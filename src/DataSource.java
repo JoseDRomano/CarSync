@@ -31,13 +31,13 @@ public class DataSource {
 
         try {
             connection = DriverManager.getConnection(CONNECTION_STRING, USERNAME, PASSWORD);
-            insertIntoInsurance = connection.prepareStatement(InsuranceConstansSQL.getString(InsuranceConstansSQL.INSERT_INSURANCE));
-            insertIntoVehicle = connection.prepareStatement(VehicleConstantsSQL.getString(VehicleConstantsSQL.INSERT_VEHICLE));
-            insertIntoTicket = connection.prepareStatement(TicketConstantsSQL.getString(TicketConstantsSQL.INSERT_TICKET));
+            insertIntoInsurance = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.INSERT_INSURANCE));
+            insertIntoVehicle = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.INSERT_VEHICLE));
+            insertIntoTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.INSERT_TICKET));
 
-            queryInsurances = connection.prepareStatement(InsuranceConstansSQL.getString(InsuranceConstansSQL.QUERY_TABLE_INSURANCE));
-            queryTickets = connection.prepareStatement(TicketConstantsSQL.getString(TicketConstantsSQL.QUERY_TABLE_TICKET));
-            queryVehicles = connection.prepareStatement(VehicleConstantsSQL.getString(VehicleConstantsSQL.QUERY_TABLE_VEHICLE));
+            queryInsurances = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.QUERY_TABLE_INSURANCE));
+            queryTickets = connection.prepareStatement(TicketEnum.getString(TicketEnum.QUERY_TABLE_TICKET));
+            queryVehicles = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.QUERY_TABLE_VEHICLE));
 
 
             return true;
@@ -99,13 +99,13 @@ public class DataSource {
             ResultSet resultSet = queryVehicles.executeQuery();
             while(resultSet.next()) {
                 Vehicle vehicle = new Vehicle();
-                vehicle.setPlate(resultSet.getString(VehicleConstantsSQL.getString(VehicleConstantsSQL.COLUMN_VEHICLE_PLATE)));
-                vehicle.setCategory(resultSet.getString(VehicleConstantsSQL.getString(VehicleConstantsSQL.COLUMN_VEHICLE_CATEGORY)));
-                vehicle.setBrand(resultSet.getString(VehicleConstantsSQL.getString(VehicleConstantsSQL.COLUMN_VEHICLE_BRAND)));
-                vehicle.setColor(resultSet.getString(VehicleConstantsSQL.getString(VehicleConstantsSQL.COLUMN_VEHICLE_COLOR)));
-                vehicle.setModel(resultSet.getString(VehicleConstantsSQL.getString(VehicleConstantsSQL.COLUMN_VEHICLE_MODEL)));
-                vehicle.setRegistration_date(resultSet.getDate(VehicleConstantsSQL.getString(VehicleConstantsSQL.COLUMN_VEHICLE_REGISTRATION_DATE)));
-                vehicle.setVin(resultSet.getString(VehicleConstantsSQL.getString(VehicleConstantsSQL.COLUMN_VEHICLE_VIN)));
+                vehicle.setPlate(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_PLATE)));
+                vehicle.setCategory(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_CATEGORY)));
+                vehicle.setBrand(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_BRAND)));
+                vehicle.setColor(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_COLOR)));
+                vehicle.setModel(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_MODEL)));
+                vehicle.setRegistration_date(resultSet.getDate(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_REGISTRATION_DATE)));
+                vehicle.setVin(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_VIN)));
                 vehicles.add(vehicle);
             }
             return vehicles;
