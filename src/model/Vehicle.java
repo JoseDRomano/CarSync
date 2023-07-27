@@ -79,15 +79,14 @@ public class Vehicle {
 
     public void setCategory(String category) {
         switch(category) {
-            case "Light_Commercial_Vehicle" -> this.category = VehicleCategory.Light_Commercial_Vehicle;
-            case "Light_Passenger_Vehicle" -> this.category = VehicleCategory.Light_Passenger_Vehicle;
-            case "Heavy_duty_Passenger_Vehicle" -> this.category = VehicleCategory.Heavy_duty_Passenger_Vehicle;
-            case "Heavy_duty_Goods_Vehicle" -> this.category = VehicleCategory.Heavy_duty_Goods_Vehicle;
+            case "Light Commercial Vehicle" -> this.category = VehicleCategory.Light_Commercial_Vehicle;
+            case "Light Passenger Vehicle" -> this.category = VehicleCategory.Light_Passenger_Vehicle;
+            case "Heavy-duty Passenger Vehicle" -> this.category = VehicleCategory.Heavy_duty_Passenger_Vehicle;
+            case "Heavy-duty Goods Vehicle" -> this.category = VehicleCategory.Heavy_duty_Goods_Vehicle;
             case "Motorcycle" -> this.category = VehicleCategory.Motorcycle;
             case "Moped" -> this.category = VehicleCategory.Moped;
             default -> System.out.println("No such category");
         }
-
     }
 
 
