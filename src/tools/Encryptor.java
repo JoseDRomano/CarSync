@@ -1,7 +1,7 @@
-/**
+package tools; /**
  * How to use:
- * 1. Import the class: import Encryptor;
- * 2. Call the method: Encryptor.encryptSHA256(String input);
+ * 1. Import the class: import tools.Encryptor;
+ * 2. Call the method: tools.Encryptor.encryptSHA256(String input);
  * 2.1 The method returns a String with the encrypted input.
  * 3. Use this method to encrypt passwords before storing them in the database.
  * 4.Done!

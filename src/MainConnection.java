@@ -9,6 +9,15 @@ public class MainConnection {
             return;
         }
 
+        dataSource.queryVehicles().forEach(System.out::println);
+
         dataSource.close();
+
+        /*String plate = "AA-AA-AAA";
+        if(plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$")) {
+            System.out.println("True");
+        }*/
+
+
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 26-Jul-2023 às 17:22
+-- Tempo de geração: 27-Jul-2023 às 17:45
 -- Versão do servidor: 10.4.28-MariaDB
 -- versão do PHP: 8.2.4
 
@@ -44,7 +44,7 @@ CREATE TABLE `insurance` (
   `company` varchar(45) NOT NULL,
   `start_date` date NOT NULL,
   `extra_category` enum('Personal Damage Insurance','Comprehensive Insurance','Anti-theft Insurance') NOT NULL,
-  `plate` varchar(8) NOT NULL
+  `plate` char(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -69,7 +69,7 @@ CREATE TABLE `person` (
 
 CREATE TABLE `ticket` (
   `driver_license_number` int(9) NOT NULL,
-  `plate` varchar(8) NOT NULL,
+  `plate` char(8) NOT NULL,
   `date` date NOT NULL,
   `expiry_date` date NOT NULL,
   `value` double NOT NULL,
@@ -101,10 +101,19 @@ CREATE TABLE `vehicle` (
   `model` varchar(45) NOT NULL,
   `color` varchar(45) NOT NULL,
   `registration_date` date NOT NULL,
-  `plate` varchar(8) NOT NULL,
-  `vin` varchar(17) NOT NULL,
-  `category` enum('Light commercial vehicles','Light commercial vehicles','Heavy-duty passenger vehicle','Heavy-duty goods vehicle','Motocycle','Moped') NOT NULL
+  `plate` char(8) NOT NULL,
+  `vin` char(17) NOT NULL,
+  `category` enum('Light Commercial Vehicle','Light Passenger Vehicle','Heavy-duty Passenger Vehicle','Heavy-duty Goods Vehicle','Motorcycle','Moped') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Extraindo dados da tabela `vehicle`
+--
+
+INSERT INTO `vehicle` (`brand`, `model`, `color`, `registration_date`, `plate`, `vin`, `category`) VALUES
+('Mercedes Benz', 'A8', 'Black', '2023-07-13', '13-24-GD', '23423424FSS', 'Light Commercial Vehicle'),
+('Audi Coup', 'C6', 'Azul Escuro', '2023-07-11', 'AS-8F-BB', '23423424FSGGG', 'Heavy-duty Goods Vehicle'),
+('BMW', 'I8', 'Branco', '2023-07-12', 'FF-L9-09', '661576866', 'Heavy-duty Goods Vehicle');
 
 --
 -- Índices para tabelas despejadas
@@ -133,7 +142,8 @@ ALTER TABLE `person`
 -- Índices para tabela `ticket`
 --
 ALTER TABLE `ticket`
-  ADD PRIMARY KEY (`plate`,`driver_license_number`);
+  ADD PRIMARY KEY (`plate`,`driver_license_number`),
+  ADD KEY `Driver_In_Ticket_FK` (`driver_license_number`);
 
 --
 -- Índices para tabela `user`
@@ -164,6 +174,13 @@ ALTER TABLE `employee`
 --
 ALTER TABLE `insurance`
   ADD CONSTRAINT `Plate_Insurance_FK` FOREIGN KEY (`plate`) REFERENCES `vehicle` (`plate`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limitadores para a tabela `ticket`
+--
+ALTER TABLE `ticket`
+  ADD CONSTRAINT `Driver_In_Ticket_FK` FOREIGN KEY (`driver_license_number`) REFERENCES `user` (`driver_license_number`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Plate_Number_Ticket_FK` FOREIGN KEY (`plate`) REFERENCES `vehicle` (`plate`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limitadores para a tabela `user`
