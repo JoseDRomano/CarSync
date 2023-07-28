@@ -2,6 +2,8 @@ package model;
 
 import java.sql.Date;
 
+import java.util.Date;
+
 public class Ticket {
 
     private int driver_license_number;
@@ -54,7 +56,7 @@ public class Ticket {
             case 3 -> this.reason = "Illegal parking";
             case 4 -> this.reason = "Reckless driving";
             case 5 -> this.reason = "Driving Under the Influence";
-            default -> throw new IllegalStateException("No such reason to be fined");
+            default -> throw new IllegalStateException("Other");
         };
     }
 
