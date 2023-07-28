@@ -2,8 +2,6 @@ package model;
 
 import java.sql.Date;
 
-import java.util.Date;
-
 public class Ticket {
 
     private int driver_license_number;
