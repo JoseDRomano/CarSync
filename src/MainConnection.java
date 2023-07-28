@@ -13,12 +13,13 @@ public class MainConnection {
             return;
         }
 
-        /*dataSource.queryVehicles().forEach(System.out::println);
-        System.out.println("Inserting a new vehicle");*/
+        dataSource.queryVehicles().forEach(System.out::println);
+
+        /*System.out.println("Inserting a new vehicle");
         dataSource.insertVehicle("AD-98-00", "47835565", "Grey",
                 "Fiat", "Punto", new Date(2009, 04, 27),
                 Vehicle.VehicleCategory.Light_Commercial_Vehicle);
-       /* System.out.println("-------------------------------------------");
+        System.out.println("-------------------------------------------");
         dataSource.queryVehicles().forEach(System.out::println);*/
 
         dataSource.close();
