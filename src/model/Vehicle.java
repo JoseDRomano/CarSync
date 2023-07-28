@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Date;
+import java.util.HashMap;
 
 public class Vehicle {
 
@@ -9,18 +10,9 @@ public class Vehicle {
     private String color;
     private String brand;
     private String model;
-    private Date registration_date;
+    private Date registrationDate;
 
-    public enum VehicleCategory {
-        Light_Commercial_Vehicle,
-        Light_Passenger_Vehicle,
-        Heavy_duty_Passenger_Vehicle,
-        Heavy_duty_Goods_Vehicle,
-        Motorcycle,
-        Moped;
-    }
-
-    private VehicleCategory category;
+    private String category;
 
     public String getPlate() {
         return plate;
@@ -66,28 +58,28 @@ public class Vehicle {
         this.model = model;
     }
 
-    public Date getRegistration_date() {
-        return registration_date;
+    public Date getregistrationDate() {
+        return registrationDate;
     }
 
-    public void setRegistration_date(Date registration_date) {
-        this.registration_date = registration_date;
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
-    public VehicleCategory getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
-        switch(category) {
-            case "Light Commercial Vehicle" -> this.category = VehicleCategory.Light_Commercial_Vehicle;
-            case "Light Passenger Vehicle" -> this.category = VehicleCategory.Light_Passenger_Vehicle;
-            case "Heavy-duty Passenger Vehicle" -> this.category = VehicleCategory.Heavy_duty_Passenger_Vehicle;
-            case "Heavy-duty Goods Vehicle" -> this.category = VehicleCategory.Heavy_duty_Goods_Vehicle;
-            case "Motorcycle" -> this.category = VehicleCategory.Motorcycle;
-            case "Moped" -> this.category = VehicleCategory.Moped;
-            default -> System.out.println("No such category");
-        }
+    public void setCategory(int categoryNumber) {
+       String s = switch (categoryNumber) {
+            case 1 -> this.category = "Light Commercial Vehicle";
+            case 2 -> this.category = "Light Passenger Vehicle";
+            case 3 -> this.category = "Heavy-duty Passenger Vehicle";
+            case 4 -> this.category = "Heavy-duty Goods Vehicle";
+            case 5 -> this.category = "Motorcycle";
+            case 6 -> this.category = "Moped";
+           default -> throw new IllegalStateException("No such category");
+       };
     }
 
 
@@ -95,7 +87,7 @@ public class Vehicle {
     public String toString() {
         return "Vehicle info: " + "\n" + "- Plate: " + plate + "\n" + "- Category: " +
                 category + "\n" + "- Vin: " + vin + "\n" + "- Registration Date: "
-                + registration_date + "\n" + "- Color: " + color + "\n"
+                + registrationDate + "\n" + "- Color: " + color + "\n"
                 + "- Model: " + model + "\n" + "- Brand: " + brand + "\n";
     }
 

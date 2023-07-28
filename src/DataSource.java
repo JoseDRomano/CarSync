@@ -94,11 +94,11 @@ public class DataSource {
             while(resultSet.next()) {
                 Vehicle vehicle = new Vehicle();
                 vehicle.setPlate(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_PLATE)));
-                vehicle.setCategory(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_CATEGORY)));
+                vehicle.setCategory(resultSet.getInt(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_CATEGORY)));
                 vehicle.setBrand(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_BRAND)));
                 vehicle.setColor(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_COLOR)));
                 vehicle.setModel(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_MODEL)));
-                vehicle.setRegistration_date(resultSet.getDate(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_REGISTRATION_DATE)));
+                vehicle.setRegistrationDate(resultSet.getDate(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_REGISTRATION_DATE)));
                 vehicle.setVin(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_VIN)));
                 vehicles.add(vehicle);
             }
@@ -113,11 +113,11 @@ public class DataSource {
 
 
     public void insertVehicle(String plate, String vin, String color,
-                              String brand, String model, Date registration_date,
-                              Vehicle.VehicleCategory category) {
+                              String brand, String model, Date registrationDate,
+                              int categoryNumber) {
 
-        if(plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$") == false) {
-            System.out.println("Wrong plate number format");
+        if(plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$") == false || categoryNumber <= 0 || categoryNumber > 6) {
+            System.out.println("Wrong input: " + plate + " " + categoryNumber);
             return;
         }
 
@@ -135,8 +135,8 @@ public class DataSource {
             insertIntoVehicle.setString(2, brand);
             insertIntoVehicle.setString(3, color);
             insertIntoVehicle.setString(4, plate);
-            insertIntoVehicle.setString(5, category.toString());
-            insertIntoVehicle.setString(6, registration_date.toString());
+            insertIntoVehicle.setInt(5, categoryNumber);
+            insertIntoVehicle.setString(6, registrationDate.toString());
             insertIntoVehicle.setString(7, vin);
             int affected = insertIntoVehicle.executeUpdate();
 
