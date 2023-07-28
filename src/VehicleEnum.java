@@ -10,6 +10,7 @@ public enum VehicleEnum {
     INSERT_VEHICLE,
     DELETE_VEHICLE,
     UPDATE_VEHICLE,
+    QUERY_TABLE_VEHICLE_BY_PLATE,
     QUERY_TABLE_VEHICLE,
     COLUMN_VEHICLE_VIN;
 
@@ -33,8 +34,9 @@ public enum VehicleEnum {
                     VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_VIN) + ") VALUES(?, ?, ?, ?, ?, ?, ?)";
             case DELETE_VEHICLE -> "DELETE FROM " + VehicleEnum.getString(VehicleEnum.TABLE_VEHICLE) + " WHERE " +
                     VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ?";
-            case QUERY_TABLE_VEHICLE -> " SELECT * FROM " + VehicleEnum.getString(VehicleEnum.TABLE_VEHICLE) +
+            case QUERY_TABLE_VEHICLE_BY_PLATE -> " SELECT * FROM " + VehicleEnum.getString(VehicleEnum.TABLE_VEHICLE) +
                     " WHERE " + VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ? ";
+            case QUERY_TABLE_VEHICLE -> " SELECT * FROM " + VehicleEnum.getString(VehicleEnum.TABLE_VEHICLE);
             case COLUMN_VEHICLE_REGISTRATION_DATE -> "registration_date";
             default -> throw new IllegalArgumentException("No such column or operation for vehicle table");
         };

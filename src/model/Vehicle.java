@@ -29,6 +29,7 @@ public class Vehicle {
     public void setPlate(String plate) {
         if(plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$")) {
             this.plate = plate;
+            return;
         }
         System.out.println("Incorrect plate number");
     }
@@ -92,10 +93,10 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        return "model.Vehicle info: " + "\n" + "- Plate: " + plate + "\n" + "- Category: " +
+        return "Vehicle info: " + "\n" + "- Plate: " + plate + "\n" + "- Category: " +
                 category + "\n" + "- Vin: " + vin + "\n" + "- Registration Date: "
                 + registration_date + "\n" + "- Color: " + color + "\n"
-                + "- Model: " + model + "\n" + "- Brand: " + brand;
+                + "- Model: " + model + "\n" + "- Brand: " + brand + "\n";
     }
 
 }

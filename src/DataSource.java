@@ -63,11 +63,6 @@ public class DataSource {
                 insertIntoVehicle.close();
             }
 
-            if(connection != null) {
-                connection.close();
-                System.out.println("Connection successfully closed");
-            }
-
             if(queryVehicles != null) {
                 queryVehicles.close();
             }
@@ -95,7 +90,6 @@ public class DataSource {
 
         List<Vehicle> vehicles = new ArrayList<>();
         try {
-            queryVehicles.setString(1, "FF-L9-09");
             ResultSet resultSet = queryVehicles.executeQuery();
             while(resultSet.next()) {
                 Vehicle vehicle = new Vehicle();
@@ -122,14 +116,14 @@ public class DataSource {
                               String brand, String model, Date registration_date,
                               Vehicle.VehicleCategory category) {
 
-        if(plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$")) {
+        if(plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$") == false) {
             System.out.println("Wrong plate number format");
             return;
         }
 
         for(Vehicle v: queryVehicles()) {
             if(v.getPlate().equals(plate)) {
-                System.out.println("Plate number already in database");
+                System.out.printf("Plate number: %s already in database %n", v.getPlate());
                 return;
             }
         }
@@ -141,7 +135,7 @@ public class DataSource {
             insertIntoVehicle.setString(2, brand);
             insertIntoVehicle.setString(3, color);
             insertIntoVehicle.setString(4, plate);
-            insertIntoVehicle.setString(5, category.name());
+            insertIntoVehicle.setString(5, category.toString());
             insertIntoVehicle.setString(6, registration_date.toString());
             insertIntoVehicle.setString(7, vin);
             int affected = insertIntoVehicle.executeUpdate();
@@ -149,7 +143,7 @@ public class DataSource {
             if(affected == 1) {
                 connection.commit();
             } else  {
-                throw new SQLException("Couldn't insert new vehicle");
+                throw new SQLException("Couldn't insert new vehicle with plate number: " + plate);
             }
 
         } catch (SQLException e) {
@@ -158,18 +152,16 @@ public class DataSource {
                 System.out.println("Performing rollback");
                 connection.rollback();
             } catch (SQLException ex) {
-                System.out.println("Couldn't perform rollback");
+                System.out.println("Couldn't perform rollback after inserting vehicle went wrong");
             }
         } finally {
             try {
-                System.out.println("Resetting default commit behavior");
+                System.out.println("Resetting default commit behavior after insert vehicle");
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
-                System.out.println("Couldn't reset default commit behavior");
+                System.out.println("Couldn't reset default commit behavior after insert vehicle");
             }
         }
-
-
     }
 
 

@@ -1,3 +1,7 @@
+import model.Vehicle;
+
+import java.sql.Date;
+
 public class MainConnection {
 
     public static void main(String[] args) {
@@ -9,14 +13,15 @@ public class MainConnection {
             return;
         }
 
-        dataSource.queryVehicles().forEach(System.out::println);
+        /*dataSource.queryVehicles().forEach(System.out::println);
+        System.out.println("Inserting a new vehicle");*/
+        dataSource.insertVehicle("AD-98-00", "47835565", "Grey",
+                "Fiat", "Punto", new Date(2009, 04, 27),
+                Vehicle.VehicleCategory.Light_Commercial_Vehicle);
+       /* System.out.println("-------------------------------------------");
+        dataSource.queryVehicles().forEach(System.out::println);*/
 
         dataSource.close();
-
-        /*String plate = "AA-AA-AAA";
-        if(plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$")) {
-            System.out.println("True");
-        }*/
 
 
     }
