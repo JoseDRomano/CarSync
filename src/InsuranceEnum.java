@@ -1,42 +1,43 @@
 public enum InsuranceEnum {
 
     TABLE_INSURANCE,
-    COLUMN_POLICY,
-    COLUMN_EXPIRY_DATE,
-    COLUMN_COMPANY,
-    COLUMN_START_DATE,
-    COLUMN_EXTRA_CATEGORY,
-    COLUMN_PLATE,
+    COLUMN_INSURANCE_POLICY,
+    COLUMN_INSURANCE_EXPIRY_DATE,
+    COLUMN_INSURANCE_COMPANY,
+    COLUMN_INSURANCE_START_DATE,
+    COLUMN_INSURANCE_EXTRA_CATEGORY,
+    COLUMN_INSURANCE_PLATE,
     INSERT_INSURANCE,
     UPDATE_INSURANCE,
     QUERY_TABLE_INSURANCE,
+    QUERY_TABLE_INSURANCE_BY_POLICY,
     DELETE_INSURANCE;
-
 
     public static String getString(InsuranceEnum isq) {
 
         String s = switch (isq) {
             case TABLE_INSURANCE -> "insurance";
-            case COLUMN_PLATE -> "plate";
-            case COLUMN_COMPANY -> "company";
-            case COLUMN_EXPIRY_DATE -> "expiry_date";
-            case COLUMN_POLICY -> "policy";
-            case COLUMN_EXTRA_CATEGORY -> "category";
-            case COLUMN_START_DATE -> "start_date";
+            case COLUMN_INSURANCE_PLATE -> "plate";
+            case COLUMN_INSURANCE_COMPANY -> "company";
+            case COLUMN_INSURANCE_EXPIRY_DATE -> "expiry_date";
+            case COLUMN_INSURANCE_POLICY -> "policy";
+            case COLUMN_INSURANCE_EXTRA_CATEGORY -> "extra_category";
+            case COLUMN_INSURANCE_START_DATE -> "start_date";
             case INSERT_INSURANCE ->
-                    "INSERT INTO " + InsuranceEnum.getString(InsuranceEnum.TABLE_INSURANCE) + '('
-                            + InsuranceEnum.getString(InsuranceEnum.COLUMN_COMPANY) + ", " +
-                            InsuranceEnum.getString(InsuranceEnum.COLUMN_PLATE) + ", " +
-                            InsuranceEnum.getString(InsuranceEnum.COLUMN_EXPIRY_DATE) + ", " +
-                            InsuranceEnum.getString(InsuranceEnum.COLUMN_POLICY) + ", " +
-                            InsuranceEnum.getString(InsuranceEnum.COLUMN_EXTRA_CATEGORY) + ", " +
-                            InsuranceEnum.getString(InsuranceEnum.COLUMN_START_DATE) + ") VALUES(?, ?, ?, ?, ?, ?)";
+                    "INSERT INTO " + getString(InsuranceEnum.TABLE_INSURANCE) + '('
+                            + getString(InsuranceEnum.COLUMN_INSURANCE_COMPANY) + ", " +
+                            getString(InsuranceEnum.COLUMN_INSURANCE_PLATE) + ", " +
+                            getString(InsuranceEnum.COLUMN_INSURANCE_EXPIRY_DATE) + ", " +
+                            getString(InsuranceEnum.COLUMN_INSURANCE_POLICY) + ", " +
+                            getString(InsuranceEnum.COLUMN_INSURANCE_EXTRA_CATEGORY) + ", " +
+                            getString(InsuranceEnum.COLUMN_INSURANCE_START_DATE) + ") VALUES(?, ?, ?, ?, ?, ?)";
             case DELETE_INSURANCE ->
-                    "DELETE FROM " + InsuranceEnum.getString(InsuranceEnum.TABLE_INSURANCE) + " WHERE " +
-                            InsuranceEnum.getString(InsuranceEnum.COLUMN_POLICY) + " = ? ";
+                    "DELETE FROM " + getString(InsuranceEnum.TABLE_INSURANCE) + " WHERE " +
+                            getString(InsuranceEnum.COLUMN_INSURANCE_POLICY) + " = ? ";
             case QUERY_TABLE_INSURANCE ->
-                    " SELECT * FROM " + InsuranceEnum.getString(InsuranceEnum.TABLE_INSURANCE) +
-                            " WHERE " + InsuranceEnum.getString(InsuranceEnum.COLUMN_POLICY) + " = ? ";
+                    " SELECT * FROM " + getString(InsuranceEnum.TABLE_INSURANCE);
+            case QUERY_TABLE_INSURANCE_BY_POLICY -> " SELECT * FROM " + getString(InsuranceEnum.TABLE_INSURANCE) +
+                    " WHERE " + getString(InsuranceEnum.COLUMN_INSURANCE_POLICY) + " = ? ";
             default -> throw new IllegalArgumentException("No such column or operation for vehicle table");
         };
         return s;

@@ -24,19 +24,19 @@ public enum VehicleEnum {
             case COLUMN_VEHICLE_MODEL -> "model";
             case COLUMN_VEHICLE_PLATE -> "plate";
             case COLUMN_VEHICLE_CATEGORY -> "category";
-            case INSERT_VEHICLE -> "INSERT INTO " + VehicleEnum.getString(VehicleEnum.TABLE_VEHICLE) + '('
-                    + VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_MODEL) + ", " +
-                    VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_BRAND) + ", " +
-                    VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_COLOR) + ", " +
-                    VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + ", " +
-                    VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_CATEGORY) + ", " +
-                    VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_REGISTRATION_DATE) + ", " +
-                    VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_VIN) + ") VALUES(?, ?, ?, ?, ?, ?, ?)";
-            case DELETE_VEHICLE -> "DELETE FROM " + VehicleEnum.getString(VehicleEnum.TABLE_VEHICLE) + " WHERE " +
-                    VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ?";
-            case QUERY_TABLE_VEHICLE_BY_PLATE -> " SELECT * FROM " + VehicleEnum.getString(VehicleEnum.TABLE_VEHICLE) +
-                    " WHERE " + VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ? ";
-            case QUERY_TABLE_VEHICLE -> " SELECT * FROM " + VehicleEnum.getString(VehicleEnum.TABLE_VEHICLE);
+            case INSERT_VEHICLE -> "INSERT INTO " + getString(VehicleEnum.TABLE_VEHICLE) + '('
+                    + getString(VehicleEnum.COLUMN_VEHICLE_MODEL) + ", " +
+                    getString(VehicleEnum.COLUMN_VEHICLE_BRAND) + ", " +
+                    getString(VehicleEnum.COLUMN_VEHICLE_COLOR) + ", " +
+                    getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + ", " +
+                    getString(VehicleEnum.COLUMN_VEHICLE_CATEGORY) + ", " +
+                    getString(VehicleEnum.COLUMN_VEHICLE_REGISTRATION_DATE) + ", " +
+                    getString(VehicleEnum.COLUMN_VEHICLE_VIN) + ") VALUES(?, ?, ?, ?, ?, ?, ?)";
+            case DELETE_VEHICLE -> "DELETE FROM " + getString(VehicleEnum.TABLE_VEHICLE) + " WHERE " +
+                    getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ?";
+            case QUERY_TABLE_VEHICLE_BY_PLATE -> " SELECT * FROM " + getString(VehicleEnum.TABLE_VEHICLE) +
+                    " WHERE " + getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ? ";
+            case QUERY_TABLE_VEHICLE -> " SELECT * FROM " + getString(VehicleEnum.TABLE_VEHICLE);
             case COLUMN_VEHICLE_REGISTRATION_DATE -> "registration_date";
             default -> throw new IllegalArgumentException("No such column or operation for vehicle table");
         };

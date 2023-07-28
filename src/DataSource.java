@@ -1,3 +1,5 @@
+import model.Insurance;
+import model.Ticket;
 import model.Vehicle;
 
 import java.sql.DriverManager;
@@ -111,12 +113,74 @@ public class DataSource {
         }
     }
 
+    public List<Insurance> queryInsurances() {
+        List<Insurance> insurances = new ArrayList<>();
+        try {
+            ResultSet resultSet = queryInsurances.executeQuery();
+            while (resultSet.next()) {
+                Insurance insurance = new Insurance();
+                insurance.setPolicy(resultSet.getInt(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_POLICY)));
+                insurance.setCarPlate(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_PLATE)));
+                insurance.setStartDate(resultSet.getDate(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_START_DATE)));
+                insurance.setExtraCategory(resultSet.getInt(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXTRA_CATEGORY)));
+                insurance.setExpDate(resultSet.getDate(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXPIRY_DATE)));
+                insurance.setCompanyName(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_COMPANY)));
+                insurances.add(insurance);
+            }
+            return insurances;
+
+        }catch (SQLException e) {
+            System.out.println("Couldn't retrieve data from insurance table: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void insertInsurance(int policy, String plate, Date startDate, int extraCategory, Date expDate, String companyName) {
+        try {
+            connection.setAutoCommit(false);
+            insertIntoInsurance.setInt(4, policy);
+            insertIntoInsurance.setString(2, plate);
+            insertIntoInsurance.setDate(6, startDate);
+            insertIntoInsurance.setInt(5, extraCategory);
+            insertIntoInsurance.setDate(3, expDate);
+            insertIntoInsurance.setString(1, companyName);
+            int affected = insertIntoInsurance.executeUpdate();
+
+            if(affected == 1) {
+                connection.commit();
+            } else  {
+                throw new SQLException("Couldn't insert new insurance with policy number: " + policy);
+            }
+            connection.commit();
+
+        }catch (SQLException e) {
+            System.out.println("Couldn't insert data into insurance table: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            }catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        }finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            }catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public void insertVehicle(String plate, String vin, String color,
                               String brand, String model, Date registrationDate,
                               int categoryNumber) {
 
-        if(plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$") == false || categoryNumber <= 0 || categoryNumber > 6) {
+        if(!plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$") || categoryNumber <= 0 || categoryNumber > 6) {
             System.out.println("Wrong input: " + plate + " " + categoryNumber);
             return;
         }

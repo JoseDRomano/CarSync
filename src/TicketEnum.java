@@ -26,18 +26,12 @@ public enum TicketEnum {
                     getString(COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + ", " +
                     getString(COLUMN_TICKET_VALUE) + ", " +
                     getString(COLUMN_TICKET_EXPIRY_DATE) + ") VALUES(?, ?, ?, ?, ?)";
-//            case INSERT_TICKET -> "INSERT INTO " + TicketEnum.getString(TicketEnum.TABLE_TICKET) + '('
-//                    + TicketEnum.getString(TicketEnum.COLUMN_TICKET_DATE) + ", " +
-//                    TicketEnum.getString(TicketEnum.COLUMN_TICKET_PLATE) + ", " +
-//                    TicketEnum.getString(TicketEnum.COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + ", " +
-//                    TicketEnum.getString(TicketEnum.COLUMN_TICKET_VALUE) + ", " +
-//                    TicketEnum.getString(TicketEnum.COLUMN_TICKET_EXPIRY_DATE) + ") VALUES(?, ?, ?, ?, ?)";
-            case DELETE_TICKET -> "DELETE FROM " + TicketEnum.getString(TicketEnum.TABLE_TICKET) + " WHERE " +
-                    TicketEnum.getString(TicketEnum.COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + " = ? AND " +
-                    TicketEnum.getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? ";
-            case QUERY_TABLE_TICKET -> "SELECT FROM " + TicketEnum.getString(TicketEnum.TABLE_TICKET) + " WHERE " +
-                    TicketEnum.getString(TicketEnum.COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + " = ? AND " +
-                    TicketEnum.getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? ";
+            case DELETE_TICKET -> "DELETE FROM " + getString(TicketEnum.TABLE_TICKET) + " WHERE " +
+                    getString(TicketEnum.COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + " = ? AND " +
+                    getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? ";
+            case QUERY_TABLE_TICKET -> "SELECT FROM " + getString(TicketEnum.TABLE_TICKET) + " WHERE " +
+                    getString(TicketEnum.COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + " = ? AND " +
+                    getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? ";
             default -> throw new IllegalArgumentException("No such column or operation for vehicle table");
         };
         return s;

@@ -8,7 +8,7 @@ public class Insurance {
     private Date expDate;
     private String companyName;
     private String extraCategory;
-    private int carPlate;
+    private String carPlate;
 
     public int getPolicy() {
         return policy;
@@ -46,15 +46,31 @@ public class Insurance {
         return extraCategory;
     }
 
-    public void setExtraCategory(String extraCategory) {
-        this.extraCategory = extraCategory;
+    public void setExtraCategory(int extraCategory) {
+        String s = switch (extraCategory) {
+            case 1 -> this.extraCategory = "Comprehensive Insurance";
+            case 2 -> this.extraCategory = "Auto Liability Insurance";
+            case 3 -> this.extraCategory = "Theft Insurance";
+            default -> throw new IllegalStateException("No such category");
+        };
     }
 
-    public int getCarPlate() {
+    public String getCarPlate() {
         return carPlate;
     }
 
-    public void setCarPlate(int carPlate) {
+    public void setCarPlate(String carPlate) {
         this.carPlate = carPlate;
     }
+
+    @Override
+    public String toString() {
+        return "Insurance policy number - " + policy + " info:" + "\n"
+                + "- Start date: " + startDate + "\n"
+                + "- Expiration date: " + expDate + "\n"
+                + "- Company name: " + companyName + "\n"
+                + "- Extra category: " + extraCategory + "\n"
+                + "- Car plate: " + carPlate + "\n";
+    }
+
 }
