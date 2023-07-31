@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 28-Jul-2023 às 15:32
+-- Tempo de geração: 31-Jul-2023 às 17:07
 -- Versão do servidor: 10.4.28-MariaDB
 -- versão do PHP: 8.2.4
 
@@ -20,6 +20,28 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `projeto_imt`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `customer`
+--
+
+CREATE TABLE `customer` (
+  `driver_license_number` int(8) NOT NULL,
+  `license_type` char(1) NOT NULL,
+  `start_date` date NOT NULL,
+  `expiry_date` date NOT NULL,
+  `nif` int(9) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Extraindo dados da tabela `customer`
+--
+
+INSERT INTO `customer` (`driver_license_number`, `license_type`, `start_date`, `expiry_date`, `nif`) VALUES
+(1234556778, '4', '2023-07-19', '2028-09-20', 270666543),
+(1235566766, '1', '2023-07-11', '2029-07-18', 311393980);
 
 -- --------------------------------------------------------
 
@@ -43,7 +65,7 @@ CREATE TABLE `insurance` (
   `expiry_date` date NOT NULL,
   `company` varchar(45) NOT NULL,
   `start_date` date NOT NULL,
-  `extra_category` enum('Personal Damage Insurance','Comprehensive Insurance','Anti-theft Insurance') NOT NULL,
+  `extra_category` int(1) NOT NULL,
   `plate` char(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -61,6 +83,14 @@ CREATE TABLE `person` (
   `password` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Extraindo dados da tabela `person`
+--
+
+INSERT INTO `person` (`nif`, `name`, `address`, `b_date`, `password`) VALUES
+(270666543, 'Osmar Mafarrico', 'Rua Sem Nome, Porta Inifinta', '2003-07-09', '123abc'),
+(311393980, 'Mickey Mouse', 'Rua das Maravilhas, Sem FIm', '1994-07-13', 'abc123');
+
 -- --------------------------------------------------------
 
 --
@@ -73,21 +103,7 @@ CREATE TABLE `ticket` (
   `date` date NOT NULL,
   `expiry_date` date NOT NULL,
   `value` double NOT NULL,
-  `reason` enum('Speeding Ticket','Red Light Violation','Illegal Parking','Reckless Driving','Driving Under the Influence') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `user`
---
-
-CREATE TABLE `user` (
-  `driver_license_number` int(8) NOT NULL,
-  `license_type` char(1) NOT NULL,
-  `start_date` date NOT NULL,
-  `expiry_date` date NOT NULL,
-  `nif` int(9) NOT NULL
+  `reason` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -103,23 +119,21 @@ CREATE TABLE `vehicle` (
   `registration_date` date NOT NULL,
   `plate` char(8) NOT NULL,
   `vin` char(17) NOT NULL,
-  `category` int(1) NOT NULL
+  `category` int(1) NOT NULL,
+  `nif` int(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Extraindo dados da tabela `vehicle`
---
-
-INSERT INTO `vehicle` (`brand`, `model`, `color`, `registration_date`, `plate`, `vin`, `category`) VALUES
-('Mercedes Benz', 'A8', 'Black', '2023-07-13', '13-24-GD', '23423424FSS', 1),
-('Fiat', 'Punto', 'Grey', '3909-05-27', 'AD-98-00', '47835565', 1),
-('Audi Coup', 'C6', 'Azul Escuro', '2023-07-11', 'AS-8F-BB', '23423424FSGGG', 2),
-('BMW', 'I8', 'Branco', '2023-07-12', 'FF-L9-09', '661576866', 3),
-('Ford', 'S9', 'GREEN', '2000-04-27', 'SS-7H-U6', '76343282', 6);
 
 --
 -- Índices para tabelas despejadas
 --
+
+--
+-- Índices para tabela `customer`
+--
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`driver_license_number`),
+  ADD UNIQUE KEY `nif` (`nif`),
+  ADD UNIQUE KEY `nif_2` (`nif`);
 
 --
 -- Índices para tabela `employee`
@@ -148,22 +162,22 @@ ALTER TABLE `ticket`
   ADD KEY `Driver_In_Ticket_FK` (`driver_license_number`);
 
 --
--- Índices para tabela `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`driver_license_number`),
-  ADD UNIQUE KEY `nif` (`nif`);
-
---
 -- Índices para tabela `vehicle`
 --
 ALTER TABLE `vehicle`
   ADD PRIMARY KEY (`plate`),
-  ADD UNIQUE KEY `vin` (`vin`);
+  ADD UNIQUE KEY `vin` (`vin`),
+  ADD KEY `Owner_NIF` (`nif`);
 
 --
 -- Restrições para despejos de tabelas
 --
+
+--
+-- Limitadores para a tabela `customer`
+--
+ALTER TABLE `customer`
+  ADD CONSTRAINT `nif_user` FOREIGN KEY (`nif`) REFERENCES `person` (`nif`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limitadores para a tabela `employee`
@@ -181,14 +195,14 @@ ALTER TABLE `insurance`
 -- Limitadores para a tabela `ticket`
 --
 ALTER TABLE `ticket`
-  ADD CONSTRAINT `Driver_In_Ticket_FK` FOREIGN KEY (`driver_license_number`) REFERENCES `user` (`driver_license_number`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Driver_In_Ticket_FK` FOREIGN KEY (`driver_license_number`) REFERENCES `customer` (`driver_license_number`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `Plate_Number_Ticket_FK` FOREIGN KEY (`plate`) REFERENCES `vehicle` (`plate`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Limitadores para a tabela `user`
+-- Limitadores para a tabela `vehicle`
 --
-ALTER TABLE `user`
-  ADD CONSTRAINT `nif_user` FOREIGN KEY (`nif`) REFERENCES `person` (`nif`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `vehicle`
+  ADD CONSTRAINT `Owner_NIF` FOREIGN KEY (`nif`) REFERENCES `customer` (`nif`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
