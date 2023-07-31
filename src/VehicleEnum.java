@@ -13,6 +13,7 @@ public enum VehicleEnum {
     UPDATE_VEHICLE_COLOR,
     QUERY_TABLE_VEHICLE_BY_PLATE,
     QUERY_TABLE_VEHICLE,
+    UPDATE_VEHICLE_OWNER,
     COLUMN_VEHICLE_VIN;
 
     public static String getString(VehicleEnum vps) {
@@ -43,6 +44,8 @@ public enum VehicleEnum {
             case COLUMN_VEHICLE_REGISTRATION_DATE -> "registration_date";
             case UPDATE_VEHICLE_COLOR -> "UPDATE " + getString(VehicleEnum.TABLE_VEHICLE) + " SET " +
                     getString(VehicleEnum.COLUMN_VEHICLE_COLOR) + " = ?" + " WHERE " + getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ?";
+            case UPDATE_VEHICLE_OWNER -> "UPDATE " + getString(VehicleEnum.TABLE_VEHICLE) + " SET " + getString(VehicleEnum.COLUMN_VEHICLE_NIF) + " = ?" + " WHERE " +
+                    getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ?";
             default -> throw new IllegalArgumentException("No such column or operation for vehicle table");
         };
         return s;

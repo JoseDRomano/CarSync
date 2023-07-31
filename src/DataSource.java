@@ -31,6 +31,7 @@ public class DataSource {
     private PreparedStatement updateVehicleColor;
     private PreparedStatement renewInsurance;
     private PreparedStatement updateTicket;
+    private PreparedStatement updateVehicleOwner;
 
     private PreparedStatement deleteVehicle;
     private PreparedStatement deleteInsurance;
@@ -54,6 +55,7 @@ public class DataSource {
 
             renewInsurance = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.RENEW_INSURANCE));
             updateVehicleColor = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.UPDATE_VEHICLE_COLOR));
+            updateVehicleOwner = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.UPDATE_VEHICLE_OWNER));
 
             //Serve para atualizar o valor da multa e a data de validade quando o mesmo for necessário.
             updateTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.UPDATE_TICKET));
@@ -374,6 +376,49 @@ public class DataSource {
 
         }catch (SQLException e) {
             System.out.println("Couldn't update vehicle color: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            }catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        }finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            }catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void changeVehicleOwner(String plate, int nif) {
+
+        if(!checkIfPlateExists(plate)) {
+            System.out.println("Plate does not exist " + plate);
+            return;
+        }
+
+        //Necessário verificar que o novo nif corresponde a uma pessoa que exitsta
+        //na tabela customer.
+
+        try {
+            connection.setAutoCommit(false);
+            updateVehicleOwner.setInt(1, nif);
+            updateVehicleOwner.setString(2, plate);
+            int affected = updateVehicleOwner.executeUpdate();
+
+            if(affected == 1) {
+                connection.commit();
+            } else  {
+                throw new SQLException("Couldn't update vehicle owner");
+            }
+
+        }catch (SQLException e) {
+            System.out.println("Couldn't update vehicle owner: " + e.getMessage());
             e.printStackTrace();
             try {
                 System.out.println("Performing rollback");
