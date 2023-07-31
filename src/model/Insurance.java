@@ -22,6 +22,10 @@ public class Insurance {
         return startDate;
     }
 
+    public void setStartDate() {
+        this.startDate = new java.sql.Date(java.util.Calendar.getInstance().getTime().getTime());
+    }
+
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
@@ -47,11 +51,11 @@ public class Insurance {
     }
 
     public void setExtraCategory(int extraCategory) {
-        String s = switch (extraCategory) {
+        switch (extraCategory) {
             case 1 -> this.extraCategory = "Comprehensive Insurance";
             case 2 -> this.extraCategory = "Auto Liability Insurance";
             case 3 -> this.extraCategory = "Theft Insurance";
-            default -> throw new IllegalStateException("No such category");
+            default -> this.extraCategory = "Default";
         };
     }
 
@@ -65,7 +69,7 @@ public class Insurance {
 
     @Override
     public String toString() {
-        return "Insurance policy number - " + policy + " info:" + "\n"
+        return "Insurance policy number - " + policy + ", info:" + "\n"
                 + "- Start date: " + startDate + "\n"
                 + "- Expiration date: " + expDate + "\n"
                 + "- Company name: " + companyName + "\n"

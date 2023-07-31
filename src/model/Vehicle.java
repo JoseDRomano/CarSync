@@ -11,8 +11,16 @@ public class Vehicle {
     private String brand;
     private String model;
     private Date registrationDate;
-
+    private int nif;
     private String category;
+
+    public int getNif() {
+        return nif;
+    }
+
+    public void setNif(int nif) {
+        this.nif = nif;
+    }
 
     public String getPlate() {
         return plate;
@@ -70,6 +78,9 @@ public class Vehicle {
         return category;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
     public void setCategory(int categoryNumber) {
        String s = switch (categoryNumber) {
             case 1 -> this.category = "Light Commercial Vehicle";

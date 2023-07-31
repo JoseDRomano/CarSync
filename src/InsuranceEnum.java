@@ -8,7 +8,7 @@ public enum InsuranceEnum {
     COLUMN_INSURANCE_EXTRA_CATEGORY,
     COLUMN_INSURANCE_PLATE,
     INSERT_INSURANCE,
-    UPDATE_INSURANCE,
+    RENEW_INSURANCE,
     QUERY_TABLE_INSURANCE,
     QUERY_TABLE_INSURANCE_BY_POLICY,
     DELETE_INSURANCE;
@@ -38,6 +38,12 @@ public enum InsuranceEnum {
                     " SELECT * FROM " + getString(InsuranceEnum.TABLE_INSURANCE);
             case QUERY_TABLE_INSURANCE_BY_POLICY -> " SELECT * FROM " + getString(InsuranceEnum.TABLE_INSURANCE) +
                     " WHERE " + getString(InsuranceEnum.COLUMN_INSURANCE_POLICY) + " = ? ";
+            case RENEW_INSURANCE -> "UPDATE " + getString(InsuranceEnum.TABLE_INSURANCE) + " SET " +
+                    getString(InsuranceEnum.COLUMN_INSURANCE_START_DATE) + " = ?, " +
+                    getString(InsuranceEnum.COLUMN_INSURANCE_EXPIRY_DATE) + " = ?, " +
+                    getString(InsuranceEnum.COLUMN_INSURANCE_EXTRA_CATEGORY) + " = ?, " +
+                    getString(InsuranceEnum.COLUMN_INSURANCE_COMPANY) + " = ? WHERE " +
+                    getString(InsuranceEnum.COLUMN_INSURANCE_POLICY) + " = ?";
             default -> throw new IllegalArgumentException("No such column or operation for vehicle table");
         };
         return s;

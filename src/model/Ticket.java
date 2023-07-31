@@ -40,7 +40,7 @@ public class Ticket {
     }
 
     public void setValue(double value) {
-        this.value = value;
+        this.value = value <= 0 ? 0 : value;
     }
 
     public String getReason() {
@@ -54,7 +54,7 @@ public class Ticket {
             case 3 -> this.reason = "Illegal parking";
             case 4 -> this.reason = "Reckless driving";
             case 5 -> this.reason = "Driving Under the Influence";
-            default -> throw new IllegalStateException("Other");
+            default -> throw new IllegalStateException("No such reason");
         };
     }
 
