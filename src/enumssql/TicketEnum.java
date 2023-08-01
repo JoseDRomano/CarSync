@@ -1,3 +1,5 @@
+package enumssql;
+
 public enum TicketEnum {
 
     TABLE_TICKET,
@@ -7,9 +9,11 @@ public enum TicketEnum {
     COLUMN_TICKET_EXPIRY_DATE,
     COLUMN_TICKET_VALUE,
     COLUMN_TICKET_REASON,
+    COLUMN_TICKET_PAID,
     INSERT_TICKET,
     DELETE_TICKET,
     UPDATE_TICKET,
+    PAY_TICKET,
     QUERY_TABLE_TICKET;
 
     public static String getString(TicketEnum tcs) {
@@ -22,6 +26,7 @@ public enum TicketEnum {
             case COLUMN_TICKET_PLATE -> "plate";
             case COLUMN_TICKET_VALUE -> "value";
             case COLUMN_TICKET_REASON -> "reason";
+            case COLUMN_TICKET_PAID -> "paid";
             case INSERT_TICKET -> "INSERT INTO " + getString(TABLE_TICKET) + '('
                     + getString(COLUMN_TICKET_DATE) + ", " +
                     getString(COLUMN_TICKET_PLATE) + ", " +
@@ -33,13 +38,16 @@ public enum TicketEnum {
                     getString(TicketEnum.COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + " = ? AND " +
                     getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? AND " +
                     getString(TicketEnum.COLUMN_TICKET_DATE) + " = ? ";
-            case QUERY_TABLE_TICKET -> "SELECT FROM " + getString(TicketEnum.TABLE_TICKET) + " WHERE " +
-                    getString(TicketEnum.COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + " = ? AND " +
-                    getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? ";
+            case QUERY_TABLE_TICKET -> "SELECT * FROM " + getString(TicketEnum.TABLE_TICKET);
             case UPDATE_TICKET -> "UPDATE " + getString(TicketEnum.TABLE_TICKET) + " SET " +
                     getString(TicketEnum.COLUMN_TICKET_DATE) + " = ?, " +
                     getString(TicketEnum.COLUMN_TICKET_VALUE) + " = ?, " +
                     getString(TicketEnum.COLUMN_TICKET_EXPIRY_DATE) + " = ? " +
+                    " WHERE " + getString(TicketEnum.COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + " = ? AND " +
+                    getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? AND " +
+                    getString(TicketEnum.COLUMN_TICKET_DATE) + " = ? ";
+            case PAY_TICKET -> "UPDATE " + getString(TicketEnum.TABLE_TICKET) + " SET " +
+                    getString(TicketEnum.COLUMN_TICKET_PAID) + " = ? " +
                     " WHERE " + getString(TicketEnum.COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + " = ? AND " +
                     getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? AND " +
                     getString(TicketEnum.COLUMN_TICKET_DATE) + " = ? ";

@@ -1,3 +1,5 @@
+package enumssql;
+
 public enum InsuranceEnum {
 
     TABLE_INSURANCE,

@@ -10,6 +10,33 @@ public class Ticket {
     private Date expiry_date;
     private double value;
     private String reason;
+    private boolean isPaid = false;
+
+    public boolean isPaid() {
+        boolean b = isPaid;
+        return b;
+    }
+
+    public boolean setPaid(int paid) {
+        if(paid == 1) {
+            isPaid = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean payTicket(double value) {
+        if(isPaid == true) {
+            System.out.println("Ticket already paid");
+            return false;
+        }
+        if(value >= this.value) {
+            setPaid(1);
+            return true;
+        }
+        System.out.println("Value not enough to pay ticket");
+        return false;
+    }
 
     public String getPlate() {
         return plate;
@@ -73,4 +100,6 @@ public class Ticket {
                 "- date: " + date + "\n" + "- expiry_date: " + expiry_date + "\n" + "- value: " + value + "\n"
                 + "- reason: " + reason;
     }
+
+
 }

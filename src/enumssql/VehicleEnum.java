@@ -1,3 +1,5 @@
+package enumssql;
+
 public enum VehicleEnum {
 
     TABLE_VEHICLE,

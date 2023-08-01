@@ -1,3 +1,6 @@
+import enumssql.InsuranceEnum;
+import enumssql.TicketEnum;
+import enumssql.VehicleEnum;
 import model.Insurance;
 import model.Ticket;
 import model.Vehicle;
@@ -32,6 +35,7 @@ public class DataSource {
     private PreparedStatement renewInsurance;
     private PreparedStatement updateTicket;
     private PreparedStatement updateVehicleOwner;
+    private PreparedStatement payTicket;
 
     private PreparedStatement deleteVehicle;
     private PreparedStatement deleteInsurance;
@@ -56,6 +60,7 @@ public class DataSource {
             renewInsurance = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.RENEW_INSURANCE));
             updateVehicleColor = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.UPDATE_VEHICLE_COLOR));
             updateVehicleOwner = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.UPDATE_VEHICLE_OWNER));
+            payTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.PAY_TICKET));
 
             //Serve para atualizar o valor da multa e a data de validade quando o mesmo for necessário.
             updateTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.UPDATE_TICKET));
@@ -171,7 +176,7 @@ public class DataSource {
         }
     }
 
-    public List<Ticket> queryTicket() {
+    public List<Ticket> queryTickets() {
         List<Ticket> tickets = new ArrayList<>();
         try {
             ResultSet resultSet = queryTickets.executeQuery();
@@ -183,6 +188,7 @@ public class DataSource {
                 ticket.setReason(resultSet.getInt(TicketEnum.getString(TicketEnum.COLUMN_TICKET_REASON)));
                 ticket.setValue(resultSet.getDouble(TicketEnum.getString(TicketEnum.COLUMN_TICKET_VALUE)));
                 ticket.setExpiry_date(resultSet.getDate(TicketEnum.getString(TicketEnum.COLUMN_TICKET_EXPIRY_DATE)));
+                ticket.setPaid(resultSet.getInt(TicketEnum.getString(TicketEnum.COLUMN_TICKET_PAID)));
                 tickets.add(ticket);
             }
             return tickets;
@@ -536,6 +542,66 @@ public class DataSource {
 
         }catch (SQLException e) {
             System.out.println("Couldn't renew insurance: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            }catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        }finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            }catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void payTicket(int driver_license_number, String plate, Date date, double value) {
+
+        if(!checkIfPlateAndDriverExists(driver_license_number, plate)) {
+            System.out.println("Plate or driver license number doesn't exist in database" + driver_license_number + " " + plate);
+            return;
+        }
+
+        int paid = 0;
+
+        for(Ticket t: queryTickets()) {
+            if(t.getDriver_license_number() == driver_license_number && t.getPlate().equals(plate) && t.getDate().equals(date)) {
+                if(t.isPaid()) {
+                    System.out.println("Ticket is already paid");
+                    return;
+                }
+                else {
+                    if(t.payTicket(value)) {
+                        paid = 1;
+                        break;
+                    }
+                    break;
+                }
+            }
+        }
+
+        try {
+            connection.setAutoCommit(false);
+            payTicket.setInt(1, paid);
+            payTicket.setInt(2, driver_license_number);
+            payTicket.setString(3, plate);
+            payTicket.setDate(4, date);
+            int affected = payTicket.executeUpdate();
+
+            if(affected == 1) {
+                connection.commit();
+            } else  {
+                throw new SQLException("Couldn't pay ticket");
+            }
+
+        }catch (SQLException e) {
+            System.out.println("Couldn't pay ticket: " + e.getMessage());
             e.printStackTrace();
             try {
                 System.out.println("Performing rollback");

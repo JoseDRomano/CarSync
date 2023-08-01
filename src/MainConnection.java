@@ -34,10 +34,7 @@ public class MainConnection {
 ////        dataSource.queryVehicles().forEach(System.out::println);
 //        dataSource.queryInsurances().forEach(System.out::println);
 
-
-        dataSource.insertTicket(213131322, "AS-8F-BB",
-                new Date(2023 - 1900, 7 - 1, 1), 2, 123.99,
-                new Date(2023 - 1900, 11 - 1, 28) );
+        dataSource.payTicket(1234556778, "13-24-GD", new Date(2023 - 1900, 8 - 1, 22), 240.00);
         dataSource.close();
 
     }
