@@ -95,10 +95,12 @@ public class Ticket {
 
     public String toString() {
         return "Ticket info: " + "\n" +
-                "- driver_license_number: " + driver_license_number + "\n" +
-                "- plate: " + plate + "\n + " +
-                "- date: " + date + "\n" + "- expiry_date: " + expiry_date + "\n" + "- value: " + value + "\n"
-                + "- reason: " + reason;
+                "- Driver's license number: " + driver_license_number + "\n" +
+                "- Car plate: " + plate + "\n" +
+                "- TIcket date: " + date + "\n"
+                + "- Ticket expiry date: " + expiry_date + "\n"
+                + "- Value to be paid: " + value + "\n"
+                + "- Ticket reason: " + reason + "\n";
     }
 
 

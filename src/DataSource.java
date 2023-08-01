@@ -112,9 +112,17 @@ public class DataSource {
                 updateVehicleColor.close();
             }
 
-/*          if (updateTicket != null) {
-            updateTicket.close();
-            }*/
+            if(payTicket != null) {
+                payTicket.close();
+            }
+
+            if(updateVehicleOwner != null) {
+                updateVehicleOwner.close();
+            }
+
+            if (updateTicket != null) {
+                updateTicket.close();
+            }
 
             if(connection != null) {
                 connection.close();
