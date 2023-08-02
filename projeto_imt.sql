@@ -87,8 +87,7 @@ CREATE TABLE `person`
     `name`     varchar(45) NOT NULL,
     `address`  varchar(60) NOT NULL,
     `b_date`   date        NOT NULL,
-    `password` varchar(8)  NOT NULL,
-    `person_type` ENUM('customer', 'employee') NOT NULL
+    `password` varchar(8)  NOT NULL
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
@@ -97,6 +96,8 @@ CREATE TABLE `person`
 -- Extraindo dados da tabela `person`
 --
 
+INSERT INTO `person` (`nif`, `name`, `address`, `b_date`, `password`) VALUES
+    (234554343, 'Luis Alberta Cina', 'Rua Sem Nome, Porta Inifinta', '2023-08-09', '123abc');
 
 -- --------------------------------------------------------
 
@@ -230,24 +231,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
--- Trigger to add Employee or Customer based on the flag in Person
-
-
-CREATE TRIGGER add_employee_or_customer
-    AFTER INSERT ON person
-    FOR EACH ROW
-BEGIN
-    IF NEW.person_type = 'EMPLOYEE' THEN
-        INSERT INTO employee (nif, access_level)
-        VALUES (NEW.nif, 0); -- Assuming default access_level is 0, you can change this value as needed
-    ELSEIF NEW.person_type = 'CUSTOMER' THEN
-        INSERT INTO customer (driver_license_number, license_type, start_date, expiry_date, nif)
-        VALUES (NEW.driver_license_number, NEW.license_type, NEW.start_date, NEW.expiry_date, NEW.nif);
-    END IF;
-END;
-
-//
-
-DELIMITER ;
-

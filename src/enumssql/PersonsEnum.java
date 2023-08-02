@@ -54,7 +54,6 @@ public enum PersonsEnum {
                     getString(PersonsEnum.COLUMN_BIRTH_DATE) + ", " +
                     getString(PersonsEnum.COLUMN_PWD) + ", " +
                     getString(PersonsEnum.COLUMN_ADDRESS) + ", " +
-                    getString(PersonsEnum.COLUMN_PERSON_TYPE_EMPLOYEE) +
                     getString(PersonsEnum.COLUMN_EMPLOYEE_ACCESS_LEVEL) + ") VALUES(?, ?, ?, ?, ?, ?)";
             case INSERT_INTO_CUSTOMER -> "INSERT INTO " + getString(PersonsEnum.TABLE_CUSTOMER) + '('
                     + getString(PersonsEnum.COLUMN_NIF) + ", " +
@@ -62,7 +61,6 @@ public enum PersonsEnum {
                     getString(PersonsEnum.COLUMN_BIRTH_DATE) + ", " +
                     getString(PersonsEnum.COLUMN_PWD) + ", " +
                     getString(PersonsEnum.COLUMN_ADDRESS) + ", " +
-                    getString(PersonsEnum.COLUMN_PERSON_TYPE_CUSTOMER) +
                     getString(PersonsEnum.COLUMN_CUSTOMER_DRIVER_LICENSE) + ", " +
                     getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE) + ", " +
                     getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE) + ", " +
