@@ -3,6 +3,7 @@ import model.Insurance;
 import model.Ticket;
 import model.Vehicle;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -19,6 +20,23 @@ public class Main {
             System.out.println("Could not connect to the database.");
         }
     }
+
+//    private static void showLogin(DataSource datasource) throws NoSuchAlgorithmException {
+//        System.out.println("===== LOGIN =====");
+//        System.out.println("Enter your NIF:");
+//        Scanner sc = new Scanner(System.in);
+//        String nif = sc.nextLine();
+//        System.out.println("Enter your password:");
+//        String password = sc.nextLine();
+//        //ver se isto dá print mesmo estando dentro do if
+//        if (datasource.login(nif, password)) {
+//
+//            System.out.print("===== MENU =====\n" +
+//                    "");
+//        } else {
+//
+//        }
+//    }
 
     private static void showMenu(DataSource dataSource) {
         Scanner scanner = new Scanner(System.in);
