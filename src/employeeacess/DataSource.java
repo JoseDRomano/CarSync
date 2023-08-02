@@ -215,6 +215,7 @@ public class DataSource {
 
     /*Devolve uma lista de veículos correspondente a um dado nif, se o nif não constar na base de dados
     *devolve null*/
+
     public List<Vehicle> getVehicle(int nif) {
         List<Vehicle> vehicles = new ArrayList<>();
         for(Vehicle vehicle : queryVehicles()) {
@@ -245,10 +246,10 @@ public class DataSource {
             */
     public void insertInsurance(int policy, String plate, Date startDate, int extraCategory, Date expDate, String companyName, int nif) {
 
-        if(checkIfPlateExists(plate) == false || extraCategory < 0 || extraCategory > 3) {
-            System.out.println("Plate does not exist" + plate);
-            return;
-        }
+      if( !isVehicleOwner(nif, plate)) {
+          System.out.println("Not owner of vehicle with plate: " + plate);
+          return;
+      }
 
         try {
             connection.setAutoCommit(false);

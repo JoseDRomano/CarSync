@@ -69,10 +69,10 @@ public class Main {
 
                 case 4:
                     System.out.println("Enter the plate number:");
-                    String plate = scanner.nextLine();
-                    Vehicle vehicle = dataSource.getVehicle(plate);
-                    if (vehicle != null) {
-                        System.out.println(vehicle);
+                    int nif = Integer.valueOf(scanner.nextLine());
+                    List<Vehicle> vehicles2 = dataSource.getVehicle(nif);
+                    if (vehicles2 != null) {
+                        vehicles2.forEach(System.out::println);
                     }
                     break;
 
@@ -93,9 +93,9 @@ public class Main {
                     int categoryNumber = scanner.nextInt();
                     scanner.nextLine(); // Consume the newline character
                     System.out.println("Enter NIF:");
-                    int nif = scanner.nextInt();
+                    int nif2 = scanner.nextInt();
                     scanner.nextLine(); // Consume the newline character
-                    dataSource.insertVehicle(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif);
+                    dataSource.insertVehicle(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2);
                     break;
 
                 case 6:
@@ -113,7 +113,9 @@ public class Main {
                     Date expiryDate = Date.valueOf(scanner.nextLine());
                     System.out.println("Enter company name:");
                     String companyName = scanner.nextLine();
-                    //dataSource.insertInsurance(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName);
+                    System.out.println("Enter NIF:");
+                    int nif3 = scanner.nextInt();
+                    dataSource.insertInsurance(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName, nif3);
                     break;
 
                 case 7:
@@ -140,7 +142,9 @@ public class Main {
                     String plateForUpdateColor = scanner.nextLine();
                     System.out.println("Enter new color:");
                     String newColor = scanner.nextLine();
-                   // dataSource.updateVehicleColor(newColor, plateForUpdateColor);
+                    System.out.println("Enter NIF: ");
+                    int nif4 = scanner.nextInt();
+                    dataSource.updateVehicleColor(newColor, plateForUpdateColor, nif4);
                     break;
 
                 case 9:
@@ -181,7 +185,9 @@ public class Main {
                     System.out.println("Enter insurance policy number:");
                     int policyForDelete = scanner.nextInt();
                     scanner.nextLine(); // Consume the newline character
-                   // dataSource.deleteInsurance(policyForDelete);
+                    System.out.println("Enter NIF: ");
+                    int nif5 = scanner.nextInt();
+                    dataSource.deleteInsurance(policyForDelete, nif5);
                     break;
 
                 case 0:
