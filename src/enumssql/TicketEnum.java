@@ -3,7 +3,7 @@ package enumssql;
 public enum TicketEnum {
 
     TABLE_TICKET,
-    COLUMN_TICKET_DRIVER_LICENSE_NUMBER,
+    COLUMN_TICKET_NIF,
     COLUMN_TICKET_PLATE,
     COLUMN_TICKET_DATE,
     COLUMN_TICKET_EXPIRY_DATE,
@@ -21,7 +21,7 @@ public enum TicketEnum {
         String s = switch (tcs) {
             case TABLE_TICKET -> "ticket";
             case COLUMN_TICKET_DATE -> "date";
-            case COLUMN_TICKET_DRIVER_LICENSE_NUMBER -> "driver_license_number";
+            case COLUMN_TICKET_NIF -> "nif";
             case COLUMN_TICKET_EXPIRY_DATE -> "expiry_date";
             case COLUMN_TICKET_PLATE -> "plate";
             case COLUMN_TICKET_VALUE -> "value";
@@ -30,12 +30,12 @@ public enum TicketEnum {
             case INSERT_TICKET -> "INSERT INTO " + getString(TABLE_TICKET) + '('
                     + getString(COLUMN_TICKET_DATE) + ", " +
                     getString(COLUMN_TICKET_PLATE) + ", " +
-                    getString(COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + ", " +
+                    getString(COLUMN_TICKET_NIF) + ", " +
                     getString(COLUMN_TICKET_VALUE) + ", " +
                     getString(COLUMN_TICKET_REASON) + ", " +
                     getString(COLUMN_TICKET_EXPIRY_DATE) + ") VALUES(?, ?, ?, ?, ?, ?)";
             case DELETE_TICKET -> "DELETE FROM " + getString(TicketEnum.TABLE_TICKET) + " WHERE " +
-                    getString(TicketEnum.COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + " = ? AND " +
+                    getString(TicketEnum.COLUMN_TICKET_NIF) + " = ? AND " +
                     getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? AND " +
                     getString(TicketEnum.COLUMN_TICKET_DATE) + " = ? ";
             case QUERY_TABLE_TICKET -> "SELECT * FROM " + getString(TicketEnum.TABLE_TICKET);
@@ -43,12 +43,12 @@ public enum TicketEnum {
                     getString(TicketEnum.COLUMN_TICKET_DATE) + " = ?, " +
                     getString(TicketEnum.COLUMN_TICKET_VALUE) + " = ?, " +
                     getString(TicketEnum.COLUMN_TICKET_EXPIRY_DATE) + " = ? " +
-                    " WHERE " + getString(TicketEnum.COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + " = ? AND " +
+                    " WHERE " + getString(TicketEnum.COLUMN_TICKET_NIF) + " = ? AND " +
                     getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? AND " +
                     getString(TicketEnum.COLUMN_TICKET_DATE) + " = ? ";
             case PAY_TICKET -> "UPDATE " + getString(TicketEnum.TABLE_TICKET) + " SET " +
                     getString(TicketEnum.COLUMN_TICKET_PAID) + " = ? " +
-                    " WHERE " + getString(TicketEnum.COLUMN_TICKET_DRIVER_LICENSE_NUMBER) + " = ? AND " +
+                    " WHERE " + getString(TicketEnum.COLUMN_TICKET_NIF) + " = ? AND " +
                     getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? AND " +
                     getString(TicketEnum.COLUMN_TICKET_DATE) + " = ? ";
             default -> throw new IllegalArgumentException("No such column or operation for vehicle table");

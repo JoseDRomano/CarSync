@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class Ticket {
 
-    private int driver_license_number;
+    private int nif;
     private String plate;
     private Date date;
     private Date expiry_date;
@@ -85,17 +85,17 @@ public class Ticket {
         };
     }
 
-    public int getDriver_license_number() {
-        return driver_license_number;
+    public int getNif() {
+        return nif;
     }
 
-    public void setDriver_license_number(int driver_license_number) {
-        this.driver_license_number = driver_license_number;
+    public void setNif(int nif) {
+        this.nif = nif;
     }
 
     public String toString() {
         return "Ticket info: " + "\n" +
-                "- Driver's license number: " + driver_license_number + "\n" +
+                "- Driver's NIF: " + nif + "\n" +
                 "- Car plate: " + plate + "\n" +
                 "- TIcket date: " + date + "\n"
                 + "- Ticket expiry date: " + expiry_date + "\n"
