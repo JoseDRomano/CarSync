@@ -153,7 +153,7 @@ public class Main {
                     System.out.println("Enter new owner NIF:");
                     int newOwnerNif = scanner.nextInt();
                     scanner.nextLine(); // Consume the newline character
-                    dataSource.changeVehicleOwner(plateForChangeOwner, newOwnerNif);
+//                    dataSource.changeVehicleOwner(plateForChangeOwner, newOwnerNif);
                     break;
 
                 case 10:
@@ -169,7 +169,7 @@ public class Main {
                     scanner.nextLine(); // Consume the newline character
                     System.out.println("Enter company name:");
                     String newCompanyName = scanner.nextLine();
-                    dataSource.renewInsurance(newStartDate, newExpiryDate, newExtraCategory, newCompanyName, policyForRenew);
+//                    dataSource.renewInsurance(newStartDate, newExpiryDate, newExtraCategory, newCompanyName, policyForRenew);
                     break;
 
                 case 11:

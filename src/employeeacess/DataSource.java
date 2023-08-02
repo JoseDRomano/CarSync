@@ -214,8 +214,7 @@ public class DataSource {
     }
 
     /*Devolve uma lista de veículos correspondente a um dado nif, se o nif não constar na base de dados
-    *devolve null*/
-
+     *devolve null*/
     public List<Vehicle> getVehicle(int nif) {
         List<Vehicle> vehicles = new ArrayList<>();
         for(Vehicle vehicle : queryVehicles()) {
@@ -229,7 +228,7 @@ public class DataSource {
                 vehicle1.setVin(vehicle.getVin());
                 vehicle1.setRegistrationDate(vehicle.getregistrationDate());
                 vehicle1.setNif(vehicle.getNif());
-               vehicles.add(vehicle1);
+                vehicles.add(vehicle1);
             }
         }
         if(vehicles.isEmpty()) {
@@ -240,16 +239,14 @@ public class DataSource {
     }
 
 
-    /*Permite inserir um seguro dado, o numero da apólice, as datas associadas e a matricula
-    (plate) do carro. Obviamente o plate
-    deve existir na base de dados e isso é feito no metodo checkIfPlateExists.
-            */
+    /*Permite inserir um seguro dado, tendo o apolice do seguro e nif.
+     */
     public void insertInsurance(int policy, String plate, Date startDate, int extraCategory, Date expDate, String companyName, int nif) {
-
-      if( !isVehicleOwner(nif, plate)) {
-          System.out.println("Not owner of vehicle with plate: " + plate);
-          return;
-      }
+        //Funciona, mas seria importante ver antecipadamente se o nif está na base de dados ou não
+        if( !isVehicleOwner(nif, plate)) {
+            System.out.println("Not owner of vehicle with plate: " + plate);
+            return;
+        }
 
         try {
             connection.setAutoCommit(false);
@@ -289,7 +286,7 @@ public class DataSource {
     }
 
 
-    /*Permite inserir um veiculo dado a matricula, e as caracteristicas do veiculo. E ainda
+    /*Permite inserir um veículo dado a matrícula, e as caracteristicas do veículo. E ainda
     o nif que deve corresponder a um customer que exista na base de dados o que ainda não é
     verificado neste metodo.
     * */
@@ -309,7 +306,10 @@ public class DataSource {
             }
         }
 
-        //É necessário previamente verficar se o nif existe na tabela de clientes.
+        if(!isVehicleOwner(nif, plate)) {
+            System.out.println("NIF: " + nif + " is not the owner of vehicle with plate: " + plate);
+            return;
+        }
 
         try {
             connection.setAutoCommit(false);
@@ -349,9 +349,7 @@ public class DataSource {
     }
 
 
-    /*Ainda está incompleto  pois o driver_license_number deve ser o que está associado ao nif que é proprietario
-    do carro que tem a matricula plate.
-    * */
+    //NOT TESTED
     public void insertTicket(int nif, String plate, Date date, int reason, double value, Date expiry_date) {
 
       /*  if(!checkIfPlateAndDriverExists(driver_license_number, plate)) {
@@ -397,12 +395,11 @@ public class DataSource {
     }
 
 
-    /*Ainda está incompleto pois este metodo deve também pedir o driver_license_number para saber se a pessoa
-    * que quer mudar a cor do veiculo é a proprietaria do mesmo*/
+    //NOT TESTED
     public void updateVehicleColor(String color, String plate, int nif) {
 
-        if(!checkIfPlateExists(plate)) {
-            System.out.println("Plate does not exist " + plate);
+        if(!isVehicleOwner(nif, plate)) {
+            System.out.println("Something wrong with provided info");
             return;
         }
 
@@ -440,20 +437,17 @@ public class DataSource {
     }
 
 
-    /*Ainda está incompleto*/
-    public void changeVehicleOwner(String plate, int nif) {
+    //NOT TESTED
+    public void changeVehicleOwner(String plate, int oldNif, int newNif) {
 
-        if(!checkIfPlateExists(plate)) {
-            System.out.println("Plate does not exist " + plate);
+        if(!isVehicleOwner(oldNif, plate)) {
+            System.out.println("Something wron with provided info");
             return;
         }
 
-        //Necessário verificar que o novo nif corresponde a uma pessoa que exitsta
-        //na tabela customer.
-
         try {
             connection.setAutoCommit(false);
-            updateVehicleOwner.setInt(1, nif);
+            updateVehicleOwner.setInt(1, newNif);
             updateVehicleOwner.setString(2, plate);
             int affected = updateVehicleOwner.executeUpdate();
 
@@ -490,10 +484,7 @@ public class DataSource {
     **/
     public void updateExpiredTicket(Date oldDate, double newValue, Date expDate, int nif, String plate, Date todayDate) {
 
-        if(!checkIfPlateAndDriverExists(nif, plate)) {
-            System.out.println("Plate or driver license number doesn't exist in database" + nif + " " + plate);
-            return;
-        }
+        //O novo valor da multa pode ser calculado seguindo uma dada tarifa, por exemplo?
 
         try {
             connection.setAutoCommit(false);
@@ -532,36 +523,13 @@ public class DataSource {
         }
     }
 
-
-    //Permite saber se a matricula existe na base de dados
-    private boolean checkIfPlateExists(String plate) {
-        List<Vehicle> vehicles = queryVehicles();
-        for(var v : vehicles) {
-            if(v.getPlate().equals(plate)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    //Ainda está incompleto.
-    private boolean checkIfPlateAndDriverExists(int driver_license_number, String plate) {
-        List<Vehicle> vehicles = queryVehicles();
-        //List<Driver> drivers = queryDrivers();
-        for(var v : vehicles) {
-            if(v.getPlate().equals(plate)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
     //Permite saber se o seguro existe.
-    private boolean insuranceExists(int policy) {
+    private boolean insuranceExists(int policy, int nif) {
         for(Insurance i: queryInsurances()) {
-            if(i.getPolicy() == policy) {
-                return true;
+            if(isVehicleOwner(nif, i.getCarPlate())) {
+                if (i.getPolicy() == policy) {
+                    return true;
+                }
             }
         }
         return false;
@@ -569,21 +537,24 @@ public class DataSource {
 
     private boolean isVehicleOwner(int nif, String plate) {
         for(Vehicle v: queryVehicles()) {
-            if(v.getPlate().equals(plate) && v.getNif() == nif) {
-                return true;
+            if(v.getPlate().equals(plate) ) {
+                if(v.getNif() == nif) {
+                    return true;
+                }
+                System.out.println("Vehicle with plate: " + plate + " is not owned by NIF: " + nif);
+                return false;
             }
         }
-        System.out.println("Nif: " + nif + " is not the owner of plate: " + plate + " or ins't registered in the database");
+        System.out.println("NIF and plate aren't registered in the database");
         return false;
     }
 
 
-    /*Ainda está incompleto pois mais uma vez é necessário adicionar o parametro nif para saaber se
-    * é o dono do carro que está a tentar renovar o seguro*/
-    public void renewInsurance(Date startDate, Date expiryDate, int Category, String companyName, int policy) {
+    //NOT TESTED
+    public void renewInsurance(Date startDate, Date expiryDate, int Category, String companyName, int policy, int nif) {
 
-        if(!insuranceExists(policy)) {
-            System.out.println("No such insurance with policy number: " + policy);
+        if(!insuranceExists(policy, nif)) {
+            System.out.println("Wrong info, policy: " + policy + " NIF: " + nif);
             return;
         }
 
@@ -625,13 +596,11 @@ public class DataSource {
 
 
 
-    /*Permite fazer o pagametno de uma multa e tal signfica que a multa passada a ter a coluna paid igual a true
-     * que na base de dadso corresponde ao valor 1. Ainda está incompleto pois é necessário verificar
-     * que o driver_license_number esta associado ao nif que é dono do carro com a matricula plate.*/
+    //NOT TESTED
     public void payTicket(int nif, String plate, Date date, double value) {
 
-        if(!checkIfPlateAndDriverExists(nif, plate)) {
-            System.out.println("Plate or NIF doesn't exist in database" + nif + " " + plate);
+        if(isVehicleOwner(nif, plate)) {
+            System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
             return;
         }
 
@@ -689,14 +658,15 @@ public class DataSource {
     }
 
 
+    //NOT TESTED
     public void deleteVehicle(String plate, int nif) { //Inacabado falta primeiro criar a classe Driver
 
-        //Faz sentido que apenas possamos apagar carros que não tenham dono, ou seja, Driver associado.
+        //Faz sentido que apenas possamos apagar carros que não tenham dono, ou seja, NIF associado.
 
-       /* if(!checkIfPlateExists(plate)) {
-            System.out.println("Plate doesn't exist in database" + plate);
+        if(!isVehicleOwner(nif, plate)) {
+            System.out.println("Wrong info, plate: " + plate + " NIF: " + nif);
             return;
-        }*/
+        }
 
         try {
             connection.setAutoCommit(false);
@@ -731,11 +701,10 @@ public class DataSource {
     }
 
 
-    //Tal como antes acho que faz sentido adicionar as informações de quem quer fazer a dada alteração como
-    //parametro.
+    //NOT TESTED
     public void deleteInsurance(int policy, int nif) {
 
-        if(!insuranceExists(policy)) {
+        if(!insuranceExists(policy, nif)) {
             System.out.println("No such insurance with policy number: " + policy);
             return;
         }
