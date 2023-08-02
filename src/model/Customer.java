@@ -9,6 +9,7 @@ public class Customer extends Person {
     private Date startingDate;
     private Date expDate;
 
+
     public int getDriverLicenseNum() {return driverLicenseNum;}
 
     public void setDriverLicenseNum(int driverLicenseNum) {

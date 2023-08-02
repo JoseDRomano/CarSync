@@ -14,9 +14,9 @@ public class MainConnection {
         //Todos os metodos abaixo funcionam
 
 
-      /*  dataSource.queryTickets().forEach(System.out::println);
+        dataSource.queryTickets().forEach(System.out::println);
         dataSource.queryVehicles().forEach(System.out::println);
-        dataSource.queryInsurances().forEach(System.out::println);*/
+        dataSource.queryInsurances().forEach(System.out::println);
 
 
 

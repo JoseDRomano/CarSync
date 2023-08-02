@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 02-Ago-2023 às 13:20
+-- Tempo de geração: 02-Ago-2023 às 14:39
 -- Versão do servidor: 10.4.28-MariaDB
 -- versão do PHP: 8.2.4
 
@@ -35,6 +35,13 @@ CREATE TABLE `customer` (
   `nif` int(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Extraindo dados da tabela `customer`
+--
+
+INSERT INTO `customer` (`driver_license_number`, `license_type`, `start_date`, `expiry_date`, `nif`) VALUES
+(1235566766, '1', '2023-08-10', '2025-08-15', 234554343);
+
 -- --------------------------------------------------------
 
 --
@@ -61,6 +68,13 @@ CREATE TABLE `insurance` (
   `plate` char(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Extraindo dados da tabela `insurance`
+--
+
+INSERT INTO `insurance` (`policy`, `expiry_date`, `company`, `start_date`, `extra_category`, `plate`) VALUES
+(55476468, '2025-08-08', 'AGEAS Seguros', '2023-08-10', 1, '13-24-GD');
+
 -- --------------------------------------------------------
 
 --
@@ -74,6 +88,13 @@ CREATE TABLE `person` (
   `b_date` date NOT NULL,
   `password` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Extraindo dados da tabela `person`
+--
+
+INSERT INTO `person` (`nif`, `name`, `address`, `b_date`, `password`) VALUES
+(234554343, 'Luis Alberta Cina', 'Rua Sem Nome, Porta Inifinta', '2023-08-09', '123abc');
 
 -- --------------------------------------------------------
 
@@ -91,6 +112,13 @@ CREATE TABLE `ticket` (
   `paid` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Extraindo dados da tabela `ticket`
+--
+
+INSERT INTO `ticket` (`nif`, `plate`, `date`, `expiry_date`, `value`, `reason`, `paid`) VALUES
+(234554343, '13-24-GD', '2023-08-23', '2025-08-08', 234.77, 3, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -107,6 +135,13 @@ CREATE TABLE `vehicle` (
   `category` int(1) NOT NULL,
   `nif` int(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Extraindo dados da tabela `vehicle`
+--
+
+INSERT INTO `vehicle` (`brand`, `model`, `color`, `registration_date`, `plate`, `vin`, `category`, `nif`) VALUES
+('Mercedes Benz', 'A8', 'Black', '2023-07-13', '13-24-GD', '23423424FSS', 1, 234554343);
 
 --
 -- Índices para tabelas despejadas
