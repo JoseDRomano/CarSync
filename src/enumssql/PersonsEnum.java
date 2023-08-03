@@ -17,6 +17,7 @@ public enum PersonsEnum {
     COLUMN_CUSTOMER_LICENSE_TYPE,
     COLUMN_CUSTOMER_START_DATE,
     COLUMN_CUSTOMER_EXPIRATION_DATE,
+    QUERY_TABLE_CUSTOMER,
 
     //Constants for the variables of the table Employee
     TABLE_EMPLOYEE,
@@ -33,13 +34,14 @@ public enum PersonsEnum {
             case COLUMN_ADDRESS -> "address";
             case TABLE_CUSTOMER -> "customer";
             case COLUMN_PERSON_TYPE_CUSTOMER -> "CUSTOMER";
-            case COLUMN_CUSTOMER_DRIVER_LICENSE -> "driver_license";
+            case COLUMN_CUSTOMER_DRIVER_LICENSE -> "driver_license_number";
             case COLUMN_CUSTOMER_LICENSE_TYPE -> "license_type";
             case COLUMN_CUSTOMER_START_DATE -> "start_date";
             case COLUMN_CUSTOMER_EXPIRATION_DATE -> "expiration_date";
             case TABLE_EMPLOYEE -> "employee";
             case COLUMN_PERSON_TYPE_EMPLOYEE -> "EMPLOYEE";
             case COLUMN_EMPLOYEE_ACCESS_LEVEL -> "access_level";
+            case QUERY_TABLE_CUSTOMER -> "SELECT * FROM " + getString(TABLE_CUSTOMER);
 
             case INSERT_INTO_PERSON -> "INSERT INTO " + getString(PersonsEnum.TABLE_PERSON) + '('
                     + getString(PersonsEnum.COLUMN_NIF) + ", " +

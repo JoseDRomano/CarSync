@@ -37,7 +37,7 @@ public enum VehicleEnum {
                     getString(VehicleEnum.COLUMN_VEHICLE_CATEGORY) + ", " +
                     getString(VehicleEnum.COLUMN_VEHICLE_REGISTRATION_DATE) + ", " +
                     getString(VehicleEnum.COLUMN_VEHICLE_NIF) + ", " +
-                    getString(VehicleEnum.COLUMN_VEHICLE_VIN) + ") VALUES(?, ?, ?, ?, ?, ?, ?)";
+                    getString(VehicleEnum.COLUMN_VEHICLE_VIN) + ") VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
             case DELETE_VEHICLE -> "DELETE FROM " + getString(VehicleEnum.TABLE_VEHICLE) + " WHERE " +
                     getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ?";
             case QUERY_TABLE_VEHICLE_BY_PLATE -> " SELECT * FROM " + getString(VehicleEnum.TABLE_VEHICLE) +

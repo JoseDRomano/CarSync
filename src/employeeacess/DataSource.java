@@ -1,8 +1,10 @@
 package employeeacess;
 
 import enumssql.InsuranceEnum;
+import enumssql.PersonsEnum;
 import enumssql.TicketEnum;
 import enumssql.VehicleEnum;
+import model.Customer;
 import model.Insurance;
 import model.Ticket;
 import model.Vehicle;
@@ -29,6 +31,7 @@ public class DataSource {
     private PreparedStatement queryInsurances;
     private PreparedStatement queryTickets;
     private PreparedStatement queryVehicleByPlate;
+    private PreparedStatement queryCustomers;
 
     private PreparedStatement insertIntoVehicle;
     private PreparedStatement insertIntoInsurance;
@@ -58,6 +61,8 @@ public class DataSource {
             queryInsurances = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.QUERY_TABLE_INSURANCE));
             queryTickets = connection.prepareStatement(TicketEnum.getString(TicketEnum.QUERY_TABLE_TICKET));
             queryVehicles = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.QUERY_TABLE_VEHICLE));
+            queryCustomers = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.QUERY_TABLE_CUSTOMER));
+
             queryVehicleByPlate = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.QUERY_TABLE_VEHICLE_BY_PLATE));
 
             renewInsurance = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.RENEW_INSURANCE));
@@ -127,6 +132,10 @@ public class DataSource {
                 updateTicket.close();
             }
 
+            if(queryCustomers != null) {
+                queryCustomers.close();
+            }
+
             if (connection != null) {
                 connection.close();
                 System.out.println("Connection successfully closed");
@@ -166,6 +175,7 @@ public class DataSource {
 //    }
 
     //Devolve um arraylist com todos os veículos que estão na base de dados.
+    //TESTED
     public List<Vehicle> queryVehicles() {
 
         List<Vehicle> vehicles = new ArrayList<>();
@@ -192,6 +202,7 @@ public class DataSource {
     }
 
     //Devolve um arraylist com todos os seguros que estão na base de dados.
+    //TESTED
     public List<Insurance> queryInsurances() {
         List<Insurance> insurances = new ArrayList<>();
         try {
@@ -216,6 +227,7 @@ public class DataSource {
     }
 
     //Devolve um arraylist com todas as multas que estão na base de dados.
+    //TESTED
     public List<Ticket> queryTickets() {
         List<Ticket> tickets = new ArrayList<>();
         try {
@@ -240,9 +252,35 @@ public class DataSource {
         }
     }
 
-    /*Devolve uma lista de veículos correspondente a um dado nif, se o nif não constar na base de dados
-     *devolve null*/
-    public List<Vehicle> getVehicle(int nif) {
+    //TESTED
+    public List<Customer> queryCustomers() {
+        List<Customer> customers = new ArrayList<>();
+        try {
+            ResultSet resultSet = queryCustomers.executeQuery();
+            while (resultSet.next()) {
+                Customer customer = new Customer();
+                customer.setNif(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF)));
+//                customer.setName(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_NAME)));
+                customer.setExpDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_EXPIRATION_DATE)));
+                customer.setLicenseType(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE)));
+//                customer.setAddress(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_ADDRESS)));
+//                customer.setBirht_date(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
+                customer.setStartingDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE)));
+//                customer.setPwd(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
+                customer.setDriverLicenseNum(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_DRIVER_LICENSE)));
+                customers.add(customer);
+            }
+            return customers;
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't retrieve data from customer table: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //TESTED
+    public List<Vehicle> getVehicleByNIF(int nif) {
         List<Vehicle> vehicles = new ArrayList<>();
         for (Vehicle vehicle : queryVehicles()) {
             if (vehicle.getNif() == nif) {
@@ -265,11 +303,30 @@ public class DataSource {
         return vehicles;
     }
 
+    //TESTED
+    public Customer getCustomerByNIF(int nif) {
+        for (Customer customer : queryCustomers()) {
+            if (customer.getNif() == nif) {
+                Customer customer1 = new Customer();
+                customer1.setNif(customer.getNif());
+                customer1.setName(customer.getName());
+                customer1.setAddress(customer.getAddress());
+                customer1.setBirht_date(customer.getBirht_date());
+                customer1.setExpDate(customer.getExpDate());
+                customer1.setLicenseType(customer.getLicenseType());
+                customer1.setPwd(customer.getPwd());
+                customer1.setStartingDate(customer.getStartingDate());
+                return customer1;
+            }
+        }
+        System.out.println("No customer found for nif: " + nif);
+        return null;
+    }
 
-    /*Permite inserir um seguro dado, tendo o apolice do seguro e nif.
-     */
-    public void insertInsurance(int policy, String plate, Date startDate, int extraCategory, Date expDate, String companyName, int nif) {
-        //Funciona, mas seria importante ver antecipadamente se o nif está na base de dados ou não
+    //TESTED
+    public void insertInsurance(int policy, String plate, Date startDate,
+                                int extraCategory, Date expDate, String companyName, int nif) {
+
         if (!isVehicleOwner(nif, plate)) {
             System.out.println("Not owner of vehicle with plate: " + plate);
             return;
@@ -313,19 +370,18 @@ public class DataSource {
     }
 
 
-    /*Permite inserir um veículo dado a matrícula, e as caracteristicas do veículo. E ainda
-    o nif que deve corresponder a um customer que exista na base de dados o que ainda não é
-    verificado neste metodo.
-    * */
+    //TESTED
     public void insertVehicle(String plate, String vin, String color,
                               String brand, String model, Date registrationDate,
                               int categoryNumber, int nif) {
 
+        //Verfica se matricula é válida
         if (!plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$") || categoryNumber <= 0 || categoryNumber > 6) {
             System.out.println("Wrong input: " + plate + " " + categoryNumber);
             return;
         }
 
+        //Verifica se o veículo já existe na base de dados
         for (Vehicle v : queryVehicles()) {
             if (v.getPlate().equals(plate)) {
                 System.out.printf("Plate number: %s already in database %n", v.getPlate());
@@ -333,8 +389,9 @@ public class DataSource {
             }
         }
 
-        if (!isVehicleOwner(nif, plate)) {
-            System.out.println("NIF: " + nif + " is not the owner of vehicle with plate: " + plate);
+        //Confirma se o nif existe na base de dados
+        if(!isCustomer(nif)){
+            System.out.println("Customer with nif: " + nif + " does not exist in database");
             return;
         }
 
@@ -347,8 +404,8 @@ public class DataSource {
             insertIntoVehicle.setString(4, plate);
             insertIntoVehicle.setInt(5, categoryNumber);
             insertIntoVehicle.setString(6, registrationDate.toString());
-            insertIntoVehicle.setString(7, vin);
-            insertIntoVehicle.setInt(8, nif);
+            insertIntoVehicle.setInt(7, nif);
+            insertIntoVehicle.setString(8, vin);
             int affected = insertIntoVehicle.executeUpdate();
 
             if (affected == 1) {
@@ -376,14 +433,14 @@ public class DataSource {
     }
 
 
-    //NOT TESTED
-    public void insertTicket(int nif, String plate, Date date, int reason, double value, Date expiry_date) {
+    //TESTED
+    public void insertTicket(int nif, String plate, Date date,
+                             int reason, double value, Date expiry_date) {
 
-      /*  if(!checkIfPlateAndDriverExists(driver_license_number, plate)) {
-            System.out.println("Plate or driver license number doesn't exist in database" + driver_license_number + " " + plate);
-            return;
+        if( !isCustomer(nif) || !isVehicleOwner(nif, plate)) {
+            System.out.println("Customer with nif: " + nif + " not owner of vehicle with plate: " + plate + " or does not exist in database");
         }
-*/
+
         try {
             connection.setAutoCommit(false);
             insertIntoTicket.setInt(3, nif);
@@ -506,9 +563,7 @@ public class DataSource {
     }
 
 
-    /*Permite atualizar o valor a pagar de uma multa, este metodo deve ser chamado antes de listar as multas.
-    Ainda está incompleto.
-    **/
+    //NOT TESTED
     public void updateExpiredTicket(Date oldDate, double newValue, Date expDate, int nif, String plate, Date todayDate) {
 
         //O novo valor da multa pode ser calculado seguindo uma dada tarifa, por exemplo?
@@ -550,7 +605,7 @@ public class DataSource {
         }
     }
 
-    //Permite saber se o seguro existe.
+    //TESTED
     private boolean insuranceExists(int policy, int nif) {
         for (Insurance i : queryInsurances()) {
             if (isVehicleOwner(nif, i.getCarPlate())) {
@@ -562,6 +617,7 @@ public class DataSource {
         return false;
     }
 
+    //TESTED
     private boolean isVehicleOwner(int nif, String plate) {
         for (Vehicle v : queryVehicles()) {
             if (v.getPlate().equals(plate)) {
@@ -573,6 +629,17 @@ public class DataSource {
             }
         }
         System.out.println("NIF and plate aren't registered in the database");
+        return false;
+    }
+
+    //TESTED
+    private boolean isCustomer(int nif) {
+        for (Customer c : queryCustomers()) {
+            if (c.getNif() == nif) {
+                return true;
+            }
+        }
+        System.out.println("NIF isn't registered in the database");
         return false;
     }
 
@@ -683,12 +750,11 @@ public class DataSource {
     }
 
 
-    //NOT TESTED
-    public void deleteVehicle(String plate, int nif) { //Inacabado falta primeiro criar a classe Driver
-        //Faz sentido que apenas possamos apagar carros que não tenham dono, ou seja, NIF associado.
+    //TESTED
+    public void deleteVehicle(String plate, int nif) {
 
         if (!isVehicleOwner(nif, plate)) {
-            System.out.println("Wrong info, plate: " + plate + " NIF: " + nif);
+            System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
             return;
         }
 
@@ -729,7 +795,8 @@ public class DataSource {
     public void deleteInsurance(int policy, int nif) {
 
         if (!insuranceExists(policy, nif)) {
-            System.out.println("No such insurance with policy number: " + policy);
+            System.out.println("No such insurance with policy number: " + policy +
+                    "or wrong info");
             return;
         }
 

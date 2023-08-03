@@ -44,6 +44,9 @@ public class Main {
 
         while (choice != 0) {
             System.out.println("===== MENU =====");
+
+            /*Para os 3 métodos de listar basta tmb pedir
+            * o número de coisas para listar*/
             System.out.println("1. List all vehicles");
             System.out.println("2. List all insurances");
             System.out.println("3. List all tickets");
@@ -88,7 +91,7 @@ public class Main {
                 case 4:
                     System.out.println("Enter the plate number:");
                     int nif = Integer.valueOf(scanner.nextLine());
-                    List<Vehicle> vehicles2 = dataSource.getVehicle(nif);
+                    List<Vehicle> vehicles2 = dataSource.getVehicleByNIF(nif);
                     if (vehicles2 != null) {
                         vehicles2.forEach(System.out::println);
                     }
