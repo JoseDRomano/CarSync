@@ -94,13 +94,15 @@ public class Ticket {
     }
 
     public String toString() {
+        String s = isPaid ? "Paid" : "Not paid";
         return "Ticket info: " + "\n" +
                 "- Driver's NIF: " + nif + "\n" +
                 "- Car plate: " + plate + "\n" +
                 "- TIcket date: " + date + "\n"
                 + "- Ticket expiry date: " + expiry_date + "\n"
-                + "- Value to be paid: " + value + "\n"
-                + "- Ticket reason: " + reason + "\n";
+                + "- Value: " + value + "\n"
+                + "- Ticket reason: " + reason + "\n" +
+                "- Ticket status: " + s + "\n";
     }
 
 

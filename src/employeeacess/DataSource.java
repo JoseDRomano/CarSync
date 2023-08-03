@@ -479,7 +479,7 @@ public class DataSource {
     }
 
 
-    //NOT TESTED
+    //TESTED
     public void updateVehicleColor(String color, String plate, int nif) {
 
         if (!isVehicleOwner(nif, plate)) {
@@ -521,11 +521,11 @@ public class DataSource {
     }
 
 
-    //NOT TESTED
+    //TESTED
     public void changeVehicleOwner(String plate, int oldNif, int newNif) {
 
-        if (!isVehicleOwner(oldNif, plate)) {
-            System.out.println("Something wron with provided info");
+        if (!isVehicleOwner(oldNif, plate) || !isCustomer(newNif)) {
+            System.out.println("Something wrong with provided info");
             return;
         }
 
@@ -644,7 +644,7 @@ public class DataSource {
     }
 
 
-    //NOT TESTED
+    //TESTED
     public void renewInsurance(Date startDate, Date expiryDate, int Category, String companyName, int policy, int nif) {
 
         if (!insuranceExists(policy, nif)) {
@@ -689,10 +689,10 @@ public class DataSource {
     }
 
 
-    //NOT TESTED
+    //TESTED
     public void payTicket(int nif, String plate, Date date, double value) {
 
-        if (isVehicleOwner(nif, plate)) {
+        if (!isVehicleOwner(nif, plate)) {
             System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
             return;
         }
@@ -707,10 +707,12 @@ public class DataSource {
                 } else {
                     if (t.payTicket(value)) {
                         paid = 1;
+                        System.out.println("Ticket paid successfully");
                         break;
                     }
-                    break;
+                    System.out.println("Couldn't pay ticket, insufficient funds or wrong info");
                 }
+                return;
             }
         }
 

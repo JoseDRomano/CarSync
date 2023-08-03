@@ -59,6 +59,7 @@ public class Main {
             System.out.println("10. Renew insurance");
             System.out.println("11. Delete vehicle");
             System.out.println("12. Delete insurance");
+            System.out.println("13. Pay ticket");
             System.out.println("0. Exit");
             System.out.println("================");
             System.out.println("Please enter your choice:");
@@ -162,38 +163,38 @@ public class Main {
                     break;
 
                 case 8:
-                    System.out.println("Enter plate number:");
-                    String plateForUpdateColor = scanner.nextLine();
-                    System.out.println("Enter new color:");
-                    String newColor = scanner.nextLine();
+                    System.out.println("Enter plate number: ");
+                    String plateForUpdateColor = scanner.nextLine().trim();
+                    System.out.println("Enter new color: ");
+                    String newColor = scanner.nextLine().replaceAll("\n", "");
                     System.out.println("Enter NIF: ");
-                    int nif4 = scanner.nextInt();
+                    int nif4 = Integer.valueOf(scanner.nextLine().trim());
                     dataSource.updateVehicleColor(newColor, plateForUpdateColor, nif4);
                     break;
 
                 case 9:
-                    System.out.println("Enter plate number:");
-                    String plateForChangeOwner = scanner.nextLine();
+                    System.out.println("Enter plate number in format XX-XX-XX:");
+                    String plateForChangeOwner = scanner.nextLine().trim();
                     System.out.println("Enter new owner NIF:");
-                    int newOwnerNif = scanner.nextInt();
-                    scanner.nextLine(); // Consume the newline character
-//                    dataSource.changeVehicleOwner(plateForChangeOwner, newOwnerNif);
+                    int newOwnerNif = Integer.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter old owner NIF:");
+                    int oldOwnerNif = Integer.valueOf(scanner.nextLine().trim());
+                    dataSource.changeVehicleOwner(plateForChangeOwner, oldOwnerNif, newOwnerNif);
                     break;
 
                 case 10:
-                    System.out.println("Enter insurance policy number:");
-                    int policyForRenew = scanner.nextInt();
-                    scanner.nextLine(); // Consume the newline character
-                    System.out.println("Enter start date (dd-mm-yyyy):");
-                    Date newStartDate = Date.valueOf(scanner.nextLine());
-                    System.out.println("Enter expiry date (dd-mm-yyyy):");
-                    Date newExpiryDate = Date.valueOf(scanner.nextLine());
+                    System.out.println("Enter insurance policy number: ");
+                    int policyForRenew = Integer.valueOf(scanner.nextLine().trim());;
+                    System.out.println("Enter start date (yyyy-mm-dd):");
+                    Date newStartDate = Date.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter expiry date (yyyy-mm-dd):");
+                    Date newExpiryDate = Date.valueOf(scanner.nextLine().trim());
                     System.out.println("Enter extra category:");
-                    int newExtraCategory = scanner.nextInt();
-                    scanner.nextLine(); // Consume the newline character
+                    int newExtraCategory = Integer.valueOf(scanner.nextLine().trim());
                     System.out.println("Enter company name:");
-                    String newCompanyName = scanner.nextLine();
-//                    dataSource.renewInsurance(newStartDate, newExpiryDate, newExtraCategory, newCompanyName, policyForRenew);
+                    String newCompanyName = scanner.nextLine().replaceAll("\n", "");
+                    int nif5 = Integer.valueOf(scanner.nextLine().trim());
+                    dataSource.renewInsurance(newStartDate, newExpiryDate, newExtraCategory, newCompanyName, policyForRenew, nif5);
                     break;
 
                 case 11:
@@ -210,8 +211,20 @@ public class Main {
                     int policyForDelete = scanner.nextInt();
                     scanner.nextLine(); // Consume the newline character
                     System.out.println("Enter NIF: ");
-                    int nif5 = scanner.nextInt();
-                    dataSource.deleteInsurance(policyForDelete, nif5);
+                    int nif6 = scanner.nextInt();
+                    dataSource.deleteInsurance(policyForDelete, nif6);
+                    break;
+
+                case 13:
+                    System.out.println("Enter NIF: ");
+                    int nif7 = Integer.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter plate number in format XX-XX-XX:");
+                    String plate7 = scanner.nextLine().trim();
+                    System.out.println("Enter date (yyyy-mm-dd):");
+                    Date date7 = Date.valueOf(scanner.nextLine().trim());
+                    System.out.println("Amount of money: ");
+                    Double d7 = Double.valueOf(scanner.nextLine().trim());
+                    dataSource.payTicket(nif7, plate7, date7, d7);
                     break;
 
                 case 0:

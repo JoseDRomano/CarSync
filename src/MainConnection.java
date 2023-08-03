@@ -27,7 +27,15 @@ public class MainConnection {
 
 //        dataSource.insertInsurance(2000019888, "AA-00-00",
 //                Date.valueOf("2021-12-2"), 2, Date.valueOf("2024-12-2"), "Allianz", 2000019888);
-        dataSource.queryInsurances().forEach(System.out::println);
+//        dataSource.queryInsurances().forEach(System.out::println);
+//        dataSource.updateVehicleColor("Dark Brown", "AS-LO-98", 2000019888);
+//        dataSource.changeVehicleOwner("AS-LO-98", 2000019888, 2134567654);
+//        dataSource.renewInsurance(Date.valueOf("2021-12-2"), Date.valueOf("2024-12-2"),
+//                2, "ACP Seguros", 12356886, 2134567654);
+//        dataSource.queryInsurances().forEach(System.out::println);
+
+        dataSource.payTicket(2000019888, "AA-00-00", Date.valueOf("2021-12-02"), 200.00);
+        dataSource.queryTickets().forEach(System.out::println);
         dataSource.close();
 
     }
