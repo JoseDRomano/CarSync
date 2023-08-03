@@ -89,72 +89,75 @@ public class Main {
                     break;
 
                 case 4:
-                    System.out.println("Enter the plate number:");
-                    int nif = Integer.valueOf(scanner.nextLine());
+                    System.out.println("Enter the plate number in formate XX-XX-XX: ");
+                    String plate = scanner.nextLine();
+                    plate.trim();
+                    System.out.println("Enter the NIF: ");
+                    int nif = Integer.valueOf(scanner.nextLine().trim());
                     List<Vehicle> vehicles2 = dataSource.getVehicleByNIF(nif);
                     if (vehicles2 != null) {
-                        vehicles2.forEach(System.out::println);
+                        for(Vehicle vehicle : vehicles2) {
+                            if(vehicle.getNif() == nif) {
+                                System.out.println(vehicle);
+                            }
+                        }
+                    } else {
+                        System.out.println("No vehicles found for plate: " + plate + " and NIF: " + nif + ".");
                     }
                     break;
 
                 case 5:
-                    System.out.println("Enter plate number:");
-                    String plateNumber = scanner.nextLine();
-                    System.out.println("Enter VIN:");
-                    String vin = scanner.nextLine();
-                    System.out.println("Enter color:");
-                    String color = scanner.nextLine();
-                    System.out.println("Enter brand:");
-                    String brand = scanner.nextLine();
-                    System.out.println("Enter model:");
-                    String model = scanner.nextLine();
-                    System.out.println("Enter registration date (dd-mm-yyyy):");
-                    Date registrationDate = Date.valueOf(scanner.nextLine());
-                    System.out.println("Enter category number:");
-                    int categoryNumber = scanner.nextInt();
-                    scanner.nextLine(); // Consume the newline character
-                    System.out.println("Enter NIF:");
-                    int nif2 = scanner.nextInt();
-                    scanner.nextLine(); // Consume the newline character
+                    System.out.println("Enter plate number in format XX-XX-XX: ");
+                    String plateNumber = scanner.nextLine().trim();
+                    System.out.println("Enter VIN: ");
+                    String vin = scanner.nextLine().trim();
+                    System.out.println("Enter color: ");
+                    String color = scanner.nextLine().replaceAll("\n", "");
+                    System.out.println("Enter brand: ");
+                    String brand = scanner.nextLine().replaceAll("\n", "");;
+                    System.out.println("Enter model: ");
+                    String model = scanner.nextLine().replaceAll("\n", "");;
+                    System.out.println("Enter registration date (yyyy-mm-day):");
+                    Date registrationDate = Date.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter category number: ");
+                    int categoryNumber = Integer.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter NIF: ");
+                    int nif2 = Integer.valueOf(scanner.nextLine().trim());
                     dataSource.insertVehicle(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2);
                     break;
 
                 case 6:
-                    System.out.println("Enter policy number:");
-                    int policyNumber = scanner.nextInt();
-                    scanner.nextLine(); // Consume the newline character
-                    System.out.println("Enter plate number:");
-                    String plateNumberForInsurance = scanner.nextLine();
-                    System.out.println("Enter start date (dd-mm-yyyy):");
-                    Date startDate = Date.valueOf(scanner.nextLine());
-                    System.out.println("Enter extra category:");
-                    int extraCategory = scanner.nextInt();
-                    scanner.nextLine(); // Consume the newline character
-                    System.out.println("Enter expiry date (dd-mm-yyyy):");
-                    Date expiryDate = Date.valueOf(scanner.nextLine());
-                    System.out.println("Enter company name:");
-                    String companyName = scanner.nextLine();
-                    System.out.println("Enter NIF:");
-                    int nif3 = scanner.nextInt();
+                    System.out.println("Enter policy number: ");
+                    int policyNumber = Integer.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter plate number in format XX-XX-XX: ");
+                    String plateNumberForInsurance = scanner.nextLine().trim();
+                    System.out.println("Enter start date (yyyy-mm-dd):");
+                    Date startDate = Date.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter extra category: ");
+                    int extraCategory = Integer.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter expiry date (yyyy-mm-dd):");
+                    Date expiryDate = Date.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter company name:" );
+                    String companyName = scanner.nextLine().replaceAll("\n", "");;
+                    System.out.println("Enter NIF: ");
+                    int nif3 = Integer.valueOf(scanner.nextLine().trim());
                     dataSource.insertInsurance(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName, nif3);
                     break;
 
                 case 7:
-                    System.out.println("Enter driver license number:");
-                    int driverLicenseNumber = scanner.nextInt();
-                    scanner.nextLine(); // Consume the newline character
-                    System.out.println("Enter plate number:");
-                    String plateNumberForTicket = scanner.nextLine();
-                    System.out.println("Enter date (dd-mm-yyyy):");
-                    Date ticketDate = Date.valueOf(scanner.nextLine());
-                    System.out.println("Enter reason:");
-                    int reason = scanner.nextInt();
-                    scanner.nextLine(); // Consume the newline character
-                    System.out.println("Enter ticket value:");
-                    double ticketValue = scanner.nextDouble();
-                    scanner.nextLine(); // Consume the newline character
-                    System.out.println("Enter expiry date (dd-mm-yyyy):");
-                    Date ticketExpiryDate = Date.valueOf(scanner.nextLine());
+                    System.out.println("Enter NIF: ");
+                    int driverLicenseNumber = Integer.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter plate number: ");
+                    String plateNumberForTicket = scanner.nextLine().trim();
+                    System.out.println("Enter date (yyyy-mm-dd):");
+                    Date ticketDate = Date.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter reason number for:" + "\n" + "Speeding -> 1 " + "\n" +
+                            "Red Light -> 2" + "\n" + "Illegal Parking -> 3" + "\n" + "Reckless Driving -> 4" + "\n" + "DUI -> 5");
+                    int reason = Integer.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter ticket value: ");
+                    double ticketValue = Double.valueOf(scanner.nextLine().trim());
+                    System.out.println("Enter expiry date (yyyy-mm-dd):");
+                    Date ticketExpiryDate = Date.valueOf(scanner.nextLine().trim());
                     dataSource.insertTicket(driverLicenseNumber, plateNumberForTicket, ticketDate, reason, ticketValue, ticketExpiryDate);
                     break;
 
