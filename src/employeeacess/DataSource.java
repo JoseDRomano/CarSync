@@ -50,6 +50,12 @@ public class DataSource {
 
     private Connection connection;
 
+   /* public DataSource() {
+        if (!open()) {
+            System.out.println("Can't open datasource");
+        }
+    }*/
+
     public boolean open() {
 
         try {
@@ -134,6 +140,10 @@ public class DataSource {
 
             if(queryCustomers != null) {
                 queryCustomers.close();
+            }
+
+            if(queryVehicleByPlate != null) {
+                queryVehicleByPlate.close();
             }
 
             if (connection != null) {
@@ -439,6 +449,7 @@ public class DataSource {
 
         if( !isCustomer(nif) || !isVehicleOwner(nif, plate)) {
             System.out.println("Customer with nif: " + nif + " not owner of vehicle with plate: " + plate + " or does not exist in database");
+            return;
         }
 
         try {

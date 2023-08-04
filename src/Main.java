@@ -1,4 +1,6 @@
+import employeeacess.BackOffice;
 import employeeacess.DataSource;
+import model.Employee;
 import model.Insurance;
 import model.Ticket;
 import model.Vehicle;
@@ -12,9 +14,16 @@ public class Main {
 
     public static void main(String[] args) {
         DataSource dataSource = new DataSource();
+        Employee e1 = new Employee();
+        e1.setAccess_level(2);
+        e1.setName("Future Man");
         if (dataSource.open()) {
             System.out.println("Connected to the database.");
-            showMenu(dataSource);
+            /*Eu pus o showMenu(dataSource) a comentario porque o que deve a aperecer
+            * é o ‘login’ e dependendo de quem fez login aparece então o BackOffice ou o
+            * FrontOffice*/
+//            showMenu(dataSource);
+            BackOffice.startBackOffice(dataSource, e1);
             dataSource.close();
         } else {
             System.out.println("Could not connect to the database.");
@@ -45,8 +54,6 @@ public class Main {
         while (choice != 0) {
             System.out.println("===== MENU =====");
 
-            /*Para os 3 métodos de listar basta tmb pedir
-            * o número de coisas para listar*/
             System.out.println("1. List all vehicles");
             System.out.println("2. List all insurances");
             System.out.println("3. List all tickets");
@@ -70,22 +77,22 @@ public class Main {
             switch (choice) {
                 case 1:
                     List<Vehicle> vehicles = dataSource.queryVehicles();
-                    for (Vehicle vehicle : vehicles) {
-                        System.out.println(vehicle);
+                    for (int i = 0; i < 10; i++) {
+                        System.out.println(vehicles.get(i));
                     }
                     break;
 
                 case 2:
                     List<Insurance> insurances = dataSource.queryInsurances();
-                    for (Insurance insurance : insurances) {
-                        System.out.println(insurance);
+                    for (int i = 0; i < 10; i++) {
+                        System.out.println(insurances.get(i));
                     }
                     break;
 
                 case 3:
                     List<Ticket> tickets = dataSource.queryTickets();
-                    for (Ticket ticket : tickets) {
-                        System.out.println(ticket);
+                    for (int i = 0; i < 10; i++) {
+                        System.out.println(tickets.get(i));
                     }
                     break;
 
