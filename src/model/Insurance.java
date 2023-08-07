@@ -1,8 +1,9 @@
 package model;
 
+import java.util.Comparator;
 import java.util.Date;
 
-public class Insurance {
+public class Insurance implements Comparable<Insurance> {
     private int policy;
     private Date startDate;
     private Date expDate;
@@ -75,6 +76,12 @@ public class Insurance {
                 + "- Company name: " + companyName + "\n"
                 + "- Extra category: " + extraCategory + "\n"
                 + "- Car plate: " + carPlate + "\n";
+    }
+
+    //Default way of comparing
+    @Override
+    public int compareTo(Insurance o) {
+        return this.policy - o.policy;
     }
 
 }

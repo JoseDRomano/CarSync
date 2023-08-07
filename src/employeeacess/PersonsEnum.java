@@ -1,4 +1,4 @@
-package enumssql;
+package employeeacess;
 
 public enum PersonsEnum {
     // constants for the variables of the table Person

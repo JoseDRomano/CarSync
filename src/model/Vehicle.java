@@ -3,7 +3,7 @@ package model;
 import java.sql.Date;
 import java.util.HashMap;
 
-public class Vehicle {
+public class Vehicle implements Comparable<Vehicle>{
 
     private String plate;
     private String vin;
@@ -100,6 +100,11 @@ public class Vehicle {
                 category + "\n" + "- Vin: " + vin + "\n" + "- Registration Date: "
                 + registrationDate + "\n" + "- Color: " + color + "\n"
                 + "- Model: " + model + "\n" + "- Brand: " + brand + "\n";
+    }
+
+    @Override
+    public int compareTo(Vehicle o) {
+        return this.getNif() - o.getNif();
     }
 
 }

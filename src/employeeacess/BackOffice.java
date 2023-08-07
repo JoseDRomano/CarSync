@@ -6,19 +6,22 @@ import java.sql.Date;
 import java.util.Scanner;
 
 
-//Falta não agora mas se calhar mais à frente arranjar forma de voltar atrás se
-//se o employee enganar-se e escolher fazer insert/update/delete e depois se arrepender.
+//Adicionar forma de inserir, ou fazer update de multiplos campos de uma só vez
+//Fazer o view e o delete
+//Se calhar devia-se usar herança para fazer backoffice para cada tipo de employee. Os métodos em comum
+//eram herdados e os outros implementados na classe em especifico.
 
 public class BackOffice {
 
     private DataSource dataSource;
     private Scanner scan;
     private Employee employee;
+    private static BackOffice instance = null;
 
     private BackOffice(DataSource dataSource, Employee employee) {
         this.dataSource = dataSource;
         this.employee = employee;
-        if(employee.getAccess_level() < 0  || employee.getAccess_level() > 2) {
+        if( employee == null || employee.getAccess_level() < 0  || employee.getAccess_level() > 2) {
             System.out.println("Restricted access");
             return;
         }
@@ -31,11 +34,17 @@ public class BackOffice {
         }
     }
 
-    public static void startBackOffice(DataSource dataSource, Employee employee) {
+    public static BackOffice startBackOffice(Employee employee) {
+        DataSource dataSource = DataSource.activateDataSource();
         if(dataSource == null && employee == null ) {
             throw new IllegalArgumentException("DataSource and Employee cannot be null");
         }
-        new BackOffice(dataSource, employee);
+
+        if(instance == null) {
+            instance = new BackOffice(dataSource, employee);
+            return instance;
+        }
+        return instance;
     }
     private void startAdmin() {
         scan = new Scanner(System.in);
@@ -43,30 +52,13 @@ public class BackOffice {
         while (choice != 0) {
             System.out.println("Welcome, " + employee.getName() + "!");
             System.out.println("Please choose an option: ");
-            System.out.println("1 - Insert a new customer");
-            System.out.println("2 - Insert a new employee");
-            System.out.println("3 - Insert a new vehicle");
-            System.out.println("4 - Insert a new insurance");
-            System.out.println("5 - Insert a new ticket");
-
-            System.out.println("6 - Update vehicle");
-            System.out.println("7 - Update customer");
-            System.out.println("8 - Update insurance");
-            System.out.println("9 - Update ticket");
-
-
-
-            System.out.println("10 - Update employee");
-            System.out.println("11 - Delete customer");
-            System.out.println("12 - Delete employee");
-            System.out.println("13 - Delete vehicle");
-            System.out.println("14 - Delete insurance");
-            System.out.println("15 - Delete ticket");
+            System.out.println("To insert information -> 1");
+            System.out.println("To update information -> 2");
+            System.out.println("To delete information -> 3");
+            System.out.println("To view information -> 4");
             System.out.println("0 - Exit");
-            System.out.print("Option: ");
+            System.out.print("Option: " + "\n");
 
-
-//            choice = Integer.parseInt(scan.nextLine().trim());
             String s = scan.nextLine().trim();
             if(!s.isEmpty() || !s.isBlank()) {
                 choice = Integer.parseInt(s);
@@ -75,39 +67,25 @@ public class BackOffice {
                 choice = -1;
             }
             switch (choice) {
-//                case 1 -> dataSource.insertCustomer();
-//                case 2 -> insertEmployee();
-                case 3 -> insertVehicle();
-                case 4 -> insertInsurance();
-                case 5 -> insertTicket();
-                case 6 -> menuUpdateVehicle();
-                case 8 -> menuUpdateInsurance();
-                case 9 -> menuUpdateTicket();
-/*                case 7 -> {
-                    ;
+                case 1 -> insertMenu();
+                case 2 -> updateMenu();
+                case 3 -> deleteMenu();
+                case 4 -> viewMenu();
+                case 0 -> {
+                    System.out.println("Exiting...");
+                    dataSource.close();
                 }
-                case 10 -> {
-                    ;
-                }
-                case 11 -> {
-                    ;
-                }
-                case 12 -> {
-                    ;
-                }
-                case 13 -> {
-                    ;
-                }
-                case 14 -> {
-                    ;
-                }*/
-
-                case 0 -> System.out.println("Exiting...");
                 default -> System.out.println("Invalid option, please try again");
             }
 
         }
         scan.close();
+    }
+
+    private void viewMenu() {
+    }
+
+    private void deleteMenu() {
 
     }
 
@@ -117,16 +95,9 @@ public class BackOffice {
         while (choice != 0) {
             System.out.println("Welcome, " + employee.getName() + "!");
             System.out.println("Please choose an option: ");
-            System.out.println("1 - Insert a new customer");
-            System.out.println("2 - Insert a new employee");
-            System.out.println("3 - Insert a new vehicle");
-            System.out.println("4 - Insert a new insurance");
-            System.out.println("5 - Insert a new ticket");
-            System.out.println("6 - Update vehicle");
-            System.out.println("7 - Update customer");
-            System.out.println("8 - Update insurance");
-            System.out.println("9 - Update ticket");
-            System.out.println("10- Update employee");
+            System.out.println("To insert information -> 1");
+            System.out.println("To update information -> 2");
+            System.out.println("To view information -> 3");
             System.out.println("0 - Exit");
             System.out.print("Option: ");
 
@@ -138,20 +109,13 @@ public class BackOffice {
                 choice = -1;
             }
             switch (choice) {
-//                case 1 -> dataSource.insertCustomer();
-//                case 2 -> insertEmployee();
-                case 3 -> insertVehicle();
-                case 4 -> insertInsurance();
-                case 5 -> insertTicket();
-                case 6 -> menuUpdateVehicle();
-
-//                case 7: ;
-//                    break;
-                case 8 -> menuUpdateInsurance();
-                case 9 -> menuUpdateTicket();
-              /*  case 10 -> {
-                    }*/
-                case 0 -> System.out.println("Exiting...");
+                case 1 -> insertMenu();
+                case 2 -> updateMenu();
+                case 3 -> viewMenu();
+                case 0 -> {
+                    System.out.println("Exiting...");
+                    dataSource.close();
+                }
                 default -> System.out.println("Invalid option, please try again");
             }
         }
@@ -166,16 +130,12 @@ public class BackOffice {
 
             System.out.println("Welcome, " + employee.getName() + "!");
             System.out.println("Please choose an option:");
-            System.out.println("1 - Insert a new customer");
-            System.out.println("2 - Insert a new vehicle");
-            System.out.println("3 - Insert a new insurance");
-            System.out.println("4 - Insert a new ticket");
-            System.out.println("5 - Update vehicle");
-            System.out.println("6 - Update customer");
-            System.out.println("7 - Update insurance");
-            System.out.println("8 - Update ticket");
+            System.out.println("To insert information -> 1");
+            System.out.println("To update information -> 2");
+            System.out.println("To view information -> 3");
             System.out.println("0 - Exit");
             System.out.print("Option: ");
+
             String s = scan.nextLine().trim();
             if(!s.isEmpty() || !s.isBlank()) {
                 choice = Integer.parseInt(s);
@@ -183,16 +143,15 @@ public class BackOffice {
             else {
                 choice = -1;
             }
+
             switch (choice) {
-//                case 1 -> insertCustomer();
-                case 2 -> insertVehicle();
-                case 3 -> insertInsurance();
-                case 4 -> insertTicket();
-                case 5 -> menuUpdateVehicle();
-//                case 6 -> changeVehicleOwner();
-                case 7 -> menuUpdateInsurance();
-                case 8 -> menuUpdateTicket();
-                case 0 -> System.out.println("Exiting...");
+                case 1 -> insertMenuEmployee();
+                case 2 -> updateMenu();
+                case 3 -> viewMenu();
+                case 0 -> {
+                    System.out.println("Exiting...");
+                    dataSource.close();
+                }
                 default -> System.out.println("Invalid option");
             }
         }
@@ -200,6 +159,12 @@ public class BackOffice {
     }
 
     private void insertVehicle() {
+        System.out.println("Insert 0 to go back or 1 to start submetting vehicle information");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to insert menu...");
+            return;
+        }
         System.out.println("Enter plate number in format XX-XX-XX: ");
         String plateNumber = scan.nextLine().trim();
         System.out.println("Enter VIN: ");
@@ -227,6 +192,12 @@ public class BackOffice {
     }
 
     private void insertInsurance() {
+        System.out.println("Insert 0 to go back or 1 to start submetting insurance information");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to insert menu..." + "\n");
+            return;
+        }
         System.out.println("Enter policy number: ");
         int policyNumber = Integer.parseInt(scan.nextLine().trim());
         System.out.println("Enter plate number in format XX-XX-XX: ");
@@ -249,6 +220,12 @@ public class BackOffice {
     }
 
     private void insertTicket() {
+        System.out.println("Insert 0 to go back or 1 to start submetting ticket information");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to insert menu..." + "\n");
+            return;
+        }
         System.out.println("Enter NIF: ");
         int driverLicenseNumber = Integer.parseInt(scan.nextLine().trim());
         System.out.println("Enter plate number: ");
@@ -271,6 +248,12 @@ public class BackOffice {
     }
 
     private void updateVehicleColor() {
+        System.out.println("Insert 0 to go back or 1 to start submetting vehicle information");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to update menu..." + "\n");
+            return;
+        }
         System.out.println("Enter plate number: ");
         String plateForUpdateColor = scan.nextLine().trim();
         System.out.println("Enter new color: ");
@@ -281,6 +264,12 @@ public class BackOffice {
     }
 
     private void changeVehicleOwner() {
+        System.out.println("Insert 0 to go back or 1 to start submetting vehicle information");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to update menu..." + "\n");
+            return;
+        }
         System.out.println("Enter plate number in format XX-XX-XX:");
         String plateForChangeOwner = scan.nextLine().trim();
         System.out.println("Enter new owner NIF:");
@@ -291,6 +280,12 @@ public class BackOffice {
     }
 
     private void renewInsurance() {
+        System.out.println("Insert 0 to go back or 1 to start submetting insurance information");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to update menu..." + "\n");
+            return;
+        }
         System.out.println("Enter insurance policy number: ");
         int policyForRenew = Integer.parseInt(scan.nextLine().trim());
         System.out.println("Enter start date (yyyy-mm-dd):");
@@ -306,6 +301,12 @@ public class BackOffice {
     }
 
     private void payTicket() {
+        System.out.println("Insert 0 to go back or 1 to start submetting ticket information");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to update menu..." + "\n");
+            return;
+        }
         System.out.println("Enter NIF: ");
         int nif7 = Integer.parseInt(scan.nextLine().trim());
         System.out.println("Enter plate number in format XX-XX-XX:");
@@ -321,7 +322,7 @@ public class BackOffice {
         scan = new Scanner(System.in);
         int choiceUV = -1;
         while (choiceUV != 0) {
-            System.out.println("====================Upate vehicle menu====================");
+            System.out.println("====================UPDATE VEHICLE MENU====================");
             System.out.println("Please choose an option: ");
             System.out.println("1 - Update vehicle color");
             System.out.println("2 - Change vehicle owner");
@@ -338,18 +339,21 @@ public class BackOffice {
             switch (choiceUV) {
                 case 1 -> updateVehicleColor();
                 case 2 -> changeVehicleOwner();
-                case 0 -> System.out.println("Back to main menu...");
+                case 0 -> {
+                    System.out.println("Back to main menu..." + "\n");
+                    return;
+                }
                 default -> System.out.println("Invalid option, please try again");
             }
         }
-//        scan.close();
+        scan.close();
     }
 
     private void menuUpdateTicket() {
         scan = new Scanner(System.in);
         int choiceUT = -1;
         while (choiceUT != 0) {
-            System.out.println("====================Upate ticket menu====================");
+            System.out.println("====================UPDATE TICKET MENU====================");
             System.out.println("Please choose an option: ");
             System.out.println("1 - Pay ticket");
             System.out.println("2 - Update expired ticket");
@@ -365,21 +369,22 @@ public class BackOffice {
             }
             switch (choiceUT) {
                 case 1 -> payTicket();
-
-//                case 2: changeVehicleOwner();
-//                    break;
-                case 0 -> System.out.println("Back to main menu...");
+//              case 2 -> updateExpiredTicket();
+                case 0 -> {
+                    System.out.println("Back to main menu..." + "\n");
+                    return;
+                }
                 default -> System.out.println("Invalid option, please try again");
             }
         }
-//        scan.close();
+        scan.close();
     }
 
     private void menuUpdateInsurance() {
         scan = new Scanner(System.in);
         int choiceUI = -1;
         while (choiceUI != 0) {
-            System.out.println("====================Upate ticket menu====================");
+            System.out.println("====================UPDATE INSURANCE MENU====================");
             System.out.println("Please choose an option: ");
             System.out.println("1 - Renew insurance");
 //            System.out.println("2 - Change insurance category");
@@ -397,11 +402,136 @@ public class BackOffice {
             switch (choiceUI) {
                 case 1 -> payTicket();
                 case 2 -> renewInsurance();
-                case 0 -> System.out.println("Back to main menu...");
+                case 0 -> {
+                    System.out.println("Back to main menu..." + "\n");
+                    return;
+                }
                 default -> System.out.println("Invalid option, please try again");
             }
         }
-//        scan.close();
+        scan.close();
+    }
+
+    private void insertMenu() {
+        scan = new Scanner(System.in);
+        int choice = -1;
+        while (choice != 0) {
+            System.out.println("====================INSERT MENU====================");
+            System.out.println("Please choose an option: ");
+
+            System.out.println("""
+            1 - Insert a new customer
+            2 - Insert a new employee
+            3 - Insert a new vehicle
+            4 - Insert a new insurance
+            5 - Insert a new ticket""");
+
+            System.out.println("0 - Exit");
+            System.out.print("Option: ");
+
+
+            String s = scan.nextLine().trim();
+            if(!s.isEmpty() || !s.isBlank()) {
+                choice = Integer.parseInt(s);
+            }
+            else {
+                choice = -1;
+            }
+            switch (choice) {
+//                case 1 -> dataSource.insertCustomer();
+//                case 2 -> dataSource.insertEmployee();
+                case 3 -> insertVehicle();
+                case 4 -> insertInsurance();
+                case 5 -> insertTicket();
+                case 0 -> {
+                    System.out.println("Back to main menu..." + "\n");
+                    return;
+                }
+                default -> System.out.println("Invalid option, please try again");
+            }
+
+        }
+        scan.close();
+    }
+
+    private void insertMenuEmployee() {
+        scan = new Scanner(System.in);
+        int choice = -1;
+        while (choice != 0) {
+            System.out.println("====================INSERT MENU====================");
+            System.out.println("Please choose an option: ");
+
+            System.out.println("""
+            1 - Insert a new customer
+            2 - Insert a new vehicle
+            3 - Insert a new insurance
+            4 - Insert a new ticket""");
+
+            System.out.println("0 - Exit");
+            System.out.print("Option: ");
+
+
+            String s = scan.nextLine().trim();
+            if(!s.isEmpty() || !s.isBlank()) {
+                choice = Integer.parseInt(s);
+            }
+            else {
+                choice = -1;
+            }
+            switch (choice) {
+//              case 1 -> dataSource.insertCustomer();
+                case 2 -> insertVehicle();
+                case 3 -> insertInsurance();
+                case 4 -> insertTicket();
+                case 0 -> {
+                    System.out.println("Back to main menu..." + "\n");
+                    return;
+                }
+                default -> System.out.println("Invalid option, please try again");
+            }
+
+        }
+        scan.close();
+    }
+
+
+    private void updateMenu() {
+        scan = new Scanner(System.in);
+        int choice = -1;
+        while (choice != 0) {
+            System.out.println("====================UPDATE MENU====================");
+            System.out.println("Please choose an option: ");
+
+            System.out.println("""
+                    1 - Update a customer
+                    2 - Update a vehicle
+                    3 - Update an insurance
+                    4 - Update a ticket
+                    """);
+
+            System.out.println("0 - Exit");
+            System.out.print("Option: ");
+
+            String s = scan.nextLine().trim();
+            if (!s.isEmpty() || !s.isBlank()) {
+                choice = Integer.parseInt(s);
+            } else {
+                choice = -1;
+            }
+            switch (choice) {
+//              case 1 -> dataSource.updateCustomer();
+                case 2 -> menuUpdateVehicle();
+                case 3 -> menuUpdateInsurance();
+                case 4 -> menuUpdateTicket();
+                case 0 -> {
+                    System.out.println("Back to main menu..." + "\n");
+                    return;
+                }
+                default -> System.out.println("Invalid option, please try again");
+            }
+
+        }
+        scan.close();
     }
 
 }
