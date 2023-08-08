@@ -1,6 +1,7 @@
 package employeeacess;
 
 import model.Employee;
+import model.Insurance;
 import model.Ticket;
 import model.Vehicle;
 
@@ -699,8 +700,8 @@ public abstract class BackOffice {
             switch (choiceVV) {
                 case 1 -> viewInsuranceByPlate();
                 case 2 -> viewInsuranceByNIF();
-                case 3 -> viewInsuranceByRegistrationDate();
-                case 4 -> viewInsuranceByDate();
+                case 3 -> viewInsuranceByExpiryDate();
+                case 4 -> viewInsuranceByRegistrationDate();
                 case 5 -> viewSpecificInsuranceByPlate();
                 case 6 -> viewSpecificInsuranceByNIF();
                 case 7 -> viewSpecificInsuranceByPolicy();
@@ -714,18 +715,144 @@ public abstract class BackOffice {
     }
 
     private void viewSpecificInsuranceByPolicy() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter policy: ");
+        int nif = Integer.parseInt(scan.nextLine().trim());
+
+        List<Insurance> insuranceList = dataSource.queryInsurances();
+        Collections.sort(insuranceList);
+        for(Insurance t: insuranceList) {
+            if(t.getPolicy() == nif) {
+                System.out.println(t.toString());
+                return;
+            }
+        }
+        System.out.println("No insurance found with that policy number");
     }
 
     private void viewSpecificInsuranceByNIF() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter NIF: ");
+        int nif = Integer.parseInt(scan.nextLine().trim());
+
+        List<Insurance> insuranceList = dataSource.queryInsurances();
+        Collections.sort(insuranceList);
+        List<Vehicle> vehicleList = dataSource.queryVehicles();
+        Collections.sort(vehicleList);
+        for(Vehicle v: vehicleList) {
+            if (v.getNif() == nif) {
+                for(Insurance t: insuranceList) {
+                    if(t.getCarPlate().equals(v.getPlate())) {
+                        System.out.println(t.toString());
+                        return;
+                    }
+                }
+            }
+        }
+        System.out.println("No insurance found with that policy number");
     }
 
     private void viewSpecificInsuranceByPlate() {
-    }
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter policy: ");
+        String plate = scan.nextLine().trim();
 
-    private void viewInsuranceByDate() {
+        List<Insurance> insuranceList = dataSource.queryInsurances();
+        Collections.sort(insuranceList);
+        for(Insurance t: insuranceList) {
+            if(t.getCarPlate() == plate) {
+                System.out.println(t.toString());
+                return;
+            }
+        }
+        System.out.println("No insurance found with that policy number");
     }
 
     private void viewInsuranceByRegistrationDate() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        System.out.println("""
+        1 - To sse from the most recent date
+        2 - To see from the oldest date""");
+
+        int nif8 = Integer.parseInt(scan.nextLine().trim());
+        List<Insurance> insuranceList = dataSource.queryInsurances();
+
+        if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
+            Collections.sort(insuranceList, new Insurance.ExpirationateComparator());
+        }
+        else {
+            Collections.sort(insuranceList, new Insurance.RegistrationDateComparator().reversed());
+        }
+
+        if(nif7 > 20 || nif7 < 0) {
+            for(int i = 0; i < 10; i++) {
+                System.out.println(insuranceList.get(i).toString());
+            }
+        }
+        else {
+            for (int i = 0; i < nif7; i++) {
+                System.out.println(insuranceList.get(i).toString());
+            }
+        }
+    }
+
+    private void viewInsuranceByExpiryDate() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        System.out.println("""
+        1 - To sse from the most recent expiration date
+        2 - To see from the oldest expiration date""");
+
+        int nif8 = Integer.parseInt(scan.nextLine().trim());
+        List<Insurance> insuranceList = dataSource.queryInsurances();
+
+        if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
+            Collections.sort(insuranceList, new Insurance.ExpirationateComparator());
+        }
+        else {
+            Collections.sort(insuranceList, new Insurance.ExpirationateComparator().reversed());
+        }
+
+        if(nif7 > 20 || nif7 < 0) {
+            for(int i = 0; i < 10; i++) {
+                System.out.println(insuranceList.get(i).toString());
+            }
+        }
+        else {
+            for (int i = 0; i < nif7; i++) {
+                System.out.println(insuranceList.get(i).toString());
+            }
+        }
     }
 
     private void viewInsuranceByNIF() {

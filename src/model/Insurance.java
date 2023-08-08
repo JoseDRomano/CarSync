@@ -11,6 +11,43 @@ public class Insurance implements Comparable<Insurance> {
     private String extraCategory;
     private String carPlate;
 
+    public static class StringPlateComparator implements Comparator<Insurance> {
+        @Override
+        public int compare(Insurance o1, Insurance o2) {
+            return o1.getCarPlate().compareTo(o2.getCarPlate());
+        }
+
+        @Override
+        public Comparator<Insurance> reversed() {
+            return Comparator.super.reversed();
+        }
+    }
+
+    public static class RegistrationDateComparator implements Comparator<Insurance> {
+        @Override
+        public int compare(Insurance o1, Insurance o2) {
+            return o1.getStartDate().compareTo(o2.getStartDate());
+        }
+
+        @Override
+        public Comparator<Insurance> reversed() {
+            return Comparator.super.reversed();
+        }
+    }
+
+    public static class ExpirationateComparator implements Comparator<Insurance> {
+        @Override
+        public int compare(Insurance o1, Insurance o2) {
+            return o1.getExpDate().compareTo(o2.getExpDate());
+        }
+
+        @Override
+        public Comparator<Insurance> reversed() {
+            return Comparator.super.reversed();
+        }
+    }
+
+
     public int getPolicy() {
         return policy;
     }
