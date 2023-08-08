@@ -15,6 +15,10 @@ import java.util.List;
 
 /**
  * Para Fazer login chamar método authenticateUser e fazer a verificação; de seguida chamar o método getDummy
+ * Falta SQL para:
+ * - Insert, Update e Delete de Customers e Employees
+ * - O update do customer corresponde a apenas atualizar a data de validade e a
+ * data de inicio.
  */
 public class DataSource {
 
