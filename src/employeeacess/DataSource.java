@@ -147,62 +147,6 @@ public class DataSource {
         }
     }
 
-    class Dummy {
-        public HashMap<String, String> data = new HashMap();
-
-        public Dummy(String nif, String name, String address, String date) {
-            data.put("nif", nif);
-            data.put("name", name);
-            data.put("address", address);
-            data.put("date", date);
-        }
-    }
-
-    public void authenticateUser(String nif, String password) {
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM person WHERE nif = '" + nif + "'");
-            //verify if this password is equals to the password in the database
-            if (resultSet.next()) {
-                //if pwd is correct, return info of the person (nif, name, email, phone)
-                if (BCrypt.checkpw(password, resultSet.getString("password"))) {
-                    System.out.println("Login successful");
-                } else {
-                    System.out.println("Wrong password");
-                }
-            } else {
-                System.out.println("NIF is not registered in our System. Please register first");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    //check if the nif is in the Employee SQL table or in the Customer SQL table
-    public Dummy getDummy(String nif) {
-        Dummy dummy = null;
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM employee WHERE nif = '" + nif + "'");
-            dummy = new Dummy(resultSet.getString("nif"), resultSet.getString("name"),
-                    resultSet.getString("address"), resultSet.getString("b_date"));
-            if (resultSet.next()) {
-                dummy.data.put("type", "employee");
-                dummy.data.put("access_level", resultSet.getString("access_level"));
-
-            } else {
-                dummy.data.put("type", "customer");
-                dummy.data.put("driver_license", resultSet.getString("driver_license"));
-            }
-        } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     //Devolve um arraylist com todos os veículos que estão na base de dados.
     //TESTED
     public List<Vehicle> queryVehicles() {

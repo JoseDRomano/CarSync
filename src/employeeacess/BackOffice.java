@@ -18,7 +18,7 @@ public abstract class BackOffice {
     private Employee employee;
     private static BackOffice instance = null;
 
-    private BackOffice(DataSource dataSource, Employee employee) {
+    public BackOffice(DataSource dataSource, Employee employee) {
         this.dataSource = dataSource;
         this.employee = employee;
         if( employee == null || employee.getAccess_level() < 0  || employee.getAccess_level() > 2) {
