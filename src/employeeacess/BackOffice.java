@@ -11,7 +11,7 @@ import java.util.Scanner;
 //Se calhar devia-se usar herança para fazer backoffice para cada tipo de employee. Os métodos em comum
 //eram herdados e os outros implementados na classe em específico.
 
-public class BackOffice {
+public abstract class BackOffice {
 
     private DataSource dataSource;
     private Scanner scan;
@@ -35,13 +35,16 @@ public class BackOffice {
     }
 
     public static BackOffice startBackOffice(Employee employee) {
-        DataSource dataSource = DataSource.activateDataSource();
+        DataSource dataSource = new DataSource();
+        if(!dataSource.open()) {
+           throw new IllegalStateException("Cannot connect to database");
+        }
         if(dataSource == null && employee == null ) {
             throw new IllegalArgumentException("DataSource and Employee cannot be null");
         }
 
         if(instance == null) {
-            instance = new BackOffice(dataSource, employee);
+//            instance = new BackOffice(dataSource, employee);
             return instance;
         }
         return instance;
