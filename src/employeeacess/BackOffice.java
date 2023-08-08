@@ -1,9 +1,12 @@
 package employeeacess;
 
 import model.Employee;
+import model.Ticket;
+import model.Vehicle;
 
 import java.sql.Date;
-import java.util.Scanner;
+import java.util.*;
+import java.sql.Date;
 
 
 //Adicionar forma de inserir, ou fazer update de multiplos campos de uma só vez
@@ -285,7 +288,7 @@ public abstract class BackOffice {
             }
             switch (choiceUT) {
                 case 1 -> payTicket();
-//                case 2 -> updateExpiredTicket();
+//              case 2 -> updateExpiredTicket();
                 case 0 -> {
                     System.out.println("Back to main menu..." + "\n");
                     return;
@@ -338,16 +341,397 @@ public abstract class BackOffice {
         System.out.println("Enter new access level:");
         int acl = Integer.parseInt(scan.nextLine().trim());
         double d7 = Double.parseDouble(scan.nextLine().trim());
-//      dataSource.updateCustomer(nif7, dln7, date7, expdate7);
+//      dataSource.updateEmployee(nif7, dln7, date7, expdate7);
     }
 
     protected void menuViewVehicle() {
+        scan = new Scanner(System.in);
+        int choiceVV = -1;
+        while (choiceVV != 0) {
+            System.out.println("====================VIEW VEHICLE MENU====================");
+            System.out.println("Please choose an option: ");
+            System.out.println("""
+                    1 - View vehicles organized by plate
+                    2 - View vehicles organized by NIF
+                    3 - View vehicles organized by registration date
+                    4 - View vehicle of a specific NIF
+                    5 - View vehicle of a specific plate
+                    """);
+            System.out.println("0 - Exit");
+            System.out.print("Option: ");
+
+            String s = scan.nextLine().trim();
+            if(!s.isEmpty() || !s.isBlank()) {
+                choiceVV = Integer.parseInt(s);
+            }
+            else {
+                choiceVV = -1;
+            }
+
+            switch (choiceVV) {
+                case 1 -> viewVehicleByPlate();
+                case 2 -> viewVehicleByNIF();
+                case 3 -> viewVehicleByRegistrationDate();
+                case 4 -> viewSpecificVehicleByNIF();
+                case 5 -> viewSpecificVehicleByPlate();
+                case 0 -> {
+                    System.out.println("Back to main menu..." + "\n");
+                    return;
+                }
+                default -> System.out.println("Invalid option, please try again");
+            }
+        }
+    }
+
+    private void viewSpecificVehicleByNIF() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view vehicle menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter NIF: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        List<Vehicle> vehicleList = dataSource.queryVehicles();
+        Collections.sort(vehicleList);
+        for (Vehicle vehicle : vehicleList) {
+            if (vehicle.getNif() == nif7) {
+                System.out.println(vehicle);
+                return;
+            }
+        }
+        System.out.println("No vehicle found with that NIF");
+    }
+
+    private void viewSpecificVehicleByPlate() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view vehicle menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter plate: ");
+        String s = scan.nextLine().trim();
+        List<Vehicle> vehicleList = dataSource.queryVehicles();
+        Collections.sort(vehicleList);
+        for (Vehicle vehicle : vehicleList) {
+            if (vehicle.getPlate().equals(s)) {
+                System.out.println(vehicle);
+                return;
+            }
+        }
+        System.out.println("No vehicle found with that plate");
+    }
+
+    private void viewVehicleByRegistrationDate() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view vehicle menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        System.out.println("""
+        1 - To sse from the most recent date
+        2 - To see from the oldest date""");
+
+        int nif8 = Integer.parseInt(scan.nextLine().trim());
+        List<Vehicle> vehicleList = dataSource.queryVehicles();
+
+        if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
+            Collections.sort(vehicleList, new Vehicle.RegistrationDateComparator());
+        }
+        else {
+            Collections.sort(vehicleList, new Vehicle.RegistrationDateComparator().reversed());
+        }
+
+        if(nif7 > 20 || nif7 < 0) {
+            for(int i = 0; i < 10; i++) {
+                System.out.println(vehicleList.get(i).toString());
+            }
+        }
+        else {
+            for (int i = 0; i < nif7; i++) {
+                System.out.println(vehicleList.get(i).toString());
+            }
+        }
+    }
+
+    private void viewVehicleByNIF() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view vehicle menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        List<Vehicle> vehicleList = dataSource.queryVehicles();
+        Collections.sort(vehicleList);
+        if(nif7 > 20 || nif7 < 0) {
+            for (int i = 0; i < nif7; i++) {
+                System.out.println(vehicleList.get(i).toString());
+            }
+        }
+        else {
+            for (int i = 0; i < 10; i++) {
+                System.out.println(vehicleList.get(i).toString());
+            }
+        }
+    }
+
+    private void viewVehicleByPlate() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view vehicle menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        List<Vehicle> vehicleList = dataSource.queryVehicles();
+        Collections.sort(vehicleList, new Vehicle.StringPlateComparator());
+        if(nif7 > 20 || nif7 < 0) {
+            for (int i = 0; i < nif7; i++) {
+                System.out.println(vehicleList.get(i).toString());
+            }
+        }
+        else {
+            for (int i = 0; i < 10; i++) {
+                System.out.println(vehicleList.get(i).toString());
+            }
+        }
     }
 
     protected void menuViewTicket() {
+        scan = new Scanner(System.in);
+        int choiceVV = -1;
+        while (choiceVV != 0) {
+            System.out.println("====================VIEW VEHICLE MENU====================");
+            System.out.println("Please choose an option: ");
+            System.out.println("""
+                    1 - View tickets organized by plate
+                    2 - View tickets organized by NIF
+                    3 - View tickets organized by date
+                    4 - View tickets organized by expiration date
+                    4 - View ticket of a specific NIF
+                    5 - View ticket of a specific plate
+                    """);
+            System.out.println("0 - Exit");
+            System.out.print("Option: ");
+
+            String s = scan.nextLine().trim();
+            if(!s.isEmpty() || !s.isBlank()) {
+                choiceVV = Integer.parseInt(s);
+            }
+            else {
+                choiceVV = -1;
+            }
+
+            switch (choiceVV) {
+                case 1 -> viewTicketByPlate();
+                case 2 -> viewTicketByNIF();
+                case 3 -> viewTicketByRegistrationDate();
+                case 4 -> viewSpecificTicketByNIF();
+                case 5 -> viewSpecificTicketByPlate();
+                case 0 -> {
+                    System.out.println("Back to main menu..." + "\n");
+                    return;
+                }
+                default -> System.out.println("Invalid option, please try again");
+            }
+        }
+    }
+
+    private void viewSpecificTicketByPlate() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter plate: ");
+        String plate = scan.nextLine().trim();
+
+        List<Ticket> ticketList = dataSource.queryTickets();
+        Collections.sort(ticketList, new Ticket.StringPlateComparator());
+        for(Ticket t: ticketList) {
+            if(t.getPlate().equals(plate)) {
+                System.out.println(t.toString());
+                return;
+            }
+        }
+        System.out.println("No ticket found with that plate number");
+    }
+
+    private void viewSpecificTicketByNIF() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter NIF: ");
+        int nif = Integer.parseInt(scan.nextLine().trim());
+
+        List<Ticket> ticketList = dataSource.queryTickets();
+        Collections.sort(ticketList, new Ticket.StringPlateComparator());
+        for(Ticket t: ticketList) {
+            if(t.getNif() == nif) {
+                System.out.println(t.toString());
+                return;
+            }
+        }
+        System.out.println("No ticket found with that NIF");
+    }
+
+    private void viewTicketByRegistrationDate() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        System.out.println("""
+        1 - To sse from the most recent date
+        2 - To see from the oldest date""");
+
+        int nif8 = Integer.parseInt(scan.nextLine().trim());
+        List<Ticket> ticketList = dataSource.queryTickets();
+
+        if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
+            Collections.sort(ticketList, new Ticket.RegistrationDateComparator());
+        }
+        else {
+            Collections.sort(ticketList, new Ticket.RegistrationDateComparator().reversed());
+        }
+
+        if(nif7 > 20 || nif7 < 0) {
+            for(int i = 0; i < 10; i++) {
+                System.out.println(ticketList.get(i).toString());
+            }
+        }
+        else {
+            for (int i = 0; i < nif7; i++) {
+                System.out.println(ticketList.get(i).toString());
+            }
+        }
+    }
+
+    private void viewTicketByNIF() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        List<Ticket> ticketList = dataSource.queryTickets();
+        Collections.sort(ticketList);
+
+        if(nif7 > 20 || nif7 < 0) {
+            for(int i = 0; i < 10; i++) {
+                System.out.println(ticketList.get(i).toString());
+            }
+        }
+        else {
+            for (int i = 0; i < nif7; i++) {
+                System.out.println(ticketList.get(i).toString());
+            }
+        }
+    }
+
+    private void viewTicketByPlate() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        List<Ticket> ticketList = dataSource.queryTickets();
+        Collections.sort(ticketList, new Ticket.StringPlateComparator());
+        if(nif7 > 20 || nif7 < 0) {
+            for (int i = 0; i < nif7; i++) {
+                System.out.println(ticketList.get(i).toString());
+            }
+        }
+        else {
+            for (int i = 0; i < 10; i++) {
+                System.out.println(ticketList.get(i).toString());
+            }
+        }
     }
 
     protected void menuViewInsurance() {
+        scan = new Scanner(System.in);
+        int choiceVV = -1;
+        while (choiceVV != 0) {
+            System.out.println("====================VIEW VEHICLE MENU====================");
+            System.out.println("Please choose an option: ");
+            System.out.println("""
+                    1 - View insurances organized by policy
+                    2 - View insurances organized by NIF
+                    3 - View insurances organized by expiration date
+                    4 - View insurances organized by date
+                    5 - View insurance of a specific NIF
+                    6 - View insurance of a specific plate
+                    7 - View insurance of a specific policy
+                    """);
+            System.out.println("0 - Exit");
+            System.out.print("Option: ");
+
+            String s = scan.nextLine().trim();
+            if(!s.isEmpty() || !s.isBlank()) {
+                choiceVV = Integer.parseInt(s);
+            }
+            else {
+                choiceVV = -1;
+            }
+
+            switch (choiceVV) {
+                case 1 -> viewInsuranceByPlate();
+                case 2 -> viewInsuranceByNIF();
+                case 3 -> viewInsuranceByRegistrationDate();
+                case 4 -> viewInsuranceByDate();
+                case 5 -> viewSpecificInsuranceByPlate();
+                case 6 -> viewSpecificInsuranceByNIF();
+                case 7 -> viewSpecificInsuranceByPolicy();
+                case 0 -> {
+                    System.out.println("Back to main menu..." + "\n");
+                    return;
+                }
+                default -> System.out.println("Invalid option, please try again");
+            }
+        }
+    }
+
+    private void viewSpecificInsuranceByPolicy() {
+    }
+
+    private void viewSpecificInsuranceByNIF() {
+    }
+
+    private void viewSpecificInsuranceByPlate() {
+    }
+
+    private void viewInsuranceByDate() {
+    }
+
+    private void viewInsuranceByRegistrationDate() {
+    }
+
+    private void viewInsuranceByNIF() {
+    }
+
+    private void viewInsuranceByPlate() {
     }
 
     protected void menuViewEmployee() {

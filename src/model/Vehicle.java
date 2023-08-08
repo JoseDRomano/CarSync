@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Date;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class Vehicle implements Comparable<Vehicle>{
@@ -14,6 +15,30 @@ public class Vehicle implements Comparable<Vehicle>{
     private int nif;
     private String category;
 
+
+    public static class StringPlateComparator implements Comparator<Vehicle> {
+        @Override
+        public int compare(Vehicle o1, Vehicle o2) {
+            return o1.getPlate().compareTo(o2.getPlate());
+        }
+
+        @Override
+        public Comparator<Vehicle> reversed() {
+            return Comparator.super.reversed();
+        }
+    }
+
+    public static class RegistrationDateComparator implements Comparator<Vehicle> {
+        @Override
+        public int compare(Vehicle o1, Vehicle o2) {
+            return o1.getregistrationDate().compareTo(o2.getregistrationDate());
+        }
+
+        @Override
+        public Comparator<Vehicle> reversed() {
+            return Comparator.super.reversed();
+        }
+    }
     public int getNif() {
         return nif;
     }
