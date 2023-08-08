@@ -9,7 +9,7 @@ import java.util.Scanner;
 //Adicionar forma de inserir, ou fazer update de multiplos campos de uma só vez
 //Fazer o view e o delete
 //Se calhar devia-se usar herança para fazer backoffice para cada tipo de employee. Os métodos em comum
-//eram herdados e os outros implementados na classe em especifico.
+//eram herdados e os outros implementados na classe em específico.
 
 public class BackOffice {
 
