@@ -5,23 +5,23 @@ import model.Insurance;
 import model.Ticket;
 import model.Vehicle;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-class DataSource {
+public class DataSource {
 
-    private static final String DB_NAME = "projeto_imt";
+    public static final String DB_NAME = "projeto_imt";
 
     //Este port number é o port number que aparece no XAMPP quando voçês dão start
     //para conectar à base de dados e no meu caso é 3306.
-    private static final int PORT_NUMBER = 3306;
-    private static final String CONNECTION_STRING = "jdbc:mysql://localhost:" + PORT_NUMBER + "/" + DB_NAME;
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
+    public static final int PORT_NUMBER = 3306;
+    public static final String CONNECTION_STRING = "jdbc:mysql://localhost:" + PORT_NUMBER + "/" + DB_NAME;
+    public static final String USERNAME = "root";
+    public static final String PASSWORD = "";
 
     private PreparedStatement queryVehicles;
     private PreparedStatement queryInsurances;
@@ -43,24 +43,10 @@ class DataSource {
     private PreparedStatement deleteInsurance;
     private PreparedStatement deleteTicket;
 
+
     private Connection connection;
 
-    private static DataSource instance = null;
-
-    private DataSource() {
-        if (!open()) {
-            throw new IllegalStateException("Can't open datasource");
-        }
-    }
-
-    public static DataSource activateDataSource() {
-        if (instance == null) {
-            instance = new DataSource();
-            return instance;
-        }
-        return instance;
-    }
-    private boolean open() {
+    public boolean open() {
 
         try {
             connection = DriverManager.getConnection(CONNECTION_STRING, USERNAME, PASSWORD);
@@ -95,7 +81,7 @@ class DataSource {
         return false;
     }
 
-    void close() {
+    public void close() {
         try {
 
             if (insertIntoTicket != null) {
@@ -146,10 +132,6 @@ class DataSource {
                 queryCustomers.close();
             }
 
-            if(queryVehicleByPlate != null) {
-                queryVehicleByPlate.close();
-            }
-
             if (connection != null) {
                 connection.close();
                 System.out.println("Connection successfully closed");
@@ -190,7 +172,7 @@ class DataSource {
 
     //Devolve um arraylist com todos os veículos que estão na base de dados.
     //TESTED
-    List<Vehicle> queryVehicles() {
+    public List<Vehicle> queryVehicles() {
 
         List<Vehicle> vehicles = new ArrayList<>();
         try {
@@ -207,7 +189,6 @@ class DataSource {
                 vehicle.setNif(resultSet.getInt(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_NIF)));
                 vehicles.add(vehicle);
             }
-            Collections.sort(vehicles);
             return vehicles;
         } catch (SQLException e) {
             System.out.println("Couldn't retrieve data from vehicle table: " + e.getMessage());
@@ -218,7 +199,7 @@ class DataSource {
 
     //Devolve um arraylist com todos os seguros que estão na base de dados.
     //TESTED
-    List<Insurance> queryInsurances() {
+    public List<Insurance> queryInsurances() {
         List<Insurance> insurances = new ArrayList<>();
         try {
             ResultSet resultSet = queryInsurances.executeQuery();
@@ -232,7 +213,6 @@ class DataSource {
                 insurance.setCompanyName(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_COMPANY)));
                 insurances.add(insurance);
             }
-            Collections.sort(insurances);
             return insurances;
 
         } catch (SQLException e) {
@@ -244,7 +224,7 @@ class DataSource {
 
     //Devolve um arraylist com todas as multas que estão na base de dados.
     //TESTED
-    List<Ticket> queryTickets() {
+    public List<Ticket> queryTickets() {
         List<Ticket> tickets = new ArrayList<>();
         try {
             ResultSet resultSet = queryTickets.executeQuery();
@@ -259,7 +239,6 @@ class DataSource {
                 ticket.setPaid(resultSet.getInt(TicketEnum.getString(TicketEnum.COLUMN_TICKET_PAID)));
                 tickets.add(ticket);
             }
-            Collections.sort(tickets);
             return tickets;
 
         } catch (SQLException e) {
@@ -270,7 +249,7 @@ class DataSource {
     }
 
     //TESTED
-    List<Customer> queryCustomers() {
+    public List<Customer> queryCustomers() {
         List<Customer> customers = new ArrayList<>();
         try {
             ResultSet resultSet = queryCustomers.executeQuery();
@@ -297,7 +276,7 @@ class DataSource {
     }
 
     //TESTED
-    List<Vehicle> getVehicleByNIF(int nif) {
+    public List<Vehicle> getVehicleByNIF(int nif) {
         List<Vehicle> vehicles = new ArrayList<>();
         for (Vehicle vehicle : queryVehicles()) {
             if (vehicle.getNif() == nif) {
@@ -321,7 +300,7 @@ class DataSource {
     }
 
     //TESTED
-    Customer getCustomerByNIF(int nif) {
+    public Customer getCustomerByNIF(int nif) {
         for (Customer customer : queryCustomers()) {
             if (customer.getNif() == nif) {
                 Customer customer1 = new Customer();
@@ -341,8 +320,8 @@ class DataSource {
     }
 
     //TESTED
-    void insertInsurance(int policy, String plate, Date startDate,
-                         int extraCategory, Date expDate, String companyName, int nif) {
+    public void insertInsurance(int policy, String plate, Date startDate,
+                                int extraCategory, Date expDate, String companyName, int nif) {
 
         if (!isVehicleOwner(nif, plate)) {
             System.out.println("Not owner of vehicle with plate: " + plate);
@@ -388,9 +367,9 @@ class DataSource {
 
 
     //TESTED
-    void insertVehicle(String plate, String vin, String color,
-                       String brand, String model, Date registrationDate,
-                       int categoryNumber, int nif) {
+    public void insertVehicle(String plate, String vin, String color,
+                              String brand, String model, Date registrationDate,
+                              int categoryNumber, int nif) {
 
         //Verfica se matricula é válida
         if (!plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$") || categoryNumber <= 0 || categoryNumber > 6) {
@@ -451,12 +430,11 @@ class DataSource {
 
 
     //TESTED
-    void insertTicket(int nif, String plate, Date date,
-                      int reason, double value, Date expiry_date) {
+    public void insertTicket(int nif, String plate, Date date,
+                             int reason, double value, Date expiry_date) {
 
         if( !isCustomer(nif) || !isVehicleOwner(nif, plate)) {
             System.out.println("Customer with nif: " + nif + " not owner of vehicle with plate: " + plate + " or does not exist in database");
-            return;
         }
 
         try {
@@ -498,7 +476,7 @@ class DataSource {
 
 
     //TESTED
-    void updateVehicleColor(String color, String plate, int nif) {
+    public void updateVehicleColor(String color, String plate, int nif) {
 
         if (!isVehicleOwner(nif, plate)) {
             System.out.println("Something wrong with provided info");
@@ -540,7 +518,7 @@ class DataSource {
 
 
     //TESTED
-    void changeVehicleOwner(String plate, int oldNif, int newNif) {
+    public void changeVehicleOwner(String plate, int oldNif, int newNif) {
 
         if (!isVehicleOwner(oldNif, plate) || !isCustomer(newNif)) {
             System.out.println("Something wrong with provided info");
@@ -582,7 +560,7 @@ class DataSource {
 
 
     //NOT TESTED
-    void updateExpiredTicket(Date oldDate, double newValue, Date expDate, int nif, String plate, Date todayDate) {
+    public void updateExpiredTicket(Date oldDate, double newValue, Date expDate, int nif, String plate, Date todayDate) {
 
         //O novo valor da multa pode ser calculado seguindo uma dada tarifa, por exemplo?
 
@@ -663,7 +641,7 @@ class DataSource {
 
 
     //TESTED
-    void renewInsurance(Date startDate, Date expiryDate, int Category, String companyName, int policy, int nif) {
+    public void renewInsurance(Date startDate, Date expiryDate, int Category, String companyName, int policy, int nif) {
 
         if (!insuranceExists(policy, nif)) {
             System.out.println("Wrong info, policy: " + policy + " NIF: " + nif);
@@ -708,7 +686,7 @@ class DataSource {
 
 
     //TESTED
-    void payTicket(int nif, String plate, Date date, double value) {
+    public void payTicket(int nif, String plate, Date date, double value) {
 
         if (!isVehicleOwner(nif, plate)) {
             System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
@@ -771,7 +749,7 @@ class DataSource {
 
 
     //TESTED
-    void deleteVehicle(String plate, int nif) {
+    public void deleteVehicle(String plate, int nif) {
 
         if (!isVehicleOwner(nif, plate)) {
             System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
@@ -812,7 +790,7 @@ class DataSource {
 
 
     //NOT TESTED
-    void deleteInsurance(int policy, int nif) {
+    public void deleteInsurance(int policy, int nif) {
 
         if (!insuranceExists(policy, nif)) {
             System.out.println("No such insurance with policy number: " + policy +
