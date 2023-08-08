@@ -4,14 +4,18 @@ import model.Customer;
 import model.Insurance;
 import model.Ticket;
 import model.Vehicle;
+import org.mindrot.jbcrypt.BCrypt;
 
-import java.security.NoSuchAlgorithmException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Para Fazer login chamar método authenticateUser e fazer a verificação; de seguida chamar o método getDummy
+ */
 public class DataSource {
 
     public static final String DB_NAME = "projeto_imt";
@@ -128,7 +132,7 @@ public class DataSource {
                 updateTicket.close();
             }
 
-            if(queryCustomers != null) {
+            if (queryCustomers != null) {
                 queryCustomers.close();
             }
 
@@ -143,32 +147,61 @@ public class DataSource {
         }
     }
 
-//    public String[] login(String nif, String password) throws NoSuchAlgorithmException {
-//        try {
-//            Statement statement = connection.createStatement();
-//            ResultSet resultSet = statement.executeQuery("SELECT * FROM person WHERE nif = '" + nif + "' AND password = '" + password + "'");
-//            //verify if this password is equals to the password in the database
-//            if(resultSet.next()) {
-//                //if pwd is correct, return info of the person (nif, name, email, phone)
-//                if (resultSet.getString("passowrd").equals(pwd)) {
-//                    System.out.println("Login successful");
-//                    return new String[]{resultSet.getString("nif"), resultSet.getString("name"), resultSet.getString("email"), resultSet.getString("phone")};
-//                } else {
-//                    System.out.println("Wrong password");
-//                    return false;
-//                }
-//            } else {
-//                System.out.println("NIF is not registered in our System. Please register first");
-//                return false;
-//            }
-//
-//        }
-//        catch (SQLException e) {
-//            System.out.println("Error in SQL: " + e.getMessage());
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
+    class Dummy {
+        public HashMap<String, String> data = new HashMap();
+
+        public Dummy(String nif, String name, String address, String date) {
+            data.put("nif", nif);
+            data.put("name", name);
+            data.put("address", address);
+            data.put("date", date);
+        }
+    }
+
+    public void authenticateUser(String nif, String password) {
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM person WHERE nif = '" + nif + "'");
+            //verify if this password is equals to the password in the database
+            if (resultSet.next()) {
+                //if pwd is correct, return info of the person (nif, name, email, phone)
+                if (BCrypt.checkpw(password, resultSet.getString("password"))) {
+                    System.out.println("Login successful");
+                } else {
+                    System.out.println("Wrong password");
+                }
+            } else {
+                System.out.println("NIF is not registered in our System. Please register first");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Query failed: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    //check if the nif is in the Employee SQL table or in the Customer SQL table
+    public Dummy getDummy(String nif) {
+        Dummy dummy = null;
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM employee WHERE nif = '" + nif + "'");
+            dummy = new Dummy(resultSet.getString("nif"), resultSet.getString("name"),
+                    resultSet.getString("address"), resultSet.getString("b_date"));
+            if (resultSet.next()) {
+                dummy.data.put("type", "employee");
+                dummy.data.put("access_level", resultSet.getString("access_level"));
+
+            } else {
+                dummy.data.put("type", "customer");
+                dummy.data.put("driver_license", resultSet.getString("driver_license"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Query failed: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     //Devolve um arraylist com todos os veículos que estão na base de dados.
     //TESTED
@@ -386,7 +419,7 @@ public class DataSource {
         }
 
         //Confirma se o nif existe na base de dados
-        if(!isCustomer(nif)){
+        if (!isCustomer(nif)) {
             System.out.println("Customer with nif: " + nif + " does not exist in database");
             return;
         }
@@ -433,7 +466,7 @@ public class DataSource {
     public void insertTicket(int nif, String plate, Date date,
                              int reason, double value, Date expiry_date) {
 
-        if( !isCustomer(nif) || !isVehicleOwner(nif, plate)) {
+        if (!isCustomer(nif) || !isVehicleOwner(nif, plate)) {
             System.out.println("Customer with nif: " + nif + " not owner of vehicle with plate: " + plate + " or does not exist in database");
         }
 
