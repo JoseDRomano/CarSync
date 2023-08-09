@@ -1,16 +1,12 @@
 package employeeacess;
 
-import model.Employee;
-import model.Insurance;
-import model.Ticket;
-import model.Vehicle;
+import model.*;
 
 import java.sql.Date;
 import java.util.*;
-import java.sql.Date;
 
 
-//Adicionar forma de inserir, ou fazer update de multiplos campos de uma só vez
+//Adicionar forma de inserir, ou fazer "update" de multiplos campos de uma só vez
 //Fazer o view e o delete
 //Se calhar devia-se usar herança para fazer backoffice para cada tipo de employee. Os métodos em comum
 //eram herdados e os outros implementados na classe em específico.
@@ -20,7 +16,6 @@ public abstract class BackOffice {
     private DataSource dataSource;
     private Scanner scan;
     private Employee employee;
-    private static BackOffice instance = null;
 
     BackOffice(DataSource dataSource, Employee employee) {
         this.dataSource = dataSource;
@@ -40,17 +35,17 @@ public abstract class BackOffice {
 
         switch (employee.getAccess_level()) {
             case 0 -> {
-                BackOfficeEmployee boe = new BackOfficeEmployee(dataSource, employee);
+                new BackOfficeEmployee(dataSource, employee);
                 return;
             }
 
             case 1 -> {
-                BackOfficeEmployeeManager boem = new BackOfficeEmployeeManager(dataSource, employee);
+                new BackOfficeEmployeeManager(dataSource, employee);
                 return;
             }
 
             case 2 -> {
-                BackOfficeAdmin boea = new BackOfficeAdmin(dataSource, employee);
+                new BackOfficeAdmin(dataSource, employee);
                 return;
             }
         }
@@ -341,7 +336,6 @@ public abstract class BackOffice {
         int nif7 = Integer.parseInt(scan.nextLine().trim());
         System.out.println("Enter new access level:");
         int acl = Integer.parseInt(scan.nextLine().trim());
-        double d7 = Double.parseDouble(scan.nextLine().trim());
 //      dataSource.updateEmployee(nif7, dln7, date7, expdate7);
     }
 
@@ -442,21 +436,17 @@ public abstract class BackOffice {
         List<Vehicle> vehicleList = dataSource.queryVehicles();
 
         if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
-            Collections.sort(vehicleList, new Vehicle.RegistrationDateComparator());
+            vehicleList.sort(new Vehicle.RegistrationDateComparator());
         }
         else {
-            Collections.sort(vehicleList, new Vehicle.RegistrationDateComparator().reversed());
+            vehicleList.sort(new Vehicle.RegistrationDateComparator().reversed());
         }
 
         if(nif7 > 20 || nif7 < 0) {
-            for(int i = 0; i < 10; i++) {
-                System.out.println(vehicleList.get(i).toString());
-            }
+            displayList(vehicleList, 10);
         }
         else {
-            for (int i = 0; i < nif7; i++) {
-                System.out.println(vehicleList.get(i).toString());
-            }
+            displayList(vehicleList, nif7);
         }
     }
 
@@ -472,14 +462,10 @@ public abstract class BackOffice {
         List<Vehicle> vehicleList = dataSource.queryVehicles();
         Collections.sort(vehicleList);
         if(nif7 > 20 || nif7 < 0) {
-            for (int i = 0; i < nif7; i++) {
-                System.out.println(vehicleList.get(i).toString());
-            }
+           displayList(vehicleList, 10);
         }
         else {
-            for (int i = 0; i < 10; i++) {
-                System.out.println(vehicleList.get(i).toString());
-            }
+            displayList(vehicleList, nif7);
         }
     }
 
@@ -493,16 +479,12 @@ public abstract class BackOffice {
         System.out.println("Enter number of rows per page, max is 20: ");
         int nif7 = Integer.parseInt(scan.nextLine().trim());
         List<Vehicle> vehicleList = dataSource.queryVehicles();
-        Collections.sort(vehicleList, new Vehicle.StringPlateComparator());
+        vehicleList.sort(new Vehicle.StringPlateComparator());
         if(nif7 > 20 || nif7 < 0) {
-            for (int i = 0; i < nif7; i++) {
-                System.out.println(vehicleList.get(i).toString());
-            }
+           displayList(vehicleList, 10);
         }
         else {
-            for (int i = 0; i < 10; i++) {
-                System.out.println(vehicleList.get(i).toString());
-            }
+            displayList(vehicleList, nif7);
         }
     }
 
@@ -557,10 +539,10 @@ public abstract class BackOffice {
         String plate = scan.nextLine().trim();
 
         List<Ticket> ticketList = dataSource.queryTickets();
-        Collections.sort(ticketList, new Ticket.StringPlateComparator());
+        ticketList.sort(new Ticket.StringPlateComparator());
         for(Ticket t: ticketList) {
             if(t.getPlate().equals(plate)) {
-                System.out.println(t.toString());
+                System.out.println(t);
                 return;
             }
         }
@@ -578,10 +560,10 @@ public abstract class BackOffice {
         int nif = Integer.parseInt(scan.nextLine().trim());
 
         List<Ticket> ticketList = dataSource.queryTickets();
-        Collections.sort(ticketList, new Ticket.StringPlateComparator());
+        ticketList.sort(new Ticket.StringPlateComparator());
         for(Ticket t: ticketList) {
             if(t.getNif() == nif) {
-                System.out.println(t.toString());
+                System.out.println(t);
                 return;
             }
         }
@@ -606,21 +588,17 @@ public abstract class BackOffice {
         List<Ticket> ticketList = dataSource.queryTickets();
 
         if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
-            Collections.sort(ticketList, new Ticket.RegistrationDateComparator());
+            ticketList.sort(new Ticket.RegistrationDateComparator());
         }
         else {
-            Collections.sort(ticketList, new Ticket.RegistrationDateComparator().reversed());
+            ticketList.sort(new Ticket.RegistrationDateComparator().reversed());
         }
 
         if(nif7 > 20 || nif7 < 0) {
-            for(int i = 0; i < 10; i++) {
-                System.out.println(ticketList.get(i).toString());
-            }
+            displayList(ticketList, 10);
         }
         else {
-            for (int i = 0; i < nif7; i++) {
-                System.out.println(ticketList.get(i).toString());
-            }
+            displayList(ticketList, nif7);
         }
     }
 
@@ -637,14 +615,10 @@ public abstract class BackOffice {
         Collections.sort(ticketList);
 
         if(nif7 > 20 || nif7 < 0) {
-            for(int i = 0; i < 10; i++) {
-                System.out.println(ticketList.get(i).toString());
-            }
+            displayList(ticketList, 10);
         }
         else {
-            for (int i = 0; i < nif7; i++) {
-                System.out.println(ticketList.get(i).toString());
-            }
+            displayList(ticketList, nif7);
         }
     }
 
@@ -658,16 +632,12 @@ public abstract class BackOffice {
         System.out.println("Enter number of rows per page, max is 20: ");
         int nif7 = Integer.parseInt(scan.nextLine().trim());
         List<Ticket> ticketList = dataSource.queryTickets();
-        Collections.sort(ticketList, new Ticket.StringPlateComparator());
+        ticketList.sort(new Ticket.StringPlateComparator());
         if(nif7 > 20 || nif7 < 0) {
-            for (int i = 0; i < nif7; i++) {
-                System.out.println(ticketList.get(i).toString());
-            }
+           displayList(ticketList, 10);
         }
         else {
-            for (int i = 0; i < 10; i++) {
-                System.out.println(ticketList.get(i).toString());
-            }
+            displayList(ticketList, nif7);
         }
     }
 
@@ -728,7 +698,7 @@ public abstract class BackOffice {
         Collections.sort(insuranceList);
         for(Insurance t: insuranceList) {
             if(t.getPolicy() == nif) {
-                System.out.println(t.toString());
+                System.out.println(t);
                 return;
             }
         }
@@ -753,7 +723,7 @@ public abstract class BackOffice {
             if (v.getNif() == nif) {
                 for(Insurance t: insuranceList) {
                     if(t.getCarPlate().equals(v.getPlate())) {
-                        System.out.println(t.toString());
+                        System.out.println(t);
                         return;
                     }
                 }
@@ -775,8 +745,8 @@ public abstract class BackOffice {
         List<Insurance> insuranceList = dataSource.queryInsurances();
         Collections.sort(insuranceList);
         for(Insurance t: insuranceList) {
-            if(t.getCarPlate() == plate) {
-                System.out.println(t.toString());
+            if(t.getCarPlate().equals(plate)) {
+                System.out.println(t);
                 return;
             }
         }
@@ -801,21 +771,17 @@ public abstract class BackOffice {
         List<Insurance> insuranceList = dataSource.queryInsurances();
 
         if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
-            Collections.sort(insuranceList, new Insurance.ExpirationateComparator());
+            insuranceList.sort(new Insurance.ExpirationateComparator());
         }
         else {
-            Collections.sort(insuranceList, new Insurance.RegistrationDateComparator().reversed());
+            insuranceList.sort(new Insurance.RegistrationDateComparator().reversed());
         }
 
         if(nif7 > 20 || nif7 < 0) {
-            for(int i = 0; i < 10; i++) {
-                System.out.println(insuranceList.get(i).toString());
-            }
+            displayList(insuranceList, 10);
         }
         else {
-            for (int i = 0; i < nif7; i++) {
-                System.out.println(insuranceList.get(i).toString());
-            }
+            displayList(insuranceList, nif7);
         }
     }
 
@@ -837,34 +803,342 @@ public abstract class BackOffice {
         List<Insurance> insuranceList = dataSource.queryInsurances();
 
         if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
-            Collections.sort(insuranceList, new Insurance.ExpirationateComparator());
+            insuranceList.sort(new Insurance.ExpirationateComparator());
         }
         else {
-            Collections.sort(insuranceList, new Insurance.ExpirationateComparator().reversed());
+            insuranceList.sort(new Insurance.ExpirationateComparator().reversed());
         }
 
         if(nif7 > 20 || nif7 < 0) {
-            for(int i = 0; i < 10; i++) {
-                System.out.println(insuranceList.get(i).toString());
-            }
+            displayList(insuranceList, 10);
         }
         else {
             for (int i = 0; i < nif7; i++) {
-                System.out.println(insuranceList.get(i).toString());
+                displayList(insuranceList, nif7);
             }
         }
     }
 
     private void viewInsuranceByNIF() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+
+        List<Insurance> insuranceList = dataSource.queryInsurances();
+        Collections.sort(insuranceList);
+
+        if (nif7 > 20 || nif7 < 0) {
+            displayList(insuranceList, 10);
+        } else {
+            displayList(insuranceList, nif7);
+
+        }
     }
 
     private void viewInsuranceByPlate() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+
+        List<Insurance> insuranceList = dataSource.queryInsurances();
+        insuranceList.sort(new Insurance.StringPlateComparator());
+
+        if (nif7 > 20 || nif7 < 0) {
+            displayList(insuranceList, 10);
+        } else {
+            displayList(insuranceList, nif7);
+
+        }
     }
 
     protected void menuViewEmployee() {
+       /* System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+
+        List<Employee> employeeList = dataSource.queryEmployee();
+        Collections.sort(employeeList);
+
+        if (nif7 > 20 || nif7 < 0) {
+            displayList(employeeList, 10);
+        } else {
+            displayList(employeeList, nif7);
+
+        }*/
     }
     protected void menuViewCustomer() {
+        scan = new Scanner(System.in);
+        int choiceVV = -1;
+        while (choiceVV != 0) {
+            System.out.println("====================VIEW VEHICLE MENU====================");
+            System.out.println("Please choose an option: ");
+            System.out.println("""
+                    1 - View customers organized by driver license number
+                    2 - View customers organized by NIF
+                    3 - View customers organized by expiration date
+                    4 - View customers organized by registration date
+                    5 - View customer of a specific plate
+                    6 - View customer of a specific NIF
+                    7 - View customer of a specific driver license number
+                    8 - View customer of a specific policy number
+                    """);
+            System.out.println("0 - Exit");
+            System.out.print("Option: ");
+
+            String s = scan.nextLine().trim();
+            if(!s.isEmpty() || !s.isBlank()) {
+                choiceVV = Integer.parseInt(s);
+            }
+            else {
+                choiceVV = -1;
+            }
+
+            switch (choiceVV) {
+                case 1 -> viewCustomerByLicense();
+                case 2 -> viewCustomerByNIF();
+                case 3 -> viewCustomerByExpiryDate();
+                case 4 -> viewCustomerByRegistrationDate();
+                case 5 -> viewSpecificCustomerByPlate();
+                case 6 -> viewSpecificCustomerByNIF();
+                case 7 -> viewSpecificCustomerByLicense();
+                case 8 -> viewSpecificCustomerByPolicy();
+                case 0 -> {
+                    System.out.println("Back to main menu..." + "\n");
+                    return;
+                }
+                default -> System.out.println("Invalid option, please try again");
+            }
+        }
     }
+
+    private void viewSpecificCustomerByPolicy() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter policy: ");
+        int policy =Integer.parseInt(scan.nextLine().trim());
+
+        List<Insurance> insuranceList = dataSource.queryInsurances();
+        List<Vehicle> vehicleList = dataSource.queryVehicles();
+        List<Customer> customerList = dataSource.queryCustomers();
+
+        for(Insurance insurance : insuranceList) {
+            if(insurance.getPolicy() == policy) {
+                for(Vehicle vehicle : vehicleList) {
+                    if(vehicle.getPlate().equals(insurance.getCarPlate())) {
+                        for(Customer customer : customerList) {
+                            if(customer.getNif() == vehicle.getNif()) {
+                                System.out.println(customer);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("No customer found with that policy number: " + policy);
+    }
+
+    private void viewSpecificCustomerByLicense() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter driver's license number: ");
+        int policy =Integer.parseInt(scan.nextLine().trim());
+
+        List<Customer> customerList = dataSource.queryCustomers();
+
+        for(Customer customer : customerList) {
+            if(customer.getDriverLicenseNum() == policy) {
+                System.out.println(customer);
+            }
+        }
+        System.out.println("No customer found with that driver license number: " + policy);
+    }
+
+    private void viewSpecificCustomerByNIF() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter driver's NIF: ");
+        int policy =Integer.parseInt(scan.nextLine().trim());
+
+        List<Customer> customerList = dataSource.queryCustomers();
+
+        for(Customer customer : customerList) {
+            if(customer.getNif() == policy) {
+                System.out.println(customer);
+            }
+        }
+        System.out.println("No customer found with that NIF: " + policy);
+    }
+
+    private void viewSpecificCustomerByPlate() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter driver's NIF: ");
+        String policy = scan.nextLine().trim();
+
+        List<Vehicle> vehicleList = dataSource.queryVehicles();
+        List<Customer> customerList = dataSource.queryCustomers();
+
+        for(Vehicle vehicle : vehicleList) {
+            if(vehicle.getPlate().equals(policy)) {
+                for(Customer customer : customerList) {
+                    if(customer.getNif() == vehicle.getNif()) {
+                        System.out.println(customer);
+                    }
+                }
+            }
+        }
+
+        System.out.println("No customer found with that plate : " + policy);
+    }
+
+    private void viewCustomerByRegistrationDate() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        System.out.println("""
+        1 - To sse from the most recent date
+        2 - To see from the oldest date""");
+
+        int nif8 = Integer.parseInt(scan.nextLine().trim());
+        List<Customer> customerList = dataSource.queryCustomers();
+
+        if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
+//            Collections.sort(customerList, new Customer().ExpirationateComparator());
+        }
+        else {
+//            Collections.sort(insuranceList, new Insurance.RegistrationDateComparator().reversed());
+        }
+
+        if(nif7 > 20 || nif7 < 0) {
+            displayList(customerList, 10);
+        }
+        else {
+            displayList(customerList, nif7);
+        }
+    }
+
+    private void viewCustomerByExpiryDate() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        System.out.println("""
+        1 - To sse from the most recent expiration date
+        2 - To see from the oldest expiration date""");
+
+        int nif8 = Integer.parseInt(scan.nextLine().trim());
+        List<Customer> customerList = dataSource.queryCustomers();
+
+        if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
+//            Collections.sort(customerList, new Insurance.ExpirationateComparator());
+        }
+        else {
+//            Collections.sort(customerList, new Insurance.ExpirationateComparator().reversed());
+        }
+
+        if(nif7 > 20 || nif7 < 0) {
+            displayList(customerList, 10);
+        }
+        else {
+            for (int i = 0; i < nif7; i++) {
+                displayList(customerList, nif7);
+            }
+        }
+    }
+
+    private void viewCustomerByNIF() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        List<Customer> customerList = dataSource.queryCustomers();
+        customerList.sort(Comparator.comparing(Customer::getNif));
+
+        if(nif7 > 20 || nif7 < 0) {
+            displayList(customerList, 10);
+        }
+        else {
+            for (int i = 0; i < nif7; i++) {
+                displayList(customerList, nif7);
+            }
+        }
+
+    }
+
+    private void viewCustomerByLicense() {
+        System.out.println("Insert 0 to go back or 1 to continue");
+        int choice = Integer.parseInt(scan.nextLine().trim());
+        if (choice == 0) {
+            System.out.println("Going back to view ticket menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        List<Customer> customerList = dataSource.queryCustomers();
+        customerList.sort(Comparator.comparing(Customer::getDriverLicenseNum));
+
+        if(nif7 > 20 || nif7 < 0) {
+            displayList(customerList, 10);
+        }
+        else {
+            for (int i = 0; i < nif7; i++) {
+                displayList(customerList, nif7);
+            }
+        }
+
+    }
+
 
     protected void updateCustomer() {
         System.out.println("Insert 0 to go back or 1 to start submetting ticket information");
@@ -884,4 +1158,41 @@ public abstract class BackOffice {
         double d7 = Double.parseDouble(scan.nextLine().trim());
 //      dataSource.updateCustomer(nif7, dln7, date7, expdate7);
     }
+
+    public static void displayList(List<?> objects, int rowsPerPage) {
+        Scanner scanner = new Scanner(System.in);
+        int currentPosition = 0; // Always start from the first position
+        int totalObjects = objects.size();
+
+        int pages = (int) Math.ceil((double) totalObjects / rowsPerPage);
+        int aux = 1;
+
+        while (currentPosition < totalObjects) {
+            System.out.println("Displaying from page " + aux + " of " + pages + ":");
+
+            for (int i = currentPosition; i < Math.min(currentPosition + rowsPerPage, totalObjects); i++) {
+                System.out.println(objects.get(i));
+            }
+
+            System.out.print("\nOptions: (C)ontinue, (P)revious, (B)ack to menu: ");
+            String input = scanner.nextLine().toUpperCase();
+
+            switch (input) {
+                case "C" -> {
+                    aux++;
+                    currentPosition += rowsPerPage;
+                }
+                case "P" -> {
+                    aux--;
+                    aux = Math.max(1, aux);
+                    currentPosition = Math.max(0, currentPosition - rowsPerPage);
+                }
+                case "B" -> {
+                    return;
+                }
+                default -> System.out.println("Invalid input. Please try again.");
+            }
+        }
+    }
+
 }
