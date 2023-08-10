@@ -8,9 +8,14 @@ import java.util.Scanner;
 
 public class WelcomeMenu {
 
-    public void run() throws SQLException {
+    public static void main(String[] args) throws SQLException {
+        run();
+    }
+
+    public static void run() throws SQLException {
         System.out.println("Welcome to IMT (but better). For every menu you'll have a few options to choose and you'll" +
-                " have to type the number of the option you want to choose. For any question, contact us at 217 949 000");
+                " have to type the number of the option you want to choose. \n" +
+                "For any question, contact us at 217 949 000");
         System.out.println("1. Login");
         System.out.println("2. Register");
         System.out.println("3. Exit");
@@ -39,9 +44,20 @@ public class WelcomeMenu {
 class Register {
     private static final String SUCCESSFUL_REGISTER = "Register successful, please login";
     private static final String NIF_ALREADY_REGISTERED = "NIF already registered in our System. Please login";
-    Connection connection;
+
+    public static final String DB_NAME = "projeto_imt";
+    //Este port number é o port number que aparece no XAMPP quando voçês dão start
+    //para conectar à base de dados e no meu caso é 3306.
+    public static final int PORT_NUMBER = 3306;
+
+    private static final String URL = "jdbc:mysql://localhost:" + PORT_NUMBER + "/" + DB_NAME;
+    public static final String USERNAME = "root";
+    public static final String PASSWORD = "";
+
+    private Connection connection;
 
     public void run() throws SQLException {
+        connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         Scanner scanner = new Scanner(System.in);
         System.out.println("------ Register ------");
 
@@ -85,15 +101,15 @@ class Register {
 
     //check if the passowrd is at least 8 characters long
     private String validatePWD(Scanner scanner) {
-            System.out.println("Enter password (must be at least 8 characters long):");
-            String password = scanner.nextLine().trim();
+        System.out.println("Enter password (must be at least 8 characters long):");
+        String password = scanner.nextLine().trim();
 
-        while(!(password.length() < 8)) {
+        while (!(password.length() < 8)) {
             System.out.println("Password must be at least 8 characters long");
             System.out.println("Enter password (must be at least 8 characters long):");
             password = scanner.nextLine().trim();
         }
-        while(true) {
+        while (true) {
             System.out.println("Confirm password:");
             String confirmPassword = scanner.nextLine().trim();
             if (password.equals(confirmPassword)) {
@@ -111,7 +127,7 @@ class Register {
         while (true) {
             System.out.println("Enter nif:");
             String input = scanner.nextLine();
-            if(input.length() != 9) {
+            if (input.length() != 9) {
                 System.out.println("Invalid NIF. Please try again");
                 validateNIF(scanner);
             }
@@ -147,13 +163,25 @@ class Register {
 }
 
 class Login {
-    Connection connection;
     private static final String SUCCESSFUL_LOGIN = "Login successful";
     private static final String WRONG_PASSWORD = "Wrong password";
     private static final String NIF_NOT_REGISTERED = "NIF is not registered in our System. Please register first";
+
+    public static final String DB_NAME = "projeto_imt";
+    //Este port number é o port number que aparece no XAMPP quando voçês dão start
+    //para conectar à base de dados e no meu caso é 3306.
+    public static final int PORT_NUMBER = 3306;
+
+    private static final String URL = "jdbc:mysql://localhost:" + PORT_NUMBER + "/" + DB_NAME;
+    public static final String USERNAME = "root";
+    public static final String PASSWORD = "";
+
+    private Connection connection;
+
     Scanner scanner;
 
-    public void run() {
+    public void run() throws SQLException {
+        connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         boolean isCorrect = false;
         boolean goBack = false;
         scanner = new Scanner(System.in);
