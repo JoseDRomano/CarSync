@@ -258,7 +258,7 @@ class Login {
     }
 
     //check if the nif is in the Employee SQL table or in the Customer SQL table
-    private Dummy getDummy(String nif) {
+    public Dummy getDummy(String nif) {
         Dummy dummy = null;
         try {
             Statement statement = connection.createStatement();
