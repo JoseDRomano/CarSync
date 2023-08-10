@@ -44,9 +44,6 @@ public class Vehicle implements Comparable<Vehicle>{
     }
 
     public void setNif(int nif) {
-        if(nif < 200000000  || nif > 299999999) {
-            throw new IllegalArgumentException("NIF must have 9 digits");
-        }
         this.nif = nif;
     }
 
