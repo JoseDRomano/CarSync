@@ -1,6 +1,7 @@
 package model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.sql.Date;
 import util.LogUtil;
 
 public class Customer extends Person {
@@ -14,6 +15,7 @@ public class Customer extends Person {
 
     public void setDriverLicenseNum(int driverLicenseNum) {
 //        LogUtil.info("Setting Driver License Number: " + driverLicenseNum);
+        if(driverLicenseNum < 10000000 || driverLicenseNum > 19999999) throw new IllegalArgumentException("Driver License Number cannot be negative");
         this.driverLicenseNum = driverLicenseNum;
     }
 
@@ -77,5 +79,10 @@ public class Customer extends Person {
                 "License Category: " + licenseType + "\n" +
                 "Registration Date: " + startingDate + "\n" +
                 "Expiration Data: " + expDate +  "\n";
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        return super.nif - o.nif;
     }
 }

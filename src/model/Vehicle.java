@@ -44,6 +44,9 @@ public class Vehicle implements Comparable<Vehicle>{
     }
 
     public void setNif(int nif) {
+        if(nif < 200000000  || nif > 299999999) {
+            throw new IllegalArgumentException("NIF must have 9 digits");
+        }
         this.nif = nif;
     }
 
@@ -56,7 +59,7 @@ public class Vehicle implements Comparable<Vehicle>{
             this.plate = plate;
             return;
         }
-        System.out.println("Incorrect plate number");
+        throw new IllegalArgumentException("Plate must have the following format: XX-XX-XX");
     }
 
     public String getVin() {
@@ -64,7 +67,11 @@ public class Vehicle implements Comparable<Vehicle>{
     }
 
     public void setVin(String vin) {
-        this.vin = vin;
+        if(vin.matches("^([0-9A-Z]{17})$")) {
+            this.vin = vin;
+            return;
+        }
+       throw new IllegalArgumentException("VIN must have 17 digits");
     }
 
     public String getColor() {

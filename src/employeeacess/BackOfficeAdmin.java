@@ -97,7 +97,7 @@ public class BackOfficeAdmin extends BackOffice{
         scan = new Scanner(System.in);
         int choice = -1;
         while (choice != 0) {
-            System.out.println("====================INSERT MENU====================");
+            System.out.println("====================VIEW MENU====================");
             System.out.println("Please choose an option: ");
 
             System.out.println("""

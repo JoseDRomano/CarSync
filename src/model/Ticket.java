@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Comparator;
 
 public class Ticket implements Comparable<Ticket> {
@@ -74,7 +75,6 @@ public class Ticket implements Comparable<Ticket> {
         System.out.println("Value not enough to pay ticket");
         return false;
     }
-
     public String getPlate() {
         return plate;
     }
@@ -127,6 +127,9 @@ public class Ticket implements Comparable<Ticket> {
     }
 
     public void setNif(int nif) {
+        if(nif < 200000000  || nif > 299999999) {
+            throw new IllegalArgumentException("NIF must have 9 digits");
+        }
         this.nif = nif;
     }
 

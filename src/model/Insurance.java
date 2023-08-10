@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -53,6 +54,7 @@ public class Insurance implements Comparable<Insurance> {
     }
 
     public void setPolicy(int policy) {
+        if(policy < 1000000000 || policy > 1999999999) throw new IllegalArgumentException("Policy number must be 10 digits long");
         this.policy = policy;
     }
 

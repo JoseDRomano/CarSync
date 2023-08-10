@@ -1,8 +1,9 @@
 package model;
 
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
 
-public abstract class Person {
+public abstract class Person implements Comparable<Person> {
     protected int nif;
     protected String pwd;
     protected String name;
@@ -14,6 +15,9 @@ public abstract class Person {
     }
 
     public void setNif(int nif) {
+        if(nif < 100000000) {
+            throw new IllegalArgumentException("NIF must have 9 digits");
+        }
         this.nif = nif;
     }
 
@@ -38,6 +42,10 @@ public abstract class Person {
     }
 
     public void setBirht_date(Date birht_date) {
+        LocalDate eighteenYearsAgo = LocalDate.now().minusYears(18);
+        if(birht_date.toLocalDate().isAfter(eighteenYearsAgo)) {
+            throw new IllegalArgumentException("You must be at least 18 years old to register");
+        }
         this.birht_date = birht_date;
     }
 
