@@ -1374,7 +1374,7 @@ public abstract class BackOffice {
                 value = Integer.parseInt(s);
                 validInput = true;
             } else {
-                System.out.println("Invalid NIF. Please enter a 9-digit number.");
+                System.out.println("Invalid value. Please enter a number.");
             }
         } while (!validInput);
 
