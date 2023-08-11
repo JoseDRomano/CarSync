@@ -8,11 +8,7 @@ import java.util.Scanner;
 
 public class WelcomeMenu {
 
-    public static void main(String[] args) throws SQLException {
-        run();
-    }
-
-    public static void run() throws SQLException {
+    public void run() throws SQLException {
         System.out.println("Welcome to IMT (but better). For every menu you'll have a few options to choose and you'll" +
                 " have to type the number of the option you want to choose. \n" +
                 "For any question, contact us at 217 949 000");
