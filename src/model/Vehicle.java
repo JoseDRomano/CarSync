@@ -56,7 +56,7 @@ public class Vehicle implements Comparable<Vehicle>{
             this.plate = plate;
             return;
         }
-        throw new IllegalArgumentException("Plate must have the following format: XX-XX-XX");
+       System.out.println("Plate must have the following format: XX-XX-XX");
     }
 
     public String getVin() {
@@ -68,7 +68,6 @@ public class Vehicle implements Comparable<Vehicle>{
             this.vin = vin;
             return;
         }
-       throw new IllegalArgumentException("VIN must have 17 digits");
     }
 
     public String getColor() {

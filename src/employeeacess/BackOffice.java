@@ -3,6 +3,9 @@ package employeeacess;
 import model.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 
@@ -20,6 +23,7 @@ public abstract class BackOffice {
     BackOffice(DataSource dataSource, Employee employee) {
         this.dataSource = dataSource;
         this.employee = employee;
+        this.scan = new Scanner(System.in);
     }
 
     public static void startBackOffice(Employee employee) {
@@ -67,25 +71,167 @@ public abstract class BackOffice {
 
     abstract void updateMenu();
 
+
+    private Date getDate() {
+        Date sqlDate = null;
+        boolean validInput = false;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        do {
+            String input = scan.nextLine().trim();
+            try {
+                LocalDate localDate = LocalDate.parse(input, formatter);
+                sqlDate = Date.valueOf(localDate);
+                validInput = true;
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format. Please enter a date in the format yyyy-MM-dd.");
+            }
+        } while (!validInput);
+
+        return sqlDate;
+    }
+
+    private int getNIF() {
+        int nif = 0;
+        boolean validInput = false;
+
+        do {
+            String s = scan.nextLine().trim();
+            if (s.matches("\\d{9}")) {
+                nif = Integer.parseInt(s);
+                validInput = true;
+            } else {
+                System.out.println("Invalid NIF. Please enter a 9-digit number.");
+            }
+        } while (!validInput);
+
+        return nif;
+    }
+
+
+    private int getDriverLicense() {
+        int driverLicense = 0;
+        boolean validInput = false;
+
+        do {
+            String s = scan.nextLine().trim();
+            if (s.matches("\\d{8}")) {
+                driverLicense = Integer.parseInt(s);
+                validInput = true;
+            } else {
+                System.out.println("Invalid driver license number. Please enter a 8-digit number.");
+            }
+        } while (!validInput);
+
+        return driverLicense;
+    }
+
+
+    private int getPolicy() {
+        int policy = 0;
+        boolean validInput = false;
+
+        do {
+            String s = scan.nextLine().trim();
+            if (s.matches("\\d{9}")) {
+                policy = Integer.parseInt(s);
+                validInput = true;
+            } else {
+                System.out.println("Invalid policy number. Please enter a 9-digit number.");
+            }
+        } while (!validInput);
+
+        return policy;
+    }
+
+    private String getPlate() {
+        String plate = null;
+        boolean validInput = false;
+
+        do {
+            String s = scan.nextLine().trim();
+            if (s.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$")) {
+                plate = s;
+                validInput = true;
+            } else {
+                System.out.println("Invalid plate. Please enter a XX-XX-XX format.");
+            }
+        } while (!validInput);
+
+        return plate;
+    }
+
+    private String getString() {
+        String str = null;
+        boolean validInput = false;
+
+        do {
+            String s = scan.nextLine().trim();
+            if (s.matches("^(?=.*[a-zA-Z0-9].*[a-zA-Z0-9])[\\w\\s]{2,}$|^[a-zA-Z0-9]+\\s[a-zA-Z0-9]+$")) {
+                str = s;
+                validInput = true;
+            } else {
+                System.out.println("Invalid word. Please make sure there are no special letters");
+            }
+        } while (!validInput);
+
+        return str;
+    }
+
+
+    private String getVIN() {
+        String str = null;
+        boolean validInput = false;
+
+        do {
+            String s = scan.nextLine().trim();
+            if (s.matches("^[A-Z0-9]{17}$")) {
+                str = s;
+                validInput = true;
+            } else {
+                System.out.println("Invalid VIN. Please enter a 17 digit value.");
+            }
+        } while (!validInput);
+
+        return str;
+    }
+
+    private double getDouble() {
+        double amount = 0.00;
+        boolean validInput = false;
+
+        do {
+            String s = scan.nextLine().trim();
+            if (s.matches("^\\d+\\.\\d{2}$|^\\d+\\.00$")) {
+                amount = Double.parseDouble(s);
+                validInput = true;
+            } else {
+                System.out.println("Invalid amount. Please enter a value that ends with a decimal part or .00 .");
+            }
+        } while (!validInput);
+
+        return amount;
+    }
+
     protected void insertVehicle() {
-        System.out.println("Insert 0 to go back");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to insert menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter plate number in format XX-XX-XX: ");
-        String plateNumber = scan.nextLine().trim();
+        String plateNumber = getPlate();
         System.out.println("Enter VIN: ");
-        String vin = scan.nextLine().trim();
+        String vin = getVIN();
         System.out.println("Enter color: ");
-        String color = scan.nextLine().replaceAll("\n", "");
+        String color = getString();
         System.out.println("Enter brand: ");
-        String brand = scan.nextLine().replaceAll("\n", "");
+        String brand = getString();
         System.out.println("Enter model: ");
-        String model = scan.nextLine().replaceAll("\n", "");
+        String model = getString();
         System.out.println("Enter registration date (yyyy-mm-day):");
-        Date registrationDate = Date.valueOf(scan.nextLine().trim());
+        Date registrationDate = getDate();
         System.out.println("""
                     Enter vehicle category:
                     Light Commercial Vehicle -> 1
@@ -94,17 +240,13 @@ public abstract class BackOffice {
                     Heavy-Duty Goods Vehicle -> 4
                     Motorcycle -> 5
                     Moped -> 6""");
-        int categoryNumber = Integer.parseInt(scan.nextLine().trim());
+        int categoryNumber = getInteger(scan);
         System.out.println("Enter NIF: ");
-        int nif2 = Integer.parseInt(scan.nextLine().trim());
-        System.out.println("Enter 0 to go back or 1 to submit vehicle information");
-        choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice != 1) {
-            System.out.println("Going back to insert menu..." + "\n");
-            return;
-        }
+        int nif2 = getNIF();
         dataSource.insertVehicle(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2);
     }
+
+
 
     protected void insertCustomer() {
     }
@@ -113,52 +255,47 @@ public abstract class BackOffice {
     }
 
     protected void insertInsurance() {
-        System.out.println("Insert 0 to go back or 1 to start submetting insurance information");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to insert menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter policy number: ");
-        int policyNumber = Integer.parseInt(scan.nextLine().trim());
+        int policyNumber = getPolicy();
         System.out.println("Enter plate number in format XX-XX-XX: ");
-        String plateNumberForInsurance = scan.nextLine().trim();
+        String plateNumberForInsurance = getPlate();
         System.out.println("Enter start date (yyyy-mm-dd):");
-        Date startDate = Date.valueOf(scan.nextLine().trim());
+        Date startDate = getDate();
         System.out.println("""
                 Enter extra category number for:
                 Comprehensive Insurance -> 1
                 Auto Liability Insurance -> 2
                 Theft Insurance -> 3""");
-        int extraCategory = Integer.parseInt(scan.nextLine().trim());
+        int extraCategory = getInteger(scan);;
         System.out.println("Enter expiry date (yyyy-mm-dd):");
-        Date expiryDate = Date.valueOf(scan.nextLine().trim());
+        Date expiryDate = getDate();
         System.out.println("Enter company name:" );
-        String companyName = scan.nextLine().replaceAll("\n", "");
+        String companyName = getString();
         System.out.println("Enter NIF: ");
-        int nif3 = Integer.parseInt(scan.nextLine().trim());
-        System.out.println("Enter 0 to go back or 1 to submit insurance information");
-        choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice != 1) {
-            System.out.println("Going back to insert menu..." + "\n");
-            return;
-        }
+        int nif3 = getNIF();
+        //Verificar se conteudo esta bem.
         dataSource.insertInsurance(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName, nif3);
     }
 
     protected void insertTicket() {
-        System.out.println("Insert 0 to go back or 1 to start submetting ticket information");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to insert menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter NIF: ");
-        int driverLicenseNumber = Integer.parseInt(scan.nextLine().trim());
+        int nif = getNIF();
         System.out.println("Enter plate number: ");
-        String plateNumberForTicket = scan.nextLine().trim();
+        String plateNumberForTicket = getPlate();;
         System.out.println("Enter date (yyyy-mm-dd):");
-        Date ticketDate = Date.valueOf(scan.nextLine().trim());
+        Date ticketDate = getDate();
         System.out.println("""
                 Enter reason number for:
                 Speeding -> 1
@@ -166,113 +303,90 @@ public abstract class BackOffice {
                 Illegal Parking -> 3
                 Reckless Driving -> 4
                 DUI -> 5""");
-        int reason = Integer.parseInt(scan.nextLine().trim());
+        int reason = getInteger(scan);
         System.out.println("Enter ticket value: ");
-        double ticketValue = Double.parseDouble(scan.nextLine().trim());
+        double ticketValue = getDouble();
         System.out.println("Enter expiry date (yyyy-mm-dd):");
-        Date ticketExpiryDate = Date.valueOf(scan.nextLine().trim());
-        System.out.println("Enter 0 to go back or 1 to submit ticket information");
-        choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice != 1) {
-            System.out.println("Going back to insert menu..." + "\n");
-            return;
-        }
-        dataSource.insertTicket(driverLicenseNumber, plateNumberForTicket, ticketDate, reason, ticketValue, ticketExpiryDate);
+        Date ticketExpiryDate = getDate();
+
+        dataSource.insertTicket(nif, plateNumberForTicket, ticketDate, reason, ticketValue, ticketExpiryDate);
     }
 
+
     protected void updateVehicleColor() {
-        System.out.println("Insert 0 to go back or 1 to start submetting vehicle information");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
             System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter plate number: ");
-        String plateForUpdateColor = scan.nextLine().trim();
+        String plateForUpdateColor = getPlate();
         System.out.println("Enter new color: ");
-        String newColor = scan.nextLine().replaceAll("\n", "");
+        String newColor = getString();
         System.out.println("Enter NIF: ");
-        int nif4 = Integer.parseInt(scan.nextLine().trim());
-        System.out.println("Enter 0 to go back or 1 to submit vehicle information");
-        choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice != 1) {
-            System.out.println("Going back to update menu..." + "\n");
-            return;
-        }
+        int nif4 = getNIF();
+
+        //Verificar se conteudo esta bem.
         dataSource.updateVehicleColor(newColor, plateForUpdateColor, nif4);
     }
 
     protected void changeVehicleOwner() {
-        System.out.println("Insert 0 to go back or 1 to start submetting vehicle information");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
             System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter plate number in format XX-XX-XX:");
-        String plateForChangeOwner = scan.nextLine().trim();
+        String plateForChangeOwner = getPlate();
         System.out.println("Enter new owner NIF:");
-        int newOwnerNif = Integer.parseInt(scan.nextLine().trim());
+        int newOwnerNif = getNIF();
         System.out.println("Enter old owner NIF:");
-        int oldOwnerNif = Integer.parseInt(scan.nextLine().trim());
-        System.out.println("Enter 0 to go back or 1 to submit vehicle information");
-        choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice != 1) {
-            System.out.println("Going back to update menu..." + "\n");
-            return;
-        }
+        int oldOwnerNif = getNIF();
+        //Verificar se conteudo esta bem.
         dataSource.changeVehicleOwner(plateForChangeOwner, oldOwnerNif, newOwnerNif);
     }
 
     protected void renewInsurance() {
-        System.out.println("Insert 0 to go back or 1 to start submetting insurance information");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
             System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter insurance policy number: ");
-        int policyForRenew = Integer.parseInt(scan.nextLine().trim());
+        int policyForRenew = getPolicy();;
         System.out.println("Enter start date (yyyy-mm-dd):");
-        Date newStartDate = Date.valueOf(scan.nextLine().trim());
+        Date newStartDate = getDate();
         System.out.println("Enter expiry date (yyyy-mm-dd):");
-        Date newExpiryDate = Date.valueOf(scan.nextLine().trim());
+        Date newExpiryDate = getDate();
         System.out.println("Enter extra category:");
-        int newExtraCategory = Integer.parseInt(scan.nextLine().trim());
+        int newExtraCategory = getInteger(scan);
         System.out.println("Enter company name:");
-        String newCompanyName = scan.nextLine().replaceAll("\n", "");
-        int nif5 = Integer.parseInt(scan.nextLine().trim());
-        System.out.println("Enter 0 to go back or 1 to submit");
-        choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice != 1) {
-            System.out.println("Going back to update menu..." + "\n");
-            return;
-        }
+        String newCompanyName = getString();
+        int nif5 = getNIF();
+        //Verificar se conteudo esta bem.
         dataSource.renewInsurance(newStartDate, newExpiryDate, newExtraCategory, newCompanyName, policyForRenew, nif5);
     }
 
     protected void payTicket() {
-        System.out.println("Insert 0 to go back or 1 to start submetting ticket information");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
             System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        int nif = getNIF();
         System.out.println("Enter plate number in format XX-XX-XX:");
-        String plate7 = scan.nextLine().trim();
+        String plate7 = getPlate();
         System.out.println("Enter date (yyyy-mm-dd):");
-        Date date7 = Date.valueOf(scan.nextLine().trim());
+        Date date7 = getDate();
         System.out.println("Amount of money: ");
-        double d7 = Double.parseDouble(scan.nextLine().trim());
-        System.out.println("Enter 0 to go back or 1 to submit");
-        choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice != 1) {
-            System.out.println("Going back to update menu..." + "\n");
-            return;
-        }
-        dataSource.payTicket(nif7, plate7, date7, d7);
+        double d7 = getDouble();
+        //Verificar se conteudo esta bem.
+        dataSource.payTicket(nif, plate7, date7, d7);
     }
 
     protected void menuUpdateVehicle() {
@@ -287,7 +401,7 @@ public abstract class BackOffice {
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")){
                 choiceUV = Integer.parseInt(s);
             }
             else {
@@ -297,7 +411,7 @@ public abstract class BackOffice {
                 case 1 -> updateVehicleColor();
                 case 2 -> changeVehicleOwner();
                 case 0 -> {
-                    System.out.println("Back to main menu..." + "\n");
+                    System.out.println("Back to update menu..." + "\n");
                     return;
                 }
                 default -> System.out.println("Invalid option, please try again");
@@ -318,7 +432,7 @@ public abstract class BackOffice {
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
                 choiceUT = Integer.parseInt(s);
             }
             else {
@@ -328,7 +442,7 @@ public abstract class BackOffice {
                 case 1 -> payTicket();
 //              case 2 -> updateExpiredTicket();
                 case 0 -> {
-                    System.out.println("Back to main menu..." + "\n");
+                    System.out.println("Back to update menu..." + "\n");
                     return;
                 }
                 default -> System.out.println("Invalid option, please try again");
@@ -348,7 +462,7 @@ public abstract class BackOffice {
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
                 choiceUI = Integer.parseInt(s);
             }
             else {
@@ -359,7 +473,7 @@ public abstract class BackOffice {
 //                case 2 -> payTicket();
                 case 1 -> renewInsurance();
                 case 0 -> {
-                    System.out.println("Back to main menu..." + "\n");
+                    System.out.println("Back to update menu..." + "\n");
                     return;
                 }
                 default -> System.out.println("Invalid option, please try again");
@@ -368,23 +482,18 @@ public abstract class BackOffice {
     }
 
     protected void updateEmployee() {
-        System.out.println("Insert 0 to go back or 1 to start submetting ticket information");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
             System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        int nif = getNIF();
         System.out.println("Enter new access level:");
-        int acl = Integer.parseInt(scan.nextLine().trim());
-        System.out.println("Enter 0 to go back or 1 to submit");
-        choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice != 1) {
-            System.out.println("Going back to update menu..." + "\n");
-            return;
-        }
-//      dataSource.updateEmployee(nif7, dln7, date7, expdate7);
+        int acl = getInteger(scan);
+        //Verificar se conteudo esta bem.
+//      dataSource.updateEmployee(nif, dln7, date7, expdate7);
     }
 
     protected void menuViewVehicle() {
@@ -400,12 +509,12 @@ public abstract class BackOffice {
                     3 - View vehicles organized by registration date
                     4 - View vehicle of a specific NIF
                     5 - View vehicle of a specific plate
-                    """);
+                    6 - View vehicle of a specific VIN""");
             System.out.println("0 - Exit");
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
                 choiceVV = Integer.parseInt(s);
             }
             else {
@@ -418,8 +527,9 @@ public abstract class BackOffice {
                 case 3 -> viewVehicleByRegistrationDate(vehiclesList);
                 case 4 -> viewSpecificVehicleByNIF(vehiclesList);
                 case 5 -> viewSpecificVehicleByPlate(vehiclesList);
+                case 6 -> viewSpecificVehicleByVIN(vehiclesList);
                 case 0 -> {
-                    System.out.println("Back to main menu..." + "\n");
+                    System.out.println("Back to view menu..." + "\n");
                     return;
                 }
                 default -> System.out.println("Invalid option, please try again");
@@ -427,18 +537,37 @@ public abstract class BackOffice {
         }
     }
 
+    private void viewSpecificVehicleByVIN(List<Vehicle> vehiclesList) {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter VIN: ");
+        String vin = getVIN();
+        Collections.sort(vehiclesList);
+        for (Vehicle vehicle : vehiclesList) {
+            if (vehicle.getVin().equals(vin)) {
+                System.out.println(vehicle);
+                return;
+            }
+        }
+        System.out.println("No vehicle found with that VIN: " + vin);
+    }
+
     private void viewSpecificVehicleByNIF(List<Vehicle> vehicleList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view vehicle menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        int nif = getNIF();
         Collections.sort(vehicleList);
         for (Vehicle vehicle : vehicleList) {
-            if (vehicle.getNif() == nif7) {
+            if (vehicle.getNif() == nif) {
                 System.out.println(vehicle);
                 return;
             }
@@ -447,14 +576,14 @@ public abstract class BackOffice {
     }
 
     private void viewSpecificVehicleByPlate(List<Vehicle> vehicleList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view vehicle menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter plate: ");
-        String s = scan.nextLine().trim();
+        s = getPlate();;
         Collections.sort(vehicleList);
         for (Vehicle vehicle : vehicleList) {
             if (vehicle.getPlate().equals(s)) {
@@ -466,69 +595,70 @@ public abstract class BackOffice {
     }
 
     private void viewVehicleByRegistrationDate(List<Vehicle> vehicleList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view vehicle menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
         1 - To sse from the most recent date
         2 - To see from the oldest date""");
 
-        int nif8 = Integer.parseInt(scan.nextLine().trim());
+        int order = getInteger(scan);
 
-        if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
+        if(order == 1 || order < 0 || order > 2) {
             vehicleList.sort(new Vehicle.RegistrationDateComparator());
         }
         else {
             vehicleList.sort(new Vehicle.RegistrationDateComparator().reversed());
         }
 
-        if(nif7 > 20 || nif7 < 0) {
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(vehicleList, 10);
         }
         else {
-            displayList(vehicleList, nif7);
+            displayList(vehicleList, rowsPerPage);
         }
     }
 
     private void viewVehicleByNIF(List<Vehicle> vehicleList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view vehicle menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        int rowsPerPage = getInteger(scan);
+
         Collections.sort(vehicleList);
-        if(nif7 > 20 || nif7 < 0) {
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(vehicleList, 10);
         }
         else {
-            displayList(vehicleList, nif7);
+            displayList(vehicleList, rowsPerPage);
         }
     }
 
     private void viewVehicleByPlate(List<Vehicle> vehicleList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view vehicle menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        int rowsPerPage = getInteger(scan);;
         vehicleList.sort(new Vehicle.StringPlateComparator());
-        if(nif7 > 20 || nif7 < 0) {
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(vehicleList, 10);
         }
         else {
-            displayList(vehicleList, nif7);
+            displayList(vehicleList, rowsPerPage);
         }
     }
 
@@ -537,7 +667,7 @@ public abstract class BackOffice {
         int choiceVV = -1;
         List<Ticket> ticketList = dataSource.queryTickets();
         while (choiceVV != 0) {
-            System.out.println("====================VIEW VEHICLE MENU====================");
+            System.out.println("====================VIEW TICKET MENU====================");
             System.out.println("Please choose an option: ");
             System.out.println("""
                     1 - View tickets organized by plate
@@ -551,7 +681,7 @@ public abstract class BackOffice {
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
                 choiceVV = Integer.parseInt(s);
             }
             else {
@@ -565,7 +695,7 @@ public abstract class BackOffice {
                 case 4 -> viewSpecificTicketByNIF(ticketList);
                 case 5 -> viewSpecificTicketByPlate(ticketList);
                 case 0 -> {
-                    System.out.println("Back to main menu..." + "\n");
+                    System.out.println("Back to view menu..." + "\n");
                     return;
                 }
                 default -> System.out.println("Invalid option, please try again");
@@ -574,14 +704,14 @@ public abstract class BackOffice {
     }
 
     private void viewSpecificTicketByPlate(List<Ticket> ticketList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter plate: ");
-        String plate = scan.nextLine().trim();
+        String plate = getPlate();;
 
         ticketList.sort(new Ticket.StringPlateComparator());
         for(Ticket t: ticketList) {
@@ -594,14 +724,14 @@ public abstract class BackOffice {
     }
 
     private void viewSpecificTicketByNIF(List<Ticket> ticketList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif = Integer.parseInt(scan.nextLine().trim());
+        int nif = getNIF();;
 
         ticketList.sort(new Ticket.StringPlateComparator());
         for(Ticket t: ticketList) {
@@ -614,70 +744,74 @@ public abstract class BackOffice {
     }
 
     private void viewTicketByRegistrationDate(List<Ticket> ticketList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
         1 - To sse from the most recent date
         2 - To see from the oldest date""");
 
-        int nif8 = Integer.parseInt(scan.nextLine().trim());
+        int order = getInteger(scan);
 
-        if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
+        if(order == 1 || order < 0 || order > 2) {
             ticketList.sort(new Ticket.RegistrationDateComparator());
         }
         else {
             ticketList.sort(new Ticket.RegistrationDateComparator().reversed());
         }
 
-        if(nif7 > 20 || nif7 < 0) {
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(ticketList, 10);
         }
         else {
-            displayList(ticketList, nif7);
+            displayList(ticketList, rowsPerPage);
         }
     }
 
     private void viewTicketByNIF(List<Ticket> ticketList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        int rowsPerPage = getInteger(scan);
         Collections.sort(ticketList);
 
-        if(nif7 > 20 || nif7 < 0) {
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(ticketList, 10);
         }
         else {
-            displayList(ticketList, nif7);
+            displayList(ticketList, rowsPerPage);
         }
     }
 
     private void viewTicketByPlate(List<Ticket> ticketList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        int rowsPerPage = getInteger(scan);
+
         ticketList.sort(new Ticket.StringPlateComparator());
-        if(nif7 > 20 || nif7 < 0) {
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(ticketList, 10);
         }
         else {
-            displayList(ticketList, nif7);
+            displayList(ticketList, rowsPerPage);
         }
     }
 
@@ -686,7 +820,7 @@ public abstract class BackOffice {
         int choiceVV = -1;
         List<Insurance> insuranceList = dataSource.queryInsurances();
         while (choiceVV != 0) {
-            System.out.println("====================VIEW VEHICLE MENU====================");
+            System.out.println("====================VIEW INSURANCE MENU====================");
             System.out.println("Please choose an option: ");
             System.out.println("""
                     1 - View insurances organized by policy
@@ -701,7 +835,7 @@ public abstract class BackOffice {
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
                 choiceVV = Integer.parseInt(s);
             }
             else {
@@ -717,7 +851,7 @@ public abstract class BackOffice {
                 case 6 -> viewSpecificInsuranceByNIF(insuranceList);
                 case 7 -> viewSpecificInsuranceByPolicy(insuranceList);
                 case 0 -> {
-                    System.out.println("Back to main menu..." + "\n");
+                    System.out.println("Back to view menu..." + "\n");
                     return;
                 }
                 default -> System.out.println("Invalid option, please try again");
@@ -726,34 +860,36 @@ public abstract class BackOffice {
     }
 
     private void viewSpecificInsuranceByPolicy(List<Insurance> insuranceList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter policy: ");
-        int nif = Integer.parseInt(scan.nextLine().trim());
+
+        int policy = getPolicy();
 
         Collections.sort(insuranceList);
         for(Insurance t: insuranceList) {
-            if(t.getPolicy() == nif) {
+            if(t.getPolicy() == policy) {
                 System.out.println(t);
                 return;
             }
         }
-        System.out.println("No insurance found with that policy number");
+        System.out.println("No insurance found with that policy number: " + policy + "\n");
     }
 
     private void viewSpecificInsuranceByNIF(List<Insurance> insuranceList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif = Integer.parseInt(scan.nextLine().trim());
+
+        int nif = getNIF();
 
         Collections.sort(insuranceList);
         List<Vehicle> vehicleList = dataSource.queryVehicles();
@@ -768,18 +904,19 @@ public abstract class BackOffice {
                 }
             }
         }
-        System.out.println("No insurance found with that policy number");
+        System.out.println("No insurance found with that NIF number: " + nif + "\n");
     }
 
     private void viewSpecificInsuranceByPlate(List<Insurance> insuranceList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
-        System.out.println("Enter policy: ");
-        String plate = scan.nextLine().trim();
+        System.out.println("Enter plate: ");
+
+        String plate = getPlate();
 
         Collections.sort(insuranceList);
         for(Insurance t: insuranceList) {
@@ -788,140 +925,142 @@ public abstract class BackOffice {
                 return;
             }
         }
-        System.out.println("No insurance found with that policy number");
+        System.out.println("No insurance found with that plate number");
     }
 
     private void viewInsuranceByRegistrationDate(List<Insurance> insuranceList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
         1 - To sse from the most recent date
         2 - To see from the oldest date""");
 
-        int nif8 = Integer.parseInt(scan.nextLine().trim());
+        int order = getInteger(scan);
 
-        if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
-            insuranceList.sort(new Insurance.ExpirationateComparator());
+        if(order == 1 || order < 0 || order > 2) {
+            insuranceList.sort(new Insurance.RegistrationDateComparator());
         }
         else {
             insuranceList.sort(new Insurance.RegistrationDateComparator().reversed());
         }
 
-        if(nif7 > 20 || nif7 < 0) {
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(insuranceList, 10);
         }
         else {
-            displayList(insuranceList, nif7);
+            displayList(insuranceList, rowsPerPage);
         }
     }
 
     private void viewInsuranceByExpiryDate(List<Insurance> insuranceList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
         1 - To sse from the most recent expiration date
         2 - To see from the oldest expiration date""");
 
-        int nif8 = Integer.parseInt(scan.nextLine().trim());
+        int order = getInteger(scan);
 
-        if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
+        if(order == 1 || order < 0 || order > 2) {
             insuranceList.sort(new Insurance.ExpirationateComparator());
         }
         else {
             insuranceList.sort(new Insurance.ExpirationateComparator().reversed());
         }
 
-        if(nif7 > 20 || nif7 < 0) {
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(insuranceList, 10);
         }
         else {
-            for (int i = 0; i < nif7; i++) {
-                displayList(insuranceList, nif7);
-            }
+            displayList(insuranceList, rowsPerPage);
         }
     }
 
     private void viewInsuranceByNIF(List<Insurance> insuranceList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        int rowsPerPage = getInteger(scan);
 
         Collections.sort(insuranceList);
 
-        if (nif7 > 20 || nif7 < 0) {
+        if (rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(insuranceList, 10);
         } else {
-            displayList(insuranceList, nif7);
+            displayList(insuranceList, rowsPerPage);
 
         }
     }
 
     private void viewInsuranceByPlate(List<Insurance> insuranceList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        int rowsPerPage = getInteger(scan);
 
         insuranceList.sort(new Insurance.StringPlateComparator());
 
-        if (nif7 > 20 || nif7 < 0) {
+        if (rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(insuranceList, 10);
         } else {
-            displayList(insuranceList, nif7);
+            displayList(insuranceList, rowsPerPage);
 
         }
     }
 
     protected void menuViewEmployee() {
-       /* System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        /*System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        int rowsPerPage = getInteger(scan);
 
 
         List<Employee> employeeList = dataSource.queryEmployee();
         Collections.sort(employeeList);
 
-        if (nif7 > 20 || nif7 < 0) {
+        if (rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(employeeList, 10);
         } else {
-            displayList(employeeList, nif7);
+            displayList(employeeList, rowsPerPage);
 
         }*/
     }
+
+
     protected void menuViewCustomer() {
         scan = new Scanner(System.in);
         int choiceVV = -1;
         List<Customer> customerList = dataSource.queryCustomers();
         while (choiceVV != 0) {
-            System.out.println("====================VIEW VEHICLE MENU====================");
+            System.out.println("====================VIEW CUSTOMER MENU====================");
             System.out.println("Please choose an option: ");
             System.out.println("""
                     1 - View customers organized by driver license number
@@ -954,7 +1093,7 @@ public abstract class BackOffice {
                 case 7 -> viewSpecificCustomerByLicense(customerList);
                 case 8 -> viewSpecificCustomerByPolicy(customerList);
                 case 0 -> {
-                    System.out.println("Back to main menu..." + "\n");
+                    System.out.println("Back to view menu..." + "\n");
                     return;
                 }
                 default -> System.out.println("Invalid option, please try again");
@@ -963,14 +1102,15 @@ public abstract class BackOffice {
     }
 
     private void viewSpecificCustomerByPolicy(List<Customer> customerList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter policy: ");
-        int policy =Integer.parseInt(scan.nextLine().trim());
+
+        int policy = getPolicy();
 
         List<Insurance> insuranceList = dataSource.queryInsurances();
         List<Vehicle> vehicleList = dataSource.queryVehicles();
@@ -992,55 +1132,57 @@ public abstract class BackOffice {
     }
 
     private void viewSpecificCustomerByLicense(List<Customer> customerList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter driver's license number: ");
-        int policy =Integer.parseInt(scan.nextLine().trim());
+        int driverLicense = getDriverLicense();
 
         for(Customer customer : customerList) {
-            if(customer.getDriverLicenseNum() == policy) {
+            if(customer.getDriverLicenseNum() == driverLicense) {
                 System.out.println(customer);
             }
         }
-        System.out.println("No customer found with that driver license number: " + policy);
+        System.out.println("No customer found with that driver license number: " + driverLicense);
     }
 
     private void viewSpecificCustomerByNIF(List<Customer> customerList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter driver's NIF: ");
-        int policy =Integer.parseInt(scan.nextLine().trim());
+
+        int nif = getNIF()  ;
 
         for(Customer customer : customerList) {
-            if(customer.getNif() == policy) {
+            if(customer.getNif() == nif) {
                 System.out.println(customer);
             }
         }
-        System.out.println("No customer found with that NIF: " + policy);
+        System.out.println("No customer found with that NIF: " + nif);
     }
 
     private void viewSpecificCustomerByPlate(List<Customer> customerList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
-        System.out.println("Enter driver's NIF: ");
-        String policy = scan.nextLine().trim();
+        System.out.println("Enter driver's plate: ");
+
+        String plate = getPlate();
 
         List<Vehicle> vehicleList = dataSource.queryVehicles();
 
         for(Vehicle vehicle : vehicleList) {
-            if(vehicle.getPlate().equals(policy)) {
+            if(vehicle.getPlate().equals(plate)) {
                 for(Customer customer : customerList) {
                     if(customer.getNif() == vehicle.getNif()) {
                         System.out.println(customer);
@@ -1049,114 +1191,117 @@ public abstract class BackOffice {
             }
         }
 
-        System.out.println("No customer found with that plate : " + policy);
+        System.out.println("No customer found with that plate : " + plate);
     }
 
     private void viewCustomerByRegistrationDate(List<Customer> customerList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
         1 - To sse from the most recent date
         2 - To see from the oldest date""");
 
-        int nif8 = Integer.parseInt(scan.nextLine().trim());
+        int order = getInteger(scan);
 
-        if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
+        if(order == 1 || order < 0 || order > 2) {
 //            Collections.sort(customerList, new Customer().ExpirationateComparator());
         }
         else {
 //            Collections.sort(insuranceList, new Insurance.RegistrationDateComparator().reversed());
         }
 
-        if(nif7 > 20 || nif7 < 0) {
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(customerList, 10);
         }
         else {
-            displayList(customerList, nif7);
+            displayList(customerList, rowsPerPage);
         }
     }
 
     private void viewCustomerByExpiryDate(List<Customer> customerList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
         1 - To sse from the most recent expiration date
         2 - To see from the oldest expiration date""");
 
-        int nif8 = Integer.parseInt(scan.nextLine().trim());
+        int order = getInteger(scan);
 
-        if(nif8 == 1 || nif8 < 0 || nif8 > 2) {
+        if(order == 1 || order < 0 || order > 2) {
 //            Collections.sort(customerList, new Insurance.ExpirationateComparator());
         }
         else {
 //            Collections.sort(customerList, new Insurance.ExpirationateComparator().reversed());
         }
 
-        if(nif7 > 20 || nif7 < 0) {
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(customerList, 10);
         }
         else {
-            for (int i = 0; i < nif7; i++) {
-                displayList(customerList, nif7);
+            for (int i = 0; i < rowsPerPage; i++) {
+                displayList(customerList, rowsPerPage);
             }
         }
     }
 
     private void viewCustomerByNIF(List<Customer> customerList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
+        //Verificar se não é vazio.
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        int rowsPerPage = getInteger(scan);
 
         customerList.sort(Comparator.comparing(Customer::getNif));
 
-        if(nif7 > 20 || nif7 < 0) {
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(customerList, 10);
         }
         else {
-            for (int i = 0; i < nif7; i++) {
-                displayList(customerList, nif7);
+            for (int i = 0; i < rowsPerPage; i++) {
+                displayList(customerList, rowsPerPage);
             }
         }
 
     }
 
     private void viewCustomerByLicense(List<Customer> customerList) {
-        System.out.println("Insert 0 to go back or 1 to continue");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
-            System.out.println("Going back to view ticket menu..." + "\n");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+
+        int rowsPerPage = getInteger(scan);
 
         customerList.sort(Comparator.comparing(Customer::getDriverLicenseNum));
 
-        if(nif7 > 20 || nif7 < 0) {
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(customerList, 10);
         }
         else {
-            for (int i = 0; i < nif7; i++) {
-                displayList(customerList, nif7);
+            for (int i = 0; i < rowsPerPage; i++) {
+                displayList(customerList, rowsPerPage);
             }
         }
 
@@ -1164,28 +1309,23 @@ public abstract class BackOffice {
 
 
     protected void updateCustomer() {
-        System.out.println("Insert 0 to go back or 1 to start submetting ticket information");
-        int choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice == 0) {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
             System.out.println("Going back to update menu..." + "\n");
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif7 = Integer.parseInt(scan.nextLine().trim());
+        int nif = getNIF();
         System.out.println("Enter driver license number:");
-        int dln7 = Integer.parseInt(scan.nextLine().trim());
+        int dln7 = getDriverLicense();
         System.out.println("Enter date (yyyy-mm-dd):");
-        Date date7 = Date.valueOf(scan.nextLine().trim());
+        Date date7 = getDate();
         System.out.println("Enter expiry date (yyyy-mm-dd):");
-        Date expdate7 = Date.valueOf(scan.nextLine().trim());
-        double d7 = Double.parseDouble(scan.nextLine().trim());
-        System.out.println("Enter 0 to go back or 1 to submit");
-        choice = Integer.parseInt(scan.nextLine().trim());
-        if (choice != 1) {
-            System.out.println("Going back to update menu..." + "\n");
-            return;
-        }
-//      dataSource.updateCustomer(nif7, dln7, date7, expdate7);
+        Date expdate7 = getDate();
+
+        //Verificar informacao
+//      dataSource.updateCustomer(nif, dln7, date7, expdate7);
     }
 
     public static void displayList(List<?> objects, int rowsPerPage) {
@@ -1203,6 +1343,7 @@ public abstract class BackOffice {
                 System.out.println(objects.get(i));
             }
 
+            System.out.println("Displaying from page " + aux + " of " + pages + ":");
             System.out.print("\nOptions: (C)ontinue, (P)revious, (B)ack to menu: ");
             String input = scanner.nextLine().toUpperCase();
 
@@ -1222,6 +1363,22 @@ public abstract class BackOffice {
                 default -> System.out.println("Invalid input. Please try again.");
             }
         }
+    }
+
+    private int getInteger(Scanner scan) {
+        int value = 0;
+        boolean validInput = false;
+        do {
+            String s = scan.nextLine().trim();
+            if (s.matches("[0-9]+")) {
+                value = Integer.parseInt(s);
+                validInput = true;
+            } else {
+                System.out.println("Invalid NIF. Please enter a 9-digit number.");
+            }
+        } while (!validInput);
+
+        return value;
     }
 
 }

@@ -15,7 +15,6 @@ public class Customer extends Person {
 
     public void setDriverLicenseNum(int driverLicenseNum) {
 //        LogUtil.info("Setting Driver License Number: " + driverLicenseNum);
-        if(driverLicenseNum < 10000000 || driverLicenseNum > 19999999) throw new IllegalArgumentException("Driver License Number cannot be negative");
         this.driverLicenseNum = driverLicenseNum;
     }
 

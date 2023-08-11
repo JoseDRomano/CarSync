@@ -301,12 +301,13 @@ public class DataSource {
     }
 
     //TESTED
-    public void insertInsurance(int policy, String plate, Date startDate,
+    public boolean insertInsurance(int policy, String plate, Date startDate,
                                 int extraCategory, Date expDate, String companyName, int nif) {
 
+        boolean worked = false;
         if (!isVehicleOwner(nif, plate)) {
             System.out.println("Not owner of vehicle with plate: " + plate);
-            return;
+            return worked;
         }
 
         try {
@@ -321,6 +322,7 @@ public class DataSource {
 
             if (affected == 1) {
                 connection.commit();
+                worked = true;
             } else {
                 throw new SQLException("Couldn't insert new insurance with policy number: " + policy);
             }
@@ -339,9 +341,11 @@ public class DataSource {
             try {
                 System.out.println("Resetting default commit behavior");
                 connection.setAutoCommit(true);
+                return worked;
             } catch (SQLException e) {
                 System.out.println("Couldn't reset auto-commit: " + e.getMessage());
                 e.printStackTrace();
+                return worked;
             }
         }
     }

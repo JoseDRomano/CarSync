@@ -26,7 +26,7 @@ public class BackOfficeEmployee extends BackOffice{
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -66,7 +66,7 @@ public class BackOfficeEmployee extends BackOffice{
 
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -105,7 +105,7 @@ public class BackOfficeEmployee extends BackOffice{
 
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
                 choice = Integer.parseInt(s);
             }
             else {

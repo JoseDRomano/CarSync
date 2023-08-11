@@ -24,10 +24,9 @@ public class BackOfficeAdmin extends BackOffice{
             System.out.println("To delete information -> 3");
             System.out.println("To view information -> 4");
             System.out.println("0 - Exit");
-            System.out.print("Option: " + "\n");
-
+            System.out.print("Option: ");
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -71,7 +70,7 @@ public class BackOfficeAdmin extends BackOffice{
 
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -112,7 +111,7 @@ public class BackOfficeAdmin extends BackOffice{
 
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -155,9 +154,10 @@ public class BackOfficeAdmin extends BackOffice{
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if (!s.isEmpty() || !s.isBlank()) {
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
                 choice = Integer.parseInt(s);
-            } else {
+            }
+            else {
                 choice = -1;
             }
             switch (choice) {

@@ -49,12 +49,18 @@ public class Insurance implements Comparable<Insurance> {
     }
 
 
+    /*public boolean validateValues(int policy, String plate, java.sql.Date startDate,
+                                  int extraCategory, java.sql.Date expDate, String companyName, int nif) {
+        if(policy >= 1000000000 || policy <= 1999999999) {
+            if()
+        }
+    }*/
     public int getPolicy() {
         return policy;
     }
 
     public void setPolicy(int policy) {
-        if(policy < 1000000000 || policy > 1999999999) throw new IllegalArgumentException("Policy number must be 10 digits long");
+        if(policy < 100000000 || policy > 199999999)  System.out.println("Policy number must be 10 digits long");
         this.policy = policy;
     }
 
