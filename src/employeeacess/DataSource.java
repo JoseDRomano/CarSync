@@ -4,7 +4,7 @@ import model.Customer;
 import model.Insurance;
 import model.Ticket;
 import model.Vehicle;
-import org.mindrot.jbcrypt.BCrypt;
+//import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
