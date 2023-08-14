@@ -3,6 +3,8 @@
 import employeeacess.BackOffice;
 import employeeacess.DataSource;
 import model.Employee;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import util.LogUtil;
 
 import java.sql.SQLException;
@@ -13,9 +15,15 @@ import java.util.Scanner;
 
 public class MainConnection {
 
+    private static final Logger logger = Logger.getLogger(MainConnection.class);
+
+
     private static Scanner scan = new Scanner(System.in);
 
     public static void main(String[] args) {
+
+        PropertyConfigurator.configure("C:/Users/diogo/IdeaProjects/IMTT-alike/resources/log4j.properties");
+
         Employee e1 = new Employee();
         e1.setAccess_level(2);
         e1.setName("Gonçalo Ramos");
@@ -24,23 +32,7 @@ public class MainConnection {
 
 //        MainConnection.initiate();
 
-    }
 
-    private static String getVIN() {
-        String str = null;
-        boolean validInput = false;
-
-        do {
-            String s = scan.nextLine().trim();
-            if (s.matches("^[A-Z0-9]{17}$")) {
-                str = s;
-                validInput = true;
-            } else {
-                System.out.println("Invalid VIN. Please enter a 17 digit value.");
-            }
-        } while (!validInput);
-
-        return str;
     }
 
    /* private static void initiate() {
@@ -52,6 +44,6 @@ public class MainConnection {
             System.out.println("Error connecting to database" + e.getMessage());
             e.printStackTrace();
         }
-    }*/
+    }/**/
 
 }
