@@ -610,7 +610,7 @@ public abstract class BackOffice {
             }
 
             switch (choiceUI) {
-                // Add a log statement for the changeInsuranceCategory() method if it's implemented.
+                //
                 // case 2:
                 //     logger.info("User chose to change insurance category.");
                 //     changeInsuranceCategory();
