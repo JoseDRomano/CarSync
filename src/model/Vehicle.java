@@ -60,7 +60,7 @@ public class Vehicle implements Comparable<Vehicle>{
     }
 
     public String getVin() {
-        return vin;
+        return this.vin;
     }
 
     public void setVin(String vin) {
@@ -68,6 +68,7 @@ public class Vehicle implements Comparable<Vehicle>{
             this.vin = vin;
             return;
         }
+        System.out.println("Vin must have the following format: XXXXXXXXXXXXXXXXX");
     }
 
     public String getColor() {

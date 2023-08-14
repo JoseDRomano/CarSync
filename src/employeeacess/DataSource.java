@@ -302,7 +302,7 @@ public class DataSource {
 
     //TESTED
     public boolean insertInsurance(int policy, String plate, Date startDate,
-                                int extraCategory, Date expDate, String companyName, int nif) {
+                                   int extraCategory, Date expDate, String companyName, int nif) {
 
         boolean worked = false;
         if (!isVehicleOwner(nif, plate)) {
@@ -321,6 +321,7 @@ public class DataSource {
             int affected = insertIntoInsurance.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Inserted insurance with policy number: " + policy);
                 connection.commit();
                 worked = true;
             } else {
@@ -390,6 +391,7 @@ public class DataSource {
             int affected = insertIntoVehicle.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Inserted vehicle with plate number: " + plate);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't insert new vehicle with plate number: " + plate);
@@ -433,6 +435,7 @@ public class DataSource {
             int affected = insertIntoTicket.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Inserted ticket for plate number: " + plate + " with value: " + value + " date: " + date);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't insert new ticket with plate number: " + plate);
@@ -475,6 +478,7 @@ public class DataSource {
             int affected = updateVehicleColor.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Updated vehicle color for plate number: " + plate + " to: " + color);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't update vehicle color");
@@ -517,6 +521,7 @@ public class DataSource {
             int affected = updateVehicleOwner.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Updated vehicle owner for plate number: " + plate + " to: " + newNif + " from: " + oldNif);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't update vehicle owner");
@@ -560,6 +565,7 @@ public class DataSource {
             int affected = updateTicket.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Updated ticket for plate number: " + plate + " to value: " + newValue + " and new date: " + todayDate);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't update ticket");
@@ -643,6 +649,7 @@ public class DataSource {
             int affected = renewInsurance.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Renewed insurance with policy number: " + policy);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't renew insurance with policy number: " + policy);
@@ -706,6 +713,7 @@ public class DataSource {
             int affected = payTicket.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Paid ticket for plate number: " + plate + " with value: " + value + "for date: " + date);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't pay ticket");
@@ -747,6 +755,7 @@ public class DataSource {
             int affected = deleteVehicle.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Vehicle succefuly deleted");
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't delete vehicle with plate number: " + plate);
@@ -789,6 +798,7 @@ public class DataSource {
             int affected = deleteInsurance.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Insurance with policy number:  " + policy + " succefuly deleted.");
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't delete insurance with policy number: " + policy);
@@ -814,6 +824,50 @@ public class DataSource {
             }
         }
     }
+
+    public void deleteTicket(int nif, String plate, Date date) {
+
+        if (!isVehicleOwner(nif, plate)) {
+            System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
+            return;
+        }
+
+        try {
+            connection.setAutoCommit(false);
+            deleteTicket.setInt(1, nif);
+            deleteTicket.setString(2, plate);
+            deleteTicket.setDate(3, date);
+            int affected = deleteTicket.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Ticket for nif: " + nif + " plate: "+ plate + " and date: "+ date + " succefully deleted");
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't delete ticket");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't delete ticket: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Ticket succefully deleted now performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
 
 }

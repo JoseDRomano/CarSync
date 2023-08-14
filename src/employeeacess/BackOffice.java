@@ -66,7 +66,7 @@ public abstract class BackOffice {
     abstract void updateMenu();
 
 
-    private Date getDate() {
+     Date getDate() {
         Date sqlDate = null;
         boolean validInput = false;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -85,7 +85,7 @@ public abstract class BackOffice {
         return sqlDate;
     }
 
-    private int getNIF() {
+     int getNIF() {
         int nif = 0;
         boolean validInput = false;
 
@@ -103,7 +103,7 @@ public abstract class BackOffice {
     }
 
 
-    private int getDriverLicense() {
+     int getDriverLicense() {
         int driverLicense = 0;
         boolean validInput = false;
 
@@ -121,7 +121,7 @@ public abstract class BackOffice {
     }
 
 
-    private int getPolicy() {
+     int getPolicy() {
         int policy = 0;
         boolean validInput = false;
 
@@ -138,7 +138,7 @@ public abstract class BackOffice {
         return policy;
     }
 
-    private String getPlate() {
+     String getPlate() {
         String plate = null;
         boolean validInput = false;
 
@@ -155,7 +155,7 @@ public abstract class BackOffice {
         return plate;
     }
 
-    private String getString() {
+     String getString() {
         String str = null;
         boolean validInput = false;
 
@@ -173,7 +173,7 @@ public abstract class BackOffice {
     }
 
 
-    private String getVIN() {
+     String getVIN() {
         String str = null;
         boolean validInput = false;
 
@@ -190,7 +190,7 @@ public abstract class BackOffice {
         return str;
     }
 
-    private double getDouble() {
+     double getDouble() {
         double amount = 0.00;
         boolean validInput = false;
 
@@ -540,7 +540,7 @@ public abstract class BackOffice {
         String vin = getVIN();
         Collections.sort(vehiclesList);
         for (Vehicle vehicle : vehiclesList) {
-            if (vehicle.getVin().equals(vin)) {
+            if ( vehicle.getVin()!= null && vehicle.getVin().equals(vin)) {
                 System.out.println(vehicle);
                 return;
             }
@@ -1169,6 +1169,7 @@ public abstract class BackOffice {
         for(Customer customer : customerList) {
             if(customer.getDriverLicenseNum() == driverLicense) {
                 System.out.println(customer);
+                return;
             }
         }
         System.out.println("No customer found with that driver license number: " + driverLicense);

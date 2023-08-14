@@ -3,6 +3,7 @@ package employeeacess;
 import model.Employee;
 import util.LogUtil;
 
+import java.sql.Date;
 import java.util.Scanner;
 
 public class BackOfficeAdmin extends BackOffice{
@@ -51,7 +52,7 @@ public class BackOfficeAdmin extends BackOffice{
     }
 
     private void deleteMenu() {
-        /*scan = new Scanner(System.in);
+        scan = new Scanner(System.in);
         int choice = -1;
         while (choice != 0) {
             System.out.println("====================DELETE MENU====================");
@@ -62,9 +63,9 @@ public class BackOfficeAdmin extends BackOffice{
             2 - Delete a employee
             3 - Delete a vehicle
             4 - Delete a insurance
-            5 - Delete a ticket""");
+            5 - Delete a ticket
+            0 - Exit""");
 
-            System.out.println("0 - Exit");
             System.out.print("Option: ");
 
 
@@ -87,7 +88,72 @@ public class BackOfficeAdmin extends BackOffice{
                 }
                 default -> System.out.println("Invalid option, please try again");
             }
-        }*/
+        }
+    }
+
+    private void deleteTicket() {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to delete menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter NIF: ");
+        int nif = getNIF();
+        System.out.println("Enter plate number: ");
+        String plateNumberForTicket = getPlate();
+        System.out.println("Enter date (yyyy-mm-dd):");
+        Date ticketDate = getDate();
+
+        getDataSource().deleteTicket(nif, plateNumberForTicket, ticketDate);
+    }
+
+    private void deleteInsurance() {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to delete menu..." + "\n");
+            return;
+        }
+
+        System.out.println("Enter policy number: ");
+        int policyNumber = getPolicy();
+        System.out.println("Enter NIF: ");
+        int nif3 = getNIF();
+
+        getDataSource().deleteInsurance(policyNumber, nif3);
+    }
+
+    private void deleteVehicle() {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to delete menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter plate number: ");
+        String plate= getPlate();
+        System.out.println("Enter NIF: ");
+        int nif = getNIF();
+        getDataSource().deleteVehicle(plate, nif);
+    }
+
+    private void deleteEmployee() {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to delete menu..." + "\n");
+            return;
+        }
+    }
+
+    private void deleteCustomer() {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to delete menu..." + "\n");
+            return;
+        }
     }
 
     @Override
