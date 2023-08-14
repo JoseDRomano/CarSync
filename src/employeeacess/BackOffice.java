@@ -8,12 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
-
-//Adicionar forma de inserir, ou fazer "update" de multiplos campos de uma só vez
-//Fazer o view e o delete
-//Se calhar devia-se usar herança para fazer backoffice para cada tipo de employee. Os métodos em comum
-//eram herdados e os outros implementados na classe em específico.
-
 public abstract class BackOffice {
 
     private DataSource dataSource;
@@ -243,6 +237,7 @@ public abstract class BackOffice {
         int categoryNumber = getInteger(scan);
         System.out.println("Enter NIF: ");
         int nif2 = getNIF();
+
         dataSource.insertVehicle(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2);
     }
 
@@ -272,14 +267,14 @@ public abstract class BackOffice {
                 Comprehensive Insurance -> 1
                 Auto Liability Insurance -> 2
                 Theft Insurance -> 3""");
-        int extraCategory = getInteger(scan);;
+        int extraCategory = getInteger(scan);
         System.out.println("Enter expiry date (yyyy-mm-dd):");
         Date expiryDate = getDate();
         System.out.println("Enter company name:" );
         String companyName = getString();
         System.out.println("Enter NIF: ");
         int nif3 = getNIF();
-        //Verificar se conteudo esta bem.
+
         dataSource.insertInsurance(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName, nif3);
     }
 
@@ -293,7 +288,7 @@ public abstract class BackOffice {
         System.out.println("Enter NIF: ");
         int nif = getNIF();
         System.out.println("Enter plate number: ");
-        String plateNumberForTicket = getPlate();;
+        String plateNumberForTicket = getPlate();
         System.out.println("Enter date (yyyy-mm-dd):");
         Date ticketDate = getDate();
         System.out.println("""
@@ -327,7 +322,6 @@ public abstract class BackOffice {
         System.out.println("Enter NIF: ");
         int nif4 = getNIF();
 
-        //Verificar se conteudo esta bem.
         dataSource.updateVehicleColor(newColor, plateForUpdateColor, nif4);
     }
 
@@ -344,7 +338,7 @@ public abstract class BackOffice {
         int newOwnerNif = getNIF();
         System.out.println("Enter old owner NIF:");
         int oldOwnerNif = getNIF();
-        //Verificar se conteudo esta bem.
+
         dataSource.changeVehicleOwner(plateForChangeOwner, oldOwnerNif, newOwnerNif);
     }
 
@@ -356,7 +350,7 @@ public abstract class BackOffice {
             return;
         }
         System.out.println("Enter insurance policy number: ");
-        int policyForRenew = getPolicy();;
+        int policyForRenew = getPolicy();
         System.out.println("Enter start date (yyyy-mm-dd):");
         Date newStartDate = getDate();
         System.out.println("Enter expiry date (yyyy-mm-dd):");
@@ -366,7 +360,7 @@ public abstract class BackOffice {
         System.out.println("Enter company name:");
         String newCompanyName = getString();
         int nif5 = getNIF();
-        //Verificar se conteudo esta bem.
+
         dataSource.renewInsurance(newStartDate, newExpiryDate, newExtraCategory, newCompanyName, policyForRenew, nif5);
     }
 
@@ -385,7 +379,7 @@ public abstract class BackOffice {
         Date date7 = getDate();
         System.out.println("Amount of money: ");
         double d7 = getDouble();
-        //Verificar se conteudo esta bem.
+
         dataSource.payTicket(nif, plate7, date7, d7);
     }
 
@@ -470,7 +464,6 @@ public abstract class BackOffice {
             }
 
             switch (choiceUI) {
-//                case 2 -> payTicket();
                 case 1 -> renewInsurance();
                 case 0 -> {
                     System.out.println("Back to update menu..." + "\n");
@@ -492,7 +485,6 @@ public abstract class BackOffice {
         int nif = getNIF();
         System.out.println("Enter new access level:");
         int acl = getInteger(scan);
-        //Verificar se conteudo esta bem.
 //      dataSource.updateEmployee(nif, dln7, date7, expdate7);
     }
 
@@ -583,7 +575,7 @@ public abstract class BackOffice {
             return;
         }
         System.out.println("Enter plate: ");
-        s = getPlate();;
+        s = getPlate();
         Collections.sort(vehicleList);
         for (Vehicle vehicle : vehicleList) {
             if (vehicle.getPlate().equals(s)) {
@@ -652,7 +644,7 @@ public abstract class BackOffice {
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int rowsPerPage = getInteger(scan);;
+        int rowsPerPage = getInteger(scan);
         vehicleList.sort(new Vehicle.StringPlateComparator());
         if(rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(vehicleList, 10);
@@ -674,8 +666,8 @@ public abstract class BackOffice {
                     2 - View tickets organized by NIF
                     3 - View tickets organized by date
                     4 - View tickets organized by expiration date
-                    4 - View ticket of a specific NIF
-                    5 - View ticket of a specific plate
+                    5 - View ticket of a specific NIF
+                    6 - View ticket of a specific plate
                     """);
             System.out.println("0 - Exit");
             System.out.print("Option: ");
@@ -692,14 +684,47 @@ public abstract class BackOffice {
                 case 1 -> viewTicketByPlate(ticketList);
                 case 2 -> viewTicketByNIF(ticketList);
                 case 3 -> viewTicketByRegistrationDate(ticketList);
-                case 4 -> viewSpecificTicketByNIF(ticketList);
-                case 5 -> viewSpecificTicketByPlate(ticketList);
+                case 5 -> viewSpecificTicketByNIF(ticketList);
+                case 6 -> viewSpecificTicketByPlate(ticketList);
+                case 4 -> viewTicketByExpirationDate(ticketList);
                 case 0 -> {
                     System.out.println("Back to view menu..." + "\n");
                     return;
                 }
                 default -> System.out.println("Invalid option, please try again");
             }
+        }
+    }
+
+    private void viewTicketByExpirationDate(List<Ticket> ticketList) {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter number of rows per page, max is 20: ");
+
+        int rowsPerPage = getInteger(scan);
+
+        System.out.println("""
+        1 - To sse from the most recent expiration date
+        2 - To see from the oldest expiration date""");
+
+        int order = getInteger(scan);
+
+        if(order == 1 || order < 0 || order > 2) {
+            ticketList.sort(new Ticket.ExpirationateComparator());
+        }
+        else {
+            ticketList.sort(new Ticket.ExpirationateComparator().reversed());
+        }
+
+        if(rowsPerPage > 20 || rowsPerPage < 0) {
+            displayList(ticketList, 10);
+        }
+        else {
+            displayList(ticketList, rowsPerPage);
         }
     }
 
@@ -711,7 +736,7 @@ public abstract class BackOffice {
             return;
         }
         System.out.println("Enter plate: ");
-        String plate = getPlate();;
+        String plate = getPlate();
 
         ticketList.sort(new Ticket.StringPlateComparator());
         for(Ticket t: ticketList) {
@@ -731,7 +756,7 @@ public abstract class BackOffice {
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif = getNIF();;
+        int nif = getNIF();
 
         ticketList.sort(new Ticket.StringPlateComparator());
         for(Ticket t: ticketList) {

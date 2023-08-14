@@ -1,14 +1,17 @@
 package employeeacess;
 
 import model.Employee;
+import util.LogUtil;
 
 import java.util.Scanner;
 
 public class BackOfficeAdmin extends BackOffice{
     Scanner scan;
-
+    private LogUtil logUtil;
     BackOfficeAdmin(DataSource dataSource, Employee employee) {
         super(dataSource, employee);
+        logUtil = new LogUtil();
+        LogUtil.info("Admin logged in");
         start();
     }
 
@@ -48,6 +51,43 @@ public class BackOfficeAdmin extends BackOffice{
     }
 
     private void deleteMenu() {
+        /*scan = new Scanner(System.in);
+        int choice = -1;
+        while (choice != 0) {
+            System.out.println("====================DELETE MENU====================");
+            System.out.println("Please choose an option: ");
+
+            System.out.println("""
+            1 - Delete a customer
+            2 - Delete a employee
+            3 - Delete a vehicle
+            4 - Delete a insurance
+            5 - Delete a ticket""");
+
+            System.out.println("0 - Exit");
+            System.out.print("Option: ");
+
+
+            String s = scan.nextLine().trim();
+            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+                choice = Integer.parseInt(s);
+            }
+            else {
+                choice = -1;
+            }
+            switch (choice) {
+                case 1 -> deleteCustomer();
+                case 2 -> deleteEmployee();
+                case 3 -> deleteVehicle();
+                case 4 -> deleteInsurance();
+                case 5 -> deleteTicket();
+                case 0 -> {
+                    System.out.println("Back to main menu..." + "\n");
+                    return;
+                }
+                default -> System.out.println("Invalid option, please try again");
+            }
+        }*/
     }
 
     @Override
