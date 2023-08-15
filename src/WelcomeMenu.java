@@ -1,3 +1,4 @@
+import employeeacess.PersonsEnum;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
@@ -5,6 +6,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Scanner;
+
+import static employeeacess.PersonsEnum.*;
 
 public class WelcomeMenu {
 
@@ -77,17 +80,30 @@ class Register {
         System.out.println("Enter License Type:");
         System.out.println("1. A\n" + "2. B\n" + "3. C\n" + "4. D\n" + "(enter the number please)");
         int license_type = scanner.nextInt();
-        System.out.println("Starting date:");
+        System.out.println("Starting date (YYYY-MM-DD):");
         String starting_date = validateDate(scanner);
-        System.out.println("Expiration date:");
+        System.out.println("Expiration date (YYYY-MM-DD):");
         String expiration_date = validateDate(scanner);
 
         /*código SQL para registar na base de dados*/
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        String sql = "INSERT INTO users (nif, name, address, birthdate, password, driver_license, license_type, " +
-                "starting_date, expiration_date) VALUES ('" + nif + "', '" + name + "', '" + address + "', '" +
-                birthdate + "', '" + hashedPassword + "', '" + driver_license + "', '" + license_type + "', '" +
-                starting_date + "', '" + expiration_date + "')";
+
+        //acho que isto funciona
+        PreparedStatement statement = connection.prepareStatement(PersonsEnum.getString(TRIGGER_INSERT_INTO_PERSON_AND_CUSTOMER));
+        connection.prepareStatement(PersonsEnum.getString(INSERT_INTO_CUSTOMER));
+
+        //Ter em atencao que isto é apenas para o Customer...
+        statement.setInt(1, nif);
+        statement.setString(2, name);
+        statement.setString(3, address);
+        statement.setString(4, birthdate);
+        statement.setString(5, hashedPassword);
+        statement.setString(6, driver_license);
+        statement.setInt(7, license_type);
+        statement.setString(8, starting_date);
+        statement.setString(9, expiration_date);
+
+
 
         /*Passamos para o login*/
         System.out.println(SUCCESSFUL_REGISTER);
@@ -128,9 +144,9 @@ class Register {
                 validateNIF(scanner);
             }
             try {
-                String sql = "SELECT * FROM person WHERE nif = '" + input + "'";
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ResultSet rs = statement.executeQuery(sql);
+                PreparedStatement statement = connection.prepareStatement(PersonsEnum.getString(QUERY_TABLE_PERSON_BY_NIF));
+                statement.setString(1, input);
+                ResultSet rs = statement.executeQuery(statement.toString());
                 if (rs.next()) {
                     System.out.println(NIF_ALREADY_REGISTERED);
                     Login login = new Login();
