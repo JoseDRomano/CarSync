@@ -1,0 +1,64 @@
+2023-08-14 12:59:13 INFO  BackOffice:51 - Starting BackOffice for Admin
+2023-08-14 12:59:13 INFO  BackOffice:51 - Starting BackOffice for Admin
+2023-08-14 12:59:13 INFO  BackOffice:23 - BackOffice initialized for employee: 0
+2023-08-14 12:59:13 INFO  BackOffice:23 - BackOffice initialized for employee: 0
+2023-08-14 12:59:13 INFO  LogUtil:13 - Admin logged in
+2023-08-14 12:59:22 INFO  BackOffice:1303 - Starting menuViewCustomer method.
+2023-08-14 12:59:22 INFO  BackOffice:1303 - Starting menuViewCustomer method.
+2023-08-14 12:59:27 INFO  BackOffice:1345 - User chose to view customers organized by registration date.
+2023-08-14 12:59:27 INFO  BackOffice:1345 - User chose to view customers organized by registration date.
+2023-08-14 12:59:27 INFO  BackOffice:1489 - Starting viewCustomerByRegistrationDate method.
+2023-08-14 12:59:27 INFO  BackOffice:1489 - Starting viewCustomerByRegistrationDate method.
+2023-08-14 12:59:29 INFO  BackOffice:1670 - Getting integer input...
+2023-08-14 12:59:29 INFO  BackOffice:1670 - Getting integer input...
+2023-08-14 12:59:30 INFO  BackOffice:1684 - Integer input obtained: 10
+2023-08-14 12:59:30 INFO  BackOffice:1684 - Integer input obtained: 10
+2023-08-14 12:59:30 INFO  BackOffice:1670 - Getting integer input...
+2023-08-14 12:59:30 INFO  BackOffice:1670 - Getting integer input...
+2023-08-14 12:59:33 INFO  BackOffice:1684 - Integer input obtained: 1
+2023-08-14 12:59:33 INFO  BackOffice:1684 - Integer input obtained: 1
+2023-08-14 12:59:33 INFO  BackOffice:1627 - Displaying list...
+2023-08-14 12:59:33 INFO  BackOffice:1627 - Displaying list...
+2023-08-14 12:59:38 INFO  BackOffice:1518 - Exiting viewCustomerByRegistrationDate method.
+2023-08-14 12:59:38 INFO  BackOffice:1518 - Exiting viewCustomerByRegistrationDate method.
+2023-08-14 12:59:41 INFO  BackOffice:1365 - User chose to exit. Going back to view menu...
+2023-08-14 12:59:41 INFO  BackOffice:1365 - User chose to exit. Going back to view menu...
+2023-08-14 13:03:22 INFO  BackOffice:51 - Starting BackOffice for Admin
+2023-08-14 13:03:22 INFO  BackOffice:51 - Starting BackOffice for Admin
+2023-08-14 13:03:22 INFO  BackOffice:23 - BackOffice initialized for employee: 0
+2023-08-14 13:03:22 INFO  BackOffice:23 - BackOffice initialized for employee: 0
+2023-08-14 13:03:22 INFO  LogUtil:13 - Admin logged in
+2023-08-15 21:57:10 INFO  BackOffice:51 - Starting BackOffice for Admin
+2023-08-15 21:57:10 INFO  BackOffice:51 - Starting BackOffice for Admin
+2023-08-15 21:57:10 INFO  BackOffice:23 - BackOffice initialized for employee: 0
+2023-08-15 21:57:10 INFO  BackOffice:23 - BackOffice initialized for employee: 0
+2023-08-15 21:57:10 INFO  LogUtil:13 - Admin logged in
+2023-08-15 21:57:20 INFO  BackOffice:1360 - Starting menuViewCustomer method.
+2023-08-15 21:57:20 INFO  BackOffice:1360 - Starting menuViewCustomer method.
+2023-08-15 21:58:47 INFO  BackOffice:51 - Starting BackOffice for Admin
+2023-08-15 21:58:47 INFO  BackOffice:51 - Starting BackOffice for Admin
+2023-08-15 21:58:47 INFO  BackOffice:23 - BackOffice initialized for employee: 0
+2023-08-15 21:58:47 INFO  BackOffice:23 - BackOffice initialized for employee: 0
+2023-08-15 21:58:47 INFO  LogUtil:13 - Admin logged in
+2023-08-15 21:58:54 INFO  BackOffice:1360 - Starting menuViewCustomer method.
+2023-08-15 21:58:54 INFO  BackOffice:1360 - Starting menuViewCustomer method.
+2023-08-15 21:59:30 INFO  BackOffice:51 - Starting BackOffice for Admin
+2023-08-15 21:59:30 INFO  BackOffice:51 - Starting BackOffice for Admin
+2023-08-15 21:59:30 INFO  BackOffice:23 - BackOffice initialized for employee: 0
+2023-08-15 21:59:30 INFO  BackOffice:23 - BackOffice initialized for employee: 0
+2023-08-15 21:59:30 INFO  LogUtil:13 - Admin logged in
+2023-08-15 21:59:35 INFO  BackOffice:1360 - Starting menuViewCustomer method.
+2023-08-15 21:59:35 INFO  BackOffice:1360 - Starting menuViewCustomer method.
+2023-08-15 22:12:23 INFO  BackOffice:52 - Starting BackOffice for Admin
+2023-08-15 22:12:23 INFO  BackOffice:52 - Starting BackOffice for Admin
+2023-08-15 22:12:23 INFO  BackOffice:24 - BackOffice initialized for employee: 0
+2023-08-15 22:12:23 INFO  BackOffice:24 - BackOffice initialized for employee: 0
+2023-08-15 22:12:23 INFO  LogUtil:13 - Admin logged in
+2023-08-15 22:12:28 INFO  BackOffice:291 - Starting insertCustomer method.
+2023-08-15 22:12:28 INFO  BackOffice:291 - Starting insertCustomer method.
+2023-08-15 22:13:21 INFO  BackOffice:1755 - Getting integer input...
+2023-08-15 22:13:21 INFO  BackOffice:1755 - Getting integer input...
+2023-08-15 22:13:22 INFO  BackOffice:1769 - Integer input obtained: 1
+2023-08-15 22:13:22 INFO  BackOffice:1769 - Integer input obtained: 1
+2023-08-15 22:16:02 INFO  BackOffice:325 - Employee insertion completed.
+2023-08-15 22:16:02 INFO  BackOffice:325 - Employee insertion completed.

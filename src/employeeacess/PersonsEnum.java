@@ -31,8 +31,8 @@ public enum PersonsEnum {
             case TABLE_PERSON -> "person";
             case COLUMN_NIF -> "nif";
             case COLUMN_NAME -> "name";
-            case COLUMN_BIRTH_DATE -> "birth_date";
-            case COLUMN_PWD -> "pwd";
+            case COLUMN_BIRTH_DATE -> "b_date";
+            case COLUMN_PWD -> "password";
             case COLUMN_ADDRESS -> "address";
             case TABLE_CUSTOMER -> "customer";
             case COLUMN_PERSON_TYPE_CUSTOMER -> "CUSTOMER";

@@ -9,6 +9,9 @@ import util.LogUtil;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -29,9 +32,7 @@ public class MainConnection {
         e1.setName("Gonçalo Ramos");
         BackOffice.startBackOffice(e1);
 
-
 //        MainConnection.initiate();
-
 
     }
 
@@ -45,5 +46,6 @@ public class MainConnection {
             e.printStackTrace();
         }
     }/**/
+
 
 }

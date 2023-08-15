@@ -72,8 +72,8 @@ public class BackOfficeEmployeeManager extends BackOffice {
                 choice = -1;
             }
             switch (choice) {
-//              case 1 -> insertCustomer();
-//              case 2 -> insertEmployee();
+              case 1 -> insertCustomer();
+            case 2 -> insertEmployee();
                 case 3 -> insertVehicle();
                 case 4 -> insertInsurance();
                 case 5 -> insertTicket();

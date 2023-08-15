@@ -105,6 +105,7 @@ public class BackOfficeAdmin extends BackOffice{
         System.out.println("Enter date (yyyy-mm-dd):");
         Date ticketDate = getDate();
 
+        printObjs(nif, plateNumberForTicket, ticketDate);
         getDataSource().deleteTicket(nif, plateNumberForTicket, ticketDate);
     }
 
@@ -121,6 +122,7 @@ public class BackOfficeAdmin extends BackOffice{
         System.out.println("Enter NIF: ");
         int nif3 = getNIF();
 
+        printObjs(policyNumber, nif3);
         getDataSource().deleteInsurance(policyNumber, nif3);
     }
 
@@ -135,6 +137,7 @@ public class BackOfficeAdmin extends BackOffice{
         String plate= getPlate();
         System.out.println("Enter NIF: ");
         int nif = getNIF();
+        printObjs(plate, nif);
         getDataSource().deleteVehicle(plate, nif);
     }
 
@@ -145,6 +148,10 @@ public class BackOfficeAdmin extends BackOffice{
             System.out.println("Going back to delete menu..." + "\n");
             return;
         }
+
+        System.out.println("Enter NIF: ");
+        int nif = getNIF();
+        getDataSource().deletePerson(nif);
     }
 
     private void deleteCustomer() {
@@ -154,6 +161,9 @@ public class BackOfficeAdmin extends BackOffice{
             System.out.println("Going back to delete menu..." + "\n");
             return;
         }
+        System.out.println("Enter NIF: ");
+        int nif = getNIF();
+        getDataSource().deletePerson(nif);
     }
 
     @Override
