@@ -75,7 +75,7 @@ public abstract class BackOffice {
     abstract void updateMenu();
 
 
-     Date getDate() {
+    Date getDate() {
         Date sqlDate = null;
         boolean validInput = false;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -95,7 +95,7 @@ public abstract class BackOffice {
         return sqlDate;
     }
 
-     int getNIF() {
+    int getNIF() {
         int nif = 0;
         boolean validInput = false;
 
@@ -114,7 +114,7 @@ public abstract class BackOffice {
     }
 
 
-     int getDriverLicense() {
+    int getDriverLicense() {
         int driverLicense = 0;
         boolean validInput = false;
 
@@ -133,7 +133,7 @@ public abstract class BackOffice {
     }
 
 
-     int getPolicy() {
+    int getPolicy() {
         int policy = 0;
         boolean validInput = false;
 
@@ -151,7 +151,7 @@ public abstract class BackOffice {
         return policy;
     }
 
-     String getPlate() {
+    String getPlate() {
         String plate = null;
         boolean validInput = false;
 
@@ -169,7 +169,7 @@ public abstract class BackOffice {
         return plate;
     }
 
-     String getString() {
+    String getString() {
         String str = null;
         boolean validInput = false;
 
@@ -188,7 +188,7 @@ public abstract class BackOffice {
     }
 
 
-     String getVIN() {
+    String getVIN() {
         String str = null;
         boolean validInput = false;
 
@@ -205,7 +205,7 @@ public abstract class BackOffice {
         return str;
     }
 
-     double getDouble() {
+    double getDouble() {
         double amount = 0.00;
         boolean validInput = false;
 
@@ -261,7 +261,25 @@ public abstract class BackOffice {
 
     protected void insertCustomer() {
         logger.info("Starting insertCustomer method.");
-        // ... (method implementation)
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
+            return;
+        }
+
+        System.out.println("Enter NIF: ");
+        int nif = getNIF();
+        System.out.println("Enter name: ");
+        String name = getString();
+        System.out.println("Enter address: ");
+        String address = getString();
+        System.out.println("Enter birth date with format yyyy-mm-dd: ");
+        Date birthDate = getDate();
+        System.out.println("Enter password: ");
+        String password = getString();
+        System.out.println("Enter driverLicense: ");
+        int driverLicense = getDriverLicense();
         logger.info("Employee insertion completed.");
     }
 
@@ -578,7 +596,7 @@ public abstract class BackOffice {
                     System.out.println("Back to update menu..." + "\n");
                     return;
                 }
-                
+
                 default -> {
                     logger.warn("Invalid option entered. Displaying error message.");
                     System.out.println("Invalid option, please try again");
@@ -878,7 +896,7 @@ public abstract class BackOffice {
 
     private void viewTicketByExpirationDate(List<Ticket> ticketList) {
         logger.info("Starting viewSpecificTicketByPlate method.");
-         System.out.println("Insert B to go back, anything else to continue");
+        System.out.println("Insert B to go back, anything else to continue");
         String s = scan.nextLine().trim();
         if (s.compareToIgnoreCase("B") == 0) {
             logger.info("User chose to go back. Exiting viewSpecificTicketByPlate method.");

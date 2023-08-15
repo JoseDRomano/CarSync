@@ -192,6 +192,10 @@ class Login {
                 case SUCCESSFUL_LOGIN:
                     System.out.println("Login successful");
                     isCorrect = true;
+                    int NIF = Integer.parseInt(nif);
+
+                    //Se for um cliente, vai para o frontoffice,
+                    //Se for um funcionário vai para o backoffice
                     break;
                 case WRONG_PASSWORD:
                     System.out.println("Wrong password. Wanna go back? (y/n)");
@@ -275,4 +279,6 @@ class Login {
         }
         return null;
     }
+
 }
+

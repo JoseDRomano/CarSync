@@ -10,6 +10,8 @@ public enum PersonsEnum {
     COLUMN_ADDRESS,
     COLUMN_PERSON_TYPE_EMPLOYEE,
     COLUMN_PERSON_TYPE_CUSTOMER,
+    DELETE_FROM_PERSON,
+    QUERY_TABLE_PERSON,
 
     //contants for the varibles of the table Customer
     TABLE_CUSTOMER,
@@ -21,7 +23,7 @@ public enum PersonsEnum {
 
     //Constants for the variables of the table Employee
     TABLE_EMPLOYEE,
-    COLUMN_EMPLOYEE_ACCESS_LEVEL, INSERT_INTO_PERSON, INSERT_INTO_EMPLOYEE, INSERT_INTO_CUSTOMER;
+    COLUMN_EMPLOYEE_ACCESS_LEVEL, INSERT_INTO_PERSON, INSERT_INTO_EMPLOYEE, INSERT_INTO_CUSTOMER, QUERY_TABLE_EMPLOYEE;
 
     //Method to get the string of the enum
     public static String getString(PersonsEnum pes) {
@@ -51,24 +53,26 @@ public enum PersonsEnum {
                     getString(PersonsEnum.COLUMN_ADDRESS) + ") VALUES(?, ?, ?, ?, ?)";
 
             case INSERT_INTO_EMPLOYEE -> "INSERT INTO " + getString(PersonsEnum.TABLE_EMPLOYEE) + '('
-                    + getString(PersonsEnum.COLUMN_NIF) + ", " +
-                    getString(PersonsEnum.COLUMN_NAME) + ", " +
-                    getString(PersonsEnum.COLUMN_BIRTH_DATE) + ", " +
-                    getString(PersonsEnum.COLUMN_PWD) + ", " +
-                    getString(PersonsEnum.COLUMN_ADDRESS) + ", " +
-                    getString(PersonsEnum.COLUMN_EMPLOYEE_ACCESS_LEVEL) + ") VALUES(?, ?, ?, ?, ?, ?)";
+//                    + getString(PersonsEnum.COLUMN_NIF) + ", " +
+//                    getString(PersonsEnum.COLUMN_NAME) + ", " +
+//                    getString(PersonsEnum.COLUMN_BIRTH_DATE) + ", " +
+//                    getString(PersonsEnum.COLUMN_PWD) + ", " +
+//                    getString(PersonsEnum.COLUMN_ADDRESS) + ", "
+                    + getString(PersonsEnum.COLUMN_EMPLOYEE_ACCESS_LEVEL) + ") VALUES(?)";
             case INSERT_INTO_CUSTOMER -> "INSERT INTO " + getString(PersonsEnum.TABLE_CUSTOMER) + '('
                     + getString(PersonsEnum.COLUMN_NIF) + ", " +
-                    getString(PersonsEnum.COLUMN_NAME) + ", " +
-                    getString(PersonsEnum.COLUMN_BIRTH_DATE) + ", " +
+//                    getString(PersonsEnum.COLUMN_NAME) + ", " +
+//                    getString(PersonsEnum.COLUMN_BIRTH_DATE) + ", " +
                     getString(PersonsEnum.COLUMN_PWD) + ", " +
-                    getString(PersonsEnum.COLUMN_ADDRESS) + ", " +
+//                    getString(PersonsEnum.COLUMN_ADDRESS) + ", " +
                     getString(PersonsEnum.COLUMN_CUSTOMER_DRIVER_LICENSE) + ", " +
                     getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE) + ", " +
                     getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE) + ", " +
-                    getString(PersonsEnum.COLUMN_CUSTOMER_EXPIRATION_DATE) + ") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    getString(PersonsEnum.COLUMN_CUSTOMER_EXPIRATION_DATE) + ") VALUES(?, ?, ?, ?, ?, ?)";
 
-
+            case DELETE_FROM_PERSON -> "DELETE FROM " + getString(TABLE_PERSON) + " WHERE " + getString(COLUMN_NIF) + " = ?";
+            case QUERY_TABLE_EMPLOYEE -> "SELECT * FROM " + getString(TABLE_EMPLOYEE);
+            case QUERY_TABLE_PERSON -> "SELECT * FROM " + getString(TABLE_PERSON);
             default -> throw new IllegalArgumentException("No such column or operation for person table");
 
         };
