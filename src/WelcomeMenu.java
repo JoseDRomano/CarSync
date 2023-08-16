@@ -103,8 +103,6 @@ class Register {
         statement.setString(8, starting_date);
         statement.setString(9, expiration_date);
 
-
-
         /*Passamos para o login*/
         System.out.println(SUCCESSFUL_REGISTER);
         Login login = new Login();
