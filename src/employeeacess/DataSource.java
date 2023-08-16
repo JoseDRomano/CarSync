@@ -708,6 +708,44 @@ public class DataSource {
         }
     }
 
+    public void updateCustomerDriverLicenseDates(Date startDate, Date expDate, int nif) {
+        try {
+            connection.setAutoCommit(false);
+            updateCustomerDriverLicenseDates.setDate(1, startDate);
+            updateCustomerDriverLicenseDates.setDate(2, expDate);
+            updateCustomerDriverLicenseDates.setInt(3, nif);
+            int affected =  updateCustomerDriverLicenseDates.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Updated dates for customer with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't update dates for customer with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't update customer driver license dates: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
     //TESTED
     private boolean insuranceExists(int policy, int nif) {
         for (Insurance i : queryInsurances()) {
