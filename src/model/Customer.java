@@ -2,6 +2,8 @@ package model;
 
 import java.time.LocalDate;
 import java.sql.Date;
+import java.util.Comparator;
+
 import util.LogUtil;
 
 public class Customer extends Person {
@@ -9,7 +11,6 @@ public class Customer extends Person {
     private String licenseType;
     private Date startingDate;
     private Date expDate;
-
 
     public int getDriverLicenseNum() {return driverLicenseNum;}
 
@@ -49,7 +50,7 @@ public class Customer extends Person {
             default -> throw new IllegalStateException("No such category");
         };
 //        LogUtil.info("Setting License Type: " + licenseType);
-        this.licenseType = licenseType;
+//        this.licenseType = licenseType;
     }
 
 

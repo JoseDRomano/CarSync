@@ -12,49 +12,6 @@ public class Insurance implements Comparable<Insurance> {
     private String extraCategory;
     private String carPlate;
 
-    public static class StringPlateComparator implements Comparator<Insurance> {
-        @Override
-        public int compare(Insurance o1, Insurance o2) {
-            return o1.getCarPlate().compareTo(o2.getCarPlate());
-        }
-
-        @Override
-        public Comparator<Insurance> reversed() {
-            return Comparator.super.reversed();
-        }
-    }
-
-    public static class RegistrationDateComparator implements Comparator<Insurance> {
-        @Override
-        public int compare(Insurance o1, Insurance o2) {
-            return o1.getStartDate().compareTo(o2.getStartDate());
-        }
-
-        @Override
-        public Comparator<Insurance> reversed() {
-            return Comparator.super.reversed();
-        }
-    }
-
-    public static class ExpirationateComparator implements Comparator<Insurance> {
-        @Override
-        public int compare(Insurance o1, Insurance o2) {
-            return o1.getExpDate().compareTo(o2.getExpDate());
-        }
-
-        @Override
-        public Comparator<Insurance> reversed() {
-            return Comparator.super.reversed();
-        }
-    }
-
-
-    /*public boolean validateValues(int policy, String plate, java.sql.Date startDate,
-                                  int extraCategory, java.sql.Date expDate, String companyName, int nif) {
-        if(policy >= 1000000000 || policy <= 1999999999) {
-            if()
-        }
-    }*/
     public int getPolicy() {
         return policy;
     }

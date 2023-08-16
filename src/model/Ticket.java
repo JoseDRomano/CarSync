@@ -14,42 +14,6 @@ public class Ticket implements Comparable<Ticket> {
     private String reason;
     private boolean isPaid = false;
 
-    public static class StringPlateComparator implements Comparator<Ticket> {
-        @Override
-        public int compare(Ticket o1, Ticket o2) {
-            return o1.getPlate().compareTo(o2.getPlate());
-        }
-
-        @Override
-        public Comparator<Ticket> reversed() {
-            return Comparator.super.reversed();
-        }
-    }
-
-    public static class RegistrationDateComparator implements Comparator<Ticket> {
-        @Override
-        public int compare(Ticket o1, Ticket o2) {
-            return o1.getDate().compareTo(o2.getDate());
-        }
-
-        @Override
-        public Comparator<Ticket> reversed() {
-            return Comparator.super.reversed();
-        }
-    }
-
-    public static class ExpirationateComparator implements Comparator<Ticket> {
-        @Override
-        public int compare(Ticket o1, Ticket o2) {
-            return o1.getExpiry_date().compareTo(o2.getExpiry_date());
-        }
-
-        @Override
-        public Comparator<Ticket> reversed() {
-            return Comparator.super.reversed();
-        }
-    }
-
     public boolean isPaid() {
         boolean b = isPaid;
         return b;

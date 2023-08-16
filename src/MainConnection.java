@@ -9,6 +9,9 @@ import util.LogUtil;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -22,16 +25,14 @@ public class MainConnection {
 
     public static void main(String[] args) {
 
-        PropertyConfigurator.configure("C:/Users/diogo/IdeaProjects/IMTT-alike/resources/log4j.properties");
+        PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
 
         Employee e1 = new Employee();
         e1.setAccess_level(2);
         e1.setName("Gonçalo Ramos");
         BackOffice.startBackOffice(e1);
 
-
 //        MainConnection.initiate();
-
 
     }
 
@@ -45,5 +46,6 @@ public class MainConnection {
             e.printStackTrace();
         }
     }/**/
+
 
 }
