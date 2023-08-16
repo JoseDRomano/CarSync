@@ -9,8 +9,6 @@ public class LogUtil {
         logger.debug(message);
     }
 
-
-
     public static void info(String message) {
         logger.info(message);
     }

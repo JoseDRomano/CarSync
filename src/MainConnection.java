@@ -5,8 +5,13 @@ import employeeacess.DataSource;
 import model.Employee;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import util.LogUtil;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -16,9 +21,11 @@ public class MainConnection {
     private static final Logger logger = Logger.getLogger(MainConnection.class);
 
 
+    private static Scanner scan = new Scanner(System.in);
+
     public static void main(String[] args) {
 
-        PropertyConfigurator.configure("C:/Users/diogo/IdeaProjects/IMTT-alike/resources/log4j.properties");
+        PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
 
         Employee e1 = new Employee();
         e1.setAccess_level(2);
@@ -27,10 +34,9 @@ public class MainConnection {
 
 //        MainConnection.initiate();
 
-
     }
 
-    private static void initiate() {
+   /* private static void initiate() {
         try {
             WelcomeMenu wm = new WelcomeMenu();
             wm.run();
@@ -39,6 +45,7 @@ public class MainConnection {
             System.out.println("Error connecting to database" + e.getMessage());
             e.printStackTrace();
         }
-    }
+    }/**/
+
 
 }

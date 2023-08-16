@@ -42,10 +42,6 @@ public abstract class Person implements Comparable<Person> {
     }
 
     public void setBirht_date(Date birht_date) {
-        LocalDate eighteenYearsAgo = LocalDate.now().minusYears(18);
-        if(birht_date.toLocalDate().isAfter(eighteenYearsAgo)) {
-            throw new IllegalArgumentException("You must be at least 18 years old to register");
-        }
         this.birht_date = birht_date;
     }
 

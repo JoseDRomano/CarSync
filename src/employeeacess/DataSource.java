@@ -1,16 +1,12 @@
 package employeeacess;
 
-import model.Customer;
-import model.Insurance;
-import model.Ticket;
-import model.Vehicle;
-import org.mindrot.jbcrypt.BCrypt;
+import model.*;
+//import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -36,10 +32,15 @@ public class DataSource {
     private PreparedStatement queryTickets;
     private PreparedStatement queryVehicleByPlate;
     private PreparedStatement queryCustomers;
+    private PreparedStatement queryEmployee;
+    private PreparedStatement queryPerson;
 
     private PreparedStatement insertIntoVehicle;
     private PreparedStatement insertIntoInsurance;
     private PreparedStatement insertIntoTicket;
+    private PreparedStatement insertIntoCustomer;
+    private PreparedStatement insertIntoEmployee;
+    private PreparedStatement insertIntoPerson;
 
     private PreparedStatement updateVehicleColor;
     private PreparedStatement renewInsurance;
@@ -50,6 +51,7 @@ public class DataSource {
     private PreparedStatement deleteVehicle;
     private PreparedStatement deleteInsurance;
     private PreparedStatement deleteTicket;
+    private PreparedStatement deletePerson;
 
 
     private Connection connection;
@@ -61,13 +63,17 @@ public class DataSource {
             insertIntoInsurance = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.INSERT_INSURANCE));
             insertIntoVehicle = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.INSERT_VEHICLE));
             insertIntoTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.INSERT_TICKET));
+            insertIntoCustomer = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.INSERT_INTO_CUSTOMER));
+            insertIntoEmployee = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.INSERT_INTO_EMPLOYEE));
+            insertIntoPerson = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.INSERT_INTO_PERSON));
 
             queryInsurances = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.QUERY_TABLE_INSURANCE));
             queryTickets = connection.prepareStatement(TicketEnum.getString(TicketEnum.QUERY_TABLE_TICKET));
             queryVehicles = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.QUERY_TABLE_VEHICLE));
             queryCustomers = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.QUERY_TABLE_CUSTOMER));
-
             queryVehicleByPlate = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.QUERY_TABLE_VEHICLE_BY_PLATE));
+            queryEmployee = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.QUERY_TABLE_EMPLOYEE));
+            queryPerson = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.QUERY_TABLE_PERSON));
 
             renewInsurance = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.RENEW_INSURANCE));
             updateVehicleColor = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.UPDATE_VEHICLE_COLOR));
@@ -80,6 +86,7 @@ public class DataSource {
             deleteVehicle = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.DELETE_VEHICLE));
             deleteInsurance = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.DELETE_INSURANCE));
             deleteTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.DELETE_TICKET));
+            deletePerson = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.DELETE_FROM_PERSON));
 
             return true;
         } catch (SQLException e) {
@@ -104,8 +111,24 @@ public class DataSource {
                 insertIntoVehicle.close();
             }
 
+            if (insertIntoCustomer != null) {
+                insertIntoCustomer.close();
+            }
+
+            if (insertIntoEmployee != null) {
+                insertIntoEmployee.close();
+            }
+
+            if (insertIntoPerson != null) {
+                insertIntoPerson.close();
+            }
+
             if (queryVehicles != null) {
                 queryVehicles.close();
+            }
+
+            if( queryPerson != null){
+                queryPerson.close();
             }
 
             if (queryTickets != null) {
@@ -138,6 +161,30 @@ public class DataSource {
 
             if (queryCustomers != null) {
                 queryCustomers.close();
+            }
+
+            if(deletePerson != null){
+                deletePerson.close();
+            }
+
+            if(deleteTicket != null){
+                deleteTicket.close();
+            }
+
+            if(deleteInsurance != null){
+                deleteInsurance.close();
+            }
+
+            if(deleteVehicle != null){
+                deleteVehicle.close();
+            }
+
+            if(queryVehicleByPlate != null){
+                queryVehicleByPlate.close();
+            }
+
+            if(queryEmployee != null){
+                queryEmployee.close();
             }
 
             if (connection != null) {
@@ -237,15 +284,24 @@ public class DataSource {
             while (resultSet.next()) {
                 Customer customer = new Customer();
                 customer.setNif(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF)));
-//                customer.setName(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_NAME)));
                 customer.setExpDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_EXPIRATION_DATE)));
                 customer.setLicenseType(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE)));
-//                customer.setAddress(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_ADDRESS)));
-//                customer.setBirht_date(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
                 customer.setStartingDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE)));
-//                customer.setPwd(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
                 customer.setDriverLicenseNum(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_DRIVER_LICENSE)));
                 customers.add(customer);
+            }
+
+            resultSet = queryPerson.executeQuery();
+
+            while (resultSet.next()) {
+                for (Customer customer : customers) {
+                    if (customer.getNif() == resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF))) {
+                        customer.setName(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_NAME)));
+                        customer.setAddress(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_ADDRESS)));
+                        customer.setBirht_date(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
+                        customer.setPwd(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
+                    }
+                }
             }
             return customers;
 
@@ -254,6 +310,41 @@ public class DataSource {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public List<Employee> queryEmployees() {
+
+        List<Employee> employees = new ArrayList<>();
+        try {
+            ResultSet resultSet = queryEmployee.executeQuery();
+            while (resultSet.next()) {
+                Employee employee = new Employee();
+                employee.setAccess_level(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_EMPLOYEE_ACCESS_LEVEL)));
+                employees.add(employee);
+            }
+
+            resultSet = queryPerson.executeQuery();
+
+            while (resultSet.next()) {
+                for (Employee employee : employees) {
+                    if (employee.getNif() == resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF))) {
+                        employee.setName(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_NAME)));
+                        employee.setAddress(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_ADDRESS)));
+                        employee.setBirht_date(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
+                        employee.setPwd(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
+                    }
+                }
+            }
+
+            return employees;
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't retrieve data from employee table: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+
+
     }
 
     //TESTED
@@ -302,7 +393,7 @@ public class DataSource {
 
     //TESTED
     public boolean insertInsurance(int policy, String plate, Date startDate,
-                                int extraCategory, Date expDate, String companyName, int nif) {
+                                   int extraCategory, Date expDate, String companyName, int nif) {
 
         boolean worked = false;
         if (!isVehicleOwner(nif, plate)) {
@@ -321,6 +412,7 @@ public class DataSource {
             int affected = insertIntoInsurance.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Inserted insurance with policy number: " + policy);
                 connection.commit();
                 worked = true;
             } else {
@@ -390,6 +482,7 @@ public class DataSource {
             int affected = insertIntoVehicle.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Inserted vehicle with plate number: " + plate);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't insert new vehicle with plate number: " + plate);
@@ -433,6 +526,7 @@ public class DataSource {
             int affected = insertIntoTicket.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Inserted ticket for plate number: " + plate + " with value: " + value + " date: " + date);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't insert new ticket with plate number: " + plate);
@@ -475,6 +569,7 @@ public class DataSource {
             int affected = updateVehicleColor.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Updated vehicle color for plate number: " + plate + " to: " + color);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't update vehicle color");
@@ -517,6 +612,7 @@ public class DataSource {
             int affected = updateVehicleOwner.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Updated vehicle owner for plate number: " + plate + " to: " + newNif + " from: " + oldNif);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't update vehicle owner");
@@ -560,6 +656,7 @@ public class DataSource {
             int affected = updateTicket.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Updated ticket for plate number: " + plate + " to value: " + newValue + " and new date: " + todayDate);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't update ticket");
@@ -643,6 +740,7 @@ public class DataSource {
             int affected = renewInsurance.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Renewed insurance with policy number: " + policy);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't renew insurance with policy number: " + policy);
@@ -706,6 +804,7 @@ public class DataSource {
             int affected = payTicket.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Paid ticket for plate number: " + plate + " with value: " + value + "for date: " + date);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't pay ticket");
@@ -747,6 +846,7 @@ public class DataSource {
             int affected = deleteVehicle.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Vehicle succefuly deleted");
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't delete vehicle with plate number: " + plate);
@@ -789,6 +889,7 @@ public class DataSource {
             int affected = deleteInsurance.executeUpdate();
 
             if (affected == 1) {
+                System.out.println("Insurance with policy number:  " + policy + " succefuly deleted.");
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't delete insurance with policy number: " + policy);
@@ -796,6 +897,237 @@ public class DataSource {
 
         } catch (SQLException e) {
             System.out.println("Couldn't delete insurance: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void deleteTicket(int nif, String plate, Date date) {
+
+        if (!isVehicleOwner(nif, plate)) {
+            System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
+            return;
+        }
+
+        try {
+            connection.setAutoCommit(false);
+            deleteTicket.setInt(1, nif);
+            deleteTicket.setString(2, plate);
+            deleteTicket.setDate(3, date);
+            int affected = deleteTicket.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Ticket for nif: " + nif + " plate: "+ plate + " and date: "+ date + " succefully deleted");
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't delete ticket");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't delete ticket: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Ticket succefully deleted now performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+    public void deletePerson(int nif) {
+
+        if (!isCustomerOrEmployee(nif)) {
+            System.out.println("No such person with nif: " + nif);
+            return;
+        }
+
+        try {
+            connection.setAutoCommit(false);
+            deletePerson.setInt(1, nif);
+            int affected = deletePerson.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Person with nif:  " + nif + " succefuly deleted.");
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't delete person with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't delete person: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean isCustomerOrEmployee(int nif) {
+
+        for(Customer customer: queryCustomers()) {
+            if(customer.getNif() == nif) {
+                return true;
+            }
+        }
+
+        for(Employee employee: queryEmployees()) {
+            if(employee.getNif() == nif) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean insertPerson(int nif, String name, String address, Date bDate, String password) {
+
+        boolean result = false;
+
+        try {
+            connection.setAutoCommit(false);
+            insertIntoPerson.setInt(1, nif);
+            insertIntoPerson.setString(2, name);
+            insertIntoPerson.setDate(3, bDate);
+            insertIntoPerson.setString(4, password);
+            insertIntoPerson.setString(5, address);
+            int affected = insertIntoPerson.executeUpdate();
+
+            if (affected == 1) {
+                result = true;
+                System.out.println("Inserted person with nif: " + nif + " and name: " + name);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't person with nif: " + nif + " and name: " + name);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't insert data into ticket table: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public void insertCustomer(int nif, String name, String address, Date bDate, String password,
+                               int driverLicense, int licenseType, Date registrationDate, Date expirationDate) {
+
+        if(!insertPerson(nif, name, address, bDate, password))  {
+            System.out.println("Couldn't insert person with nif: " + nif);
+            return;
+        }
+
+        try {
+            connection.setAutoCommit(false);
+            insertIntoCustomer.setInt(1, nif);
+            insertIntoCustomer.setString(2, password);
+            insertIntoCustomer.setInt(3, driverLicense);
+            insertIntoCustomer.setInt(4, licenseType);
+            insertIntoCustomer.setDate(5, registrationDate);
+            insertIntoCustomer.setDate(6, expirationDate);
+            int affected = insertIntoCustomer.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Inserted customer with nif: " + nif + " and driver license number: " + driverLicense);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't insert customer with nif: " + nif + " and driver license number: " + driverLicense);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't insert data into ticket table: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void insertEmployee(int nif, String name, String address, Date bDate, String password,
+                               int accessLevel) {
+
+        if(!insertPerson(nif, name, address, bDate, password))  {
+            System.out.println("Couldn't insert person with nif: " + nif);
+            return;
+        }
+
+        try {
+            connection.setAutoCommit(false);
+            insertIntoEmployee.setInt(1, accessLevel);
+            int affected = insertIntoEmployee.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Inserted employee with nif: " + nif + ", name: " + name + "and access level: " + accessLevel);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't insert employee with nif: " + nif + ", name: " + name + "and access level: " + accessLevel);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't insert data into ticket table: " + e.getMessage());
             e.printStackTrace();
             try {
                 System.out.println("Performing rollback");

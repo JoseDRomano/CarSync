@@ -15,30 +15,6 @@ public class Vehicle implements Comparable<Vehicle>{
     private int nif;
     private String category;
 
-
-    public static class StringPlateComparator implements Comparator<Vehicle> {
-        @Override
-        public int compare(Vehicle o1, Vehicle o2) {
-            return o1.getPlate().compareTo(o2.getPlate());
-        }
-
-        @Override
-        public Comparator<Vehicle> reversed() {
-            return Comparator.super.reversed();
-        }
-    }
-
-    public static class RegistrationDateComparator implements Comparator<Vehicle> {
-        @Override
-        public int compare(Vehicle o1, Vehicle o2) {
-            return o1.getregistrationDate().compareTo(o2.getregistrationDate());
-        }
-
-        @Override
-        public Comparator<Vehicle> reversed() {
-            return Comparator.super.reversed();
-        }
-    }
     public int getNif() {
         return nif;
     }
@@ -60,7 +36,7 @@ public class Vehicle implements Comparable<Vehicle>{
     }
 
     public String getVin() {
-        return vin;
+        return this.vin;
     }
 
     public void setVin(String vin) {
@@ -68,6 +44,7 @@ public class Vehicle implements Comparable<Vehicle>{
             this.vin = vin;
             return;
         }
+        System.out.println("Vin must have the following format: XXXXXXXXXXXXXXXXX");
     }
 
     public String getColor() {
