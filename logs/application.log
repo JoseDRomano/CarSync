@@ -1,0 +1,28 @@
+2023-08-14 08:54:31 INFO  BackOffice:57 - Starting BackOffice for Admin
+2023-08-14 08:54:31 INFO  BackOffice:57 - Starting BackOffice for Admin
+2023-08-14 08:54:31 INFO  BackOffice:29 - BackOffice initialized for employee: 0
+2023-08-14 08:54:31 INFO  BackOffice:29 - BackOffice initialized for employee: 0
+2023-08-14 08:54:54 INFO  BackOffice:243 - Starting insertEmployee method.
+2023-08-14 08:54:54 INFO  BackOffice:243 - Starting insertEmployee method.
+2023-08-14 08:54:54 INFO  BackOffice:245 - Employee insertion completed.
+2023-08-14 08:54:54 INFO  BackOffice:245 - Employee insertion completed.
+2023-08-14 08:54:58 INFO  BackOffice:237 - Starting insertCustomer method.
+2023-08-14 08:54:58 INFO  BackOffice:237 - Starting insertCustomer method.
+2023-08-14 08:54:58 INFO  BackOffice:239 - Employee insertion completed.
+2023-08-14 08:54:58 INFO  BackOffice:239 - Employee insertion completed.
+2023-08-14 08:55:06 INFO  BackOffice:450 - Starting menuUpdateVehicle method.
+2023-08-14 08:55:06 INFO  BackOffice:450 - Starting menuUpdateVehicle method.
+2023-08-14 08:55:06 INFO  BackOffice:454 - Displaying UPDATE VEHICLE MENU.
+2023-08-14 08:55:06 INFO  BackOffice:454 - Displaying UPDATE VEHICLE MENU.
+2023-08-14 08:55:09 INFO  BackOffice:479 - User chose to update vehicle color.
+2023-08-14 08:55:09 INFO  BackOffice:479 - User chose to update vehicle color.
+2023-08-14 08:55:09 INFO  BackOffice:332 - Starting updateVehicleColor method.
+2023-08-14 08:55:09 INFO  BackOffice:332 - Starting updateVehicleColor method.
+2023-08-14 08:55:10 INFO  BackOffice:336 - User chose to go back. Update color operation aborted.
+2023-08-14 08:55:10 INFO  BackOffice:336 - User chose to go back. Update color operation aborted.
+2023-08-14 08:55:10 INFO  BackOffice:454 - Displaying UPDATE VEHICLE MENU.
+2023-08-14 08:55:10 INFO  BackOffice:454 - Displaying UPDATE VEHICLE MENU.
+2023-08-14 08:55:12 INFO  BackOffice:487 - User chose to exit UPDATE VEHICLE MENU.
+2023-08-14 08:55:12 INFO  BackOffice:487 - User chose to exit UPDATE VEHICLE MENU.
+2023-08-14 08:55:12 INFO  BackOffice:495 - Exiting menuUpdateVehicle method.
+2023-08-14 08:55:12 INFO  BackOffice:495 - Exiting menuUpdateVehicle method.
