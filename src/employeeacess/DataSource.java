@@ -1021,8 +1021,6 @@ public class DataSource {
 
         boolean result = false;
 
-        //É suposto fazer incriptação à password?
-
         try {
             connection.setAutoCommit(false);
             insertIntoPerson.setInt(1, nif);

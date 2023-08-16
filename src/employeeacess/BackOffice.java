@@ -9,6 +9,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
+import org.mindrot.jbcrypt.BCrypt;
+import tools.Encryptor;
+
 public abstract class BackOffice {
 
 
@@ -310,6 +313,7 @@ public abstract class BackOffice {
         Date birthDate = getBirthDate();
         System.out.println("Enter password: ");
         String password = getString();
+        password = BCrypt.hashpw(password, BCrypt.gensalt());
         System.out.println("Enter driverLicense: ");
         int driverLicense = getDriverLicense();
         System.out.println("""
@@ -351,6 +355,7 @@ public abstract class BackOffice {
         Date birthDate = getBirthDate();
         System.out.println("Enter password: ");
         String password = getString();
+        password = BCrypt.hashpw(password, BCrypt.gensalt());
         System.out.println("Enter employee access level: ");
         int accessLevel = getInteger(scan);
         if(printValues(nif, name, address, birthDate, password, accessLevel) == -1) {
