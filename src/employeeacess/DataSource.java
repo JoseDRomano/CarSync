@@ -47,6 +47,10 @@ public class DataSource {
     private PreparedStatement updateTicket;
     private PreparedStatement updateVehicleOwner;
     private PreparedStatement payTicket;
+    private PreparedStatement updateEmployeeAccessLevel;
+    private PreparedStatement updatePersonPassword;
+    private PreparedStatement updatePersonAddress;
+    private PreparedStatement updateCustomerDriverLicenseDates;
 
     private PreparedStatement deleteVehicle;
     private PreparedStatement deleteInsurance;
@@ -79,6 +83,11 @@ public class DataSource {
             updateVehicleColor = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.UPDATE_VEHICLE_COLOR));
             updateVehicleOwner = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.UPDATE_VEHICLE_OWNER));
             payTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.PAY_TICKET));
+            updateEmployeeAccessLevel = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.UPDATE_EMPLOYER_ACCESS_LEVEL));
+            updatePersonPassword = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.UPDATE_PERSON_PWD));
+            updatePersonAddress = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.UPDATE_PERSON_ADDRESS));
+            updateCustomerDriverLicenseDates = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.UPDATE_CUSTOMER_DRIVER_LICENSE_DATES));
+
 
             //Serve para atualizar o valor da multa e a data de validade quando o mesmo for necessário.
             updateTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.UPDATE_TICKET));
@@ -157,6 +166,22 @@ public class DataSource {
 
             if (updateTicket != null) {
                 updateTicket.close();
+            }
+
+            if(updateEmployeeAccessLevel != null){
+                updateEmployeeAccessLevel.close();
+            }
+
+            if (updatePersonPassword != null) {
+                updatePersonPassword.close();
+            }
+
+            if (updatePersonAddress != null) {
+                updatePersonAddress.close();
+            }
+
+            if (updateCustomerDriverLicenseDates != null) {
+                updateCustomerDriverLicenseDates.close();
             }
 
             if (queryCustomers != null) {

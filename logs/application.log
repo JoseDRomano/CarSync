@@ -62,3 +62,72 @@
 2023-08-15 22:13:22 INFO  BackOffice:1769 - Integer input obtained: 1
 2023-08-15 22:16:02 INFO  BackOffice:325 - Employee insertion completed.
 2023-08-15 22:16:02 INFO  BackOffice:325 - Employee insertion completed.
+2023-08-16 13:23:53 INFO  BackOffice:57 - Starting BackOffice for Admin
+2023-08-16 13:23:53 INFO  BackOffice:57 - Starting BackOffice for Admin
+2023-08-16 13:23:53 INFO  BackOffice:29 - BackOffice initialized for employee: 0
+2023-08-16 13:23:53 INFO  BackOffice:29 - BackOffice initialized for employee: 0
+2023-08-16 13:23:53 INFO  LogUtil:13 - Admin logged in
+2023-08-16 13:24:02 INFO  BackOffice:1416 - Starting menuViewCustomer method.
+2023-08-16 13:24:02 INFO  BackOffice:1416 - Starting menuViewCustomer method.
+2023-08-16 13:26:02 INFO  BackOffice:1478 - User chose to exit. Going back to view menu...
+2023-08-16 13:26:02 INFO  BackOffice:1478 - User chose to exit. Going back to view menu...
+2023-08-16 13:30:54 INFO  BackOffice:57 - Starting BackOffice for Admin
+2023-08-16 13:30:54 INFO  BackOffice:57 - Starting BackOffice for Admin
+2023-08-16 13:30:54 INFO  BackOffice:29 - BackOffice initialized for employee: 0
+2023-08-16 13:30:54 INFO  BackOffice:29 - BackOffice initialized for employee: 0
+2023-08-16 13:30:54 INFO  LogUtil:13 - Admin logged in
+2023-08-16 13:31:03 INFO  BackOffice:298 - Starting insertCustomer method.
+2023-08-16 13:31:03 INFO  BackOffice:298 - Starting insertCustomer method.
+2023-08-16 13:31:24 ERROR BackOffice:122 - Invalid date input: 2020-1-1
+java.time.format.DateTimeParseException: Text '2020-1-1' could not be parsed at index 5
+	at java.base/java.time.format.DateTimeFormatter.parseResolved0(DateTimeFormatter.java:2052)
+	at java.base/java.time.format.DateTimeFormatter.parse(DateTimeFormatter.java:1954)
+	at java.base/java.time.LocalDate.parse(LocalDate.java:430)
+	at employeeacess.BackOffice.getBirthDate(BackOffice.java:112)
+	at employeeacess.BackOffice.insertCustomer(BackOffice.java:313)
+	at employeeacess.BackOfficeAdmin.insertMenu(BackOfficeAdmin.java:196)
+	at employeeacess.BackOfficeAdmin.start(BackOfficeAdmin.java:40)
+	at employeeacess.BackOfficeAdmin.<init>(BackOfficeAdmin.java:16)
+	at employeeacess.BackOffice.startBackOffice(BackOffice.java:58)
+	at MainConnection.main(MainConnection.java:33)
+2023-08-16 13:31:24 ERROR BackOffice:122 - Invalid date input: 2020-1-1
+java.time.format.DateTimeParseException: Text '2020-1-1' could not be parsed at index 5
+	at java.base/java.time.format.DateTimeFormatter.parseResolved0(DateTimeFormatter.java:2052)
+	at java.base/java.time.format.DateTimeFormatter.parse(DateTimeFormatter.java:1954)
+	at java.base/java.time.LocalDate.parse(LocalDate.java:430)
+	at employeeacess.BackOffice.getBirthDate(BackOffice.java:112)
+	at employeeacess.BackOffice.insertCustomer(BackOffice.java:313)
+	at employeeacess.BackOfficeAdmin.insertMenu(BackOfficeAdmin.java:196)
+	at employeeacess.BackOfficeAdmin.start(BackOfficeAdmin.java:40)
+	at employeeacess.BackOfficeAdmin.<init>(BackOfficeAdmin.java:16)
+	at employeeacess.BackOffice.startBackOffice(BackOffice.java:58)
+	at MainConnection.main(MainConnection.java:33)
+2023-08-16 13:31:43 INFO  BackOffice:1783 - Getting integer input...
+2023-08-16 13:31:43 INFO  BackOffice:1783 - Getting integer input...
+2023-08-16 13:31:45 INFO  BackOffice:1797 - Integer input obtained: 2
+2023-08-16 13:31:45 INFO  BackOffice:1797 - Integer input obtained: 2
+2023-08-16 13:33:05 INFO  BackOffice:1416 - Starting menuViewCustomer method.
+2023-08-16 13:33:05 INFO  BackOffice:1416 - Starting menuViewCustomer method.
+2023-08-16 13:33:20 INFO  BackOffice:1478 - User chose to exit. Going back to view menu...
+2023-08-16 13:33:20 INFO  BackOffice:1478 - User chose to exit. Going back to view menu...
+2023-08-16 13:33:22 INFO  BackOffice:1416 - Starting menuViewCustomer method.
+2023-08-16 13:33:22 INFO  BackOffice:1416 - Starting menuViewCustomer method.
+2023-08-16 13:33:25 INFO  BackOffice:1478 - User chose to exit. Going back to view menu...
+2023-08-16 13:33:25 INFO  BackOffice:1478 - User chose to exit. Going back to view menu...
+2023-08-16 13:33:33 INFO  BackOffice:57 - Starting BackOffice for Admin
+2023-08-16 13:33:33 INFO  BackOffice:57 - Starting BackOffice for Admin
+2023-08-16 13:33:33 INFO  BackOffice:29 - BackOffice initialized for employee: 0
+2023-08-16 13:33:33 INFO  BackOffice:29 - BackOffice initialized for employee: 0
+2023-08-16 13:33:33 INFO  LogUtil:13 - Admin logged in
+2023-08-16 13:33:38 INFO  BackOffice:1416 - Starting menuViewCustomer method.
+2023-08-16 13:33:38 INFO  BackOffice:1416 - Starting menuViewCustomer method.
+2023-08-16 13:33:44 INFO  BackOffice:1478 - User chose to exit. Going back to view menu...
+2023-08-16 13:33:44 INFO  BackOffice:1478 - User chose to exit. Going back to view menu...
+2023-08-16 13:33:49 INFO  BackOffice:1783 - Getting integer input...
+2023-08-16 13:33:49 INFO  BackOffice:1783 - Getting integer input...
+2023-08-16 13:33:52 INFO  BackOffice:1797 - Integer input obtained: 10
+2023-08-16 13:33:52 INFO  BackOffice:1797 - Integer input obtained: 10
+2023-08-16 13:33:52 INFO  BackOffice:1740 - Displaying list...
+2023-08-16 13:33:52 INFO  BackOffice:1740 - Displaying list...
+2023-08-16 13:33:52 INFO  BackOffice:1778 - Displaying list completed.
+2023-08-16 13:33:52 INFO  BackOffice:1778 - Displaying list completed.
