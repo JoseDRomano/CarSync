@@ -55,7 +55,7 @@ public enum PersonsEnum {
                     getString(PersonsEnum.COLUMN_BIRTH_DATE) + ", " +
                     getString(PersonsEnum.COLUMN_PWD) + ", " +
                     getString(PersonsEnum.COLUMN_ADDRESS) + ", " +
-                    getString(PersonsEnum.COLUMN_EMPLOYEE_ACCESS_LEVEL) + ") VALUES(?, ?, ?, ?, ?, ?)" ;
+                    getString(PersonsEnum.COLUMN_EMPLOYEE_ACCESS_LEVEL) + ") VALUES(?, ?, ?, ?, ?, ?)";
 
 //            case INSERT_INTO_EMPLOYEE -> "INSERT INTO " + getString(PersonsEnum.TABLE_EMPLOYEE) + '('
 //                    + getString(PersonsEnum.COLUMN_NIF) + ", " +
