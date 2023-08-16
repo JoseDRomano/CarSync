@@ -1,3 +1,5 @@
+import employeeacess.BackOffice;
+import employeeacess.DataSource;
 import employeeacess.PersonsEnum;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -226,6 +228,7 @@ class Login {
             Dummy dummy = getDummy(scanner.nextLine().trim());
             if (dummy.data.get("type").equals("employee")) {
                 //call Backoffice and send the dummy object as an argument
+                BackOffice.startBackOffice(Integer.parseInt(dummy.data.get("nif")));
             } else {
                 //call FrontOffice and send the dummy object as an argument
             }

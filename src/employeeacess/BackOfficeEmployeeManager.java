@@ -27,7 +27,7 @@ public class BackOfficeEmployeeManager extends BackOffice {
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -67,7 +67,7 @@ public class BackOfficeEmployeeManager extends BackOffice {
 
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -109,7 +109,7 @@ public class BackOfficeEmployeeManager extends BackOffice {
 
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -145,21 +145,20 @@ public class BackOfficeEmployeeManager extends BackOffice {
                     2 - Update a vehicle
                     3 - Update an insurance
                     4 - Update a ticket
-                    5 - Update an employee
-                    """);
+                    5 - Update an employee""");
 
             System.out.println("0 - Exit");
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choice = Integer.parseInt(s);
             }
             else {
                 choice = -1;
             }
             switch (choice) {
-                case 1 -> updateCustomer();
+                case 1 -> menuUpdateCustomer();
                 case 2 -> menuUpdateVehicle();
                 case 3 -> menuUpdateInsurance();
                 case 4 -> menuUpdateTicket();

@@ -162,6 +162,7 @@ public interface getValues {
                 str = s;
                 validInput = true;
             } else {
+                logger.error("Invalid VIN: " + s);
                 System.out.println("Invalid VIN. Please enter a 17 digit value.");
             }
         } while (!validInput);
@@ -186,5 +187,63 @@ public interface getValues {
 
         return amount;
     }
+
+    default int printValues(Scanner scan, Logger logger, Object... vs) {
+        boolean validInput = false;
+        int decision = -1;
+        int i = 1;
+        System.out.println("The values entered are: ");
+        for (Object o : vs) {
+            System.out.println("Value " + i + ": " + o.toString());
+            i++;
+        }
+        System.out.println("If values are correct, press Y(y) to continue, N(n) to cancel.");
+        do {
+            String s = scan.nextLine().trim();
+            if (s.compareToIgnoreCase("Y") == 0) {
+                System.out.println("Values confirmed.");
+                decision = 1;
+                validInput = true;
+            } else if (s.compareToIgnoreCase("N") == 0) {
+                System.out.println("Procedure cancelled.");
+                validInput = true;
+            } else {
+                System.out.println("Invalid input. Please try again.");
+                logger.warn("Invalid input received.");
+            }
+        } while (!validInput);
+
+        return decision;
+    }
+
+
+    default String getPassword(Scanner scan, Logger logger) {
+        String password = null;
+        boolean validInput = false;
+
+        do {
+            String s = scan.nextLine().trim();
+            if (s.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]{2,})[a-zA-Z0-9!@#$%^&*]{6,10}$\n")) {
+                password = s;
+                validInput = true;
+            } else {
+                logger.error("Invalid amount: " + s);
+                System.out.println("""
+                        Invalid password. 
+                        Please make sure the password contains at least:
+                        - 1 uppercase letter
+                        - 1 lowercase letter
+                        - 1 number
+                        - 2 special characters
+                        - 1 to 10 characters""");
+            }
+        } while (!validInput);
+
+        return password;
+    }
+
+
+
+
 
 }

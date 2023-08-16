@@ -668,8 +668,6 @@ public class DataSource {
     //NOT TESTED
     public void updateExpiredTicket(Date oldDate, double newValue, Date expDate, int nif, String plate, Date todayDate) {
 
-        //O novo valor da multa pode ser calculado seguindo uma dada tarifa, por exemplo?
-
         try {
             connection.setAutoCommit(false);
             updateTicket.setDate(1, todayDate);
@@ -744,6 +742,115 @@ public class DataSource {
         }
     }
 
+    public void updateEmployeeAccessLevel(int nif, int newAccessLevel) {
+        try {
+            connection.setAutoCommit(false);
+            updateEmployeeAccessLevel.setInt(1, newAccessLevel);
+            updateEmployeeAccessLevel.setInt(2, nif);
+            int affected = updateEmployeeAccessLevel.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Updated access level for employee with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't update access level for employee with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't update employee access level: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //changePassword
+    //updateAddress
+    //renewDriverLicense
+
+    public void updatePersonPassword(int nif, String newPassword) {
+        try {
+            connection.setAutoCommit(false);
+            updatePersonPassword.setString(1, newPassword);
+            updatePersonPassword.setInt(2, nif);
+            int affected = updatePersonPassword.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Updated password for person with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't update password for person with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't update person password: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void updatePersonAddress (int nif, String newAddress) {
+        try {
+            connection.setAutoCommit(false);
+            updatePersonAddress.setString(1, newAddress);
+            updatePersonAddress.setInt(2, nif);
+            int affected = updatePersonAddress.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Updated address for person with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't update address for person with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't update person address: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     //TESTED
