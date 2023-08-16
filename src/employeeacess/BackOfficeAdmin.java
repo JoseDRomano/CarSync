@@ -105,7 +105,7 @@ public class BackOfficeAdmin extends BackOffice{
         System.out.println("Enter date (yyyy-mm-dd):");
         Date ticketDate = getDate();
 
-        printObjs(nif, plateNumberForTicket, ticketDate);
+        printValues(nif, plateNumberForTicket, ticketDate);
         getDataSource().deleteTicket(nif, plateNumberForTicket, ticketDate);
     }
 
@@ -122,7 +122,7 @@ public class BackOfficeAdmin extends BackOffice{
         System.out.println("Enter NIF: ");
         int nif3 = getNIF();
 
-        printObjs(policyNumber, nif3);
+        printValues(policyNumber, nif3);
         getDataSource().deleteInsurance(policyNumber, nif3);
     }
 
@@ -137,7 +137,7 @@ public class BackOfficeAdmin extends BackOffice{
         String plate= getPlate();
         System.out.println("Enter NIF: ");
         int nif = getNIF();
-        printObjs(plate, nif);
+        printValues(plate, nif);
         getDataSource().deleteVehicle(plate, nif);
     }
 

@@ -12,7 +12,7 @@ import java.util.*;
 public abstract class BackOffice {
 
 
-    //Lembrar de utilizar o valor devolvido por printOBjs para ver se continuamos ou damos return.
+    //Lembrar de utilizar o valor devolvido por printValues para ver se continuamos ou damos return.
     private static final Logger logger = Logger.getLogger(BackOffice.class);
     private DataSource dataSource;
     private Scanner scan;
@@ -282,7 +282,10 @@ public abstract class BackOffice {
         int categoryNumber = getInteger(scan);
         System.out.println("Enter NIF: ");
         int nif2 = getNIF();
-        printObjs(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2);
+
+        if(printValues(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2) == -1) {
+            return;
+        }
         dataSource.insertVehicle(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2);
     }
 
@@ -321,7 +324,9 @@ public abstract class BackOffice {
         Date registrationDate = getDate();
         System.out.println("Enter expiration date: ");
         Date expirationDate = getDate();
-        printObjs(nif, name, address, birthDate, password, driverLicense, licenseType, registrationDate, expirationDate);
+        if(printValues(nif, name, address, birthDate, password, driverLicense, licenseType, registrationDate, expirationDate) == -1) {
+            return;
+        }
         dataSource.insertCustomer(nif, name, address, birthDate, password,
                 driverLicense, licenseType, registrationDate, expirationDate);
         logger.info("Employee insertion completed.");
@@ -348,7 +353,9 @@ public abstract class BackOffice {
         String password = getString();
         System.out.println("Enter employee access level: ");
         int accessLevel = getInteger(scan);
-        printObjs(nif, name, address, birthDate, password, accessLevel);
+        if(printValues(nif, name, address, birthDate, password, accessLevel) == -1) {
+            return;
+        }
         dataSource.insertEmployee(nif, name, address, birthDate, password, accessLevel);
         logger.info("Employee insertion completed.");
     }
@@ -386,7 +393,9 @@ public abstract class BackOffice {
         System.out.println("Enter NIF: ");
         int nif3 = getNIF();
 
-        printObjs(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName, nif3);
+        if (printValues(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName, nif3) ==-1 ) {
+            return;
+        }
         dataSource.insertInsurance(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName, nif3);
         logger.info("Insurance insertion completed.");
     }
@@ -425,7 +434,9 @@ public abstract class BackOffice {
         Date ticketExpiryDate = getDate();
         logger.info("Ticket expiry date entered: " + ticketExpiryDate);
 
-        printObjs(nif, plateNumberForTicket, ticketDate, reason, ticketValue, ticketExpiryDate);
+        if(printValues(nif, plateNumberForTicket, ticketDate, reason, ticketValue, ticketExpiryDate)== -1) {
+            return;
+        }
 
         logger.info("Inserting ticket data into the database.");
         dataSource.insertTicket(nif, plateNumberForTicket, ticketDate, reason, ticketValue, ticketExpiryDate);
@@ -454,7 +465,9 @@ public abstract class BackOffice {
         logger.info("NIF entered: " + nif);
 
         logger.info("Updating vehicle color in the database.");
-        printObjs(plateForUpdateColor, newColor, nif);
+        if(printValues(plateForUpdateColor, newColor, nif) == -1) {
+            return;
+        }
         dataSource.updateVehicleColor(newColor, plateForUpdateColor, nif);
         logger.info("Vehicle color update completed.");
     }
@@ -481,7 +494,9 @@ public abstract class BackOffice {
         logger.info("Old owner NIF entered: " + oldOwnerNif);
 
         logger.info("Changing vehicle owner in the database.");
-        printObjs(newOwnerNif, oldOwnerNif, plateForChangeOwner);
+        if(printValues(newOwnerNif, oldOwnerNif, plateForChangeOwner)==-1) {
+            return;
+        }
         dataSource.changeVehicleOwner(plateForChangeOwner, oldOwnerNif, newOwnerNif);
         logger.info("Vehicle owner change completed.");
     }
@@ -517,7 +532,9 @@ public abstract class BackOffice {
         logger.info("NIF entered for renewal: " + nif5);
 
         logger.info("Renewing insurance in the database.");
-        printObjs(policyForRenew, newStartDate, newExpiryDate, newExtraCategory, newCompanyName, nif5);
+        if(printValues(policyForRenew, newStartDate, newExpiryDate, newExtraCategory, newCompanyName, nif5)== -1) {
+            return;
+        }
         dataSource.renewInsurance(newStartDate, newExpiryDate, newExtraCategory, newCompanyName, policyForRenew, nif5);
         logger.info("Insurance renewal completed.");
     }
@@ -547,7 +564,9 @@ public abstract class BackOffice {
         logger.info("Payment amount entered: " + d7);
 
         logger.info("Processing ticket payment in the database.");
-        printObjs(nif, plate7, date7, d7);
+        if(printValues(nif, plate7, date7, d7) == -1) {
+            return;
+        }
         dataSource.payTicket(nif, plate7, date7, d7);
         logger.info("Ticket payment completed.");
     }
@@ -691,7 +710,9 @@ public abstract class BackOffice {
         System.out.println("Enter new access level:");
         int acl = getInteger(scan);
         logger.info("New access level entered: " + acl);
-        printObjs(nif, acl);
+        if(printValues(nif, acl) == -1 ){
+            return;
+        }
         // dataSource.updateEmployee(nif, dln7, date7, expdate7);
 
         // Uncomment the above line and add log statements if you implement the dataSource.updateEmployee method.
@@ -1705,7 +1726,7 @@ public abstract class BackOffice {
         System.out.println("Enter expiry date (yyyy-mm-dd):");
         Date expdate7 = getDate();
 
-        printObjs(nif, dln7, date7, expdate7);
+        printValues(nif, dln7, date7, expdate7);
         // dataSource.updateCustomer(nif, dln7, date7, expdate7);
         logger.info("Customer information updated.");
     }
@@ -1772,12 +1793,14 @@ public abstract class BackOffice {
         return value;
     }
 
-    int printObjs(Object... vs) {
+    int printValues(Object... vs) {
         boolean validInput = false;
         int decision = -1;
+        int i = 1;
         System.out.println("The values entered are: ");
         for (Object o : vs) {
-            System.out.println(o);
+            System.out.println("Value " + i + ": " + o.toString());
+            i++;
         }
         System.out.println("If values are correct, press Y(y) to continue, N(n) to cancel.");
         do {
