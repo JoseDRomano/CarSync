@@ -16,7 +16,25 @@ public class FrontOffice {
         this.dataSource = dataSource;
         this.customer = customer;
         this.scan = new Scanner(System.in);
+
     }
+
+    public static FrontOffice startFrontOffice(int customerNif) {
+        DataSource dataSource = new DataSource();
+
+        if (!dataSource.open()) {
+            throw new IllegalStateException("Cannot connect to database");
+        }
+
+        Customer customer = dataSource.getCustomerByNIF(customerNif);
+
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer not found for NIF: " + customerNif);
+        }
+
+        return new FrontOffice(dataSource, customer);
+    }
+
 
     public void viewCustomerVehicles() {
         List<Vehicle> customerVehicles = dataSource.getVehicleByNIF(customer.getNif());
@@ -31,21 +49,21 @@ public class FrontOffice {
         }
     }
 
-   // public void viewCustomerInsurances() {
+// public void viewCustomerInsurances() {
 
 
-      //  List<Insurance> insurances = dataSource.queryInsurancesByNIF(customer.getNif());
+// List<Insurance> insurances = dataSource.queryInsurancesByNIF(customer.getNif());
 
-      //  if (insurances == null || insurances.isEmpty()) {
-      //      System.out.println("No insurances found for the customer.");
-      //  } else {
-      //      System.out.println("Insurances for Customer " + customer.getNif() + ":");
-      //      for (Insurance insurance : insurances) {
-      //          System.out.println(insurance);
-      //      }
-      //  }
+// if (insurances == null || insurances.isEmpty()) {
+// System.out.println("No insurances found for the customer.");
+// } else {
+// System.out.println("Insurances for Customer " + customer.getNif() + ":");
+// for (Insurance insurance : insurances) {
+// System.out.println(insurance);
+// }
+// }
 
-   // }
+// }
 
     public void viewCustomerTickets() {
         List<Ticket> customerTickets = dataSource.queryTickets();
@@ -73,14 +91,14 @@ public class FrontOffice {
             System.out.print("Please enter your choice: ");
 
             int choice = scan.nextInt();
-            scan.nextLine();  // Consume newline
+            scan.nextLine(); // Consume newline
 
             switch (choice) {
                 case 1:
                     viewCustomerVehicles();
                     break;
                 case 2:
-                  //  viewCustomerInsurances();
+// viewCustomerInsurances();
                     break;
                 case 3:
                     viewCustomerTickets();
@@ -97,8 +115,8 @@ public class FrontOffice {
 
 
     public static void main(String[] args) {
-       //processo de login dps
-        int customerNif = 200000000; /*dps meter o metodo de  login que apanha o nif*/
+//processo de login dps
+        int customerNif = 200000001; /*dps meter o metodo de login que apanha o nif*/
 
         DataSource dataSource = new DataSource();
 
