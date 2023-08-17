@@ -1,6 +1,7 @@
 import com.mysql.cj.protocol.Message;
 import employeeacess.BackOffice;
 import employeeacess.DataSource;
+import employeeacess.FrontOffice;
 import org.mindrot.jbcrypt.BCrypt;
 import util.Mail;
 
@@ -253,6 +254,7 @@ class Login {
         if (isCorrect) {
             if (dataSource.isCustomer(nif_num)) {
                 //call Frontoffice
+                FrontOffice.startFrontOffice(nif_num);
 
             } else
                 BackOffice.startBackOffice(nif_num);
