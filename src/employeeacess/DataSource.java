@@ -47,6 +47,10 @@ public class DataSource {
     private PreparedStatement updateTicket;
     private PreparedStatement updateVehicleOwner;
     private PreparedStatement payTicket;
+    private PreparedStatement updateEmployeeAccessLevel;
+    private PreparedStatement updatePersonPassword;
+    private PreparedStatement updatePersonAddress;
+    private PreparedStatement updateCustomerDriverLicenseDates;
 
     private PreparedStatement deleteVehicle;
     private PreparedStatement deleteInsurance;
@@ -79,6 +83,11 @@ public class DataSource {
             updateVehicleColor = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.UPDATE_VEHICLE_COLOR));
             updateVehicleOwner = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.UPDATE_VEHICLE_OWNER));
             payTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.PAY_TICKET));
+            updateEmployeeAccessLevel = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.UPDATE_EMPLOYER_ACCESS_LEVEL));
+            updatePersonPassword = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.UPDATE_PERSON_PWD));
+            updatePersonAddress = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.UPDATE_PERSON_ADDRESS));
+            updateCustomerDriverLicenseDates = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.UPDATE_CUSTOMER_DRIVER_LICENSE_DATES));
+
 
             //Serve para atualizar o valor da multa e a data de validade quando o mesmo for necessário.
             updateTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.UPDATE_TICKET));
@@ -157,6 +166,22 @@ public class DataSource {
 
             if (updateTicket != null) {
                 updateTicket.close();
+            }
+
+            if(updateEmployeeAccessLevel != null){
+                updateEmployeeAccessLevel.close();
+            }
+
+            if (updatePersonPassword != null) {
+                updatePersonPassword.close();
+            }
+
+            if (updatePersonAddress != null) {
+                updatePersonAddress.close();
+            }
+
+            if (updateCustomerDriverLicenseDates != null) {
+                updateCustomerDriverLicenseDates.close();
             }
 
             if (queryCustomers != null) {
@@ -643,8 +668,6 @@ public class DataSource {
     //NOT TESTED
     public void updateExpiredTicket(Date oldDate, double newValue, Date expDate, int nif, String plate, Date todayDate) {
 
-        //O novo valor da multa pode ser calculado seguindo uma dada tarifa, por exemplo?
-
         try {
             connection.setAutoCommit(false);
             updateTicket.setDate(1, todayDate);
@@ -682,6 +705,153 @@ public class DataSource {
             }
         }
     }
+
+    public void updateCustomerDriverLicenseDates(Date startDate, Date expDate, int nif) {
+        try {
+            connection.setAutoCommit(false);
+            updateCustomerDriverLicenseDates.setDate(1, startDate);
+            updateCustomerDriverLicenseDates.setDate(2, expDate);
+            updateCustomerDriverLicenseDates.setInt(3, nif);
+            int affected =  updateCustomerDriverLicenseDates.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Updated dates for customer with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't update dates for customer with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't update customer driver license dates: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void updateEmployeeAccessLevel(int nif, int newAccessLevel) {
+        try {
+            connection.setAutoCommit(false);
+            updateEmployeeAccessLevel.setInt(1, newAccessLevel);
+            updateEmployeeAccessLevel.setInt(2, nif);
+            int affected = updateEmployeeAccessLevel.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Updated access level for employee with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't update access level for employee with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't update employee access level: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //changePassword
+    //updateAddress
+    //renewDriverLicense
+
+    public void updatePersonPassword(int nif, String newPassword) {
+        try {
+            connection.setAutoCommit(false);
+            updatePersonPassword.setString(1, newPassword);
+            updatePersonPassword.setInt(2, nif);
+            int affected = updatePersonPassword.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Updated password for person with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't update password for person with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't update person password: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void updatePersonAddress (int nif, String newAddress) {
+        try {
+            connection.setAutoCommit(false);
+            updatePersonAddress.setString(1, newAddress);
+            updatePersonAddress.setInt(2, nif);
+            int affected = updatePersonAddress.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Updated address for person with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't update address for person with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't update person address: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     //TESTED
     private boolean insuranceExists(int policy, int nif) {

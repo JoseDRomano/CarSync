@@ -16,16 +16,18 @@ public class BackOfficeEmployeeManager extends BackOffice {
         scan = new Scanner(System.in);
         int choice = -1;
         while (choice != 0) {
+            System.out.println("====================MANAGER MENU====================");
             System.out.println("Welcome, " + getEmployee().getName() + "!");
             System.out.println("Please choose an option: ");
-            System.out.println("To insert information -> 1");
-            System.out.println("To update information -> 2");
-            System.out.println("To view information -> 3");
-            System.out.println("0 - Exit");
-            System.out.print("Option: " + "\n");
+            System.out.println("""
+                    1 - Insert information
+                    2 - Update information
+                    3 - View information
+                    0 - Exit""");
+            System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -65,7 +67,7 @@ public class BackOfficeEmployeeManager extends BackOffice {
 
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -107,7 +109,7 @@ public class BackOfficeEmployeeManager extends BackOffice {
 
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -143,21 +145,20 @@ public class BackOfficeEmployeeManager extends BackOffice {
                     2 - Update a vehicle
                     3 - Update an insurance
                     4 - Update a ticket
-                    5 - Update an employee
-                    """);
+                    5 - Update an employee""");
 
             System.out.println("0 - Exit");
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choice = Integer.parseInt(s);
             }
             else {
                 choice = -1;
             }
             switch (choice) {
-                case 1 -> updateCustomer();
+                case 1 -> menuUpdateCustomer();
                 case 2 -> menuUpdateVehicle();
                 case 3 -> menuUpdateInsurance();
                 case 4 -> menuUpdateTicket();

@@ -32,7 +32,7 @@ public class Vehicle implements Comparable<Vehicle>{
             this.plate = plate;
             return;
         }
-       System.out.println("Plate must have the following format: XX-XX-XX");
+        System.out.println("Plate must have the following format: XX-XX-XX");
     }
 
     public String getVin() {
@@ -40,11 +40,7 @@ public class Vehicle implements Comparable<Vehicle>{
     }
 
     public void setVin(String vin) {
-        if(vin.matches("^([0-9A-Z]{17})$")) {
-            this.vin = vin;
-            return;
-        }
-        System.out.println("Vin must have the following format: XXXXXXXXXXXXXXXXX");
+        this.vin = vin;
     }
 
     public String getColor() {
@@ -87,15 +83,15 @@ public class Vehicle implements Comparable<Vehicle>{
         this.category = category;
     }
     public void setCategory(int categoryNumber) {
-       String s = switch (categoryNumber) {
+        String s = switch (categoryNumber) {
             case 1 -> this.category = "Light Commercial Vehicle";
             case 2 -> this.category = "Light Passenger Vehicle";
             case 3 -> this.category = "Heavy-duty Passenger Vehicle";
             case 4 -> this.category = "Heavy-duty Goods Vehicle";
             case 5 -> this.category = "Motorcycle";
             case 6 -> this.category = "Moped";
-           default -> throw new IllegalStateException("No such category");
-       };
+            default -> throw new IllegalStateException("No such category");
+        };
     }
 
 

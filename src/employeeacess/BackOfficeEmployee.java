@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class BackOfficeEmployee extends BackOffice{
     Scanner scan;
-    BackOfficeEmployee(DataSource dataSource, Employee employee) {
+    BackOfficeEmployee(DataSource dataSource,Employee employee) {
         super(dataSource, employee);
         start();
     }
@@ -16,17 +16,18 @@ public class BackOfficeEmployee extends BackOffice{
         scan = new Scanner(System.in);
         int choice = -1;
         while (choice != 0) {
-
+            System.out.println("====================EMPLOYEE MENU====================");
             System.out.println("Welcome, " + getEmployee().getName() + "!");
             System.out.println("Please choose an option:");
-            System.out.println("To insert information -> 1");
-            System.out.println("To update information -> 2");
-            System.out.println("To view information -> 3");
-            System.out.println("0 - Exit");
+            System.out.println("""
+                    1 - Insert information
+                    2 - Update information
+                    3 - View information
+                    0 - Exit""");
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -66,14 +67,14 @@ public class BackOfficeEmployee extends BackOffice{
 
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choice = Integer.parseInt(s);
             }
             else {
                 choice = -1;
             }
             switch (choice) {
-//              case 1 -> insertCustomer();
+                case 1 -> insertCustomer();
                 case 2 -> insertVehicle();
                 case 3 -> insertInsurance();
                 case 4 -> insertTicket();
@@ -105,7 +106,7 @@ public class BackOfficeEmployee extends BackOffice{
 
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choice = Integer.parseInt(s);
             }
             else {
@@ -129,6 +130,42 @@ public class BackOfficeEmployee extends BackOffice{
 
     @Override
     void updateMenu() {
+        scan = new Scanner(System.in);
+        int choice = -1;
+        while (choice != 0) {
+            System.out.println("====================UPDATE MENU====================");
+            System.out.println("Please choose an option: ");
+
+            System.out.println("""
+            1 - Update customers
+            2 - Update vehicles
+            3 - Update insurances
+            4 - Update tickets""");
+
+            System.out.println("0 - Exit");
+            System.out.print("Option: ");
+
+
+            String s = scan.nextLine().trim();
+            if(s.matches("^[0-9]$")) {
+                choice = Integer.parseInt(s);
+            }
+            else {
+                choice = -1;
+            }
+            switch (choice) {
+                case 1 -> menuUpdateCustomer();
+                case 2 -> menuUpdateVehicle();
+                case 3 -> menuUpdateInsurance();
+                case 4 -> menuUpdateTicket();
+                case 0 -> {
+                    System.out.println("Back to update menu..." + "\n");
+                    return;
+                }
+                default -> System.out.println("Invalid option, please try again");
+            }
+
+        }
 
     }
 }

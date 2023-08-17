@@ -15,54 +15,54 @@ import tools.Encryptor;
 public abstract class BackOffice {
 
 
-    //Lembrar de utilizar o valor devolvido por printValues para ver se continuamos ou damos return.
     private static final Logger logger = Logger.getLogger(BackOffice.class);
     private DataSource dataSource;
     private Scanner scan;
     private Employee employee;
 
-    BackOffice(DataSource dataSource, Employee employee) {
-        this.dataSource = dataSource;
+    BackOffice(DataSource dataSource, Employee employee ) {
         this.employee = employee;
+        this.dataSource = dataSource;
         this.scan = new Scanner(System.in);
 
         logger.info("BackOffice initialized for employee: " + employee.getNif());
     }
 
-    public static void startBackOffice(Employee employee) {
+    public static void startBackOffice(int nif) {
         DataSource dataSource = new DataSource();
-
-        if (employee == null) {
-            throw new IllegalArgumentException("DataSource and Employee cannot be null");
-        }
 
         if (!dataSource.open()) {
             throw new IllegalStateException("Cannot connect to database");
         }
 
-        switch (employee.getAccess_level()) {
+        Employee employee1 = new Employee();
+        for(Employee e : dataSource.queryEmployees()) {
+            if(e.getNif() == nif) {
+                employee1 = e;
+                break;
+            }
+        }
+
+        switch (employee1.getAccess_level()) {
             case 0 -> {
                 logger.info("Starting BackOffice for Employee level 0");
-                new BackOfficeEmployee(dataSource, employee);
+                new BackOfficeEmployee(dataSource, employee1);
                 return;
             }
 
             case 1 -> {
                 logger.info("Starting BackOffice for Employee Manager");
-                new BackOfficeEmployeeManager(dataSource, employee);
+                new BackOfficeEmployeeManager(dataSource, employee1);
                 return;
             }
 
             case 2 -> {
                 logger.info("Starting BackOffice for Admin");
-                new BackOfficeAdmin(dataSource, employee);
+                new BackOfficeAdmin(dataSource, employee1);
                 return;
             }
         }
         throw new IllegalArgumentException("Invalid access level");
-    }
-
-    public static void startBackOffice(DataSource dataSource, Employee e1) {
     }
 
     abstract void start();
@@ -286,9 +286,11 @@ public abstract class BackOffice {
         System.out.println("Enter NIF: ");
         int nif2 = getNIF();
 
-        if(printValues(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2) == -1) {
-            return;
-        }
+//        if(printValues(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2) == -1) {
+//            return;
+//        }
+
+
         dataSource.insertVehicle(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2);
     }
 
@@ -312,7 +314,7 @@ public abstract class BackOffice {
         System.out.println("Enter birth date with format yyyy-mm-dd: ");
         Date birthDate = getBirthDate();
         System.out.println("Enter password: ");
-        String password = getString();
+        String password = getPassword();
         password = BCrypt.hashpw(password, BCrypt.gensalt());
         System.out.println("Enter driverLicense: ");
         int driverLicense = getDriverLicense();
@@ -328,9 +330,9 @@ public abstract class BackOffice {
         Date registrationDate = getDate();
         System.out.println("Enter expiration date: ");
         Date expirationDate = getDate();
-        if(printValues(nif, name, address, birthDate, password, driverLicense, licenseType, registrationDate, expirationDate) == -1) {
-            return;
-        }
+//        if(printValues(nif, name, address, birthDate, password, driverLicense, licenseType, registrationDate, expirationDate) == -1) {
+//            return;
+//        }
         dataSource.insertCustomer(nif, name, address, birthDate, password,
                 driverLicense, licenseType, registrationDate, expirationDate);
         logger.info("Employee insertion completed.");
@@ -354,13 +356,13 @@ public abstract class BackOffice {
         System.out.println("Enter birth date with format yyyy-mm-dd: ");
         Date birthDate = getBirthDate();
         System.out.println("Enter password: ");
-        String password = getString();
+        String password = getPassword();
         password = BCrypt.hashpw(password, BCrypt.gensalt());
         System.out.println("Enter employee access level: ");
         int accessLevel = getInteger(scan);
-        if(printValues(nif, name, address, birthDate, password, accessLevel) == -1) {
-            return;
-        }
+//        if(printValues(nif, name, address, birthDate, password, accessLevel) == -1) {
+//            return;
+//        }
         dataSource.insertEmployee(nif, name, address, birthDate, password, accessLevel);
         logger.info("Employee insertion completed.");
     }
@@ -398,9 +400,9 @@ public abstract class BackOffice {
         System.out.println("Enter NIF: ");
         int nif3 = getNIF();
 
-        if (printValues(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName, nif3) ==-1 ) {
-            return;
-        }
+//        if (printValues(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName, nif3) ==-1 ) {
+//            return;
+//        }
         dataSource.insertInsurance(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName, nif3);
         logger.info("Insurance insertion completed.");
     }
@@ -438,10 +440,10 @@ public abstract class BackOffice {
         System.out.println("Enter expiry date (yyyy-MM-dd):");
         Date ticketExpiryDate = getDate();
         logger.info("Ticket expiry date entered: " + ticketExpiryDate);
-
-        if(printValues(nif, plateNumberForTicket, ticketDate, reason, ticketValue, ticketExpiryDate)== -1) {
-            return;
-        }
+//
+//        if(printValues(nif, plateNumberForTicket, ticketDate, reason, ticketValue, ticketExpiryDate)== -1) {
+//            return;
+//        }
 
         logger.info("Inserting ticket data into the database.");
         dataSource.insertTicket(nif, plateNumberForTicket, ticketDate, reason, ticketValue, ticketExpiryDate);
@@ -470,9 +472,9 @@ public abstract class BackOffice {
         logger.info("NIF entered: " + nif);
 
         logger.info("Updating vehicle color in the database.");
-        if(printValues(plateForUpdateColor, newColor, nif) == -1) {
-            return;
-        }
+//        if(printValues(plateForUpdateColor, newColor, nif) == -1) {
+//            return;
+//        }
         dataSource.updateVehicleColor(newColor, plateForUpdateColor, nif);
         logger.info("Vehicle color update completed.");
     }
@@ -499,9 +501,9 @@ public abstract class BackOffice {
         logger.info("Old owner NIF entered: " + oldOwnerNif);
 
         logger.info("Changing vehicle owner in the database.");
-        if(printValues(newOwnerNif, oldOwnerNif, plateForChangeOwner)==-1) {
-            return;
-        }
+//        if(printValues(newOwnerNif, oldOwnerNif, plateForChangeOwner)==-1) {
+//            return;
+//        }
         dataSource.changeVehicleOwner(plateForChangeOwner, oldOwnerNif, newOwnerNif);
         logger.info("Vehicle owner change completed.");
     }
@@ -537,9 +539,9 @@ public abstract class BackOffice {
         logger.info("NIF entered for renewal: " + nif5);
 
         logger.info("Renewing insurance in the database.");
-        if(printValues(policyForRenew, newStartDate, newExpiryDate, newExtraCategory, newCompanyName, nif5)== -1) {
-            return;
-        }
+//        if(printValues(policyForRenew, newStartDate, newExpiryDate, newExtraCategory, newCompanyName, nif5)== -1) {
+//            return;
+//        }
         dataSource.renewInsurance(newStartDate, newExpiryDate, newExtraCategory, newCompanyName, policyForRenew, nif5);
         logger.info("Insurance renewal completed.");
     }
@@ -569,9 +571,9 @@ public abstract class BackOffice {
         logger.info("Payment amount entered: " + d7);
 
         logger.info("Processing ticket payment in the database.");
-        if(printValues(nif, plate7, date7, d7) == -1) {
-            return;
-        }
+//        if(printValues(nif, plate7, date7, d7) == -1) {
+//            return;
+//        }
         dataSource.payTicket(nif, plate7, date7, d7);
         logger.info("Ticket payment completed.");
     }
@@ -590,7 +592,7 @@ public abstract class BackOffice {
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")){
+            if(s.matches("^[0-9]$")){
                 choiceUV = Integer.parseInt(s);
             }
             else {
@@ -637,7 +639,7 @@ public abstract class BackOffice {
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choiceUT = Integer.parseInt(s);
             }
             else {
@@ -671,7 +673,7 @@ public abstract class BackOffice {
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choiceUI = Integer.parseInt(s);
             }
             else {
@@ -700,30 +702,71 @@ public abstract class BackOffice {
     }
 
     protected void updateEmployee() {
-        logger.info("Starting updateEmployee method.");
-        System.out.println("Insert B to go back, anything else to continue");
-        String s = scan.nextLine().trim();
-        if (s.compareToIgnoreCase("B") == 0) {
-            logger.info("User chose to go back. Employee update aborted.");
-            System.out.println("Going back to update menu..." + "\n");
-            return;
-        }
-        logger.info("Continuing with employee update.");
-        System.out.println("Enter NIF: ");
-        int nif = getNIF();
-        logger.info("NIF entered: " + nif);
-        System.out.println("Enter new access level:");
-        int acl = getInteger(scan);
-        logger.info("New access level entered: " + acl);
-        if(printValues(nif, acl) == -1 ){
-            return;
-        }
-        // dataSource.updateEmployee(nif, dln7, date7, expdate7);
+        logger.info("Starting menu update employee.");
+        scan = new Scanner(System.in);
+        int choiceUI = -1;
+        List<Employee> employeeList = dataSource.queryEmployees();
+        while (choiceUI != 0) {
+            System.out.println("====================UPDATE EMPLOYEE MENU====================");
+            System.out.println("Please choose an option: ");
+            System.out.println("""
+                    1 - Change employee access level
+                    2 - Change employee password
+                    3 - Change employee address
+                    """);
+            System.out.println("0 - Exit");
+            System.out.print("Option: ");
 
-        // Uncomment the above line and add log statements if you implement the dataSource.updateEmployee method.
+            String s = scan.nextLine().trim();
+            if(s.matches("^[0-9]$")) {
+                choiceUI = Integer.parseInt(s);
+            }
+            else {
+                choiceUI = -1;
+            }
 
-        logger.info("Employee update completed.");
+            switch (choiceUI) {
+                case 1 -> {
+                    logger.info("Employee choose to change employee access level.");
+                    logger.info("Updating employee access level...");
+                    System.out.println("Insert B to go back, anything else to continue");
+                    s = scan.nextLine().trim();
+                    if (s.compareToIgnoreCase("B") == 0) {
+                        System.out.println("Going back to update menu..." + "\n");
+                        break;
+                    }
+                    System.out.println("Enter NIF: ");
+                    int nif = getNIF();
+                    System.out.println("Enter new access level: ");
+                    int accessLevel = getInteger(scan);
+                    dataSource.updateEmployeeAccessLevel(nif, accessLevel);
+                    logger.info("Employee access level changed.");
+                }
+
+                case 2 -> {
+                    logger.info("Employee choose to change employee password.");
+                    changePassword(employeeList);
+                }
+
+                case 3 -> {
+                    logger.info("Employee choose to change employee address.");
+                    updateAddress(employeeList);
+                }
+                case 0 -> {
+                    logger.info("User chose to exit UPDATE EMPLOYEE MENU.");
+                    System.out.println("Back to update menu..." + "\n");
+                    return;
+                }
+
+                default -> {
+                    logger.warn("Invalid option entered. Displaying error message.");
+                    System.out.println("Invalid option, please try again");
+                }
+            }
+        }
+        logger.info("Exiting menuUpdateInsurance method.");
     }
+
 
 
     protected void menuViewVehicle() {
@@ -746,7 +789,7 @@ public abstract class BackOffice {
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choiceVV = Integer.parseInt(s);
             } else {
                 logger.warn("Invalid input for option: " + s);
@@ -965,7 +1008,7 @@ public abstract class BackOffice {
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if(s.matches("^[0-9]$")) {
                 choiceVV = Integer.parseInt(s);
             } else {
                 choiceVV = -1;
@@ -1170,7 +1213,7 @@ public abstract class BackOffice {
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if (!s.isEmpty() || !s.isBlank() || s.matches("[0-9]")) {
+            if (s.matches("^[0-9]$")) {
                 choiceVV = Integer.parseInt(s);
             } else {
                 choiceVV = -1;
@@ -1428,13 +1471,12 @@ public abstract class BackOffice {
                 5 - View customer of a specific plate
                 6 - View customer of a specific NIF
                 7 - View customer of a specific driver license number
-                8 - View customer of a specific policy number
-                """);
+                8 - View customer of a specific policy number""");
             System.out.println("0 - Exit");
             System.out.print("Option: ");
 
             String s = scan.nextLine().trim();
-            if(!s.isEmpty() || !s.isBlank()) {
+            if(s.matches("^[0-9]$")) {
                 choiceVV = Integer.parseInt(s);
             }
             else {
@@ -1658,9 +1700,8 @@ public abstract class BackOffice {
         if (rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(customerList, 10);
         } else {
-            for (int i = 0; i < rowsPerPage; i++) {
+
                 displayList(customerList, rowsPerPage);
-            }
         }
         logger.info("Viewing customers by expiry date completed.");
     }
@@ -1683,9 +1724,8 @@ public abstract class BackOffice {
         if (rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(customerList, 10);
         } else {
-            for (int i = 0; i < rowsPerPage; i++) {
                 displayList(customerList, rowsPerPage);
-            }
+
         }
         logger.info("Viewing customers by NIF completed.");
     }
@@ -1707,15 +1747,66 @@ public abstract class BackOffice {
         if (rowsPerPage > 20 || rowsPerPage < 0) {
             displayList(customerList, 10);
         } else {
-            for (int i = 0; i < rowsPerPage; i++) {
                 displayList(customerList, rowsPerPage);
-            }
         }
         logger.info("Viewing customers by license completed.");
     }
 
-    protected void updateCustomer() {
-        logger.info("Updating customer information...");
+
+    protected void menuUpdateCustomer() {
+        logger.info("Starting menuUpdateCustomer method.");
+        scan = new Scanner(System.in);
+        int choiceVV = -1;
+        List<Customer> customerList = dataSource.queryCustomers();
+        while (choiceVV != 0) {
+            System.out.println("====================UPDATE CUSTOMER MENU====================");
+            System.out.println("Please choose an option: ");
+            System.out.println("""
+                1 - Renew customer's driver license
+                2 - Update customer password
+                3 - Update customer address
+                """);
+            System.out.println("0 - Exit");
+            System.out.print("Option: ");
+
+            String s = scan.nextLine().trim();
+            if(s.matches("^[0-9]$")) {
+                choiceVV = Integer.parseInt(s);
+            }
+            else {
+                choiceVV = -1;
+            }
+
+            switch (choiceVV) {
+                case 1 -> {
+                    logger.info("Employee choose to renew customer's driver license.");
+                    renewDriverLicense(customerList);
+                }
+                case 2 -> {
+                    logger.info("Employee choose to update customer password");
+                    updateAddress(customerList);
+                }
+                case 3 -> {
+                    logger.info("Employee choose to update customer address");
+                    changePassword(customerList);
+                }
+
+                case 0 -> {
+                    logger.info("User chose to exit. Going back to view menu...");
+                    System.out.println("Back to update menu..." + "\n");
+                    return;
+                }
+                default -> {
+                    logger.info("User chose an invalid option. Please try again.");
+                    System.out.println("Invalid option, please try again");
+                }
+            }
+        }
+        logger.info("Exiting menuViewCustomer method.");
+    }
+
+    private void changePassword(List<?> personList) {
+        logger.info("Updating customer password...");
         System.out.println("Insert B to go back, anything else to continue");
         String s = scan.nextLine().trim();
         if (s.compareToIgnoreCase("B") == 0) {
@@ -1724,17 +1815,48 @@ public abstract class BackOffice {
         }
         System.out.println("Enter NIF: ");
         int nif = getNIF();
-        System.out.println("Enter driver license number:");
-        int dln7 = getDriverLicense();
-        System.out.println("Enter date (yyyy-mm-dd):");
-        Date date7 = getDate();
-        System.out.println("Enter expiry date (yyyy-mm-dd):");
-        Date expdate7 = getDate();
-
-        printValues(nif, dln7, date7, expdate7);
-        // dataSource.updateCustomer(nif, dln7, date7, expdate7);
-        logger.info("Customer information updated.");
+        System.out.println("Enter new password:");
+        String password = getPassword();
+        password = BCrypt.hashpw(password, BCrypt.gensalt());
+        dataSource.updatePersonPassword(nif, password);
+        logger.info("Customer password changed.");
     }
+
+    private void updateAddress(List<?> personList) {
+        logger.info("Updating customer address...");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter NIF: ");
+        int nif = getNIF();
+        System.out.println("Enter new address:");
+        String address = getString();
+        dataSource.updatePersonAddress(nif, address);
+        logger.info("Customer address changed.");
+    }
+
+    private void renewDriverLicense(List<?> personList) {
+        logger.info("Renewing customer driver's license...");
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to update menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter NIF: ");
+        int nif = getNIF();
+        System.out.println("Enter new emission date: ");
+        Date date = getDate();
+        System.out.println("Enter new expiration date: ");
+        Date expdate = getDate();
+        dataSource.updateCustomerDriverLicenseDates(date, expdate, nif);
+        logger.info("Customer driver license renewed.");
+    }
+
+
 
     public static void displayList(List<?> objects, int rowsPerPage) {
         logger.info("Displaying list...");
@@ -1824,5 +1946,30 @@ public abstract class BackOffice {
         } while (!validInput);
 
         return decision;
+    }
+
+    protected String getPassword() {
+        String password = null;
+        boolean validInput = false;
+
+        do {
+            String s = scan.nextLine().trim();
+            if (s.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*_]{2,})[a-zA-Z0-9!@#$%^&*]{6,10}$")) {
+                password = s;
+                validInput = true;
+            } else {
+                logger.error("Invalid amount: " + s);
+                System.out.println("""
+                        Invalid password. 
+                        Please make sure the password contains at least:
+                        - 1 uppercase letter
+                        - 1 lowercase letter
+                        - 1 number
+                        - 2 special characters
+                        - 1 to 10 characters""");
+            }
+        } while (!validInput);
+
+        return password;
     }
 }

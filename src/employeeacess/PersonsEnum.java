@@ -21,7 +21,7 @@ public enum PersonsEnum {
 
     //Constants for the variables of the table Employee
     TABLE_EMPLOYEE,
-    COLUMN_EMPLOYEE_ACCESS_LEVEL, INSERT_INTO_PERSON, INSERT_INTO_EMPLOYEE, INSERT_INTO_CUSTOMER, DELETE_FROM_PERSON, DELETE_FROM_EMPLOYEE, DELETE_FROM_CUSTOMER, QUERY_TABLE_CUSTOMER_BY_NIF, QUERY_TABLE_EMPLOYEE_BY_NIF, QUERY_TABLE_EMPLOYEE, QUERY_TABLE_PERSON, UPDATE_CUSTOMER_DRIVER_LICENSE, UPDATE_CUSTOMER_DRIVER_LICENSE_DATES, UPDATE_EMPLOYER_ACCESS_LEVEL, UPDATE_PERSON_ADDRESS, UPDATE_PERSON_PWD, TRIGGER_INSERT_INTO_PERSON_AND_CUSTOMER, QUERY_TABLE_PERSON_BY_NIF;
+    COLUMN_EMPLOYEE_ACCESS_LEVEL, INSERT_INTO_PERSON, INSERT_INTO_EMPLOYEE, INSERT_INTO_CUSTOMER, DELETE_FROM_PERSON, DELETE_FROM_EMPLOYEE, DELETE_FROM_CUSTOMER, QUERY_TABLE_CUSTOMER_BY_NIF, QUERY_TABLE_EMPLOYEE_BY_NIF, QUERY_TABLE_EMPLOYEE, QUERY_TABLE_PERSON, UPDATE_CUSTOMER_DRIVER_LICENSE, UPDATE_CUSTOMER_DRIVER_LICENSE_DATES, UPDATE_EMPLOYER_ACCESS_LEVEL, UPDATE_PERSON_ADDRESS, UPDATE_PERSON_PWD, TRIGGER_INSERT_INTO_PERSON_AND_CUSTOMER, QUERY_TABLE_PERSON_BY_NIF, INSERT_INTO_TABLE_CUSTOMER, INSERT_INTO_TABLE_EMPLOYEE;
 
     //Method to get the string of the enum
     public static String getString(PersonsEnum pes) {
@@ -29,8 +29,8 @@ public enum PersonsEnum {
             case TABLE_PERSON -> "person";
             case COLUMN_NIF -> "nif";
             case COLUMN_NAME -> "name";
-            case COLUMN_BIRTH_DATE -> "birth_date";
-            case COLUMN_PWD -> "pwd";
+            case COLUMN_BIRTH_DATE -> "b_date";
+            case COLUMN_PWD -> "password";
             case COLUMN_ADDRESS -> "address";
             case TABLE_CUSTOMER -> "customer";
             case COLUMN_PERSON_TYPE_CUSTOMER -> "CUSTOMER";
@@ -57,9 +57,9 @@ public enum PersonsEnum {
                     getString(PersonsEnum.COLUMN_ADDRESS) + ", " +
                     getString(PersonsEnum.COLUMN_EMPLOYEE_ACCESS_LEVEL) + ") VALUES(?, ?, ?, ?, ?, ?)";
 
-//            case INSERT_INTO_EMPLOYEE -> "INSERT INTO " + getString(PersonsEnum.TABLE_EMPLOYEE) + '('
-//                    + getString(PersonsEnum.COLUMN_NIF) + ", " +
-//                    getString(PersonsEnum.COLUMN_EMPLOYEE_ACCESS_LEVEL) + ") VALUES(?, ?, ?, ?, ?, ?)";
+            case INSERT_INTO_TABLE_EMPLOYEE -> "INSERT INTO " + getString(PersonsEnum.TABLE_EMPLOYEE) + '('
+                    + getString(PersonsEnum.COLUMN_NIF) + ", " +
+                    getString(PersonsEnum.COLUMN_EMPLOYEE_ACCESS_LEVEL) + ") VALUES(?, ?)";
 
 
             case INSERT_INTO_CUSTOMER -> "INSERT INTO " + getString(PersonsEnum.TABLE_CUSTOMER) + '('
@@ -73,12 +73,12 @@ public enum PersonsEnum {
                     getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE) + ", " +
                     getString(PersonsEnum.COLUMN_CUSTOMER_EXPIRATION_DATE) + ") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-//            case INSERT_INTO_CUSTOMER -> "INSERT INTO " + getString(PersonsEnum.TABLE_CUSTOMER) + '('
-//                    + getString(PersonsEnum.COLUMN_NIF) + ", " +
-//                    getString(PersonsEnum.COLUMN_CUSTOMER_DRIVER_LICENSE) + ", " +
-//                    getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE) + ", " +
-//                    getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE) + ", " +
-//                    getString(PersonsEnum.COLUMN_CUSTOMER_EXPIRATION_DATE) + ") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            case INSERT_INTO_TABLE_CUSTOMER -> "INSERT INTO " + getString(PersonsEnum.TABLE_CUSTOMER) + '('
+                    + getString(PersonsEnum.COLUMN_NIF) + ", " +
+                    getString(PersonsEnum.COLUMN_CUSTOMER_DRIVER_LICENSE) + ", " +
+                    getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE) + ", " +
+                    getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE) + ", " +
+                    getString(PersonsEnum.COLUMN_CUSTOMER_EXPIRATION_DATE) + ") VALUES(?, ?, ?, ?, ?)";
 
 
             case UPDATE_CUSTOMER_DRIVER_LICENSE_DATES -> "UPDATE " + getString(PersonsEnum.TABLE_CUSTOMER) + " SET " +
