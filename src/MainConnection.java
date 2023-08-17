@@ -26,17 +26,15 @@ public class MainConnection {
 
     public static void main(String[] args) {
 
-        /*PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
+      /*  PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
 
         BackOffice.startBackOffice(296789012);*/
 
-        new DataSource().queryEmployees().forEach(System.out::println);
-
-//        MainConnection.initiate();
+        MainConnection.initiate();
 
     }
 
-   /* private static void initiate() {
+    private static void initiate() {
         try {
             WelcomeMenu wm = new WelcomeMenu();
             wm.run();
@@ -45,7 +43,7 @@ public class MainConnection {
             System.out.println("Error connecting to database" + e.getMessage());
             e.printStackTrace();
         }
-    }/**/
+    }
 
 
 }

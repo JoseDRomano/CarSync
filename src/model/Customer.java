@@ -74,11 +74,23 @@ public class Customer extends Person {
 
     @Override
     public String toString() {
-        return "Customer with NIF: " + super.nif + " info:" + "\n" +
+        String print = """
+                Customer info:
+                - NIF: %d
+                - Name: %s
+                - Birth Date: %s
+                - Address: %s
+                - Driver's license number: %d
+                - License Category: %s
+                - Registration Date: %s
+                - Expiration Data: %s
+                """;
+        return String.format(print, nif, name, birht_date, address, driverLicenseNum, licenseType, startingDate, expDate);
+        /*return "Customer with NIF: " + super.nif + " info:" + "\n" +
                 "Driver's license number: " + driverLicenseNum + "\n" +
                 "License Category: " + licenseType + "\n" +
                 "Registration Date: " + startingDate + "\n" +
-                "Expiration Data: " + expDate +  "\n";
+                "Expiration Data: " + expDate +  "\n";*/
     }
 
     @Override

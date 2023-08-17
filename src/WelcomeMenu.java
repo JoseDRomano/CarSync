@@ -3,29 +3,30 @@ import employeeacess.DataSource;
 import employeeacess.PersonsEnum;
 import org.mindrot.jbcrypt.BCrypt;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import static employeeacess.PersonsEnum.*;
+import static employeeacess.PersonsEnum.INSERT_INTO_CUSTOMER;
+import static employeeacess.PersonsEnum.INSERT_INTO_PERSON;
 
 public class WelcomeMenu {
 
     public void run() throws SQLException {
-        System.out.println("Welcome to IMT (but better). For every menu you'll have a few options to choose and you'll" +
-                " have to type the number of the option you want to choose. \n" +
-                "For any question, contact us at 217 949 000");
+        System.out.println("Welcome to IMT (but better). For every menu you'll have a few options to choose and you'll" + " have to type the number of the option you want to choose. \n" + "For any question, contact us at 217 949 000");
         System.out.println("1. Login");
         System.out.println("2. Register");
         System.out.println("3. Exit");
         Scanner scanner = new Scanner(System.in);
         int option = scanner.nextInt();
+
         switch (option) {
             case 1:
                 Login login = new Login();
-                login.run();
+                login.run(new DataSource());
                 break;
             case 2:
                 Register register = new Register();
@@ -33,6 +34,7 @@ public class WelcomeMenu {
                 break;
             case 3:
                 System.out.println("Bye bye");
+
                 break;
             default:
                 System.out.println("Invalid option. Please try again");
@@ -55,14 +57,22 @@ class Register {
     public static final String USERNAME = "root";
     public static final String PASSWORD = "";
 
+    DataSource dataSource;
+
     private Connection connection;
 
     public void run() throws SQLException {
+       this.dataSource = new DataSource();
+
+       if (!dataSource.open()) {
+           System.out.println("Can't open datasource");
+       }
+
         connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         Scanner scanner = new Scanner(System.in);
         System.out.println("------ Register ------");
 
-        int nif = validateNIF(scanner);
+        int nif = validateNIF(scanner, dataSource);
 
         System.out.println("Enter name:");
         String name = scanner.nextLine().trim();
@@ -90,27 +100,14 @@ class Register {
         /*código SQL para registar na base de dados*/
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-        //acho que isto funciona
-        PreparedStatement statement = connection.prepareStatement(PersonsEnum.getString(TRIGGER_INSERT_INTO_PERSON_AND_CUSTOMER));
-        connection.prepareStatement(PersonsEnum.getString(INSERT_INTO_CUSTOMER));
-
-        //Ter em atencao que isto é apenas para o Customer...
-        statement.setInt(1, nif);
-        statement.setString(2, name);
-        statement.setString(3, address);
-        statement.setString(4, birthdate);
-        statement.setString(5, hashedPassword);
-        statement.setString(6, driver_license);
-        statement.setInt(7, license_type);
-        statement.setString(8, starting_date);
-        statement.setString(9, expiration_date);
-
+        dataSource.insertCustomer(nif, name, address, Date.valueOf(birthdate), hashedPassword, Integer.parseInt(driver_license),
+                license_type, Date.valueOf(starting_date), Date.valueOf(expiration_date));
 
 
         /*Passamos para o login*/
         System.out.println(SUCCESSFUL_REGISTER);
         Login login = new Login();
-        login.run();
+        login.run(dataSource);
     }
 
     //check if the passowrd is at least 8 characters long
@@ -118,7 +115,7 @@ class Register {
         System.out.println("Enter password (must be at least 8 characters long):");
         String password = scanner.nextLine().trim();
 
-        while (!(password.length() < 8)) {
+        while ((password.length() < 8)) {
             System.out.println("Password must be at least 8 characters long");
             System.out.println("Enter password (must be at least 8 characters long):");
             password = scanner.nextLine().trim();
@@ -136,28 +133,27 @@ class Register {
     }
 
     //this method will verify if there's already a nif registered in the Customer SQL table
-    private int validateNIF(Scanner scanner) {
+    private int validateNIF(Scanner scanner, DataSource dataSource) {
 
         while (true) {
             System.out.println("Enter nif:");
-            String input = scanner.nextLine();
-            if (input.length() != 9) {
+            String input = scanner.nextLine().trim();
+            if (!input.matches("\\d{9}")) {
+                System.out.println(input);
+                System.out.println(input.length());
                 System.out.println("Invalid NIF. Please try again");
-                validateNIF(scanner);
+                validateNIF(scanner, dataSource);
             }
             try {
-                PreparedStatement statement = connection.prepareStatement(PersonsEnum.getString(QUERY_TABLE_PERSON_BY_NIF));
-                statement.setString(1, input);
-                ResultSet rs = statement.executeQuery(statement.toString());
-                if (rs.next()) {
-                    System.out.println(NIF_ALREADY_REGISTERED);
+                if (dataSource.open()) if (dataSource.isCustomerOrEmployee(Integer.parseInt(input))) {
+                    System.out.println("NIF already registered in our System. Please login");
                     Login login = new Login();
-                    login.run();
+                    login.run(dataSource);
                 } else {
                     return Integer.parseInt(input);
                 }
             } catch (SQLException e) {
-                System.out.println("Invalid NIF. Please try again");
+                System.out.println("Invalid NIF. Please try again" + e.getMessage());
             }
         }
     }
@@ -194,7 +190,7 @@ class Login {
 
     Scanner scanner;
 
-    public void run() throws SQLException {
+    public void run(DataSource dataSource) throws SQLException {
         connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         boolean isCorrect = false;
         boolean goBack = false;
@@ -223,14 +219,14 @@ class Login {
                     break;
             }
         }
-
+        dataSource.close();
         if (isCorrect) {
             Dummy dummy = getDummy(scanner.nextLine().trim());
             if (dummy.data.get("type").equals("employee")) {
                 //call Backoffice and send the dummy object as an argument
                 BackOffice.startBackOffice(Integer.parseInt(dummy.data.get("nif")));
             } else {
-                //call FrontOffice and send the dummy object as an argument
+//               call FrontOffice
             }
         } else {
             System.out.println("Going back to main menu");
@@ -257,12 +253,9 @@ class Login {
             //verify if this password is equals to the password in the database
             if (resultSet.next()) {
                 //if pwd is correct, return info of the person (nif, name, email, phone)
-                if (BCrypt.checkpw(password, resultSet.getString("password")))
-                    return SUCCESSFUL_LOGIN;
-                else
-                    return WRONG_PASSWORD;
-            } else
-                return NIF_NOT_REGISTERED;
+                if (BCrypt.checkpw(password, resultSet.getString("password"))) return SUCCESSFUL_LOGIN;
+                else return WRONG_PASSWORD;
+            } else return NIF_NOT_REGISTERED;
 
 
         } catch (SQLException e) {
@@ -278,8 +271,7 @@ class Login {
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM employee WHERE nif = '" + nif + "'");
-            dummy = new Dummy(resultSet.getString("nif"), resultSet.getString("name"),
-                    resultSet.getString("address"), resultSet.getString("b_date"));
+            dummy = new Dummy(resultSet.getString("nif"), resultSet.getString("name"), resultSet.getString("address"), resultSet.getString("b_date"));
             if (resultSet.next()) {
                 dummy.data.put("type", "employee");
                 dummy.data.put("access_level", resultSet.getString("access_level"));

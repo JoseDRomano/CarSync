@@ -67,9 +67,9 @@ public class DataSource {
             insertIntoInsurance = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.INSERT_INSURANCE));
             insertIntoVehicle = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.INSERT_VEHICLE));
             insertIntoTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.INSERT_TICKET));
-            insertIntoCustomer = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.INSERT_INTO_CUSTOMER));
             insertIntoEmployee = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.INSERT_INTO_EMPLOYEE));
             insertIntoPerson = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.INSERT_INTO_PERSON));
+            insertIntoCustomer = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.INSERT_INTO_TABLE_CUSTOMER));
 
             queryInsurances = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.QUERY_TABLE_INSURANCE));
             queryTickets = connection.prepareStatement(TicketEnum.getString(TicketEnum.QUERY_TABLE_TICKET));
@@ -370,18 +370,19 @@ public class DataSource {
             while (resultSet.next()) {
                 Employee employee = new Employee();
                 employee.setAccess_level(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_EMPLOYEE_ACCESS_LEVEL)));
+                employee.setNif(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF)));
                 employees.add(employee);
             }
 
-            resultSet = queryPerson.executeQuery();
+            ResultSet resultSet1 = queryPerson.executeQuery();
 
-            while (resultSet.next()) {
+            while (resultSet1.next()) {
                 for (Employee employee : employees) {
-                    if (employee.getNif() == resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF))) {
-                        employee.setName(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_NAME)));
-                        employee.setAddress(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_ADDRESS)));
-                        employee.setBirht_date(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
-                        employee.setPwd(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
+                    if (employee.getNif() == resultSet1.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF))) {
+                        employee.setName(resultSet1.getString(PersonsEnum.getString(PersonsEnum.COLUMN_NAME)));
+                        employee.setAddress(resultSet1.getString(PersonsEnum.getString(PersonsEnum.COLUMN_ADDRESS)));
+                        employee.setBirht_date(resultSet1.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
+                        employee.setPwd(resultSet1.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
                     }
                 }
             }
@@ -1195,7 +1196,7 @@ public class DataSource {
         }
     }
 
-    private boolean isCustomerOrEmployee(int nif) {
+    public boolean isCustomerOrEmployee(int nif) {
 
         for(Customer customer: queryCustomers()) {
             if(customer.getNif() == nif) {
@@ -1211,6 +1212,7 @@ public class DataSource {
 
         return false;
     }
+
 
     private boolean insertPerson(int nif, String name, String address, Date bDate, String password) {
 
@@ -1266,11 +1268,10 @@ public class DataSource {
         try {
             connection.setAutoCommit(false);
             insertIntoCustomer.setInt(1, nif);
-            insertIntoCustomer.setString(2, password);
-            insertIntoCustomer.setInt(3, driverLicense);
-            insertIntoCustomer.setInt(4, licenseType);
-            insertIntoCustomer.setDate(5, registrationDate);
-            insertIntoCustomer.setDate(6, expirationDate);
+            insertIntoCustomer.setInt(2, driverLicense);
+            insertIntoCustomer.setInt(3, licenseType);
+            insertIntoCustomer.setDate(4, registrationDate);
+            insertIntoCustomer.setDate(5, expirationDate);
             int affected = insertIntoCustomer.executeUpdate();
 
             if (affected == 1) {
