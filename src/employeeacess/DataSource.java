@@ -7,7 +7,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Para Fazer login chamar método authenticateUser e fazer a verificação; de seguida chamar o método getDummy
@@ -321,6 +323,43 @@ public class DataSource {
 
         } catch (SQLException e) {
             System.out.println("Couldn't retrieve data from ticket table: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //Com hashmap
+    public Map< Integer,Customer> queryCustomersHashMap() {
+        Map<Integer,Customer> customers = new HashMap();
+        try {
+            ResultSet resultSet = queryCustomers.executeQuery();
+            while (resultSet.next()) {
+                Customer customer = new Customer();
+                int nif =  resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF));
+                customer.setNif(nif);
+                customer.setExpDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_EXPIRATION_DATE)));
+                customer.setLicenseType(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE)));
+                customer.setStartingDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE)));
+                customer.setDriverLicenseNum(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_DRIVER_LICENSE)));
+                customers.put(nif,customer);
+            }
+
+            resultSet = queryPerson.executeQuery();
+
+            while (resultSet.next()) {
+                for (Customer customer : customers.values()) {
+                    if (customer.getNif() == resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF))) {
+                        customer.setName(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_NAME)));
+                        customer.setAddress(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_ADDRESS)));
+                        customer.setBirht_date(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
+                        customer.setPwd(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
+                    }
+                }
+            }
+            return customers;
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't retrieve data from customer table: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -1354,7 +1393,5 @@ public class DataSource {
             }
         }
     }
-
-
 }
 
