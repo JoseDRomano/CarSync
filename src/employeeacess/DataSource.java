@@ -907,15 +907,27 @@ public class DataSource {
     }
 
     //TESTED
-    private boolean isCustomer(int nif) {
+    public boolean isCustomer(int nif) {
         for (Customer c : queryCustomers()) {
             if (c.getNif() == nif) {
                 return true;
             }
         }
-        System.out.println("NIF isn't registered in the database");
+//        System.out.println("NIF isn't registered in the database");
         return false;
     }
+
+    public boolean isEmployee(int nif) {
+        for (Employee e : queryEmployees()) {
+            if (e.getNif() == nif) {
+                return true;
+            }
+        }
+//        System.out.println("NIF isn't registered in the database");
+        return false;
+    }
+
+
 
 
     //TESTED

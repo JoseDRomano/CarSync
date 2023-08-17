@@ -1,5 +1,4 @@
 package employeeacess;
-
 import model.*;
 import org.apache.log4j.Logger;
 import java.sql.Date;
@@ -8,7 +7,7 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
-
+import org.apache.log4j.PropertyConfigurator;
 import org.mindrot.jbcrypt.BCrypt;
 import tools.Encryptor;
 
@@ -20,6 +19,7 @@ public abstract class BackOffice {
     private Scanner scan;
     private Employee employee;
 
+//    PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
     BackOffice(DataSource dataSource, Employee employee ) {
         this.employee = employee;
         this.dataSource = dataSource;

@@ -1,17 +1,11 @@
 import employeeacess.BackOffice;
 import employeeacess.DataSource;
-import employeeacess.PersonsEnum;
 import org.mindrot.jbcrypt.BCrypt;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
 import java.util.Scanner;
-
-import static employeeacess.PersonsEnum.INSERT_INTO_CUSTOMER;
-import static employeeacess.PersonsEnum.INSERT_INTO_PERSON;
 
 public class WelcomeMenu {
 
@@ -22,15 +16,20 @@ public class WelcomeMenu {
         System.out.println("3. Exit");
         Scanner scanner = new Scanner(System.in);
         int option = scanner.nextInt();
+        DataSource dataSource = new DataSource();
+        if (!dataSource.open()) {
+            System.out.println("Can't open datasource");
+            return;
+        }
 
         switch (option) {
             case 1:
                 Login login = new Login();
-                login.run(new DataSource());
+                login.run(dataSource);
                 break;
             case 2:
                 Register register = new Register();
-                register.run();
+                register.run(dataSource);
                 break;
             case 3:
                 System.out.println("Bye bye");
@@ -61,12 +60,8 @@ class Register {
 
     private Connection connection;
 
-    public void run() throws SQLException {
-       this.dataSource = new DataSource();
-
-       if (!dataSource.open()) {
-           System.out.println("Can't open datasource");
-       }
+    public void run(DataSource dataSource) throws SQLException {
+        this.dataSource = dataSource;
 
         connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         Scanner scanner = new Scanner(System.in);
@@ -145,7 +140,7 @@ class Register {
                 validateNIF(scanner, dataSource);
             }
             try {
-                if (dataSource.open()) if (dataSource.isCustomerOrEmployee(Integer.parseInt(input))) {
+                if (dataSource.isCustomerOrEmployee(Integer.parseInt(input))) {
                     System.out.println("NIF already registered in our System. Please login");
                     Login login = new Login();
                     login.run(dataSource);
@@ -194,6 +189,7 @@ class Login {
         connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         boolean isCorrect = false;
         boolean goBack = false;
+        int nif_num = 0;
         scanner = new Scanner(System.in);
         System.out.println("------ Login ------");
         while (!isCorrect || !goBack) {
@@ -205,6 +201,7 @@ class Login {
             switch (result) {
                 case SUCCESSFUL_LOGIN:
                     System.out.println("Login successful");
+                    nif_num = Integer.parseInt(nif);
                     isCorrect = true;
                     break;
                 case WRONG_PASSWORD:
@@ -218,31 +215,22 @@ class Login {
                     System.out.println("NIF is not registered in our System. Please register first");
                     break;
             }
+            if (isCorrect) break;
         }
-        dataSource.close();
+
         if (isCorrect) {
-            Dummy dummy = getDummy(scanner.nextLine().trim());
-            if (dummy.data.get("type").equals("employee")) {
-                //call Backoffice and send the dummy object as an argument
-                BackOffice.startBackOffice(Integer.parseInt(dummy.data.get("nif")));
+            if (dataSource.isCustomer(nif_num)) {
+                //call Frontoffice
+
             } else {
-//               call FrontOffice
+                BackOffice.startBackOffice(nif_num);
             }
         } else {
             System.out.println("Going back to main menu");
         }
+        dataSource.close();
     }
 
-    class Dummy {
-        public HashMap<String, String> data = new HashMap();
-
-        public Dummy(String nif, String name, String address, String date) {
-            data.put("nif", nif);
-            data.put("name", name);
-            data.put("address", address);
-            data.put("date", date);
-        }
-    }
 
     private String authenticateUser(String nif, String password) {
         try {
@@ -265,25 +253,5 @@ class Login {
         return null;
     }
 
-    //check if the nif is in the Employee SQL table or in the Customer SQL table
-    public Dummy getDummy(String nif) {
-        Dummy dummy = null;
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM employee WHERE nif = '" + nif + "'");
-            dummy = new Dummy(resultSet.getString("nif"), resultSet.getString("name"), resultSet.getString("address"), resultSet.getString("b_date"));
-            if (resultSet.next()) {
-                dummy.data.put("type", "employee");
-                dummy.data.put("access_level", resultSet.getString("access_level"));
 
-            } else {
-                dummy.data.put("type", "customer");
-                dummy.data.put("driver_license", resultSet.getString("driver_license"));
-            }
-        } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

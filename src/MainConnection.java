@@ -5,6 +5,7 @@ import employeeacess.DataSource;
 import model.Employee;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.mindrot.jbcrypt.BCrypt;
 import util.LogUtil;
 
 import javax.xml.crypto.Data;
@@ -26,9 +27,14 @@ public class MainConnection {
 
     public static void main(String[] args) {
 
-      /*  PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
+        PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
 
-        BackOffice.startBackOffice(296789012);*/
+//        BackOffice.startBackOffice(296789012);
+
+
+        /*System.out.println("Enter password: ");
+        String psd = "123abc";
+        System.out.println("Your password is: " + psd + " password stored in db: " + BCrypt.hashpw(psd, BCrypt.gensalt()));*/
 
         MainConnection.initiate();
 
