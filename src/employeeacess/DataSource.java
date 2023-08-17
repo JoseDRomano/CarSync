@@ -274,6 +274,31 @@ public class DataSource {
             return null;
         }
     }
+  //  public List<Insurance> queryInsurancesByNIF(int nif) {
+    //    List<Insurance> insurances = new ArrayList<>();
+      //  try {
+        //    PreparedStatement preparedStatement = connection.prepareStatement(
+          //         "SELECT * FROM insurance WHERE customer_nif = ?"
+            //);
+            //preparedStatement.setInt(1, nif);
+            //ResultSet resultSet = preparedStatement.executeQuery();
+            //while (resultSet.next()) {
+              //Insurance insurance = new Insurance();
+                //insurance.setPolicy(resultSet.getInt(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_POLICY)));
+                //insurance.setCarPlate(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_PLATE)));
+                //insurance.setStartDate(resultSet.getDate(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_START_DATE)));
+                //insurance.setExtraCategory(resultSet.getInt(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXTRA_CATEGORY)));
+                //insurance.setExpDate(resultSet.getDate(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXPIRY_DATE)));
+                //insurance.setCompanyName(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_COMPANY)));
+               //insurances.add(insurance);
+        //    }
+        //    return insurances;
+      //  } catch (SQLException e) {
+         //   System.out.println("Couldn't retrieve insurances for NIF " + nif + ": " + e.getMessage());
+          //  e.printStackTrace();
+           // return null;
+       // }
+    //}
 
     //Devolve um arraylist com todas as multas que estão na base de dados.
     //TESTED
