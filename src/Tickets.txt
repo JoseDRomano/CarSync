@@ -1,0 +1,14 @@
+Ticket ID: 1
+- Type: Register Customer
+- Status: Open
+- Date: 2019-01-01
+- Customer NIF: 123456789
+- Info:
+    Customer Name: John Doe;
+    Customer Address: 123 Main Street;
+    Customer Password: asdksaldjalskdj4312313@
+    Customer birth date: 1990-01-01
+    Customer driver license number: 123456789
+    Customer driver license expiration date: 2020-01-01
+    Customer license type: 3
+---------------------------------------------------------------------

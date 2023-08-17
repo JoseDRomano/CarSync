@@ -276,11 +276,11 @@ public abstract class BackOffice {
         Date registrationDate = getDate();
         System.out.println("""
                     Enter vehicle category:
-                    Light Commercial Vehicle -> 1
-                    Light Passenger Vehicle -> 2
-                    Heavy-duty Passenger Vehicle -> 3
-                    Heavy-Duty Goods Vehicle -> 4
-                    Motorcycle -> 5
+                        Light Commercial Vehicle -> 1
+                        Light Passenger Vehicle -> 2
+                        Heavy-duty Passenger Vehicle -> 3
+                        Heavy-Duty Goods Vehicle -> 4
+                        Motorcycle -> 5
                     Moped -> 6""");
         int categoryNumber = getInteger(scan);
         System.out.println("Enter NIF: ");
@@ -320,10 +320,10 @@ public abstract class BackOffice {
         int driverLicense = getDriverLicense();
         System.out.println("""
                 Enter license type: 
-                1 for A
-                2 for B
-                3 for C
-                4 for D""");
+                    1 for A
+                    2 for B
+                    3 for C
+                    4 for D""");
         //Aqui nao deve ser getInteger, deve ser getLicenseType porque apenas aceita 1,2,3,4
         int licenseType = getInteger(scan);
         System.out.println("Enter registration date: ");
@@ -387,9 +387,9 @@ public abstract class BackOffice {
         logger.info("Start date entered: " + startDate);
         System.out.println("""
                 Enter extra category number for:
-                Comprehensive Insurance -> 1
-                Auto Liability Insurance -> 2
-                Theft Insurance -> 3""");
+                    Comprehensive Insurance -> 1
+                    Auto Liability Insurance -> 2
+                    Theft Insurance -> 3""");
         int extraCategory = getInteger(scan);
         System.out.println("Enter expiry date (yyyy-mm-dd):");
         Date expiryDate = getDate();
