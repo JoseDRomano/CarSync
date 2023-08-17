@@ -1,15 +1,26 @@
+import com.mysql.cj.protocol.Message;
 import employeeacess.BackOffice;
 import employeeacess.DataSource;
 import org.mindrot.jbcrypt.BCrypt;
+import util.Mail;
 
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Properties;
+import java.util.Random;
 import java.util.Scanner;
 
 public class WelcomeMenu {
 
-    public void run() throws SQLException {
+    public void run() throws SQLException, MessagingException {
         System.out.println("Welcome to IMT (but better). For every menu you'll have a few options to choose and you'll" + " have to type the number of the option you want to choose. \n" + "For any question, contact us at 217 949 000");
         System.out.println("1. Login");
         System.out.println("2. Register");
@@ -60,7 +71,7 @@ class Register {
 
     private Connection connection;
 
-    public void run(DataSource dataSource) throws SQLException {
+    public void run(DataSource dataSource) throws SQLException, MessagingException {
         this.dataSource = dataSource;
 
         connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -147,7 +158,7 @@ class Register {
                 } else {
                     return Integer.parseInt(input);
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | MessagingException e) {
                 System.out.println("Invalid NIF. Please try again" + e.getMessage());
             }
         }
@@ -169,8 +180,14 @@ class Register {
 
 class Login {
     private static final String SUCCESSFUL_LOGIN = "Login successful";
-    private static final String WRONG_PASSWORD = "Wrong password";
+    private static final String WRONG_PASSWORD = "Wrong password. Wanna go back? (y/n)";
     private static final String NIF_NOT_REGISTERED = "NIF is not registered in our System. Please register first";
+
+    private static final String LOGIN = "------ Login ------";
+    private static final String ENTER_NIF = "Please enter your NIF:";
+    private static final String ENTER_PASSWORD = "Please enter your password:";
+
+    private static final String FORGOT_PASSWORD = "Forgot password? (y/n)";
 
     public static final String DB_NAME = "projeto_imt";
     //Este port number é o port number que aparece no XAMPP quando voçês dão start
@@ -185,34 +202,49 @@ class Login {
 
     Scanner scanner;
 
-    public void run(DataSource dataSource) throws SQLException {
+    public void run(DataSource dataSource) throws SQLException, MessagingException {
         connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        Session newSession = null;
         boolean isCorrect = false;
         boolean goBack = false;
         int nif_num = 0;
         scanner = new Scanner(System.in);
-        System.out.println("------ Login ------");
+        System.out.println(LOGIN);
         while (!isCorrect || !goBack) {
-            System.out.println("Please enter your NIF:");
+            System.out.println(ENTER_NIF);
             String nif = scanner.nextLine().trim();
-            System.out.println("Please enter your password:");
+            System.out.println(ENTER_PASSWORD);
             String password = scanner.nextLine().trim();
             String result = authenticateUser(nif, password);
             switch (result) {
                 case SUCCESSFUL_LOGIN:
-                    System.out.println("Login successful");
+                    System.out.println(SUCCESSFUL_LOGIN);
                     nif_num = Integer.parseInt(nif);
                     isCorrect = true;
                     break;
                 case WRONG_PASSWORD:
-                    System.out.println("Wrong password. Wanna go back? (y/n)");
+                    System.out.println(WRONG_PASSWORD);
                     String answer = scanner.nextLine().trim();
                     if (answer.equals("y")) {
-                        goBack = true;
+                        Mail mail = new Mail();
+                        mail.setupServerProperties(newSession);
+                        String tempPassword = mail.generateRandomPassword(8);
+                        String name = dataSource.queryCustomersHashMap().get(nif_num).getName();
+                        MimeMessage mimeMessage = mail.draftEmail(name, newSession);
+                        mail.sendEmail(newSession, mimeMessage);
+
+                        System.out.println("Check your email for the new password and insert it here:");
+                        String tempInput = scanner.nextLine().trim();
+
+                        if (tempInput.equals(tempPassword)) {
+                            String newPassword = validateNewPWD(scanner);
+                            String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+                            dataSource.updatePersonPassword(nif_num, hashedPassword);
+                        } else System.out.println("Wrong password");
                     }
                     break;
                 case NIF_NOT_REGISTERED:
-                    System.out.println("NIF is not registered in our System. Please register first");
+                    System.out.println(NIF_NOT_REGISTERED);
                     break;
             }
             if (isCorrect) break;
@@ -222,15 +254,34 @@ class Login {
             if (dataSource.isCustomer(nif_num)) {
                 //call Frontoffice
 
-            } else {
+            } else
                 BackOffice.startBackOffice(nif_num);
-            }
+
         } else {
             System.out.println("Going back to main menu");
         }
         dataSource.close();
     }
 
+
+    //check if the passowrd is at least 8 characters long
+    private String validateNewPWD(Scanner scanner) {
+        String password;
+        do {
+            System.out.println("Enter a new password (must be at least 8 characters long):");
+            password = scanner.nextLine().trim();
+
+        } while ((password.length() < 8));
+
+        String confirmPassword;
+        do {
+            System.out.println("Confirm password:");
+            confirmPassword = scanner.nextLine().trim();
+        } while (!password.equals(confirmPassword));
+
+        return password;
+
+    }
 
     private String authenticateUser(String nif, String password) {
         try {
@@ -252,6 +303,5 @@ class Login {
         }
         return null;
     }
-
 
 }
