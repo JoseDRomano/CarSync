@@ -23,6 +23,7 @@ public class BackOfficeEmployeeManager extends BackOffice {
                     1 - Insert information
                     2 - Update information
                     3 - View information
+                    4 - Deactivate information
                     0 - Exit""");
             System.out.print("Option: ");
 
@@ -37,6 +38,7 @@ public class BackOfficeEmployeeManager extends BackOffice {
                 case 1 -> insertMenu();
                 case 2 -> updateMenu();
                 case 3 -> viewMenu();
+                case 4 -> deactivateMenu();
                 case 0 -> {
                     System.out.println("Exiting...");
                     getDataSource().close();
@@ -170,6 +172,57 @@ public class BackOfficeEmployeeManager extends BackOffice {
                 default -> System.out.println("Invalid option, please try again");
             }
         }
+    }
+
+    @Override
+    void deactivateMenu() {
+        scan = new Scanner(System.in);
+        int choice = -1;
+        while (choice != 0) {
+            System.out.println("====================DEACTIVATE MENU====================");
+            System.out.println("Please choose an option: ");
+
+            System.out.println("""
+                    1 - Deactivate a customer
+                    2 - Deactivate a vehicle
+                    3 - Deactivate an insurance
+                    4 - Deactivate a ticket
+                    5 - Deactivate an employee
+                    0 - Exit""");
+            System.out.print("Option: ");
+
+            String s = scan.nextLine().trim();
+            if (s.matches("^[0-9]$")) {
+                choice = Integer.parseInt(s);
+            } else {
+                choice = -1;
+            }
+            switch (choice) {
+                case 1 -> deactivateCustomer();
+                case 2 -> deactivateVehicle();
+                case 3 -> deactivateInsurance();
+                case 4 -> deactivateTicket();
+                case 5 -> deactivateEmployee();
+                case 0 -> {
+                    System.out.println("Back to main menu..." + "\n");
+                    return;
+                }
+                default -> System.out.println("Invalid option, please try again");
+            }
+        }
+
+    }
+
+    void deactivateEmployee() {
+        System.out.println("Insert B to go back, anything else to continue");
+        String s = scan.nextLine().trim();
+        if (s.compareToIgnoreCase("B") == 0) {
+            System.out.println("Going back to delete menu..." + "\n");
+            return;
+        }
+        System.out.println("Enter NIF: ");
+        int nif = getNIF(scan, getLogger());
+        getDataSource().deactivateEmployee(nif);
     }
 
 }

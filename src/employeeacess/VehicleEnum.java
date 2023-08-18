@@ -10,12 +10,14 @@ public enum VehicleEnum {
     COLUMN_VEHICLE_PLATE,
     COLUMN_VEHICLE_CATEGORY,
     COLUMN_VEHICLE_NIF,
+    COLUMN_VEHICLE_DEACTIVATED,
     INSERT_VEHICLE,
     DELETE_VEHICLE,
     UPDATE_VEHICLE_COLOR,
     QUERY_TABLE_VEHICLE_BY_PLATE,
     QUERY_TABLE_VEHICLE,
     UPDATE_VEHICLE_OWNER,
+    DEACTIVATE_VEHICLE,
     COLUMN_VEHICLE_VIN;
 
     public static String getString(VehicleEnum vps) {
@@ -29,6 +31,7 @@ public enum VehicleEnum {
             case COLUMN_VEHICLE_PLATE -> "plate";
             case COLUMN_VEHICLE_CATEGORY -> "category";
             case COLUMN_VEHICLE_NIF -> "nif";
+            case COLUMN_VEHICLE_DEACTIVATED -> "deactivated";
             case INSERT_VEHICLE -> "INSERT INTO " + getString(VehicleEnum.TABLE_VEHICLE) + '('
                     + getString(VehicleEnum.COLUMN_VEHICLE_MODEL) + ", " +
                     getString(VehicleEnum.COLUMN_VEHICLE_BRAND) + ", " +
@@ -47,6 +50,9 @@ public enum VehicleEnum {
             case UPDATE_VEHICLE_COLOR -> "UPDATE " + getString(VehicleEnum.TABLE_VEHICLE) + " SET " +
                     getString(VehicleEnum.COLUMN_VEHICLE_COLOR) + " = ?" + " WHERE " + getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ?";
             case UPDATE_VEHICLE_OWNER -> "UPDATE " + getString(VehicleEnum.TABLE_VEHICLE) + " SET " + getString(VehicleEnum.COLUMN_VEHICLE_NIF) + " = ?" + " WHERE " +
+                    getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ?";
+            case DEACTIVATE_VEHICLE -> "UPDATE " + getString(VehicleEnum.TABLE_VEHICLE) + " SET " +
+                    getString(VehicleEnum.COLUMN_VEHICLE_DEACTIVATED) + " = 1  WHERE " +
                     getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ?";
             default -> throw new IllegalArgumentException("No such column or operation for vehicle table");
         };

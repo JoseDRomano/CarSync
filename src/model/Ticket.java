@@ -13,6 +13,15 @@ public class Ticket implements Comparable<Ticket> {
     private double value;
     private String reason;
     private boolean isPaid = false;
+    private boolean deactivated = false;
+
+    public void deactivate() {
+        this.deactivated = true;
+    }
+
+    public void setDeactivated(boolean deactivated) {
+        this.deactivated = deactivated;
+    }
 
     public boolean isPaid() {
         boolean b = isPaid;

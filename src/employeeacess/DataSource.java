@@ -1,10 +1,7 @@
 package employeeacess;
 
 import model.*;
-//import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,11 +50,19 @@ public class DataSource {
     private PreparedStatement updatePersonPassword;
     private PreparedStatement updatePersonAddress;
     private PreparedStatement updateCustomerDriverLicenseDates;
+    private PreparedStatement updatePersonEmail;
 
     private PreparedStatement deleteVehicle;
     private PreparedStatement deleteInsurance;
     private PreparedStatement deleteTicket;
     private PreparedStatement deletePerson;
+
+    private PreparedStatement deactivateEmployee;
+    private PreparedStatement deactivateCustomer;
+    private PreparedStatement deactivateVehicle;
+    private PreparedStatement deactivateInsurance;
+    private PreparedStatement deactivateTicket;
+    private PreparedStatement deactivatePerson;
 
 
     private Connection connection;
@@ -69,7 +74,7 @@ public class DataSource {
             insertIntoInsurance = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.INSERT_INSURANCE));
             insertIntoVehicle = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.INSERT_VEHICLE));
             insertIntoTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.INSERT_TICKET));
-            insertIntoEmployee = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.INSERT_INTO_EMPLOYEE));
+            insertIntoEmployee = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.INSERT_INTO_TABLE_EMPLOYEE));
             insertIntoPerson = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.INSERT_INTO_PERSON));
             insertIntoCustomer = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.INSERT_INTO_TABLE_CUSTOMER));
 
@@ -89,7 +94,7 @@ public class DataSource {
             updatePersonPassword = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.UPDATE_PERSON_PWD));
             updatePersonAddress = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.UPDATE_PERSON_ADDRESS));
             updateCustomerDriverLicenseDates = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.UPDATE_CUSTOMER_DRIVER_LICENSE_DATES));
-
+            updatePersonEmail = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.UPDATE_PERSON_EMAIL));
 
             //Serve para atualizar o valor da multa e a data de validade quando o mesmo for necessário.
             updateTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.UPDATE_TICKET));
@@ -98,6 +103,14 @@ public class DataSource {
             deleteInsurance = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.DELETE_INSURANCE));
             deleteTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.DELETE_TICKET));
             deletePerson = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.DELETE_FROM_PERSON));
+
+
+            deactivateCustomer = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.DEACTIVATE_CUSTOMER));
+            deactivateVehicle = connection.prepareStatement(VehicleEnum.getString(VehicleEnum.DEACTIVATE_VEHICLE));
+            deactivateInsurance = connection.prepareStatement(InsuranceEnum.getString(InsuranceEnum.DEACTIVATE_INSURANCE));
+            deactivateTicket = connection.prepareStatement(TicketEnum.getString(TicketEnum.DEACTIVATE_TICKET));
+            deactivatePerson = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.DEACTIVATE_PERSON));
+            deactivateEmployee = connection.prepareStatement(PersonsEnum.getString(PersonsEnum.DEACTIVATE_EMPLOYEE));
 
             return true;
         } catch (SQLException e) {
@@ -138,7 +151,7 @@ public class DataSource {
                 queryVehicles.close();
             }
 
-            if( queryPerson != null){
+            if (queryPerson != null) {
                 queryPerson.close();
             }
 
@@ -170,7 +183,7 @@ public class DataSource {
                 updateTicket.close();
             }
 
-            if(updateEmployeeAccessLevel != null){
+            if (updateEmployeeAccessLevel != null) {
                 updateEmployeeAccessLevel.close();
             }
 
@@ -186,32 +199,60 @@ public class DataSource {
                 updateCustomerDriverLicenseDates.close();
             }
 
+            if(updatePersonEmail != null){
+                updatePersonEmail.close();
+            }
+
             if (queryCustomers != null) {
                 queryCustomers.close();
             }
 
-            if(deletePerson != null){
+            if (deletePerson != null) {
                 deletePerson.close();
             }
 
-            if(deleteTicket != null){
+            if (deleteTicket != null) {
                 deleteTicket.close();
             }
 
-            if(deleteInsurance != null){
+            if (deleteInsurance != null) {
                 deleteInsurance.close();
             }
 
-            if(deleteVehicle != null){
+            if (deleteVehicle != null) {
                 deleteVehicle.close();
             }
 
-            if(queryVehicleByPlate != null){
+            if (queryVehicleByPlate != null) {
                 queryVehicleByPlate.close();
             }
 
-            if(queryEmployee != null){
+            if (queryEmployee != null) {
                 queryEmployee.close();
+            }
+
+            if (deactivateTicket != null) {
+                deactivateTicket.close();
+            }
+
+            if (deactivateInsurance != null) {
+                deactivateInsurance.close();
+            }
+
+            if (deactivateVehicle != null) {
+                deactivateVehicle.close();
+            }
+
+            if (deactivateCustomer != null) {
+                deactivateCustomer.close();
+            }
+
+            if (deactivatePerson != null) {
+                deactivatePerson.close();
+            }
+
+            if (deactivateEmployee != null) {
+                deactivateEmployee.close();
             }
 
             if (connection != null) {
@@ -276,30 +317,30 @@ public class DataSource {
             return null;
         }
     }
-  //  public List<Insurance> queryInsurancesByNIF(int nif) {
+    //  public List<Insurance> queryInsurancesByNIF(int nif) {
     //    List<Insurance> insurances = new ArrayList<>();
-      //  try {
-        //    PreparedStatement preparedStatement = connection.prepareStatement(
-          //         "SELECT * FROM insurance WHERE customer_nif = ?"
-            //);
-            //preparedStatement.setInt(1, nif);
-            //ResultSet resultSet = preparedStatement.executeQuery();
-            //while (resultSet.next()) {
-              //Insurance insurance = new Insurance();
-                //insurance.setPolicy(resultSet.getInt(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_POLICY)));
-                //insurance.setCarPlate(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_PLATE)));
-                //insurance.setStartDate(resultSet.getDate(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_START_DATE)));
-                //insurance.setExtraCategory(resultSet.getInt(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXTRA_CATEGORY)));
-                //insurance.setExpDate(resultSet.getDate(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXPIRY_DATE)));
-                //insurance.setCompanyName(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_COMPANY)));
-               //insurances.add(insurance);
-        //    }
-        //    return insurances;
-      //  } catch (SQLException e) {
-         //   System.out.println("Couldn't retrieve insurances for NIF " + nif + ": " + e.getMessage());
-          //  e.printStackTrace();
-           // return null;
-       // }
+    //  try {
+    //    PreparedStatement preparedStatement = connection.prepareStatement(
+    //         "SELECT * FROM insurance WHERE customer_nif = ?"
+    //);
+    //preparedStatement.setInt(1, nif);
+    //ResultSet resultSet = preparedStatement.executeQuery();
+    //while (resultSet.next()) {
+    //Insurance insurance = new Insurance();
+    //insurance.setPolicy(resultSet.getInt(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_POLICY)));
+    //insurance.setCarPlate(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_PLATE)));
+    //insurance.setStartDate(resultSet.getDate(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_START_DATE)));
+    //insurance.setExtraCategory(resultSet.getInt(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXTRA_CATEGORY)));
+    //insurance.setExpDate(resultSet.getDate(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXPIRY_DATE)));
+    //insurance.setCompanyName(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_COMPANY)));
+    //insurances.add(insurance);
+    //    }
+    //    return insurances;
+    //  } catch (SQLException e) {
+    //   System.out.println("Couldn't retrieve insurances for NIF " + nif + ": " + e.getMessage());
+    //  e.printStackTrace();
+    // return null;
+    // }
     //}
 
     //Devolve um arraylist com todas as multas que estão na base de dados.
@@ -329,19 +370,19 @@ public class DataSource {
     }
 
     //Com hashmap
-    public Map< Integer,Customer> queryCustomersHashMap() {
-        Map<Integer,Customer> customers = new HashMap();
+    public Map<Integer, Customer> queryCustomersHashMap() {
+        Map<Integer, Customer> customers = new HashMap();
         try {
             ResultSet resultSet = queryCustomers.executeQuery();
             while (resultSet.next()) {
                 Customer customer = new Customer();
-                int nif =  resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF));
+                int nif = resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF));
                 customer.setNif(nif);
                 customer.setExpDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_EXPIRATION_DATE)));
                 customer.setLicenseType(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE)));
                 customer.setStartingDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE)));
                 customer.setDriverLicenseNum(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_DRIVER_LICENSE)));
-                customers.put(nif,customer);
+                customers.put(nif, customer);
             }
 
             resultSet = queryPerson.executeQuery();
@@ -483,13 +524,13 @@ public class DataSource {
 
     //TESTED
     public boolean insertInsurance(int policy, String plate, Date startDate,
-                                   int extraCategory, Date expDate, String companyName, int nif) {
+                                   int extraCategory, Date expDate, String companyName) {
 
         boolean worked = false;
-        if (!isVehicleOwner(nif, plate)) {
+        /*if (!isVehicleOwner(nif, plate)) {
             System.out.println("Not owner of vehicle with plate: " + plate);
             return worked;
-        }
+        }*/
 
         try {
             connection.setAutoCommit(false);
@@ -645,12 +686,12 @@ public class DataSource {
 
 
     //TESTED
-    public void updateVehicleColor(String color, String plate, int nif) {
+    public void updateVehicleColor(String color, String plate) {
 
-        if (!isVehicleOwner(nif, plate)) {
+        /*if (!isVehicleOwner(nif, plate)) {
             System.out.println("Something wrong with provided info");
             return;
-        }
+        }*/
 
         try {
             connection.setAutoCommit(false);
@@ -688,9 +729,9 @@ public class DataSource {
 
 
     //TESTED
-    public void changeVehicleOwner(String plate, int oldNif, int newNif) {
+    public void changeVehicleOwner(String plate, int newNif) {
 
-        if (!isVehicleOwner(oldNif, plate) || !isCustomer(newNif)) {
+        if (!isCustomer(newNif)) {
             System.out.println("Something wrong with provided info");
             return;
         }
@@ -702,7 +743,7 @@ public class DataSource {
             int affected = updateVehicleOwner.executeUpdate();
 
             if (affected == 1) {
-                System.out.println("Updated vehicle owner for plate number: " + plate + " to: " + newNif + " from: " + oldNif);
+                System.out.println("Updated vehicle owner for plate number: " + plate + " to: " + newNif);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't update vehicle owner");
@@ -771,19 +812,19 @@ public class DataSource {
         }
     }
 
-    public void updateCustomerDriverLicenseDates(Date startDate, Date expDate, int nif) {
+    public void updateCustomerDriverLicenseDates(Date startDate, Date expDate, int driverLincese) {
         try {
             connection.setAutoCommit(false);
             updateCustomerDriverLicenseDates.setDate(1, startDate);
             updateCustomerDriverLicenseDates.setDate(2, expDate);
-            updateCustomerDriverLicenseDates.setInt(3, nif);
-            int affected =  updateCustomerDriverLicenseDates.executeUpdate();
+            updateCustomerDriverLicenseDates.setInt(3, driverLincese);
+            int affected = updateCustomerDriverLicenseDates.executeUpdate();
 
             if (affected == 1) {
-                System.out.println("Updated dates for customer with nif: " + nif);
+                System.out.println("Updated dates for customer with license number: " + driverLincese);
                 connection.commit();
             } else {
-                throw new SQLException("Couldn't update dates for customer with nif: " + nif);
+                throw new SQLException("Couldn't update dates for customer with license number: " + driverLincese);
             }
 
         } catch (SQLException e) {
@@ -842,10 +883,6 @@ public class DataSource {
         }
     }
 
-    //changePassword
-    //updateAddress
-    //renewDriverLicense
-
     public void updatePersonPassword(int nif, String newPassword) {
         try {
             connection.setAutoCommit(false);
@@ -882,7 +919,7 @@ public class DataSource {
     }
 
 
-    public void updatePersonAddress (int nif, String newAddress) {
+    public void updatePersonAddress(int nif, String newAddress) {
         try {
             connection.setAutoCommit(false);
             updatePersonAddress.setString(1, newAddress);
@@ -898,6 +935,47 @@ public class DataSource {
 
         } catch (SQLException e) {
             System.out.println("Couldn't update person address: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void updatePersonEmail(int nif, String newEmail) {
+
+        if(!isCustomerOrEmployee(nif)) {
+            System.out.println("Person with nif: " + nif + " is not a customer nor employee.");
+            return;
+        }
+
+        try {
+            connection.setAutoCommit(false);
+            updatePersonEmail.setString(1, newEmail);
+            updatePersonEmail.setInt(2, nif);
+            int affected = updatePersonEmail.executeUpdate();
+
+            if (affected == 1) {
+                System.out.println("Updated email for person with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't update email for person with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't update person email: " + e.getMessage());
             e.printStackTrace();
             try {
                 System.out.println("Performing rollback");
@@ -967,15 +1045,13 @@ public class DataSource {
     }
 
 
-
-
     //TESTED
-    public void renewInsurance(Date startDate, Date expiryDate, int Category, String companyName, int policy, int nif) {
+    public void renewInsurance(Date startDate, Date expiryDate, int Category, String companyName, int policy) {
 
-        if (!insuranceExists(policy, nif)) {
+       /* if (!insuranceExists(policy, nif)) {
             System.out.println("Wrong info, policy: " + policy + " NIF: " + nif);
             return;
-        }
+        }*/
 
         try {
             connection.setAutoCommit(false);
@@ -1016,17 +1092,17 @@ public class DataSource {
 
 
     //TESTED
-    public void payTicket(int nif, String plate, Date date, double value) {
+    public void payTicket(String plate, Date date, double value) {
 
-        if (!isVehicleOwner(nif, plate)) {
+        /*if (!isVehicleOwner(nif, plate)) {
             System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
             return;
-        }
+        }*/
 
         int paid = 0;
 
         for (Ticket t : queryTickets()) {
-            if (t.getNif() == nif && t.getPlate().equals(plate) && t.getDate().equals(date)) {
+            if (t.getPlate().equals(plate) && t.getDate().equals(date)) {
                 if (t.isPaid()) {
                     System.out.println("Ticket is already paid");
                     return;
@@ -1045,9 +1121,8 @@ public class DataSource {
         try {
             connection.setAutoCommit(false);
             payTicket.setInt(1, paid);
-            payTicket.setInt(2, nif);
-            payTicket.setString(3, plate);
-            payTicket.setDate(4, date);
+            payTicket.setString(2, plate);
+            payTicket.setDate(3, date);
             int affected = payTicket.executeUpdate();
 
             if (affected == 1) {
@@ -1080,12 +1155,12 @@ public class DataSource {
 
 
     //TESTED
-    public void deleteVehicle(String plate, int nif) {
+    public void deleteVehicle(String plate) {
 
-        if (!isVehicleOwner(nif, plate)) {
+        /*if (!isVehicleOwner(nif, plate)) {
             System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
             return;
-        }
+        }*/
 
         try {
             connection.setAutoCommit(false);
@@ -1122,13 +1197,13 @@ public class DataSource {
 
 
     //NOT TESTED
-    public void deleteInsurance(int policy, int nif) {
+    public void deleteInsurance(int policy) {
 
-        if (!insuranceExists(policy, nif)) {
+       /* if (!insuranceExists(policy, nif)) {
             System.out.println("No such insurance with policy number: " + policy +
                     "or wrong info");
             return;
-        }
+        }*/
 
         try {
             connection.setAutoCommit(false);
@@ -1163,22 +1238,22 @@ public class DataSource {
         }
     }
 
-    public void deleteTicket(int nif, String plate, Date date) {
+    public void deleteTicket(String plate, Date date) {
 
-        if (!isVehicleOwner(nif, plate)) {
+       /* if (!isVehicleOwner(nif, plate)) {
             System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
             return;
-        }
+        }*/
 
         try {
             connection.setAutoCommit(false);
-            deleteTicket.setInt(1, nif);
-            deleteTicket.setString(2, plate);
-            deleteTicket.setDate(3, date);
+//            deleteTicket.setInt(1, nif);
+            deleteTicket.setString(1, plate);
+            deleteTicket.setDate(2, date);
             int affected = deleteTicket.executeUpdate();
 
             if (affected == 1) {
-                System.out.println("Ticket for nif: " + nif + " plate: "+ plate + " and date: "+ date + " succefully deleted");
+                System.out.println("Ticket for plate: " + plate + " and date: " + date + " succefully deleted");
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't delete ticket");
@@ -1204,7 +1279,6 @@ public class DataSource {
             }
         }
     }
-
 
 
     public void deletePerson(int nif) {
@@ -1249,14 +1323,14 @@ public class DataSource {
 
     public boolean isCustomerOrEmployee(int nif) {
 
-        for(Customer customer: queryCustomers()) {
-            if(customer.getNif() == nif) {
+        for (Customer customer : queryCustomers()) {
+            if (customer.getNif() == nif) {
                 return true;
             }
         }
 
-        for(Employee employee: queryEmployees()) {
-            if(employee.getNif() == nif) {
+        for (Employee employee : queryEmployees()) {
+            if (employee.getNif() == nif) {
                 return true;
             }
         }
@@ -1265,7 +1339,7 @@ public class DataSource {
     }
 
 
-    private boolean insertPerson(int nif, String name, String address, Date bDate, String password) {
+    private boolean insertPerson(int nif, String name, String address, Date bDate, String password, String email) {
 
         boolean result = false;
 
@@ -1275,7 +1349,8 @@ public class DataSource {
             insertIntoPerson.setString(2, name);
             insertIntoPerson.setDate(3, bDate);
             insertIntoPerson.setString(4, password);
-            insertIntoPerson.setString(5, address);
+            insertIntoPerson.setString(5, email);
+            insertIntoPerson.setString(6, address);
             int affected = insertIntoPerson.executeUpdate();
 
             if (affected == 1) {
@@ -1308,10 +1383,10 @@ public class DataSource {
         return result;
     }
 
-    public void insertCustomer(int nif, String name, String address, Date bDate, String password,
+    public void insertCustomer(int nif, String name, String address, Date bDate, String password, String email,
                                int driverLicense, int licenseType, Date registrationDate, Date expirationDate) {
 
-        if(!insertPerson(nif, name, address, bDate, password))  {
+        if (!insertPerson(nif, name, address, bDate, password, email)) {
             System.out.println("Couldn't insert person with nif: " + nif);
             return;
         }
@@ -1329,6 +1404,7 @@ public class DataSource {
                 System.out.println("Inserted customer with nif: " + nif + " and driver license number: " + driverLicense);
                 connection.commit();
             } else {
+                deletePerson(nif);
                 throw new SQLException("Couldn't insert customer with nif: " + nif + " and driver license number: " + driverLicense);
             }
 
@@ -1353,28 +1429,31 @@ public class DataSource {
         }
     }
 
-    public void insertEmployee(int nif, String name, String address, Date bDate, String password,
+    public void insertEmployee(int nif, String name, String address, Date bDate, String password, String email,
                                int accessLevel) {
 
-        if(!insertPerson(nif, name, address, bDate, password))  {
+        if (!insertPerson(nif, name, address, bDate, password, email)) {
             System.out.println("Couldn't insert person with nif: " + nif);
             return;
         }
 
+
         try {
             connection.setAutoCommit(false);
-            insertIntoEmployee.setInt(1, accessLevel);
+            insertIntoEmployee.setInt(2, accessLevel);
+            insertIntoEmployee.setInt(1, nif);
             int affected = insertIntoEmployee.executeUpdate();
 
             if (affected == 1) {
-                System.out.println("Inserted employee with nif: " + nif + ", name: " + name + "and access level: " + accessLevel);
+                System.out.println("Inserted employee with nif: " + nif + ", name: " + name + " and access level: " + accessLevel);
                 connection.commit();
             } else {
+                deletePerson(nif);
                 throw new SQLException("Couldn't insert employee with nif: " + nif + ", name: " + name + "and access level: " + accessLevel);
             }
 
         } catch (SQLException e) {
-            System.out.println("Couldn't insert data into ticket table: " + e.getMessage());
+            System.out.println("Couldn't insert data into insurance table: " + e.getMessage());
             e.printStackTrace();
             try {
                 System.out.println("Performing rollback");
@@ -1393,5 +1472,265 @@ public class DataSource {
             }
         }
     }
+
+    public boolean deactivatePerson(int nif) {
+
+        boolean result = false;
+        if(!isCustomerOrEmployee(nif)) {
+            System.out.println("Person with nif: " + nif + " is not a customer or employee");
+            return false;
+        }
+
+        try {
+            connection.setAutoCommit(false);
+            deactivatePerson.setInt(1, nif);
+            int affected = deactivatePerson.executeUpdate();
+
+            if (affected == 1) {
+                result = true;
+                System.out.println("Deactivated person with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't deactivate person with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't deactivate person with nif: " + nif);
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public boolean deactivateCustomer(int nif) {
+
+        if (!deactivatePerson(nif)) {
+            System.out.println("Couldn't deactivate person with nif: " + nif);
+            return false;
+        }
+
+        if(!isCustomer(nif)) {
+            System.out.println("Person with nif: " + nif + " is not a customer");
+            return false;
+        }
+
+        boolean result = false;
+
+        try {
+            connection.setAutoCommit(false);
+            deactivateCustomer.setInt(1, nif);
+            int affected = deactivateCustomer.executeUpdate();
+
+            if (affected == 1) {
+                result = true;
+                System.out.println("Deactivated customer with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't deactivate customer with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't deactivate customer with nif: " + nif);
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public boolean deactivateEmployee(int nif) {
+
+        if (!deactivatePerson(nif)) {
+            System.out.println("Couldn't deactivate person with nif: " + nif);
+            return false;
+        }
+
+        if(!isEmployee(nif)) {
+            System.out.println("Person with nif: " + nif + " is not an employee");
+            return false;
+        }
+
+        boolean result = false;
+
+        try {
+            connection.setAutoCommit(false);
+            deactivateEmployee.setInt(1, nif);
+            int affected = deactivateEmployee.executeUpdate();
+
+            if (affected == 1) {
+                result = true;
+                System.out.println("Deactivated employee with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't deactivate employee with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't deactivate employee with nif: " + nif);
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public boolean deactivateTicket(int nif) {
+
+        boolean result = false;
+
+        try {
+            connection.setAutoCommit(false);
+            deactivateTicket.setInt(1, nif);
+            int affected = deactivateTicket.executeUpdate();
+
+            if (affected == 1) {
+                result = true;
+                System.out.println("Deactivated ticket with nif: " + nif);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't deactivate ticket with nif: " + nif);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't deactivate ticket with nif: " + nif);
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public boolean deactivateInsurance(int policy) {
+
+        boolean result = false;
+
+        try {
+            connection.setAutoCommit(false);
+            deactivateInsurance.setInt(1, policy);
+            int affected = deactivateInsurance.executeUpdate();
+
+            if (affected == 1) {
+                result = true;
+                System.out.println("Deactivated insurance with policy: " + policy);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't deactivate insurance with policy: " + policy);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't deactivate insurance with policy: " + policy);
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public boolean deactivateVehicle(String plate) {
+
+        boolean result = false;
+
+        try {
+            connection.setAutoCommit(false);
+            deactivateVehicle.setString(1, plate);
+            int affected = deactivateVehicle.executeUpdate();
+
+            if (affected == 1) {
+                result = true;
+                System.out.println("Deactivated vehicle with plate: " + plate);
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't deactivate vehicle with plate: " + plate);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Couldn't deactivate vehicle with plate: " + plate);
+            e.printStackTrace();
+            try {
+                System.out.println("Performing rollback");
+                connection.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Couldn't perform rollback: " + e2.getMessage());
+                e2.printStackTrace();
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+
 }
 

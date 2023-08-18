@@ -1,28 +1,11 @@
 
 
 import employeeacess.BackOffice;
-import employeeacess.DataSource;
-import model.Employee;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.chainsaw.Main;
-import org.mindrot.jbcrypt.BCrypt;
-import util.LogUtil;
 
-import javax.xml.crypto.Data;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.sql.SQLData;
+import javax.mail.MessagingException;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
 
@@ -35,32 +18,53 @@ public class MainConnection {
 
     public static void main(String[] args) {
 
-       /* PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
+        PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
 
-//        BackOffice.startBackOffice(296789012);
-        MainConnection.initiate();*/
+        //Password para o nif 200000000 é Ab12@d3 (employee)
+        /*Password para o nif 200000001 é Ab12@d4 (customer)
+        + driver license number 1000000*/
+        BackOffice.startBackOffice(296789012);
 
-        MainConnection.readTicketsFromFile();
+//        MainConnection.initiate();
+        /*String s = "123abc";
+        String hashed = BCrypt.hashpw(s, BCrypt.gensalt());
+        System.out.println(hashed);*/
 
+
+//        MainConnection.readTicketsFromFile();
+        /*String s = """
+                - Info:
+                    Customer Name - John Doe;
+                    Customer Address - 123 Main Street;
+                    Customer Password - asdksaldjalskdj4312313@
+                    Customer birth date - 1990-01-01
+                    Customer driver license number - 123456789
+                    Customer driver license expiration date - 2020-01-01
+                    Customer license type - 3""";
+        String[] svalues = s.split(":");
+        System.out.println(svalues[1]);
+        String s2 = svalues[1].replaceAll("\\t", "");
+        System.out.println(s2);*/
     }
 
     private static void initiate() {
         try {
             WelcomeMenu wm = new WelcomeMenu();
             wm.run();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println("Error connecting to database" + e.getMessage());
             e.printStackTrace();
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public static boolean readTicketsFromFile() {
+    /*public static boolean readTicketsFromFile() {
         boolean result = false;
         Path filePath = Path.of("Tickets.txt");
         Scanner scanner = null;
         try {
-            scanner = new Scanner(new BufferedReader(new FileReader(filePath.toString())));
+            scanner = new Scanner(new BufferedReader(new FileReader("Tickets.txt")));
             scanner.useDelimiter("^[-]{5,}$"); {
                 while(scanner.hasNextLine()) {
                     int ticketID = MainConnection.getID(scanner.nextLine());
@@ -97,13 +101,13 @@ public class MainConnection {
     static String ticketType(String s) {
         String[] svalues = s.split(":");
         String type = svalues[1];
-        return type;
+        return type.trim();
     }
 
     static String ticketStatus(String s) {
         String[] svalues = s.split(":");
         String status = svalues[1];
-        return status;
+        return status.trim();
     }
 
     static Date ticketDate(String s) {
@@ -123,8 +127,7 @@ public class MainConnection {
         String info = svalues[1];
         return info;
     }
-
-
+*/
 
 
 }

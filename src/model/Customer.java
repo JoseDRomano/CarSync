@@ -97,4 +97,5 @@ public class Customer extends Person {
     public int compareTo(Person o) {
         return super.nif - o.nif;
     }
+
 }

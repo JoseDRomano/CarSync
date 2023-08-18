@@ -11,4 +11,3 @@ Ticket ID: 1
     Customer driver license number: 123456789
     Customer driver license expiration date: 2020-01-01
     Customer license type: 3
----------------------------------------------------------------------

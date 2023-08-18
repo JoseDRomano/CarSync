@@ -103,11 +103,13 @@ class Register {
         String starting_date = validateDate(scanner);
         System.out.println("Expiration date (YYYY-MM-DD):");
         String expiration_date = validateDate(scanner);
+        System.out.println("Enter email:");
+        String email = scanner.nextLine().trim();
 
         /*código SQL para registar na base de dados*/
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-        dataSource.insertCustomer(nif, name, address, Date.valueOf(birthdate), hashedPassword, Integer.parseInt(driver_license),
+        dataSource.insertCustomer(nif, name, address, Date.valueOf(birthdate), hashedPassword, email, Integer.parseInt(driver_license),
                 license_type, Date.valueOf(starting_date), Date.valueOf(expiration_date));
 
 

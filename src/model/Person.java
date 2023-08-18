@@ -9,9 +9,19 @@ public abstract class Person implements Comparable<Person> {
     protected String name;
     protected Date birht_date;
     protected String address;
+    protected boolean deactivated = false;
+    private String email;
 
     public int getNif() {
         return nif;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return this.email;
     }
 
     public void setNif(int nif) {
@@ -52,4 +62,13 @@ public abstract class Person implements Comparable<Person> {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public void deactivate() {
+        this.deactivated = true;
+    }
+
+    public void setDeactivated(boolean deactivated) {
+        this.deactivated = deactivated;
+    }
+
 }

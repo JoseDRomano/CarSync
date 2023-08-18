@@ -11,9 +11,18 @@ public class Insurance implements Comparable<Insurance> {
     private String companyName;
     private String extraCategory;
     private String carPlate;
+    private boolean deactivated = false;
 
     public int getPolicy() {
         return policy;
+    }
+
+    public void deactivate() {
+        this.deactivated = true;
+    }
+
+    public void setDeactivated(boolean deactivated) {
+        this.deactivated = deactivated;
     }
 
     public void setPolicy(int policy) {

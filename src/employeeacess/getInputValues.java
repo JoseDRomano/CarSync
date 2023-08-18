@@ -7,11 +7,10 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Scanner;
 
-public interface getValues {
-
-
+public interface getInputValues {
 
     default Date getDate(Scanner scan, Logger logger) {
         Date sqlDate = null;
@@ -25,7 +24,7 @@ public interface getValues {
                 sqlDate = Date.valueOf(localDate);
                 validInput = true;
             } catch (DateTimeParseException e) {
-                logger.error("Invalid date input: " + input, e);
+//                logger.error("Invalid date input: " + input, e);
                 System.out.println("Invalid date format. Please enter a date in the format yyyy-MM-dd.");
             }
         } while (!validInput);
@@ -51,7 +50,7 @@ public interface getValues {
                     System.out.println("The customer must be at least 18 years old. Please enter a valid date.");
                 }
             } catch (DateTimeParseException e) {
-                logger.error("Invalid date input: " + input, e);
+//                logger.error("Invalid date input: " + input, e);
                 System.out.println("Invalid date format. Please enter a date in the format yyyy-MM-dd.");
             }
         } while (!validInput);
@@ -69,7 +68,7 @@ public interface getValues {
                 nif = Integer.parseInt(s);
                 validInput = true;
             } else {
-                logger.error("Invalid NIF: " + s);
+//                logger.error("Invalid NIF: " + s);
                 System.out.println("Invalid NIF. Please enter a 9-digit number.");
             }
         } while (!validInput);
@@ -88,7 +87,7 @@ public interface getValues {
                 driverLicense = Integer.parseInt(s);
                 validInput = true;
             } else {
-                logger.error("Invalid driver license number: " + s);
+//                logger.error("Invalid driver license number: " + s);
                 System.out.println("Invalid driver license number. Please enter a 8-digit number.");
             }
         } while (!validInput);
@@ -107,7 +106,7 @@ public interface getValues {
                 policy = Integer.parseInt(s);
                 validInput = true;
             } else {
-                logger.error("Invalid policy number: " + s);
+//                logger.error("Invalid policy number: " + s);
                 System.out.println("Invalid policy number. Please enter a 9-digit number.");
             }
         } while (!validInput);
@@ -125,7 +124,7 @@ public interface getValues {
                 plate = s;
                 validInput = true;
             } else {
-                logger.error("Invalid plate: " + s);
+//                logger.error("Invalid plate: " + s);
                 System.out.println("Invalid plate. Please enter a XX-XX-XX format.");
             }
         } while (!validInput);
@@ -143,8 +142,8 @@ public interface getValues {
                 str = s;
                 validInput = true;
             } else {
-                logger.error("Invalid word: " + s);
-                System.out.println("Invalid word. Please make sure there are no special letters");
+//                logger.error("Invalid word: " + s);
+                System.out.println("Invalid word. Please make sure there are no special letters and at least 2 letters");
             }
         } while (!validInput);
 
@@ -162,7 +161,7 @@ public interface getValues {
                 str = s;
                 validInput = true;
             } else {
-                logger.error("Invalid VIN: " + s);
+//                logger.error("Invalid VIN: " + s);
                 System.out.println("Invalid VIN. Please enter a 17 digit value.");
             }
         } while (!validInput);
@@ -180,7 +179,7 @@ public interface getValues {
                 amount = Double.parseDouble(s);
                 validInput = true;
             } else {
-                logger.error("Invalid amount: " + s);
+//                logger.error("Invalid amount: " + s);
                 System.out.println("Invalid amount. Please enter a value that ends with a decimal part or .00 .");
             }
         } while (!validInput);
@@ -209,7 +208,7 @@ public interface getValues {
                 validInput = true;
             } else {
                 System.out.println("Invalid input. Please try again.");
-                logger.warn("Invalid input received.");
+//                logger.warn("Invalid input received.");
             }
         } while (!validInput);
 
@@ -223,27 +222,102 @@ public interface getValues {
 
         do {
             String s = scan.nextLine().trim();
-            if (s.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]{2,})[a-zA-Z0-9!@#$%^&*]{6,10}$\n")) {
+            if (s.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,10}$).*")) {
                 password = s;
                 validInput = true;
             } else {
-                logger.error("Invalid amount: " + s);
+//                logger.error("Invalid amount: " + s);
                 System.out.println("""
                         Invalid password. 
                         Please make sure the password contains at least:
                         - 1 uppercase letter
                         - 1 lowercase letter
                         - 1 number
-                        - 2 special characters
-                        - 1 to 10 characters""");
+                        - 1 special character
+                        - 6 to 10 characters""");
             }
         } while (!validInput);
 
         return password;
     }
 
+    default int getInteger(Scanner scan, Logger logger) {
+        logger.info("Getting integer input...");
+        int value = 0;
+        boolean validInput = false;
+        do {
+            String s = scan.nextLine().trim();
+            if (s.matches("[0-9]+")) {
+                value = Integer.parseInt(s);
+                validInput = true;
+            } else {
+                System.out.println("Invalid value. Please enter a number.");
+//                logger.warn("Invalid value entered. Please enter a number.");
+            }
+        } while (!validInput);
 
+        logger.info("Integer input obtained: " + value);
+        return value;
+    }
 
+    default void displayList(List<?> objects, int rowsPerPage, Logger logger) {
+        logger.info("Displaying list...");
+        Scanner scanner = new Scanner(System.in);
+        int currentPosition = 0; // Always start from the first position
+        int totalObjects = objects.size();
 
+        int pages = (int) Math.ceil((double) totalObjects / rowsPerPage);
+        int aux = 1;
+
+        while (currentPosition < totalObjects) {
+            System.out.println("Displaying from page " + aux + " of " + pages + ":");
+
+            for (int i = currentPosition; i < Math.min(currentPosition + rowsPerPage, totalObjects); i++) {
+                System.out.println(objects.get(i));
+            }
+
+            System.out.println("Displaying from page " + aux + " of " + pages + ":");
+            System.out.print("\nOptions: (C)ontinue, (P)revious, (B)ack to menu: ");
+            String input = scanner.nextLine().toUpperCase();
+
+            switch (input) {
+                case "C" -> {
+                    aux++;
+                    currentPosition += rowsPerPage;
+                }
+                case "P" -> {
+                    aux--;
+                    aux = Math.max(1, aux);
+                    currentPosition = Math.max(0, currentPosition - rowsPerPage);
+                }
+                case "B" -> {
+                    return;
+                }
+                default -> {
+                    System.out.println("Invalid input. Please try again.");
+//                    logger.warn("Invalid input received.");
+                }
+            }
+        }
+        logger.info("Displaying list completed.");
+    }
+
+    default String getEmail(Scanner scan, Logger logger) {
+        String email = null;
+        boolean validInput = false;
+
+        do {
+            String s = scan.nextLine().trim();
+            if (s.matches("^[a-zA-Z0-9]{2,}@([a-zA-Z0-9]{2,}\\.com|[a-zA-Z0-9]{2,}\\.pt)$")) {
+                email = s;
+                validInput = true;
+            } else {
+//                logger.error("Invalid email: " + s);
+                System.out.println("Invalid email. Please enter a valid email that ends with .com or .pt .");
+            }
+        } while (!validInput);
+
+        return email;
+    }
 
 }

@@ -14,6 +14,15 @@ public class Vehicle implements Comparable<Vehicle>{
     private Date registrationDate;
     private int nif;
     private String category;
+    private boolean deactivated = false;
+
+    public void deactivate() {
+        this.deactivated = true;
+    }
+
+    public void setDeactivated(boolean deactivated) {
+        this.deactivated = deactivated;
+    }
 
     public int getNif() {
         return nif;
