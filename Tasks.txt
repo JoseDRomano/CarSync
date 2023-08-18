@@ -1,0 +1,7 @@
+Task ID: 1
+    Type: Insert Vehicle
+    Status: Open
+    Date: 2022-05-11
+    NIF: 296789012
+    Values: Light Vehicle, 12-12-CD, 12321424HJGJGJHG, BLACK, BMW, A9
+
