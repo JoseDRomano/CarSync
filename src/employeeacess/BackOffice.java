@@ -95,17 +95,17 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter plate number in format XX-XX-XX: ");
-        String plateNumber = getPlate(scan, logger);
+        String plateNumber = getPlate(scan);
         System.out.println("Enter VIN: ");
-        String vin = getVIN(scan, logger);
+        String vin = getVIN(scan);
         System.out.println("Enter color: ");
-        String color = getString(scan, logger);
+        String color = getString(scan);
         System.out.println("Enter brand: ");
-        String brand = getString(scan, logger);
+        String brand = getString(scan);
         System.out.println("Enter model: ");
-        String model = getString(scan, logger);
+        String model = getString(scan);
         System.out.println("Enter registration date (yyyy-mm-day):");
-        Date registrationDate = getDate(scan, logger);
+        Date registrationDate = getDate(scan);
         System.out.println("""
                 Enter vehicle category:
                     Light Commercial Vehicle -> 1
@@ -114,9 +114,9 @@ public abstract class BackOffice implements getInputValues {
                     Heavy-Duty Goods Vehicle -> 4
                     Motorcycle -> 5
                 Moped -> 6""");
-        int categoryNumber = getInteger(scan, logger);
+        int categoryNumber = getInteger(scan);
         System.out.println("Enter NIF: ");
-        int nif2 = getNIF(scan, logger);
+        int nif2 = getNIF(scan);
 
         dataSource.insertVehicle(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2);
     }
@@ -132,18 +132,18 @@ public abstract class BackOffice implements getInputValues {
         }
 
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, logger);
+        int nif = getNIF(scan);
         System.out.println("Enter name: ");
-        String name = getString(scan, logger);
+        String name = getString(scan);
         System.out.println("Enter address: ");
-        String address = getString(scan, logger);
+        String address = getString(scan);
         System.out.println("Enter birth date with format yyyy-mm-dd: ");
-        Date birthDate = getBirthDate(scan, logger);
+        Date birthDate = getBirthDate(scan);
         System.out.println("Enter password: ");
-        String password = getPassword(scan, logger);
+        String password = getPassword(scan);
         password = BCrypt.hashpw(password, BCrypt.gensalt());
         System.out.println("Enter driverLicense: ");
-        int driverLicense = getDriverLicense(scan, logger);
+        int driverLicense = getDriverLicense(scan);
         System.out.println("""
                 Enter license type: 
                     1 for A
@@ -151,13 +151,13 @@ public abstract class BackOffice implements getInputValues {
                     3 for C
                     4 for D""");
         //Aqui nao deve ser getInteger, deve ser getLicenseType porque apenas aceita 1,2,3,4
-        int licenseType = getInteger(scan, logger);
+        int licenseType = getInteger(scan);
         System.out.println("Enter registration date: ");
-        Date registrationDate = getDate(scan, logger);
+        Date registrationDate = getDate(scan);
         System.out.println("Enter expiration date: ");
-        Date expirationDate = getDate(scan, logger);
+        Date expirationDate = getDate(scan);
         System.out.println("Enter email: ");
-        String email = getEmail(scan, logger);
+        String email = getEmail(scan);
         dataSource.insertCustomer(nif, name, address, birthDate, password, email,
                 driverLicense, licenseType, registrationDate, expirationDate);
         logger.info("Employee insertion completed.");
@@ -173,20 +173,20 @@ public abstract class BackOffice implements getInputValues {
         }
 
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, logger);
+        int nif = getNIF(scan);
         System.out.println("Enter name: ");
-        String name = getString(scan, logger);
+        String name = getString(scan);
         System.out.println("Enter address: ");
-        String address = getString(scan, logger);
+        String address = getString(scan);
         System.out.println("Enter birth date with format yyyy-mm-dd: ");
-        Date birthDate = getBirthDate(scan, logger);
+        Date birthDate = getBirthDate(scan);
         System.out.println("Enter password: ");
-        String password = getPassword(scan, logger);
+        String password = getPassword(scan);
         password = BCrypt.hashpw(password, BCrypt.gensalt());
         System.out.println("Enter employee access level: ");
-        int accessLevel = getInteger(scan, logger);
+        int accessLevel = getInteger(scan);
         System.out.println("Enter email: ");
-        String email = getEmail(scan, logger);
+        String email = getEmail(scan);
         dataSource.insertEmployee(nif, name, address, birthDate, password, email, accessLevel);
         logger.info("Employee insertion completed.");
     }
@@ -202,24 +202,24 @@ public abstract class BackOffice implements getInputValues {
         }
         logger.info("Continuing with insurance insertion.");
         System.out.println("Enter policy number: ");
-        int policyNumber = getPolicy(scan, logger);
+        int policyNumber = getPolicy(scan);
         logger.info("Policy number entered: " + policyNumber);
         System.out.println("Enter plate number in format XX-XX-XX: ");
-        String plateNumberForInsurance = getPlate(scan, logger);
+        String plateNumberForInsurance = getPlate(scan);
         System.out.println("Enter start date (yyyy-mm-dd):");
-        Date startDate = getDate(scan, logger);
+        Date startDate = getDate(scan);
         logger.info("Start date entered: " + startDate);
         System.out.println("""
                 Enter extra category number for:
                     Comprehensive Insurance -> 1
                     Auto Liability Insurance -> 2
                     Theft Insurance -> 3""");
-        int extraCategory = getInteger(scan, logger);
+        int extraCategory = getInteger(scan);
         System.out.println("Enter expiry date (yyyy-mm-dd):");
-        Date expiryDate = getDate(scan, logger);
+        Date expiryDate = getDate(scan);
         logger.info("Expiry date entered: " + expiryDate);
         System.out.println("Enter company name:");
-        String companyName = getString(scan, logger);
+        String companyName = getString(scan);
         logger.info("Company name entered: " + companyName);
 
         dataSource.insertInsurance(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName);
@@ -237,12 +237,12 @@ public abstract class BackOffice implements getInputValues {
         }
         logger.info("Continuing with ticket insertion.");
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, logger);
+        int nif = getNIF(scan);
         logger.info("NIF entered: " + nif);
         System.out.println("Enter plate number: ");
-        String plateNumberForTicket = getPlate(scan, logger);
+        String plateNumberForTicket = getPlate(scan);
         System.out.println("Enter date (yyyy-mm-dd):");
-        Date ticketDate = getDate(scan, logger);
+        Date ticketDate = getDate(scan);
         logger.info("Ticket date entered: " + ticketDate);
         System.out.println("""
                 Enter reason number for:
@@ -251,13 +251,13 @@ public abstract class BackOffice implements getInputValues {
                 Illegal Parking -> 3
                 Reckless Driving -> 4
                 DUI -> 5""");
-        int reason = getInteger(scan, logger);
+        int reason = getInteger(scan);
         logger.info("Reason number entered: " + reason);
         System.out.println("Enter ticket value: ");
-        double ticketValue = getDouble(scan, logger);
+        double ticketValue = getDouble(scan);
         logger.info("Ticket value entered: " + ticketValue);
         System.out.println("Enter expiry date (yyyy-MM-dd):");
-        Date ticketExpiryDate = getDate(scan, logger);
+        Date ticketExpiryDate = getDate(scan);
         logger.info("Ticket expiry date entered: " + ticketExpiryDate);
 
         logger.info("Inserting ticket data into the database.");
@@ -277,10 +277,10 @@ public abstract class BackOffice implements getInputValues {
         }
         logger.info("Continuing with vehicle color update.");
         System.out.println("Enter plate number: ");
-        String plateForUpdateColor = getPlate(scan, logger);
+        String plateForUpdateColor = getPlate(scan);
         logger.info("Plate number entered for color update: " + plateForUpdateColor);
         System.out.println("Enter new color: ");
-        String newColor = getString(scan, logger);
+        String newColor = getString(scan);
         logger.info("New color entered: " + newColor);
         logger.info("Updating vehicle color in the database.");
 
@@ -300,10 +300,10 @@ public abstract class BackOffice implements getInputValues {
         }
         logger.info("Continuing with vehicle owner change.");
         System.out.println("Enter plate number in format XX-XX-XX:");
-        String plateForChangeOwner = getPlate(scan, logger);
+        String plateForChangeOwner = getPlate(scan);
         logger.info("Plate number entered for owner change: " + plateForChangeOwner);
         System.out.println("Enter new owner NIF:");
-        int newOwnerNif = getNIF(scan, logger);
+        int newOwnerNif = getNIF(scan);
         logger.info("New owner NIF entered: " + newOwnerNif);
         logger.info("Changing vehicle owner in the database.");
 
@@ -323,20 +323,20 @@ public abstract class BackOffice implements getInputValues {
         }
         logger.info("Continuing with insurance renewal.");
         System.out.println("Enter insurance policy number: ");
-        int policyForRenew = getPolicy(scan, logger);
+        int policyForRenew = getPolicy(scan);
         logger.info("Insurance policy number entered for renewal: " + policyForRenew);
 
         System.out.println("Enter start date (yyyy-mm-dd):");
-        Date newStartDate = getDate(scan, logger);
+        Date newStartDate = getDate(scan);
         logger.info("New start date entered for renewal: " + newStartDate);
         System.out.println("Enter expiry date (yyyy-MM-dd):");
-        Date newExpiryDate = getDate(scan, logger);
+        Date newExpiryDate = getDate(scan);
         logger.info("New expiry date entered for renewal: " + newExpiryDate);
         System.out.println("Enter extra category:");
-        int newExtraCategory = getInteger(scan, logger);
+        int newExtraCategory = getInteger(scan);
         logger.info("New extra category entered for renewal: " + newExtraCategory);
         System.out.println("Enter company name:");
-        String newCompanyName = getString(scan, logger);
+        String newCompanyName = getString(scan);
         logger.info("New company name entered for renewal: " + newCompanyName);
 
         logger.info("Renewing insurance in the database.");
@@ -357,13 +357,13 @@ public abstract class BackOffice implements getInputValues {
         }
         logger.info("Continuing with ticket payment.");
         System.out.println("Enter plate number in format XX-XX-XX:");
-        String plate7 = getPlate(scan, logger);
+        String plate7 = getPlate(scan);
         logger.info("Plate number entered for ticket payment: " + plate7);
         System.out.println("Enter date (yyyy-MM-dd):");
-        Date date7 = getDate(scan, logger);
+        Date date7 = getDate(scan);
         logger.info("Payment date entered: " + date7);
         System.out.println("Amount of money: ");
-        double d7 = getDouble(scan, logger);
+        double d7 = getDouble(scan);
         logger.info("Payment amount entered: " + d7);
 
         logger.info("Processing ticket payment in the database.");
@@ -527,9 +527,9 @@ public abstract class BackOffice implements getInputValues {
                         break;
                     }
                     System.out.println("Enter NIF: ");
-                    int nif = getNIF(scan, logger);
+                    int nif = getNIF(scan);
                     System.out.println("Enter new access level: ");
-                    int accessLevel = getInteger(scan, logger);
+                    int accessLevel = getInteger(scan);
                     dataSource.updateEmployeeAccessLevel(nif, accessLevel);
                     logger.info("Employee access level changed.");
                 }
@@ -553,9 +553,9 @@ public abstract class BackOffice implements getInputValues {
                         break;
                     }
                     System.out.println("Enter NIF: ");
-                    int nif = getNIF(scan, logger);
+                    int nif = getNIF(scan);
                     System.out.println("Enter new email: ");
-                    String email = getEmail(scan, logger);
+                    String email = getEmail(scan);
                     dataSource.updatePersonEmail(nif, email);
                     logger.info("Employee email changed.");
                 }
@@ -652,7 +652,7 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter VIN: ");
-        String vin = getVIN(scan, logger);
+        String vin = getVIN(scan);
         Collections.sort(vehiclesList);
         for (Vehicle vehicle : vehiclesList) {
             if (vehicle.getVin() != null && vehicle.getVin().equals(vin)) {
@@ -677,7 +677,7 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, logger);
+        int nif = getNIF(scan);
         Collections.sort(vehicleList);
         for (Vehicle vehicle : vehicleList) {
             if (vehicle.getNif() == nif) {
@@ -702,7 +702,7 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter plate: ");
-        s = getPlate(scan, logger);
+        s = getPlate(scan);
         Collections.sort(vehicleList);
         for (Vehicle vehicle : vehicleList) {
             if (vehicle.getPlate().equals(s)) {
@@ -728,13 +728,13 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
                 1 - To see from the most recent date
                 2 - To see from the oldest date""");
 
-        int order = getInteger(scan, logger);
+        int order = getInteger(scan);
 
         if (order == 1 || order < 0 || order > 2) {
             vehicleList.sort(Comparator.comparing(Vehicle::getregistrationDate));
@@ -743,9 +743,9 @@ public abstract class BackOffice implements getInputValues {
         }
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(vehicleList, 10, logger);
+            displayList(vehicleList, 10);
         } else {
-            displayList(vehicleList, rowsPerPage, logger);
+            displayList(vehicleList, rowsPerPage);
         }
         logger.info("Exiting viewVehicleByRegistrationDate method.");
     }
@@ -761,13 +761,13 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         Collections.sort(vehicleList);
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(vehicleList, 10, logger);
+            displayList(vehicleList, 10);
         } else {
-            displayList(vehicleList, rowsPerPage, logger);
+            displayList(vehicleList, rowsPerPage);
         }
 
         logger.info("Exiting viewVehicleByNIF method.");
@@ -784,12 +784,12 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
         vehicleList.sort(Comparator.comparing(Vehicle::getPlate));
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(vehicleList, 10, logger);
+            displayList(vehicleList, 10);
         } else {
-            displayList(vehicleList, rowsPerPage, logger);
+            displayList(vehicleList, rowsPerPage);
         }
         logger.info("Exiting viewVehicleByPlate method.");
     }
@@ -849,13 +849,13 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter number of rows per page, max is 20: ");
 
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
                 1 - To sse from the most recent expiration date
                 2 - To see from the oldest expiration date""");
 
-        int order = getInteger(scan, logger);
+        int order = getInteger(scan);
 
         if (order == 1 || order < 0 || order > 2) {
             ticketList.sort(Comparator.comparing(Ticket::getExpiry_date));
@@ -864,9 +864,9 @@ public abstract class BackOffice implements getInputValues {
         }
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(ticketList, 10, logger);
+            displayList(ticketList, 10);
         } else {
-            displayList(ticketList, rowsPerPage, logger);
+            displayList(ticketList, rowsPerPage);
         }
     }
 
@@ -880,7 +880,7 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter plate: ");
-        String plate = getPlate(scan, logger);
+        String plate = getPlate(scan);
 
         ticketList.sort(Comparator.comparing(Ticket::getPlate));
         for (Ticket t : ticketList) {
@@ -905,7 +905,7 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, logger);
+        int nif = getNIF(scan);
 
         ticketList.sort(Comparator.comparing(Ticket::getNif));
         for (Ticket t : ticketList) {
@@ -930,13 +930,13 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter number of rows per page, max is 20: ");
 
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
                 1 - To see from the most recent date
                 2 - To see from the oldest date""");
 
-        int order = getInteger(scan, logger);
+        int order = getInteger(scan);
 
         if (order == 1 || order < 0 || order > 2) {
             ticketList.sort(Comparator.comparing(Ticket::getDate));
@@ -945,9 +945,9 @@ public abstract class BackOffice implements getInputValues {
         }
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(ticketList, 10, logger);
+            displayList(ticketList, 10);
         } else {
-            displayList(ticketList, rowsPerPage, logger);
+            displayList(ticketList, rowsPerPage);
         }
         logger.info("Exiting viewTicketByRegistrationDate method.");
     }
@@ -963,13 +963,13 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter number of rows per page, max is 20: ");
 
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
         Collections.sort(ticketList);
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(ticketList, 10, logger);
+            displayList(ticketList, 10);
         } else {
-            displayList(ticketList, rowsPerPage, logger);
+            displayList(ticketList, rowsPerPage);
         }
         logger.info("Exiting viewTicketByNIF method.");
     }
@@ -985,13 +985,13 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter number of rows per page, max is 20: ");
 
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         ticketList.sort(Comparator.comparing(Ticket::getPlate));
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(ticketList, 10, logger);
+            displayList(ticketList, 10);
         } else {
-            displayList(ticketList, rowsPerPage, logger);
+            displayList(ticketList, rowsPerPage);
         }
         logger.info("Exiting viewTicketByPlate method.");
     }
@@ -1053,7 +1053,7 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter policy: ");
 
-        int policy = getPolicy(scan, logger);
+        int policy = getPolicy(scan);
 
         Collections.sort(insuranceList);
         for (Insurance t : insuranceList) {
@@ -1078,7 +1078,7 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter NIF: ");
 
-        int nif = getNIF(scan, logger);
+        int nif = getNIF(scan);
 
         Collections.sort(insuranceList);
         List<Vehicle> vehicleList = dataSource.queryVehicles();
@@ -1109,7 +1109,7 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter plate: ");
 
-        String plate = getPlate(scan, logger);
+        String plate = getPlate(scan);
 
         Collections.sort(insuranceList);
         for (Insurance t : insuranceList) {
@@ -1133,13 +1133,13 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
                 1 - To see from the most recent date
                 2 - To see from the oldest date""");
 
-        int order = getInteger(scan, logger);
+        int order = getInteger(scan);
 
         if (order == 1 || order < 0 || order > 2) {
             insuranceList.sort(Comparator.comparing(Insurance::getStartDate));
@@ -1148,9 +1148,9 @@ public abstract class BackOffice implements getInputValues {
         }
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(insuranceList, 10, logger);
+            displayList(insuranceList, 10);
         } else {
-            displayList(insuranceList, rowsPerPage, logger);
+            displayList(insuranceList, rowsPerPage);
         }
         logger.info("Exiting viewInsuranceByRegistrationDate method.");
     }
@@ -1165,13 +1165,13 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
                 1 - To see from the most recent expiration date
                 2 - To see from the oldest expiration date""");
 
-        int order = getInteger(scan, logger);
+        int order = getInteger(scan);
 
         if (order == 1 || order < 0 || order > 2) {
             insuranceList.sort(Comparator.comparing(Insurance::getExpDate));
@@ -1180,9 +1180,9 @@ public abstract class BackOffice implements getInputValues {
         }
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(insuranceList, 10, logger);
+            displayList(insuranceList, 10);
         } else {
-            displayList(insuranceList, rowsPerPage, logger);
+            displayList(insuranceList, rowsPerPage);
         }
         logger.info("Exiting viewInsuranceByExpiryDate method.");
     }
@@ -1199,14 +1199,14 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter number of rows per page, max is 20: ");
 
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         Collections.sort(insuranceList);
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(insuranceList, 10, logger);
+            displayList(insuranceList, 10);
         } else {
-            displayList(insuranceList, rowsPerPage, logger);
+            displayList(insuranceList, rowsPerPage);
         }
         logger.info("Exiting viewInsuranceByNIF method.");
     }
@@ -1222,14 +1222,14 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter number of rows per page, max is 20: ");
 
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         insuranceList.sort(Comparator.comparing(Insurance::getCarPlate));
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(insuranceList, 10, logger);
+            displayList(insuranceList, 10);
         } else {
-            displayList(insuranceList, rowsPerPage, logger);
+            displayList(insuranceList, rowsPerPage);
         }
         logger.info("Exiting viewInsuranceByPlate method.");
     }
@@ -1243,16 +1243,16 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
 
         List<Employee> employeeList = dataSource.queryEmployees();
         Collections.sort(employeeList);
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(employeeList, 10, logger);
+            displayList(employeeList, 10);
         } else {
-            displayList(employeeList, rowsPerPage, logger);
+            displayList(employeeList, rowsPerPage);
 
         }
     }
@@ -1345,7 +1345,7 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter policy: ");
 
-        int policy = getPolicy(scan, logger);
+        int policy = getPolicy(scan);
 
         List<Insurance> insuranceList = dataSource.queryInsurances();
         List<Vehicle> vehicleList = dataSource.queryVehicles();
@@ -1378,7 +1378,7 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter driver's license number: ");
-        int driverLicense = getDriverLicense(scan, logger);
+        int driverLicense = getDriverLicense(scan);
 
         for (Customer customer : customerList) {
             if (customer.getDriverLicenseNum() == driverLicense) {
@@ -1401,7 +1401,7 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter driver's NIF: ");
 
-        int nif = getNIF(scan, logger);
+        int nif = getNIF(scan);
 
         for (Customer customer : customerList) {
             if (customer.getNif() == nif) {
@@ -1424,7 +1424,7 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter driver's plate: ");
 
-        String plate = getPlate(scan, logger);
+        String plate = getPlate(scan);
 
         List<Vehicle> vehicleList = dataSource.queryVehicles();
 
@@ -1453,13 +1453,13 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
                 1 - To see from the most recent date
                 2 - To see from the oldest date""");
 
-        int order = getInteger(scan, logger);
+        int order = getInteger(scan);
 
         if (order == 1 || order < 0 || order > 2) {
             customerList.sort(Comparator.comparing(Customer::getStartingDate));
@@ -1468,9 +1468,9 @@ public abstract class BackOffice implements getInputValues {
         }
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(customerList, 10, logger);
+            displayList(customerList, 10);
         } else {
-            displayList(customerList, rowsPerPage, logger);
+            displayList(customerList, rowsPerPage);
         }
         logger.info("Exiting viewCustomerByRegistrationDate method.");
     }
@@ -1485,13 +1485,13 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter number of rows per page, max is 20: ");
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         System.out.println("""
                 1 - To see from the most recent expiration date
                 2 - To see from the oldest expiration date""");
 
-        int order = getInteger(scan, logger);
+        int order = getInteger(scan);
 
         if (order == 1 || order < 0 || order > 2) {
             customerList.sort(Comparator.comparing(Customer::getExpDate));
@@ -1500,10 +1500,10 @@ public abstract class BackOffice implements getInputValues {
         }
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(customerList, 10, logger);
+            displayList(customerList, 10);
         } else {
 
-            displayList(customerList, rowsPerPage, logger);
+            displayList(customerList, rowsPerPage);
         }
         logger.info("Viewing customers by expiry date completed.");
     }
@@ -1519,14 +1519,14 @@ public abstract class BackOffice implements getInputValues {
         // Verificar se não é vazio.
         System.out.println("Enter number of rows per page, max is 20: ");
 
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         customerList.sort(Comparator.comparing(Customer::getNif));
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(customerList, 10, logger);
+            displayList(customerList, 10);
         } else {
-            displayList(customerList, rowsPerPage, logger);
+            displayList(customerList, rowsPerPage);
 
         }
         logger.info("Viewing customers by NIF completed.");
@@ -1542,14 +1542,14 @@ public abstract class BackOffice implements getInputValues {
         }
         System.out.println("Enter number of rows per page, max is 20: ");
 
-        int rowsPerPage = getInteger(scan, logger);
+        int rowsPerPage = getInteger(scan);
 
         customerList.sort(Comparator.comparing(Customer::getDriverLicenseNum));
 
         if (rowsPerPage > 20 || rowsPerPage < 0) {
-            displayList(customerList, 10, logger);
+            displayList(customerList, 10);
         } else {
-            displayList(customerList, rowsPerPage, logger);
+            displayList(customerList, rowsPerPage);
         }
         logger.info("Viewing customers by license completed.");
     }
@@ -1601,9 +1601,9 @@ public abstract class BackOffice implements getInputValues {
                         return;
                     }
                     System.out.println("Enter NIF: ");
-                    int nif = getNIF(scan, logger);
+                    int nif = getNIF(scan);
                     System.out.println("Enter new email:");
-                    String email = getString(scan, logger);
+                    String email = getString(scan);
                     dataSource.updatePersonEmail(nif, email);
                     logger.info("Customer email changed.");
                 }
@@ -1631,9 +1631,9 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, logger);
+        int nif = getNIF(scan);
         System.out.println("Enter new password:");
-        String password = getPassword(scan, logger);
+        String password = getPassword(scan);
         password = BCrypt.hashpw(password, BCrypt.gensalt());
         dataSource.updatePersonPassword(nif, password);
         logger.info("Customer password changed.");
@@ -1648,9 +1648,9 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, logger);
+        int nif = getNIF(scan);
         System.out.println("Enter new address:");
-        String address = getString(scan, logger);
+        String address = getString(scan);
         dataSource.updatePersonAddress(nif, address);
         logger.info("Customer address changed.");
     }
@@ -1664,11 +1664,11 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter driver's license number: ");
-        int dricerLicense = getDriverLicense(scan, logger);
+        int dricerLicense = getDriverLicense(scan);
         System.out.println("Enter new emission date: ");
-        Date date = getDate(scan, logger);
+        Date date = getDate(scan);
         System.out.println("Enter new expiration date: ");
-        Date expdate = getDate(scan, logger);
+        Date expdate = getDate(scan);
         dataSource.updateCustomerDriverLicenseDates(date, expdate, dricerLicense);
         logger.info("Customer driver license renewed.");
     }
@@ -1681,7 +1681,7 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, getLogger());
+        int nif = getNIF(scan);
         getDataSource().deactivateCustomer(nif);
     }
 
@@ -1693,7 +1693,7 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter plate: ");
-        String plate = getPlate(scan, getLogger());
+        String plate = getPlate(scan);
         getDataSource().deactivateVehicle(plate);
     }
 
@@ -1705,7 +1705,7 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter policy number: ");
-        int policy = getPolicy(scan, getLogger());
+        int policy = getPolicy(scan);
         getDataSource().deactivateInsurance(policy);
     }
 
@@ -1717,7 +1717,7 @@ public abstract class BackOffice implements getInputValues {
             return;
         }
         System.out.println("Enter nif: ");
-        int nif = getNIF(scan, getLogger());
+        int nif = getNIF(scan);
         getDataSource().deactivateTicket(nif);
     }
 

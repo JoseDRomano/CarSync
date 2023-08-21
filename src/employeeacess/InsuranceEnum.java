@@ -19,7 +19,7 @@ public enum InsuranceEnum {
 
     public static String getString(InsuranceEnum isq) {
 
-        String s = switch (isq) {
+        return switch (isq) {
             case TABLE_INSURANCE -> "insurance";
             case COLUMN_INSURANCE_PLATE -> "plate";
             case COLUMN_INSURANCE_COMPANY -> "company";
@@ -54,7 +54,6 @@ public enum InsuranceEnum {
                     getString(InsuranceEnum.COLUMN_INSURANCE_POLICY) + " = ?";
             default -> throw new IllegalArgumentException("No such column or operation for vehicle table");
         };
-        return s;
     }
 
 

@@ -102,9 +102,9 @@ public class BackOfficeAdmin extends BackOffice {
             return;
         }
         System.out.println("Enter plate number: ");
-        String plateNumberForTicket = getPlate(scan, getLogger());
+        String plateNumberForTicket = getPlate(scan);
         System.out.println("Enter date (yyyy-mm-dd):");
-        Date ticketDate = getDate(scan, getLogger());
+        Date ticketDate = getDate(scan);
 
 //        printValues(nif, plateNumberForTicket, ticketDate);
         getDataSource().deleteTicket(plateNumberForTicket, ticketDate);
@@ -119,9 +119,9 @@ public class BackOfficeAdmin extends BackOffice {
         }
 
         System.out.println("Enter policy number: ");
-        int policyNumber = getPolicy(scan, getLogger());
+        int policyNumber = getPolicy(scan);
         System.out.println("Enter NIF: ");
-        int nif3 = getNIF(scan, getLogger());
+        int nif3 = getNIF(scan);
 
 //        printValues(policyNumber, nif3);
         getDataSource().deleteInsurance(policyNumber);
@@ -135,9 +135,9 @@ public class BackOfficeAdmin extends BackOffice {
             return;
         }
         System.out.println("Enter plate number: ");
-        String plate = getPlate(scan, getLogger());
+        String plate = getPlate(scan);
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, getLogger());
+        int nif = getNIF(scan);
 //        printValues(plate, nif);
         getDataSource().deleteVehicle(plate);
     }
@@ -151,7 +151,7 @@ public class BackOfficeAdmin extends BackOffice {
         }
 
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, getLogger());
+        int nif = getNIF(scan);
         getDataSource().deletePerson(nif);
     }
 
@@ -163,7 +163,7 @@ public class BackOfficeAdmin extends BackOffice {
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, getLogger());
+        int nif = getNIF(scan);
         getDataSource().deletePerson(nif);
     }
 
@@ -335,7 +335,7 @@ public class BackOfficeAdmin extends BackOffice {
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, getLogger());
+        int nif = getNIF(scan);
         getDataSource().deactivateEmployee(nif);
     }
 }

@@ -1,5 +1,7 @@
 
 
+import employeeacess.BackOfficeMenu;
+import model.Employee;
 import model.TaskManagment;
 import org.apache.log4j.Logger;
 
@@ -20,6 +22,11 @@ public class MainConnection {
 //        PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
 //        BackOffice.startBackOffice(296789012);
 //        MainConnection.initiate();
+
+        //Menu interativo
+        Employee employee = new Employee();
+        employee.setName("John Doe");
+        BackOfficeMenu backOfficeMenu = new BackOfficeMenu(employee);
 
     }
 

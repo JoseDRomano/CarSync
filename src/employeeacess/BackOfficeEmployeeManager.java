@@ -221,7 +221,7 @@ public class BackOfficeEmployeeManager extends BackOffice {
             return;
         }
         System.out.println("Enter NIF: ");
-        int nif = getNIF(scan, getLogger());
+        int nif = getNIF(scan);
         getDataSource().deactivateEmployee(nif);
     }
 

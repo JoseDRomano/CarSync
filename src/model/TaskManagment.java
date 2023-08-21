@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class TaskManagment {
 
@@ -19,6 +18,10 @@ public class TaskManagment {
     }
 
     public void printList() {
+       if(taskList.isEmpty()) {
+           System.out.println("No tasks to show");
+           return;
+       }
         taskList.forEach(task -> System.out.println(task.toString()));
     }
 
@@ -30,7 +33,7 @@ public class TaskManagment {
                 int taskID = getID(scanner.nextLine());
                 String taskType = taskType(scanner.nextLine());
                 String taskStatus = taskStatus(scanner.nextLine());
-                String taskDate = taskDate(scanner.nextLine()).toString();
+                String taskDate = taskDate(scanner.nextLine());
                 int nif = getNIF(scanner.nextLine());
                 String taskInfo = taskInfo(scanner.nextLine());
 
@@ -41,7 +44,7 @@ public class TaskManagment {
                 }
 
                 taskList.add(new Task(taskID, taskType, taskStatus,
-                        taskDate.toString(),
+                        taskDate,
                         nif,
                         taskInfo));
 
@@ -82,7 +85,12 @@ public class TaskManagment {
 
     public boolean deleteTaskFromFile(int taskID) {
         boolean result = false;
-        taskList.removeIf(task -> task.getTaskID() == taskID);
+        if(getTask(taskID) == null) {
+            return false;
+        }
+        else {
+            taskList.removeIf(task -> task.getTaskID() == taskID);
+        }
         taskList.sort(Task::compareTo);
         for(int i = 0; i < taskList.size(); i++) {
             taskList.get(i).setTaskID(i + 1);
@@ -103,11 +111,14 @@ public class TaskManagment {
     public boolean updateTaskStatus(String status, int taskID) {
         Path filePath = Path.of("tasks.txt");
         boolean result = false;
-        for (Task task : taskList) {
-            if (task.getTaskID() == taskID) {
-                task.setTaskStatus(status);
-            }
+
+        if(getTask(taskID) == null) {
+            return false;
         }
+        else {
+            getTask(taskID).setTaskStatus(status);
+        }
+
         taskList.sort(Task::compareTo);
         try {
             for (Task task : taskList) {
@@ -122,7 +133,17 @@ public class TaskManagment {
         return result;
     }
 
-    private static int getID(String s) {
+    public Task getTask(int taskID) {
+        for (Task task : taskList) {
+            if (task.getTaskID() == taskID) {
+                return task;
+            }
+        }
+        System.out.println("Task not found");
+        return null;
+    }
+
+    private int getID(String s) {
         if(s.isEmpty() || s.isBlank()) {
             return -1;
         }
@@ -130,7 +151,7 @@ public class TaskManagment {
         return Integer.parseInt(svalues[1].trim());
     }
 
-    private static String taskType(String s) {
+    private String taskType(String s) {
         if(s.isEmpty() || s.isBlank()) {
             return null;
         }
@@ -139,7 +160,7 @@ public class TaskManagment {
         return type.trim();
     }
 
-    private static String taskStatus(String s) {
+    private String taskStatus(String s) {
         if(s.isEmpty() || s.isBlank()) {
             return null;
         }
@@ -148,30 +169,28 @@ public class TaskManagment {
         return status.trim();
     }
 
-    private static java.sql.Date taskDate(String s) {
+    private String taskDate(String s) {
         if(s.isEmpty() || s.isBlank()) {
             return null;
         }
         String[] svalues = s.split(":");
         java.sql.Date date = java.sql.Date.valueOf(svalues[1].trim());
-        return date;
+        return date.toString();
     }
 
-    private static int getNIF(String s) {
+    private int getNIF(String s) {
         if(s.isEmpty() || s.isBlank()) {
             return -1;
         }
         String[] svalues = s.split(":");
-        int nif = Integer.parseInt(svalues[1].trim());
-        return nif;
+        return Integer.parseInt(svalues[1].trim());
     }
 
-    private static String taskInfo(String s) {
+    private String taskInfo(String s) {
         if(s.isEmpty() || s.isBlank()) {
             return null;
         }
         String[] svalues = s.split(":");
-        String info = svalues[1].trim();
-        return info;
+        return svalues[1].trim();
     }
 }

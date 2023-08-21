@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public interface getInputValues {
 
-    default Date getDate(Scanner scan, Logger logger) {
+    default Date getDate(Scanner scan) {
         Date sqlDate = null;
         boolean validInput = false;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -32,7 +32,7 @@ public interface getInputValues {
         return sqlDate;
     }
 
-    default java.sql.Date getBirthDate(Scanner scan, Logger logger) {
+    default java.sql.Date getBirthDate(Scanner scan) {
         java.sql.Date bDate = null;
         boolean validInput = false;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -58,7 +58,7 @@ public interface getInputValues {
         return bDate;
     }
 
-    default int getNIF(Scanner scan, Logger logger) {
+    default int getNIF(Scanner scan) {
         int nif = 0;
         boolean validInput = false;
 
@@ -77,7 +77,7 @@ public interface getInputValues {
     }
 
 
-    default int getDriverLicense(Scanner scan, Logger logger) {
+    default int getDriverLicense(Scanner scan) {
         int driverLicense = 0;
         boolean validInput = false;
 
@@ -96,7 +96,7 @@ public interface getInputValues {
     }
 
 
-    default int getPolicy(Scanner scan, Logger logger) {
+    default int getPolicy(Scanner scan) {
         int policy = 0;
         boolean validInput = false;
 
@@ -114,7 +114,7 @@ public interface getInputValues {
         return policy;
     }
 
-    default String getPlate(Scanner scan, Logger logger) {
+    default String getPlate(Scanner scan) {
         String plate = null;
         boolean validInput = false;
 
@@ -132,7 +132,7 @@ public interface getInputValues {
         return plate;
     }
 
-    default String getString(Scanner scan, Logger logger) {
+    default String getString(Scanner scan) {
         String str = null;
         boolean validInput = false;
 
@@ -151,7 +151,7 @@ public interface getInputValues {
     }
 
 
-    default String getVIN(Scanner scan, Logger logger) {
+    default String getVIN(Scanner scan) {
         String str = null;
         boolean validInput = false;
 
@@ -169,7 +169,7 @@ public interface getInputValues {
         return str;
     }
 
-    default double getDouble(Scanner scan, Logger logger) {
+    default double getDouble(Scanner scan) {
         double amount = 0.00;
         boolean validInput = false;
 
@@ -216,7 +216,7 @@ public interface getInputValues {
     }
 
 
-    default String getPassword(Scanner scan, Logger logger) {
+    default String getPassword(Scanner scan) {
         String password = null;
         boolean validInput = false;
 
@@ -241,8 +241,8 @@ public interface getInputValues {
         return password;
     }
 
-    default int getInteger(Scanner scan, Logger logger) {
-        logger.info("Getting integer input...");
+    default int getInteger(Scanner scan) {
+//        logger.info("Getting integer input...");
         int value = 0;
         boolean validInput = false;
         do {
@@ -256,12 +256,12 @@ public interface getInputValues {
             }
         } while (!validInput);
 
-        logger.info("Integer input obtained: " + value);
+//        logger.info("Integer input obtained: " + value);
         return value;
     }
 
-    default void displayList(List<?> objects, int rowsPerPage, Logger logger) {
-        logger.info("Displaying list...");
+    default void displayList(List<?> objects, int rowsPerPage) {
+//        logger.info("Displaying list...");
         Scanner scanner = new Scanner(System.in);
         int currentPosition = 0; // Always start from the first position
         int totalObjects = objects.size();
@@ -299,10 +299,10 @@ public interface getInputValues {
                 }
             }
         }
-        logger.info("Displaying list completed.");
+//        logger.info("Displaying list completed.");
     }
 
-    default String getEmail(Scanner scan, Logger logger) {
+    default String getEmail(Scanner scan) {
         String email = null;
         boolean validInput = false;
 

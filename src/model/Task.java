@@ -20,6 +20,17 @@ public class Task implements Comparable<Task> {
         this.values = values;
     }
 
+    private enum TaskType {
+        CUSTOMER_REGISTRATION, VEHICLE_REGISTRATION,
+        INSURANCE_REGISTRATION, TICKET_REGISTRATION, EMPLOYEE_REGISTRATION,
+        CUSTOMER_REMOVAL, VEHICLE_REMOVAL,
+        INSURANCE_REMOVAL, TICKET_REMOVAL, EMPLOYEE_REMOVAL,
+        CUSTOMER_DEACTIVATION, VEHICLE_DEACTIVATION,
+        INSURANCE_DEACTIVATION, TICKET_DEACTIVATION, EMPLOYEE_DEACTIVATION,
+        CUSTOMER_UPDATE, VEHICLE_UPDATE,
+        INSURANCE_UPDATE, TICKET_UPDATE, EMPLOYEE_UPDATE;
+    }
+
     public Task(int taskID, String taskType, String taskDate, int nif, String values) {
         new Task(taskID, taskType, "Open", taskDate, nif, values);
     }
