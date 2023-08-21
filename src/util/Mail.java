@@ -1,5 +1,7 @@
 package util;
 
+import employeeacess.DataSource;
+
 import java.util.Random;
 
 import java.util.Properties;
@@ -19,7 +21,7 @@ public class Mail {
     //SETUP MAIL SERVER PROPERTIES
     //DRAFT AN EMAIL
     //SEND EMAIL
-
+    DataSource dataSource = new DataSource();
     Session newSession = null;
     MimeMessage mimeMessage = null;
 
@@ -34,8 +36,12 @@ public class Mail {
         System.out.println("Email successfully sent!!!");
     }
 
-    public MimeMessage draftEmail(String name, Session newSession) throws  MessagingException {
-        String email = "";
+    public MimeMessage draftEmail(String nif, Session newSession) throws  MessagingException {
+        //Extract from table person the email of the person
+        //Extract from table person the name of the person with the nif
+
+        String name = dataSource.queryCustomersHashMap().get(nif).getName();
+        String email = dataSource.queryCustomersHashMap().get(nif).getEmail();
         String emailSubject = "Password Recovery Request";
         String emailBody =
                 "Dear " + name + ",\n" +

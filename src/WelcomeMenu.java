@@ -90,6 +90,8 @@ class Register {
         System.out.println("Enter birthdate (YYYY-MM-DD):");
         String birthdate = validateDate(scanner);
 
+        String email = validateEmail(scanner);
+
         //Password
         String password = validatePWD(scanner);
 
@@ -103,8 +105,6 @@ class Register {
         String starting_date = validateDate(scanner);
         System.out.println("Expiration date (YYYY-MM-DD):");
         String expiration_date = validateDate(scanner);
-        System.out.println("Enter email:");
-        String email = scanner.nextLine().trim();
 
         /*código SQL para registar na base de dados*/
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
@@ -117,6 +117,18 @@ class Register {
         System.out.println(SUCCESSFUL_REGISTER);
         Login login = new Login();
         login.run(dataSource);
+    }
+
+    private String validateEmail(Scanner scanner) {
+        System.out.println("Enter email:");
+        String email = scanner.nextLine().trim();
+
+        while (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            System.out.println("Invalid email. Please try again");
+            System.out.println("Enter email:");
+            email = scanner.nextLine().trim();
+        }
+        return email;
     }
 
     //check if the passowrd is at least 8 characters long
