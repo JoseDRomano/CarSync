@@ -212,6 +212,53 @@ public class BackOfficeMenu extends JFrame {
             insertMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> System.exit(0));
+        ActionListener goToPageListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton button = (JButton) e.getSource();
+                mainFrame.setVisible(false);
+
+                if (button == vehicleInsert) insertVehicle(insertMenuFrame);
+            /*    else if (button == employeeInsert) insertEmployee();
+                else if (button == customerInsert) insertCustomer();
+                else if (button == ticketInsert) insertTicket();
+                else if (button == insuranceInsert) insertInsurance();*/
+            }
+        };
+    }
+
+    private void insertVehicle(JFrame insertFrame) {
+        /*JFrame insertVehicleFrame = new JFrame("Insert Vehicle");
+        insertVehicleFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        insertVehicleFrame.setSize(WIDTH, HEIGHT);
+        JButton exitButton = new JButton("Exit");
+        JButton backButton = new JButton("Back");
+        JButton insertButton = new JButton("Submit");
+        JTextField plate = new JTextField("Plate");
+        JTextField model = new JTextField("Model");
+        JTextField color = new JTextField("Color");
+        JTextField registrationDate = new JTextField("Regitration Date (YYYY-MM-DD)");
+        JTextField vin = new JTextField("VIN");
+        JTextField nif = new JTextField("NIF");
+        JComboBox<String> category = new JComboBox<>(new String[]{"Light Commercial Vehicle",
+                "Light Passenger Vehicle",
+                "Heavy-duty Commercial Vehicle",
+                "Heavy-duty Passenger Vehicle",
+                "Motorcycle", "Moped",
+                "Heavy-duty Passenger Vehicle"});
+        JPanel insertVehiclePanel = new JPanel();
+        insertVehiclePanel.setLayout(new GridLayout(7, 1));
+        insertVehiclePanel.add(insertButton);
+        insertVehiclePanel.add(backButton);
+        insertVehiclePanel.add(exitButton);
+        insertVehicleFrame.add(insertVehiclePanel);
+        insertVehicleFrame.setVisible(true);
+        backButton.addActionListener(e -> {
+            insertFrame.setVisible(true);
+            insertVehicleFrame.setVisible(false);
+        });
+        exitButton.addActionListener(e -> System.exit(0));*/
+
     }
 
 
