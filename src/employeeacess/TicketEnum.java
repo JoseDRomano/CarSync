@@ -11,6 +11,7 @@ public enum TicketEnum {
     COLUMN_TICKET_REASON,
     COLUMN_TICKET_PAID,
     COLUMN_TICKET_DEACTIVATED,
+    COLUMN_TICKET_ID,
     INSERT_TICKET,
     DELETE_TICKET,
     UPDATE_TICKET,
@@ -30,6 +31,7 @@ public enum TicketEnum {
             case COLUMN_TICKET_REASON -> "reason";
             case COLUMN_TICKET_PAID -> "paid";
             case COLUMN_TICKET_DEACTIVATED -> "deactivated";
+            case COLUMN_TICKET_ID -> "ticketID";
             case INSERT_TICKET -> "INSERT INTO " + getString(TABLE_TICKET) + '('
                     + getString(COLUMN_TICKET_DATE) + ", " +
                     getString(COLUMN_TICKET_PLATE) + ", " +

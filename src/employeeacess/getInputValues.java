@@ -32,6 +32,8 @@ public interface getInputValues {
         return sqlDate;
     }
 
+
+
     default java.sql.Date getBirthDate(Scanner scan) {
         java.sql.Date bDate = null;
         boolean validInput = false;

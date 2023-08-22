@@ -118,7 +118,7 @@ public abstract class BackOffice implements getInputValues {
         System.out.println("Enter NIF: ");
         int nif2 = getNIF(scan);
 
-        dataSource.insertVehicle(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2);
+//        dataSource.insertVehicle(plateNumber, vin, color, brand, model, registrationDate, categoryNumber, nif2);
     }
 
 

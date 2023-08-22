@@ -91,7 +91,7 @@ public class Vehicle implements Comparable<Vehicle>{
     public void setCategory(String category) {
         this.category = category;
     }
-    public void setCategory(int categoryNumber) {
+    /*public void setCategory(int categoryNumber) {
         String s = switch (categoryNumber) {
             case 1 -> this.category = "Light Commercial Vehicle";
             case 2 -> this.category = "Light Passenger Vehicle";
@@ -101,7 +101,7 @@ public class Vehicle implements Comparable<Vehicle>{
             case 6 -> this.category = "Moped";
             default -> throw new IllegalStateException("No such category");
         };
-    }
+    }*/
 
 
     @Override

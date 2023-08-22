@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * Para Fazer login chamar método authenticateUser e fazer a verificação; de seguida chamar o método getDummy
@@ -276,7 +277,7 @@ public class DataSource {
             while (resultSet.next()) {
                 Vehicle vehicle = new Vehicle();
                 vehicle.setPlate(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_PLATE)));
-                vehicle.setCategory(resultSet.getInt(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_CATEGORY)));
+                vehicle.setCategory(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_CATEGORY)));
                 vehicle.setBrand(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_BRAND)));
                 vehicle.setColor(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_COLOR)));
                 vehicle.setModel(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_MODEL)));
@@ -358,6 +359,7 @@ public class DataSource {
                 ticket.setValue(resultSet.getDouble(TicketEnum.getString(TicketEnum.COLUMN_TICKET_VALUE)));
                 ticket.setExpiry_date(resultSet.getDate(TicketEnum.getString(TicketEnum.COLUMN_TICKET_EXPIRY_DATE)));
                 ticket.setPaid(resultSet.getInt(TicketEnum.getString(TicketEnum.COLUMN_TICKET_PAID)));
+                ticket.setTicketID(resultSet.getInt(TicketEnum.getString(TicketEnum.COLUMN_TICKET_ID)));
                 tickets.add(ticket);
             }
             return tickets;
@@ -577,13 +579,13 @@ public class DataSource {
     //TESTED
     public void insertVehicle(String plate, String vin, String color,
                               String brand, String model, Date registrationDate,
-                              int categoryNumber, int nif) {
+                              String category, int nif) {
 
         //Verfica se matricula é válida
-        if (!plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$") || categoryNumber <= 0 || categoryNumber > 6) {
+        /*if (!plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$") || categoryNumber <= 0 || categoryNumber > 6) {
             System.out.println("Wrong input: " + plate + " " + categoryNumber);
             return;
-        }
+        }*/
 
         //Verifica se o veículo já existe na base de dados
         for (Vehicle v : queryVehicles()) {
@@ -606,7 +608,7 @@ public class DataSource {
             insertIntoVehicle.setString(2, brand);
             insertIntoVehicle.setString(3, color);
             insertIntoVehicle.setString(4, plate);
-            insertIntoVehicle.setInt(5, categoryNumber);
+            insertIntoVehicle.setString(5, category);
             insertIntoVehicle.setString(6, registrationDate.toString());
             insertIntoVehicle.setInt(7, nif);
             insertIntoVehicle.setString(8, vin);
@@ -1342,6 +1344,7 @@ public class DataSource {
     private boolean insertPerson(int nif, String name, String address, Date bDate, String password, String email) {
 
         boolean result = false;
+        password = BCrypt.hashpw(password, BCrypt.gensalt());
 
         try {
             connection.setAutoCommit(false);
@@ -1384,7 +1387,7 @@ public class DataSource {
     }
 
     public void insertCustomer(int nif, String name, String address, Date bDate, String password, String email,
-                               int driverLicense, int licenseType, Date registrationDate, Date expirationDate) {
+                               int driverLicense, String licenseType, Date registrationDate, Date expirationDate) {
 
         if (!insertPerson(nif, name, address, bDate, password, email)) {
             System.out.println("Couldn't insert person with nif: " + nif);
@@ -1395,7 +1398,7 @@ public class DataSource {
             connection.setAutoCommit(false);
             insertIntoCustomer.setInt(1, nif);
             insertIntoCustomer.setInt(2, driverLicense);
-            insertIntoCustomer.setInt(3, licenseType);
+//            insertIntoCustomer.setInt(3, licenseType);
             insertIntoCustomer.setDate(4, registrationDate);
             insertIntoCustomer.setDate(5, expirationDate);
             int affected = insertIntoCustomer.executeUpdate();

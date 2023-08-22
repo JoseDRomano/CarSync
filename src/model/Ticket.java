@@ -1,8 +1,6 @@
 package model;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.util.Comparator;
 
 public class Ticket implements Comparable<Ticket> {
 
@@ -14,6 +12,15 @@ public class Ticket implements Comparable<Ticket> {
     private String reason;
     private boolean isPaid = false;
     private boolean deactivated = false;
+    private int ticketID;
+
+
+    public void setTicketID(int ticketID) {
+        this.ticketID = ticketID;
+    }
+    public int getTicketID() {
+        return ticketID;
+    }
 
     public void deactivate() {
         this.deactivated = true;
@@ -29,7 +36,7 @@ public class Ticket implements Comparable<Ticket> {
     }
 
     public boolean setPaid(int paid) {
-        if(paid == 1) {
+        if (paid == 1) {
             isPaid = true;
             return true;
         }
@@ -37,17 +44,18 @@ public class Ticket implements Comparable<Ticket> {
     }
 
     public boolean payTicket(double value) {
-        if(isPaid == true) {
+        if (isPaid == true) {
             System.out.println("Ticket already paid");
             return false;
         }
-        if(value >= this.value) {
+        if (value >= this.value) {
             setPaid(1);
             return true;
         }
         System.out.println("Value not enough to pay ticket");
         return false;
     }
+
     public String getPlate() {
         return plate;
     }
@@ -100,7 +108,7 @@ public class Ticket implements Comparable<Ticket> {
     }
 
     public void setNif(int nif) {
-        if(nif < 200000000  || nif > 299999999) {
+        if (nif < 200000000 || nif > 299999999) {
             throw new IllegalArgumentException("NIF must have 9 digits");
         }
         this.nif = nif;
@@ -122,7 +130,6 @@ public class Ticket implements Comparable<Ticket> {
     public int compareTo(Ticket o) {
         return this.nif - o.nif;
     }
-
 
 
 }
