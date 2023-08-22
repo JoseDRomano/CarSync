@@ -1,6 +1,7 @@
 package employeeacess;
 
 import model.*;
+import util.UserWriterAux;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -1406,6 +1407,7 @@ public class DataSource {
             if (affected == 1) {
                 System.out.println("Inserted customer with nif: " + nif + " and driver license number: " + driverLicense);
                 connection.commit();
+                UserWriterAux userWriterAux = new UserWriterAux(nif, password, "customer with driver license number: " + driverLicense);
             } else {
                 deletePerson(nif);
                 throw new SQLException("Couldn't insert customer with nif: " + nif + " and driver license number: " + driverLicense);
@@ -1440,7 +1442,6 @@ public class DataSource {
             return;
         }
 
-
         try {
             connection.setAutoCommit(false);
             insertIntoEmployee.setInt(2, accessLevel);
@@ -1450,6 +1451,9 @@ public class DataSource {
             if (affected == 1) {
                 System.out.println("Inserted employee with nif: " + nif + ", name: " + name + " and access level: " + accessLevel);
                 connection.commit();
+                UserWriterAux userWriterAux = new UserWriterAux(nif, password, "employee with access level: " + accessLevel);
+                userWriterAux.writeToFile();
+
             } else {
                 deletePerson(nif);
                 throw new SQLException("Couldn't insert employee with nif: " + nif + ", name: " + name + "and access level: " + accessLevel);

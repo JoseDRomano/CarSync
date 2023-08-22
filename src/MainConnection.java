@@ -1,10 +1,15 @@
 
 
 import employeeacess.BackOfficeMenu;
+import employeeacess.MenuEmployee;
 import model.Employee;
 import model.TaskManagment;
 import org.apache.log4j.Logger;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -26,8 +31,9 @@ public class MainConnection {
         //Menu interativo
         Employee employee = new Employee();
         employee.setName("John Doe");
-        BackOfficeMenu backOfficeMenu = new BackOfficeMenu(employee);
+        //BackOfficeMenu backOfficeMenu = new BackOfficeMenu(employee);
 
+        MenuEmployee menuEmployee = new MenuEmployee(employee);
     }
 
   /*  private static void initiate() {
@@ -41,7 +47,5 @@ public class MainConnection {
             throw new RuntimeException(e);
         }
     }*/
-
-
 
 }
