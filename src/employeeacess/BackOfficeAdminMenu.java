@@ -1,13 +1,15 @@
 package employeeacess;
 
 import model.Employee;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
-import java.sql.SQLException;
+
+import static java.awt.Color.RED;
 
 public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
@@ -269,77 +271,69 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 insertMenuFrame.setVisible(false);
 
                 if (button == vehicleInsert) insertVehicle(insertMenuFrame);
-//                else if (button == employeeInsert) insertEmployee();
-//                else if (button == customerInsert) insertCustomer(insertMenuFrame);
+//                else if (button == employeeInsert) insertEmployee(insertMenuFrame);
+                else if (button == customerInsert) insertCustomer(insertMenuFrame);
 //                else if (button == ticketInsert) insertTicket();
 //                else if (button == insuranceInsert) insertInsurance();*/
             }
         };
         vehicleInsert.addActionListener(goToPageListener);
+        customerInsert.addActionListener(goToPageListener);
     }
 
     private void insertCustomer(JFrame insertMenuFrame) {
         JFrame insertCustomerFrame = new JFrame("Insert Customer");
         insertCustomerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertCustomerFrame.setSize(WIDTH, HEIGHT);
-        insertCustomerFrame.setLayout(new BorderLayout());
         insertCustomerFrame.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(5, 10, 5, 10);
 
-        JLabel insertCustomerLabel = new JLabel("Insert Customer");
+        JPanel insertCustomerPanel = new JPanel(new GridBagLayout());
+        insertCustomerPanel.setBackground(Color.WHITE);
+
+        JLabel insertCustomerLabel = new JLabel("Insert Customer Page");
         insertCustomerLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        insertCustomerLabel.setHorizontalAlignment(JLabel.CENTER);
-        insertCustomerLabel.setVerticalAlignment(JLabel.TOP);
-        insertCustomerFrame.setForeground(Color.BLACK);
-        insertCustomerFrame.add(insertCustomerLabel, gbc);
+        insertCustomerLabel.setForeground(Color.BLACK);
+        gbc.gridwidth = 3;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.PAGE_START;
+        insertCustomerPanel.add(insertCustomerLabel, gbc);
 
         JLabel nameLabel = new JLabel("Name: ");
-        JTextField nameField = new JTextField();
-        nameField.setPreferredSize(new Dimension(200, 24));
+        JTextField nameField = new JTextField(15);
 
         JLabel addressLabel = new JLabel("Address: ");
-        JTextField addressField = new JTextField();
-        addressField.setPreferredSize(new Dimension(200, 24));
+        JTextField addressField = new JTextField(15);
 
         JLabel emailLabel = new JLabel("Email: ");
-        JTextField emailField = new JTextField();
-        emailField.setPreferredSize(new Dimension(200, 24));
+        JTextField emailField = new JTextField(15);
 
         JLabel birthDateLabel = new JLabel("Birth Date: (YYYY-MM-DD)");
-        JTextField birthDateField = new JTextField();
-        birthDateField.setPreferredSize(new Dimension(200, 24));
+        JTextField birthDateField = new JTextField(15);
 
         JLabel passwordLabel = new JLabel("Password: ");
-        JTextField passwordField = new JTextField();
-        passwordField.setPreferredSize(new Dimension(200, 24));
+        JTextField passwordField = new JTextField(15);
 
         JLabel nifLabel = new JLabel("NIF: ");
-        JTextField nifField = new JTextField();
-        nifField.setPreferredSize(new Dimension(200, 24));
+        JTextField nifField = new JTextField(15);
 
         JLabel driverLicenseLabel = new JLabel("Driver License: ");
-        JTextField driverLicenseField = new JTextField();
-        driverLicenseField.setPreferredSize(new Dimension(200, 24));
+        JTextField driverLicenseField = new JTextField(15);
 
         JLabel licenseTypeLabel = new JLabel("License Type: ");
         JComboBox<String> licenseType = new JComboBox<>(new String[]{"A", "B", "C", "D"});
-        licenseType.setPreferredSize(new Dimension(200, 24));
 
         JLabel licenseDateLabel = new JLabel("License Date: (YYYY-MM-DD)");
-        JTextField licenseDateField = new JTextField();
-        licenseDateField.setPreferredSize(new Dimension(200, 24));
+        JTextField licenseDateField = new JTextField(15);
 
         JLabel licenseExpirationLabel = new JLabel("License Expiration: (YYYY-MM-DD)");
-        JTextField licenseExpirationField = new JTextField();
-        licenseExpirationField.setPreferredSize(new Dimension(200, 24));
+        JTextField licenseExpirationField = new JTextField(15);
 
         JButton submitButton = new JButton("Submit");
         submitButton.setBackground(GREEN);
         submitButton.setForeground(Color.WHITE);
-        submitButton.setPreferredSize(new Dimension(100, 20));
         submitButton.addActionListener(e -> {
             String name = nameField.getText();
             String address = addressField.getText();
@@ -372,18 +366,79 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             } else if (!isDate(licenseExpiration)) {
                 JOptionPane.showMessageDialog(insertCustomerFrame, "Wrong license expiration format");
             } else {
+                password = BCrypt.hashpw(password, BCrypt.gensalt());
                 dataSource.insertCustomer(Integer.parseInt(nif), name, address, Date.valueOf(birthDate),
                         password, email, Integer.parseInt(driverLicense), selectedLicenseType, Date.valueOf(licenseDate), Date.valueOf(licenseExpiration));
                 JOptionPane.showMessageDialog(insertCustomerFrame, "Customer inserted successfully");
-                insertCustomerFrame.setVisible(false);
-                insertMenuFrame.setVisible(true);
             }
+            insertCustomerFrame.setVisible(false);
+            insertCustomer(insertMenuFrame);
         });
 
+        JButton exitButton = new JButton("Exit");
+        JButton backButton = new JButton("Back");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            insertCustomerFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
 
-        gbc.gridwidth = 2;
-        //
+        backButton.setBackground(GREEN);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            insertMenuFrame.setVisible(true);
+            insertCustomerFrame.setVisible(false);
+        });
 
+        gbc.gridwidth = 1;
+        JLabel[] labels = {nameLabel, addressLabel, emailLabel, birthDateLabel,
+                passwordLabel, nifLabel, driverLicenseLabel, licenseDateLabel,
+                licenseExpirationLabel, licenseTypeLabel};
+        JTextField[] fields = {nameField, addressField, emailField, birthDateField,
+                passwordField, nifField, driverLicenseField,
+                licenseDateField, licenseExpirationField};
+
+        for (int row = 0; row < 10; row++) {
+            gbc.gridx = 0;
+            gbc.gridy = row + 1;
+            gbc.anchor = GridBagConstraints.EAST;
+            insertCustomerPanel.add(labels[row], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.WEST;
+            if (row == 9) {
+                insertCustomerPanel.add(licenseType, gbc);
+            } else {
+                insertCustomerPanel.add(fields[row], gbc);
+            }
+        }
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 6, 10);
+        insertCustomerPanel.add(submitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        insertCustomerPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        insertCustomerPanel.add(backButton, gbc);
+
+        insertCustomerFrame.add(insertCustomerPanel);
+        insertCustomerFrame.pack();
+        insertCustomerFrame.setVisible(true);
     }
 
     private void insertVehicle(JFrame insertFrame) {

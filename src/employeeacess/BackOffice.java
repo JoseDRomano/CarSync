@@ -158,8 +158,8 @@ public abstract class BackOffice implements getInputValues {
         Date expirationDate = getDate(scan);
         System.out.println("Enter email: ");
         String email = getEmail(scan);
-        dataSource.insertCustomer(nif, name, address, birthDate, password, email,
-                driverLicense, licenseType, registrationDate, expirationDate);
+//        dataSource.insertCustomer(nif, name, address, birthDate, password, email,
+//                driverLicense, licenseType, registrationDate, expirationDate);
         logger.info("Employee insertion completed.");
     }
 

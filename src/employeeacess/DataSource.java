@@ -1398,7 +1398,7 @@ public class DataSource {
             connection.setAutoCommit(false);
             insertIntoCustomer.setInt(1, nif);
             insertIntoCustomer.setInt(2, driverLicense);
-//            insertIntoCustomer.setInt(3, licenseType);
+            insertIntoCustomer.setString(3, licenseType);
             insertIntoCustomer.setDate(4, registrationDate);
             insertIntoCustomer.setDate(5, expirationDate);
             int affected = insertIntoCustomer.executeUpdate();

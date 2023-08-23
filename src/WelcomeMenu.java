@@ -110,7 +110,7 @@ class Register {
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
         dataSource.insertCustomer(nif, name, address, Date.valueOf(birthdate), hashedPassword, email, Integer.parseInt(driver_license),
-                license_type, Date.valueOf(starting_date), Date.valueOf(expiration_date));
+                String.valueOf(license_type), Date.valueOf(starting_date), Date.valueOf(expiration_date));
 
 
         /*Passamos para o login*/
