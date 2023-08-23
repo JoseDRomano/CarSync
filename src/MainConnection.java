@@ -1,8 +1,5 @@
 
 
-import employeeacess.BackOffice;
-import employeeacess.BackOfficeAdminMenu;
-import model.Employee;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -14,11 +11,6 @@ import java.util.Scanner;
 
 
 public class MainConnection {
-
-    private static final Logger logger = Logger.getLogger(MainConnection.class);
-
-
-    private static Scanner scan = new Scanner(System.in);
 
     public static void main(String[] args) {
 
