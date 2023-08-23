@@ -581,10 +581,11 @@ public class DataSource {
 
 
     //TESTED
-    public void insertVehicle(String plate, String vin, String color,
+    public boolean insertVehicle(String plate, String vin, String color,
                               String brand, String model, Date registrationDate,
                               String category, int nif) {
 
+        boolean result = false;
         //Verfica se matricula é válida
         /*if (!plate.matches("^([0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2}[\\-]{1}[0-9A-Z]{2})$") || categoryNumber <= 0 || categoryNumber > 6) {
             System.out.println("Wrong input: " + plate + " " + categoryNumber);
@@ -595,14 +596,14 @@ public class DataSource {
         for (Vehicle v : queryVehicles()) {
             if (v.getPlate().equals(plate)) {
                 System.out.printf("Plate number: %s already in database %n", v.getPlate());
-                return;
+                return result;
             }
         }
 
         //Confirma se o nif existe na base de dados
         if (!isCustomer(nif)) {
             System.out.println("Customer with nif: " + nif + " does not exist in database");
-            return;
+            return result;
         }
 
         try {
@@ -619,6 +620,7 @@ public class DataSource {
             int affected = insertIntoVehicle.executeUpdate();
 
             if (affected == 1) {
+                result = true;
                 System.out.println("Inserted vehicle with plate number: " + plate);
                 connection.commit();
             } else {
@@ -641,15 +643,18 @@ public class DataSource {
                 System.out.println("Couldn't reset default commit behavior after insert vehicle");
             }
         }
+        return result;
     }
 
 
     //TESTED
-    public void insertTicket(int nif, String plate, Date date,
+    public boolean insertTicket(int nif, String plate, Date date,
                              int reason, double value, Date expiry_date) {
 
+        boolean result = false;
         if (!isCustomer(nif) || !isVehicleOwner(nif, plate)) {
             System.out.println("Customer with nif: " + nif + " not owner of vehicle with plate: " + plate + " or does not exist in database");
+            return false;
         }
 
         try {
@@ -663,6 +668,7 @@ public class DataSource {
             int affected = insertIntoTicket.executeUpdate();
 
             if (affected == 1) {
+                result = true;
                 System.out.println("Inserted ticket for plate number: " + plate + " with value: " + value + " date: " + date);
                 connection.commit();
             } else {
@@ -688,12 +694,14 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+        return result;
     }
 
 
     //TESTED
-    public void updateVehicleColor(String color, String plate) {
+    public boolean updateVehicleColor(String color, String plate) {
 
+        boolean result = false;
         /*if (!isVehicleOwner(nif, plate)) {
             System.out.println("Something wrong with provided info");
             return;
@@ -706,6 +714,7 @@ public class DataSource {
             int affected = updateVehicleColor.executeUpdate();
 
             if (affected == 1) {
+                result = true;
                 System.out.println("Updated vehicle color for plate number: " + plate + " to: " + color);
                 connection.commit();
             } else {
@@ -731,6 +740,7 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+        return result;
     }
 
 
@@ -1390,12 +1400,14 @@ public class DataSource {
         return result;
     }
 
-    public void insertCustomer(int nif, String name, String address, Date bDate, String password, String email,
+    public boolean insertCustomer(int nif, String name, String address, Date bDate, String password, String email,
                                int driverLicense, String licenseType, Date registrationDate, Date expirationDate) {
+
+        boolean result = false;
 
         if (!insertPerson(nif, name, address, bDate, password, email)) {
             System.out.println("Couldn't insert person with nif: " + nif);
-            return;
+            return result;
         }
 
         try {
@@ -1408,6 +1420,7 @@ public class DataSource {
             int affected = insertIntoCustomer.executeUpdate();
 
             if (affected == 1) {
+                result = true;
                 System.out.println("Inserted customer with nif: " + nif + " and driver license number: " + driverLicense);
                 connection.commit();
                 UserWriterAux userWriterAux = new UserWriterAux(nif, password, "customer with driver license number: " + driverLicense);
@@ -1435,14 +1448,19 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+        return result;
     }
 
-    public void insertEmployee(int nif, String name, String address, Date bDate, String password, String email,
+    public boolean insertEmployee(int nif, String name, String address,
+                                  Date bDate, String password,
+                                  String email,
                                int accessLevel) {
+
+        boolean result = false;
 
         if (!insertPerson(nif, name, address, bDate, password, email)) {
             System.out.println("Couldn't insert person with nif: " + nif);
-            return;
+            return result;
         }
 
         try {
@@ -1452,6 +1470,7 @@ public class DataSource {
             int affected = insertIntoEmployee.executeUpdate();
 
             if (affected == 1) {
+                result = true;
                 System.out.println("Inserted employee with nif: " + nif + ", name: " + name + " and access level: " + accessLevel);
                 connection.commit();
                 UserWriterAux userWriterAux = new UserWriterAux(nif, password, "employee with access level: " + accessLevel);
@@ -1481,6 +1500,7 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+        return result;
     }
 
     public boolean deactivatePerson(int nif) {
