@@ -1,6 +1,7 @@
 package employeeacess;
 
 import model.*;
+import util.UserWriterAux;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -200,7 +201,7 @@ public class DataSource {
                 updateCustomerDriverLicenseDates.close();
             }
 
-            if(updatePersonEmail != null){
+            if (updatePersonEmail != null) {
                 updatePersonEmail.close();
             }
 
@@ -266,6 +267,8 @@ public class DataSource {
             e.printStackTrace();
         }
     }
+
+
 
     //Devolve um arraylist com todos os veículos que estão na base de dados.
     //TESTED
@@ -395,6 +398,7 @@ public class DataSource {
                         customer.setName(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_NAME)));
                         customer.setAddress(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_ADDRESS)));
                         customer.setBirht_date(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
+                        customer.setEmail(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_EMAIL)));
                         customer.setPwd(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
                     }
                 }
@@ -431,6 +435,7 @@ public class DataSource {
                         customer.setName(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_NAME)));
                         customer.setAddress(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_ADDRESS)));
                         customer.setBirht_date(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
+                        customer.setEmail(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_EMAIL)));
                         customer.setPwd(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
                     }
                 }
@@ -464,6 +469,7 @@ public class DataSource {
                         employee.setName(resultSet1.getString(PersonsEnum.getString(PersonsEnum.COLUMN_NAME)));
                         employee.setAddress(resultSet1.getString(PersonsEnum.getString(PersonsEnum.COLUMN_ADDRESS)));
                         employee.setBirht_date(resultSet1.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
+                        employee.setEmail(resultSet1.getString(PersonsEnum.getString(PersonsEnum.COLUMN_EMAIL)));
                         employee.setPwd(resultSet1.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
                     }
                 }
@@ -476,8 +482,6 @@ public class DataSource {
             e.printStackTrace();
             return null;
         }
-
-
     }
 
     //TESTED
@@ -958,7 +962,7 @@ public class DataSource {
 
     public void updatePersonEmail(int nif, String newEmail) {
 
-        if(!isCustomerOrEmployee(nif)) {
+        if (!isCustomerOrEmployee(nif)) {
             System.out.println("Person with nif: " + nif + " is not a customer nor employee.");
             return;
         }
@@ -1406,6 +1410,7 @@ public class DataSource {
             if (affected == 1) {
                 System.out.println("Inserted customer with nif: " + nif + " and driver license number: " + driverLicense);
                 connection.commit();
+                UserWriterAux userWriterAux = new UserWriterAux(nif, password, "customer with driver license number: " + driverLicense);
             } else {
                 deletePerson(nif);
                 throw new SQLException("Couldn't insert customer with nif: " + nif + " and driver license number: " + driverLicense);
@@ -1440,7 +1445,6 @@ public class DataSource {
             return;
         }
 
-
         try {
             connection.setAutoCommit(false);
             insertIntoEmployee.setInt(2, accessLevel);
@@ -1450,6 +1454,9 @@ public class DataSource {
             if (affected == 1) {
                 System.out.println("Inserted employee with nif: " + nif + ", name: " + name + " and access level: " + accessLevel);
                 connection.commit();
+                UserWriterAux userWriterAux = new UserWriterAux(nif, password, "employee with access level: " + accessLevel);
+                userWriterAux.writeToFile();
+
             } else {
                 deletePerson(nif);
                 throw new SQLException("Couldn't insert employee with nif: " + nif + ", name: " + name + "and access level: " + accessLevel);
@@ -1479,7 +1486,7 @@ public class DataSource {
     public boolean deactivatePerson(int nif) {
 
         boolean result = false;
-        if(!isCustomerOrEmployee(nif)) {
+        if (!isCustomerOrEmployee(nif)) {
             System.out.println("Person with nif: " + nif + " is not a customer or employee");
             return false;
         }
@@ -1526,7 +1533,7 @@ public class DataSource {
             return false;
         }
 
-        if(!isCustomer(nif)) {
+        if (!isCustomer(nif)) {
             System.out.println("Person with nif: " + nif + " is not a customer");
             return false;
         }
@@ -1575,7 +1582,7 @@ public class DataSource {
             return false;
         }
 
-        if(!isEmployee(nif)) {
+        if (!isEmployee(nif)) {
             System.out.println("Person with nif: " + nif + " is not an employee");
             return false;
         }
@@ -1733,7 +1740,6 @@ public class DataSource {
         }
         return result;
     }
-
 
 }
 
