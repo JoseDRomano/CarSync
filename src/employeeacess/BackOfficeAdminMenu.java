@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Date;
 
 import static java.awt.Color.RED;
@@ -439,6 +441,15 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertCustomerFrame.add(insertCustomerPanel);
         insertCustomerFrame.pack();
         insertCustomerFrame.setVisible(true);
+
+        insertCustomerFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Code to close your DataSource here
+                dataSource.close();
+                // Close the DataSource or perform other cleanup tasks
+            }
+        });
     }
 
     private void insertVehicle(JFrame insertFrame) {

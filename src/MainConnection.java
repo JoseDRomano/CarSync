@@ -1,5 +1,7 @@
 
 
+import employeeacess.BackOfficeAdminMenu;
+import model.Employee;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -24,14 +26,14 @@ public class MainConnection {
         //Password para nif 200000002 (Jose Sem Fim) - Password a1b2c3
 
 
-        WelcomeMenuForm welcomeMenuForm = new WelcomeMenuForm();
-        welcomeMenuForm.show();
+       /* WelcomeMenuForm welcomeMenuForm = new WelcomeMenuForm();
+        welcomeMenuForm.show();*/
 
 
         //Menu interativo
-        /*Employee employee = new Employee();
+        Employee employee = new Employee();
         employee.setName("John Doe");
-        BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);*/
+        BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
 
 
     }
