@@ -214,15 +214,15 @@ public abstract class BackOffice implements getInputValues {
                     Comprehensive Insurance -> 1
                     Auto Liability Insurance -> 2
                     Theft Insurance -> 3""");
-        int extraCategory = getInteger(scan);
+        /*int extraCategory = getInteger(scan);
         System.out.println("Enter expiry date (yyyy-mm-dd):");
         Date expiryDate = getDate(scan);
         logger.info("Expiry date entered: " + expiryDate);
         System.out.println("Enter company name:");
         String companyName = getString(scan);
-        logger.info("Company name entered: " + companyName);
+        logger.info("Company name entered: " + companyName);*/
 
-        dataSource.insertInsurance(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName);
+//        dataSource.insertInsurance(policyNumber, plateNumberForInsurance, startDate, extraCategory, expiryDate, companyName);
         logger.info("Insurance insertion completed.");
     }
 
@@ -251,8 +251,8 @@ public abstract class BackOffice implements getInputValues {
                 Illegal Parking -> 3
                 Reckless Driving -> 4
                 DUI -> 5""");
-        int reason = getInteger(scan);
-        logger.info("Reason number entered: " + reason);
+//        String reason = getInteger(scan);
+//        logger.info("Reason number entered: " + reason);
         System.out.println("Enter ticket value: ");
         double ticketValue = getDouble(scan);
         logger.info("Ticket value entered: " + ticketValue);
@@ -261,7 +261,7 @@ public abstract class BackOffice implements getInputValues {
         logger.info("Ticket expiry date entered: " + ticketExpiryDate);
 
         logger.info("Inserting ticket data into the database.");
-        dataSource.insertTicket(nif, plateNumberForTicket, ticketDate, reason, ticketValue, ticketExpiryDate);
+//        dataSource.insertTicket(nif, plateNumberForTicket, ticketDate, reason, ticketValue, ticketExpiryDate);
         logger.info("Ticket insertion completed.");
     }
 

@@ -62,13 +62,17 @@ public class Insurance implements Comparable<Insurance> {
         return extraCategory;
     }
 
-    public void setExtraCategory(int extraCategory) {
+   /* public void setExtraCategory(int extraCategory) {
         switch (extraCategory) {
             case 1 -> this.extraCategory = "Comprehensive Insurance";
             case 2 -> this.extraCategory = "Auto Liability Insurance";
             case 3 -> this.extraCategory = "Theft Insurance";
             default -> this.extraCategory = "Default";
         };
+    }*/
+
+    public void setExtraCategory(String extraCategory) {
+        this.extraCategory = extraCategory;
     }
 
     public String getCarPlate() {

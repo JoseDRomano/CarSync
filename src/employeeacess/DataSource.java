@@ -308,7 +308,7 @@ public class DataSource {
                 insurance.setPolicy(resultSet.getInt(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_POLICY)));
                 insurance.setCarPlate(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_PLATE)));
                 insurance.setStartDate(resultSet.getDate(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_START_DATE)));
-                insurance.setExtraCategory(resultSet.getInt(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXTRA_CATEGORY)));
+                insurance.setExtraCategory(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXTRA_CATEGORY)));
                 insurance.setExpDate(resultSet.getDate(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXPIRY_DATE)));
                 insurance.setCompanyName(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_COMPANY)));
                 insurances.add(insurance);
@@ -529,8 +529,10 @@ public class DataSource {
     }
 
     //TESTED
-    public boolean insertInsurance(int policy, String plate, Date startDate,
-                                   int extraCategory, Date expDate, String companyName) {
+    public boolean insertInsurance(int policy, String plate ,
+                                   Date startDate,
+                                   String extraCategory, Date expDate,
+                                   String companyName) {
 
         boolean worked = false;
         /*if (!isVehicleOwner(nif, plate)) {
@@ -543,7 +545,7 @@ public class DataSource {
             insertIntoInsurance.setInt(4, policy);
             insertIntoInsurance.setString(2, plate);
             insertIntoInsurance.setDate(6, startDate);
-            insertIntoInsurance.setInt(5, extraCategory);
+            insertIntoInsurance.setString(5, extraCategory);
             insertIntoInsurance.setDate(3, expDate);
             insertIntoInsurance.setString(1, companyName);
             int affected = insertIntoInsurance.executeUpdate();
@@ -649,7 +651,7 @@ public class DataSource {
 
     //TESTED
     public boolean insertTicket(int nif, String plate, Date date,
-                             int reason, double value, Date expiry_date) {
+                             String reason, double value, Date expiry_date) {
 
         boolean result = false;
         if (!isCustomer(nif) || !isVehicleOwner(nif, plate)) {
@@ -662,7 +664,7 @@ public class DataSource {
             insertIntoTicket.setInt(3, nif);
             insertIntoTicket.setString(2, plate);
             insertIntoTicket.setDate(1, date);
-            insertIntoTicket.setInt(5, reason);
+            insertIntoTicket.setString(5, reason);
             insertIntoTicket.setDouble(4, value);
             insertIntoTicket.setDate(6, expiry_date);
             int affected = insertIntoTicket.executeUpdate();

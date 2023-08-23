@@ -98,7 +98,7 @@ public class Ticket implements Comparable<Ticket> {
             case 2 -> this.reason = "Red light";
             case 3 -> this.reason = "Illegal parking";
             case 4 -> this.reason = "Reckless driving";
-            case 5 -> this.reason = "Driving Under the Influence";
+            case 5 -> this.reason = "DUI";
             default -> throw new IllegalStateException("No such reason");
         };
     }
