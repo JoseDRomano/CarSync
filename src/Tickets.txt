@@ -1,0 +1,13 @@
+Ticket ID: 2
+    Type: Update Customer
+    Status: Closed
+    Date: 2019-11-21
+    Customer NIF: 123456789
+    Values: Moss Cosmo, 111 Old Wood, asdksaldjalskdj4312313@, 1990-01-01, 123456789, 2020-01-01
+
+Ticket ID: 2
+    Type: Update Customer
+    Status: Closed
+    Date: 2019-11-21
+    Customer NIF: 123456789
+    Values: Moss Cosmo, 111 Old Wood, asdksaldjalskdj4312313@, 1990-01-01, 123456789, 2020-01-01
