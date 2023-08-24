@@ -17,12 +17,12 @@ public class MainConnection {
 
     public static void main(String[] args) {
 
-        PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
-        Employee employee = new Employee();
-        employee.setName("John Doe");
-        employee.setNif(296789012);
-        employee.setAccess_level(2);
-        BackOffice.startBackOffice(296789012);
+//        PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
+//        Employee employee = new Employee();
+//        employee.setName("John Doe");
+//        employee.setNif(296789012);
+//        employee.setAccess_level(2);
+//        BackOffice.startBackOffice(296789012);
 //        MainConnection.initiate();
 
         //Password para Pedro Ribeiro - 123abc / NIF - 200000000
@@ -36,9 +36,9 @@ public class MainConnection {
 
 
         //Menu interativo
-       /* Employee employee = new Employee();
+        Employee employee = new Employee();
         employee.setName("John Doe");
-        BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);*/
+        BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
 
 
     }

@@ -6,12 +6,16 @@ import model.Person;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class CreateTableNavigation {
+import static java.awt.Color.BLACK;
+
+public class CustomerTableNavigation {
     private JFrame frame;
     private JTable table;
     private CustomerTableModel tableModel;
@@ -21,10 +25,102 @@ public class CreateTableNavigation {
     private int currentPage = 1;
     private int rowsPerPage = 30;
     private DataSource dataSource = new DataSource();
+    private final Color GREEN = new Color(0, 100, 0);
+    private final Color RED = new Color(130, 0, 0);
+    private final Color WHITE = new Color(255, 255, 255);
 
-    private List<Customer> data; // Sample data source
 
-    public CreateTableNavigation(int rowsPerPage) {
+    private List<Customer> data;
+
+    public CustomerTableNavigation(int rowsPerPage, JFrame originalFrame, List<Customer> customerList) {
+
+        this.data = customerList;
+        if (rowsPerPage > 0) {
+            this.rowsPerPage = rowsPerPage;
+        }
+
+        if (!dataSource.open()) {
+            System.out.println("Can't open datasource");
+            return;
+        }
+
+        tableModel = new CustomerTableModel(new String[]{"NIF", "Name", "Birth Date", "Address", "License number", "License Category",
+                "Registration Date", "Expiration Date", "Email"});
+
+        table = new JTable(tableModel);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        frame = new JFrame("Customer Search");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        prevButton = new JButton("Previous");
+        nextButton = new JButton("Next");
+        prevButton.setBackground(GREEN);
+        prevButton.setForeground(WHITE);
+        nextButton.setBackground(GREEN);
+        nextButton.setForeground(WHITE);
+
+        pageInfoLabel = new JLabel();
+
+
+        prevButton.addActionListener(e -> {
+            if (currentPage > 1) {
+                currentPage--;
+                updateTable();
+            }
+        });
+
+        nextButton.addActionListener(e -> {
+            if (currentPage < getTotalPages()) {
+                currentPage++;
+                updateTable();
+            }
+        });
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            frame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            originalFrame.setVisible(true);
+            frame.dispose();
+            frame.setVisible(false);
+        });
+
+        JPanel navPanel = new JPanel();
+        navPanel.add(prevButton);
+        navPanel.add(pageInfoLabel);
+        navPanel.add(nextButton);
+        navPanel.add(exitButton);
+        navPanel.add(backButton);
+
+        frame.setLayout(new BorderLayout());
+        frame.add(new JScrollPane(table), BorderLayout.CENTER);
+        frame.add(navPanel, BorderLayout.SOUTH);
+
+        frame.setSize(1200, 600);
+        frame.setVisible(true);
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
+        updateTable();
+    }
+
+
+    public CustomerTableNavigation(int rowsPerPage, JFrame originalFrame) {
         if (rowsPerPage > 0) {
             this.rowsPerPage = rowsPerPage;
         }
@@ -44,10 +140,13 @@ public class CreateTableNavigation {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         data = dataSource.queryCustomers();
-//        data.forEach(System.out::println);
 
         prevButton = new JButton("Previous");
         nextButton = new JButton("Next");
+        prevButton.setBackground(GREEN);
+        prevButton.setForeground(WHITE);
+        nextButton.setBackground(GREEN);
+        nextButton.setForeground(WHITE);
 
         pageInfoLabel = new JLabel();
 
@@ -66,18 +165,43 @@ public class CreateTableNavigation {
             }
         });
 
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            frame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            originalFrame.setVisible(true);
+            frame.setVisible(false);
+        });
+
         JPanel navPanel = new JPanel();
         navPanel.add(prevButton);
         navPanel.add(pageInfoLabel);
         navPanel.add(nextButton);
-
+        navPanel.add(exitButton);
+        navPanel.add(backButton);
 
         frame.setLayout(new BorderLayout());
         frame.add(new JScrollPane(table), BorderLayout.CENTER);
         frame.add(navPanel, BorderLayout.SOUTH);
 
-        frame.setSize(1000, 800);
+        frame.setSize(1200, 600);
         frame.setVisible(true);
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
 
         updateTable();
     }
@@ -95,108 +219,6 @@ public class CreateTableNavigation {
 
     private int getTotalPages() {
         return (int) Math.ceil((double) data.size() / rowsPerPage);
-    }
-
-    public void dataSort(int order) {
-        if (order == 1) {
-            data.sort(Comparator.comparing(Customer::getNif));
-        } else if (order == 2) {
-            data.sort(Comparator.comparing(Person::getName));
-        } else if (order == 3) {
-            data.sort(Comparator.comparing(Person::getBirht_date));
-        } else if (order == 4) {
-            data.sort(Comparator.comparing(Person::getAddress));
-        } else if (order == 5) {
-            data.sort(Comparator.comparing(Customer::getDriverLicenseNum));
-        } else if (order == 6) {
-            data.sort(Comparator.comparing(Customer::getLicenseType));
-        } else if (order == 7) {
-            data.sort(Comparator.comparing(Customer::getStartingDate));
-        } else if (order == 8) {
-            data.sort(Comparator.comparing(Customer::getExpDate));
-        } else if (order == 9) {
-            data.sort(Comparator.comparing(Customer::getEmail));
-        }
-    }
-
-    public void dataFilter(int numericFilter, int order) {
-        List<Customer> customerList = new ArrayList<>();
-        for (Customer customer : data) {
-            if (customer.getNif() == numericFilter) {
-                customerList.add(customer);
-            } else if (customer.getDriverLicenseNum() == numericFilter) {
-                customerList.add(customer);
-            }
-        }
-        data = customerList;
-        dataSort(order);
-    }
-
-    public void dataStringFilter(int order, String stringFilter, String filterType) {
-        List<Customer> customerList = new ArrayList<>();
-
-        switch (filterType) {
-            case "Name" -> {
-                for (Customer customer : data) {
-                    if (customer.getName().contains(stringFilter)) {
-                        customerList.add(customer);
-                    }
-                }
-            }
-            case "Address" -> {
-                for (Customer customer : data) {
-                    if (customer.getAddress().equals(stringFilter)) {
-                        customerList.add(customer);
-                    }
-                }
-            }
-            case "License Type" -> {
-                for (Customer customer : data) {
-                    if (customer.getLicenseType().equals(stringFilter)) {
-                        customerList.add(customer);
-                    }
-                }
-            }
-            case "Email" -> {
-                for (Customer customer : data) {
-                    if (customer.getEmail().equals(stringFilter)) {
-                        customerList.add(customer);
-                    }
-                }
-            }
-        }
-        data = customerList;
-        dataSort(order);
-    }
-
-    public void dataDateFilter(int order, Date dateFilter, String filterType) {
-        List<Customer> customerList = new ArrayList<>();
-
-        switch (filterType) {
-            case "Birth Date" -> {
-                for (Customer customer : data) {
-                    if (customer.getBirht_date().equals(dateFilter)) {
-                        customerList.add(customer);
-                    }
-                }
-            }
-            case "Registration Date" -> {
-                for (Customer customer : data) {
-                    if (customer.getStartingDate().equals(dateFilter)) {
-                        customerList.add(customer);
-                    }
-                }
-            }
-            case "Expiration Date" -> {
-                for (Customer customer : data) {
-                    if (customer.getExpDate().equals(dateFilter)) {
-                        customerList.add(customer);
-                    }
-                }
-            }
-        }
-        data = customerList;
-        dataSort(order);
     }
 
 
@@ -258,7 +280,7 @@ public class CreateTableNavigation {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new CreateTableNavigation(1);
+                new CustomerTableNavigation(1, new JFrame());
             }
         });
     }
