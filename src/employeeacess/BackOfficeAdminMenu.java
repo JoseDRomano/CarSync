@@ -4,12 +4,16 @@ import model.Employee;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
+import java.util.Collections;
+import java.util.Objects;
 
 import static java.awt.Color.BLACK;
 
@@ -102,7 +106,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             dataSource.close();
             System.exit(0);
         });
-
     }
 
     private void buildSearchMenuPage() {
@@ -136,6 +139,161 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             dataSource.close();
             System.exit(0);
         });
+
+        ActionListener goToPageListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton button = (JButton) e.getSource();
+                mainFrame.setVisible(false);
+
+                if (button == vehicleDisplay) vehicleDisplayPage(searchMenuFrame);
+                else if (button == employeeDisplay) employeeDisplayPage(searchMenuFrame);
+                else if (button == customerDisplay) customerDisplayPage(searchMenuFrame);
+                else if (button == ticketDisplay) ticketDisplayPage(searchMenuFrame);
+                else if (button == insuranceDisplay) insuranceDisplayPage(searchMenuFrame);
+            }
+        };
+
+        vehicleDisplay.addActionListener(goToPageListener);
+        employeeDisplay.addActionListener(goToPageListener);
+        customerDisplay.addActionListener(goToPageListener);
+        ticketDisplay.addActionListener(goToPageListener);
+        insuranceDisplay.addActionListener(goToPageListener);
+
+    }
+
+    private void insuranceDisplayPage(JFrame searchMenuFrame) {
+        JFrame insuranceDisplayFrame = new JFrame("Insurance Display Menu");
+        insuranceDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JPanel insuranceDisplayPanel = new JPanel(new GridBagLayout());
+
+        JLabel insuranceDisplayLabel = new JLabel("Insurance Display Menu");
+        insuranceDisplayLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        insuranceDisplayLabel.setForeground(new Color(0, 0, 90));
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        insuranceDisplayPanel.add(insuranceDisplayLabel, gbc);
+
+        JComboBox<String> insuranceDisplaySearchOptions = new JComboBox<>(new String[]{" ", "Search by Policy Number",
+                "Search by Customer ID", "Search by Vehicle ID",
+                "Search by Name"});
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        JButton searchButton = new JButton("Search");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            insuranceDisplayFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            searchMenuFrame.setVisible(true);
+            insuranceDisplayFrame.setVisible(false);
+        });
+
+    }
+
+    private void ticketDisplayPage(JFrame searchMenuFrame) {
+
+    }
+
+    private void customerDisplayPage(JFrame searchMenuFrame) {
+        JFrame customerDisplayFrame = new JFrame("Customer Search Menu");
+        customerDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JPanel insuranceDisplayPanel = new JPanel(new GridBagLayout());
+
+        JLabel customerDisplayLabel = new JLabel("Customer Search Menu");
+        customerDisplayLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        customerDisplayLabel.setForeground(new Color(0, 0, 90));
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        insuranceDisplayPanel.add(customerDisplayLabel, gbc);
+
+        JLabel customerDisplaySearchLabel = new JLabel("Search by:");
+        JComboBox<String> customerDisplaySearchOptions = new JComboBox<>(new String[]{" ", "General Search",
+                "Search by NIF", "Search by Name", "Search by Address", "Search by License Type",
+                "Search by License Number"});
+
+        JLabel customerDisplayOrderLabel = new JLabel("Order by:");
+        JComboBox<String> customerDisplayOrderOptions = new JComboBox<>(new String[]{" ", "Order by NIF",
+                "Order by Name", "Order by Address", "Order by License Type", "Order by License Number",
+                "Order by Date of Birth", "Order by Date of License Issue", "Order by Date of License Expiration"});
+
+        JButton searchButton = new JButton("Search");
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setBackground(GREEN);
+        searchButton.addActionListener(e -> {
+            String searchOption = (String) customerDisplaySearchOptions.getSelectedItem();
+            String ordertType = (String) customerDisplayOrderOptions.getSelectedItem();
+
+            if (searchOption.isBlank() || searchOption.isBlank() || ordertType.isEmpty() || ordertType.isBlank()) {
+                JOptionPane.showMessageDialog(customerDisplayFrame, "Please select a search option and an order option");
+            } else {
+                switch (searchOption) {
+                    case "General Search":
+                        switch (ordertType) {
+                            case "Order by NIF":
+                                break;
+                            case "Order by Name":
+                                break;
+                            case "Order by Address":
+                                break;
+                            case "Order by License Type":
+                                break;
+                            case "Order by License Number":
+                                break;
+                            case "Order by Date of Birth":
+                                break;
+                            case "Order by Date of License Issue":
+                                break;
+                            case "Order by Date of License Expiration":
+                                break;
+                        }
+                        break;
+                }
+            }
+        });
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            customerDisplayFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            searchMenuFrame.setVisible(true);
+            customerDisplayFrame.setVisible(false);
+        });
+
+
+    }
+
+    private void employeeDisplayPage(JFrame searchMenuFrame) {
+
+    }
+
+    private void vehicleDisplayPage(JFrame searchMenuFrame) {
     }
 
     private void buildUpdateMenuPage() {
@@ -313,7 +471,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JTextField plateField = new JTextField(15);
 
         JLabel insuranceCategoryLabel = new JLabel("Insurance Category: ");
-        JComboBox<String> insuranceCategoryField = new JComboBox<>(new String[]{" ", "Third Party", "Third Party Fire and Theft", "Third Party Fire and Auto-Liabitlity", "Comprehensive"});
+        JComboBox<String> insuranceCategoryField = new JComboBox<>(new String[]{" ", "Third Party",
+                "Third Party Fire and Theft", "Third Party Fire and Auto-Liabitlity", "Comprehensive"});
 
         JLabel policyLabel = new JLabel("Policy: ");
         JTextField policyField = new JTextField(15);
@@ -438,7 +597,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 dataSource.close();
             }
         });
-
 
     }
 
@@ -825,7 +983,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                     ((String) licenseType.getSelectedItem()).isBlank()) {
                 JOptionPane.showMessageDialog(insertCustomerFrame, "Please choose an option from the license option box");
             } else {
-                password = BCrypt.hashpw(password, BCrypt.gensalt());
                 if (dataSource.insertCustomer(Integer.parseInt(nif), name, address, Date.valueOf(birthDate),
                         password, email, Integer.parseInt(driverLicense), selectedLicenseType, Date.valueOf(licenseDate), Date.valueOf(licenseExpiration))) {
                     JOptionPane.showMessageDialog(insertCustomerFrame, "Customer inserted successfully");
@@ -1077,7 +1234,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             }
         });
     }
-
 
    /* private void eventForButtons(JButton button) {
         switch (button.getName()) {

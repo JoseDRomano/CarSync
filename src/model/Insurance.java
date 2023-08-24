@@ -1,8 +1,10 @@
 package model;
 
-import java.time.LocalDate;
-import java.util.Comparator;
+import employeeacess.DataSource;
+
+import javax.swing.table.AbstractTableModel;
 import java.util.Date;
+import java.util.List;
 
 public class Insurance implements Comparable<Insurance> {
     private int policy;
@@ -26,7 +28,7 @@ public class Insurance implements Comparable<Insurance> {
     }
 
     public void setPolicy(int policy) {
-        if(policy < 100000000 || policy > 199999999)  System.out.println("Policy number must be 10 digits long");
+        if (policy < 100000000 || policy > 199999999) System.out.println("Policy number must be 10 digits long");
         this.policy = policy;
     }
 
@@ -97,6 +99,42 @@ public class Insurance implements Comparable<Insurance> {
     @Override
     public int compareTo(Insurance o) {
         return this.policy - o.policy;
+    }
+
+    public static class InsuranceTableModel extends AbstractTableModel {
+
+        private final String[] columnNames = {"Policy", "Category", "Car Plate",
+                "Company Name", "Start Date", "Expiration Date"};
+
+        private List<Insurance> insurances = new DataSource().queryInsurances();
+
+        @Override
+        public int getRowCount() {
+            return insurances.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return columnNames.length;
+        }
+
+        public String getColumnName(int column) {
+            return columnNames[column];
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Insurance insurance = insurances.get(rowIndex);
+            return switch (columnIndex) {
+                case 0 -> insurance.getPolicy();
+                case 1 -> insurance.getExtraCategory();
+                case 2 -> insurance.getCarPlate();
+                case 3 -> insurance.getCompanyName();
+                case 4 -> insurance.getStartDate();
+                case 5 -> insurance.getExpDate();
+                default -> null;
+            };
+        }
     }
 
 }
