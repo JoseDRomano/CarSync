@@ -181,7 +181,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JComboBox<String> rowsPerPageOptions = new JComboBox<>(new String[]{"20", "30", "50", "100"});
 
         JLabel insuranceDisplaySearchLabel = new JLabel("Search by:");
-        JComboBox<String> insuranceDisplaySearchOptions = new JComboBox<>(new String[]{" ",
+        JComboBox<String> insuranceDisplaySearchOptions = new JComboBox<>(new String[]{" ", "General Search",
                 "Search by Policy Number", "Search by Company", "Search by Plate",
                 "Search by Category", "Search by Expiration Date", "Search by Issue Date"});
 
@@ -196,118 +196,107 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton searchButton = new JButton("Search");
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(GREEN);
+
         searchButton.addActionListener(e -> {
             String searchOption = (String) insuranceDisplaySearchOptions.getSelectedItem();
             String orderType = (String) insuranceDisplayOrderOptions.getSelectedItem();
             String rowsPerPage = (String) rowsPerPageOptions.getSelectedItem();
             String input = inputForSearchField.getText();
 
-            if (searchOption.isBlank() || searchOption.isBlank() || orderType.isEmpty() || orderType.isBlank()) {
-                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please select a search option and an order option");
-            } else if (!isInteger(rowsPerPage)) {
-                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please select the number of rows per page");
-            }
-            boolean result = true;
-            while (result) {
-                switch (searchOption) {
-                    case "General Search" -> {
-                        displaySearchByOrderInsurance(rowsPerPage,
-                                dataSource.queryInsurances(), insuranceDisplayFrame, orderType);
-                        result = false;
-                    }
-                    case "Search by Policy Number" -> {
-                        if (!isPolicy(input)) {
-                            JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid policy number");
-                            result = false;
-                        } else {
-                            List<Insurance> insuranceList = new ArrayList<>();
-                            for (Insurance insurance : dataSource.queryInsurances()) {
-                                if (insurance.getPolicy() == Integer.parseInt(input)) {
-                                    insuranceList.add(insurance);
-                                    break;
-                                }
-                            }
-                            new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
-                        }
-                        result = false;
-                    }
-                    case "Search by Company" -> {
-                        if (!isValidString(input)) {
-                            JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid company name");
-                            result = false;
-                        } else {
-                            List<Insurance> insuranceList = new ArrayList<>();
-                            for (Insurance insurance : dataSource.queryInsurances()) {
-                                if (insurance.getCompanyName().equals(input)) {
-                                    insuranceList.add(insurance);
-                                }
-                            }
-                            new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
-                        }
-                        result = false;
-                    }
+            if (!searchOption.equals(" ") && !orderType.equals(" ")) {
+                if (searchOption.equals("General Search")) {
+                    displaySearchByOrderInsurance(rowsPerPage, dataSource.queryInsurances(), insuranceDisplayFrame, orderType);
+                } else {
+                    switch (searchOption) {
 
-                    case "Search by Plate" -> {
-                        if (!isPlate(input)) {
-                            JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid plate");
-                            result = false;
-                        } else {
-                            List<Insurance> insuranceList = new ArrayList<>();
-                            for (Insurance insurance : dataSource.queryInsurances()) {
-                                if (insurance.getCarPlate().equals(input)) {
-                                    insuranceList.add(insurance);
+                        case "Search by Policy Number" -> {
+                            if (isPolicy(input)) {
+                                List<Insurance> insuranceList = new ArrayList<>();
+                                for (Insurance insurance : dataSource.queryInsurances()) {
+                                    if (insurance.getPolicy() == Integer.parseInt(input)) {
+                                        insuranceList.add(insurance);
+                                        break;
+                                    }
                                 }
+                                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                            } else {
+                                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid policy number");
                             }
-                            new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
                         }
-                        result = false;
-                    }
-                    case "Search by Category" -> {
-                        if (!isValidString(input)) {
-                            JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid category");
-                        } else {
-                            List<Insurance> insuranceList = new ArrayList<>();
-                            for (Insurance insurance : dataSource.queryInsurances()) {
-                                if (insurance.getExtraCategory().equals(input)) {
-                                    insuranceList.add(insurance);
+
+                        case "Search by Company" -> {
+                            if (isValidString(input)) {
+                                List<Insurance> insuranceList = new ArrayList<>();
+                                for (Insurance insurance : dataSource.queryInsurances()) {
+                                    if (insurance.getCompanyName().equals(input)) {
+                                        insuranceList.add(insurance);
+                                    }
                                 }
+                                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                            } else {
+                                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid company name");
                             }
-                            new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
                         }
-                        result = false;
-                    }
-                    case "Search by Expiration Date" -> {
-                        if (!isDate(input)) {
-                            JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid date");
-                            result = false;
-                        } else {
-                            List<Insurance> insuranceList = new ArrayList<>();
-                            for (Insurance insurance : dataSource.queryInsurances()) {
-                                if (insurance.getExpDate().equals(input) || insurance.getExpDate().after(Date.valueOf(input))) {
-                                    insuranceList.add(insurance);
+
+                        case "Search by Plate" -> {
+                            if (isPlate(input)) {
+                                List<Insurance> insuranceList = new ArrayList<>();
+                                for (Insurance insurance : dataSource.queryInsurances()) {
+                                    if (insurance.getCarPlate().equals(input)) {
+                                        insuranceList.add(insurance);
+                                    }
                                 }
+                                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                            } else {
+                                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid plate");
                             }
-                            new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
                         }
-                        result = false;
-                    }
-                    case "Search by Issue Date" -> {
-                        if (!isDate(input)) {
-                            JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid date");
-                            result = false;
-                        } else {
-                            List<Insurance> insuranceList = new ArrayList<>();
-                            for (Insurance insurance : dataSource.queryInsurances()) {
-                                if (insurance.getStartDate().equals(input) || insurance.getStartDate().after(Date.valueOf(input))) {
-                                    insuranceList.add(insurance);
+
+                        case "Search by Category" -> {
+                            if (isValidString(input)) {
+                                List<Insurance> insuranceList = new ArrayList<>();
+                                for (Insurance insurance : dataSource.queryInsurances()) {
+                                    if (insurance.getExtraCategory().equals(input)) {
+                                        insuranceList.add(insurance);
+                                    }
                                 }
+                                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                            } else {
+                                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid category");
                             }
-                            new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
                         }
-                        result = false;
+
+                        case "Search by Expiration Date" -> {
+                            if (isDate(input)) {
+                                List<Insurance> insuranceList = new ArrayList<>();
+                                for (Insurance insurance : dataSource.queryInsurances()) {
+                                    if (insurance.getExpDate().equals(input) || insurance.getExpDate().after(Date.valueOf(input))) {
+                                        insuranceList.add(insurance);
+                                    }
+                                }
+                                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                            } else {
+                                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid date");
+                            }
+                        }
+
+                        case "Search by Issue Date" -> {
+                            if (isDate(input)) {
+                                List<Insurance> insuranceList = new ArrayList<>();
+                                for (Insurance insurance : dataSource.queryInsurances()) {
+                                    if (insurance.getStartDate().equals(input) || insurance.getStartDate().after(Date.valueOf(input))) {
+                                        insuranceList.add(insurance);
+                                    }
+                                }
+                                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                            } else {
+                                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid date");
+                            }
+                        }
                     }
-                    default -> JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please select a search option");
                 }
+            } else {
+                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please select a search option and order option");
             }
 
         });
@@ -459,7 +448,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             String input = inputForSearchField.getText();
 
             if (!searchOption.equals(" ") && !orderType.equals(" ")) {
-                if (searchOption.equals("Genearl Search")) {
+                if (searchOption.equals("General Search")) {
                     displaySearchByOrderTicket(rowsPerPage, dataSource.queryTickets(), ticketDisplayFrame, orderType);
                 } else {
                     switch (searchOption) {
