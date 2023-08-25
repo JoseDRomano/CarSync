@@ -368,7 +368,7 @@ public abstract class BackOffice implements getInputValues {
 
         logger.info("Processing ticket payment in the database.");
 
-        dataSource.payTicket(plate7, date7, d7);
+//        dataSource.payTicket(plate7, date7, d7);
         logger.info("Ticket payment completed.");
     }
 

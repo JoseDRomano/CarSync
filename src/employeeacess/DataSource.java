@@ -788,7 +788,7 @@ public class DataSource {
     }
 
 
-    //NOT TESTED
+    //NOT TESTED -
     public void updateExpiredTicket(Date oldDate, double newValue, Date expDate, int nif, String plate, Date todayDate) {
 
         try {
@@ -1107,41 +1107,36 @@ public class DataSource {
 
 
     //TESTED
-    public void payTicket(String plate, Date date, double value) {
+    public boolean payTicket(int ticketID, double value) {
+        boolean result = false;
 
-        /*if (!isVehicleOwner(nif, plate)) {
-            System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
-            return;
-        }*/
-
-        int paid = 0;
+        int paid = 1;
 
         for (Ticket t : queryTickets()) {
-            if (t.getPlate().equals(plate) && t.getDate().equals(date)) {
+            if (t.getTicketID() == ticketID) {
                 if (t.isPaid()) {
                     System.out.println("Ticket is already paid");
-                    return;
+                    return false;
                 } else {
                     if (t.payTicket(value)) {
-                        paid = 1;
+                        paid = 0;
                         System.out.println("Ticket paid successfully");
                         break;
                     }
                     System.out.println("Couldn't pay ticket, insufficient funds or wrong info");
                 }
-                return;
+                return false;
             }
         }
 
         try {
             connection.setAutoCommit(false);
             payTicket.setInt(1, paid);
-            payTicket.setString(2, plate);
-            payTicket.setDate(3, date);
+            payTicket.setInt(2, ticketID);
             int affected = payTicket.executeUpdate();
 
             if (affected == 1) {
-                System.out.println("Paid ticket for plate number: " + plate + " with value: " + value + "for date: " + date);
+                result = true;
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't pay ticket");
@@ -1166,6 +1161,7 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+        return result;
     }
 
 

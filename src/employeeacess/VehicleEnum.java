@@ -52,7 +52,7 @@ public enum VehicleEnum {
             case UPDATE_VEHICLE_OWNER -> "UPDATE " + getString(VehicleEnum.TABLE_VEHICLE) + " SET " + getString(VehicleEnum.COLUMN_VEHICLE_NIF) + " = ?" + " WHERE " +
                     getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ?";
             case DEACTIVATE_VEHICLE -> "UPDATE " + getString(VehicleEnum.TABLE_VEHICLE) + " SET " +
-                    getString(VehicleEnum.COLUMN_VEHICLE_DEACTIVATED) + " = 1  WHERE " +
+                    getString(VehicleEnum.COLUMN_VEHICLE_DEACTIVATED) + " = 0  WHERE " +
                     getString(VehicleEnum.COLUMN_VEHICLE_PLATE) + " = ?";
             default -> throw new IllegalArgumentException("No such column or operation for vehicle table");
         };

@@ -35,12 +35,6 @@ public class MainConnection {
 //        welcomeMenuForm.show();
 
 
-        //Menu interativo
-        Employee employee = new Employee();
-        employee.setName("John Doe");
-        BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
-
-
     }
 
    /* private static void initiate() {

@@ -53,10 +53,10 @@ public enum TicketEnum {
                     getString(TicketEnum.COLUMN_TICKET_DATE) + " = ? ";
             case PAY_TICKET -> "UPDATE " + getString(TicketEnum.TABLE_TICKET) + " SET " +
                     getString(TicketEnum.COLUMN_TICKET_PAID) + " = ? " +
-                    " WHERE " + getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? AND " +
+                    " WHERE " + getString(TicketEnum.COLUMN_TICKET_ID) + " = ? AND " +
                     getString(TicketEnum.COLUMN_TICKET_DATE) + " = ? ";
             case DEACTIVATE_TICKET -> "UPDATE " + getString(TicketEnum.TABLE_TICKET) + " SET " +
-                    getString(TicketEnum.COLUMN_TICKET_DEACTIVATED) + " = 1 WHERE " +
+                    getString(TicketEnum.COLUMN_TICKET_DEACTIVATED) + " = 0 WHERE " +
                     getString(TicketEnum.COLUMN_TICKET_NIF) + " = ?";
             default -> throw new IllegalArgumentException("No such column or operation for vehicle table");
         };

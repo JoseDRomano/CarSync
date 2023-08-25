@@ -2,7 +2,6 @@ package employeeacess;
 
 import model.Customer;
 import model.Employee;
-import org.mindrot.jbcrypt.BCrypt;
 
 import javax.swing.*;
 import java.awt.*;
@@ -258,7 +257,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 while (result) {
                     switch (searchOption) {
                         case "General Search" -> {
-                            displaySearchByOrder(rowsPerPage,
+                            displaySearchByOrderCustomer(rowsPerPage,
                                     dataSource.queryCustomers(), customerDisplayFrame, ordertType);
                             result = false;
                         }
@@ -284,7 +283,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                         customerList.add(customer);
                                     }
                                 });
-                                displaySearchByOrder(rowsPerPage, customerList, customerDisplayFrame, ordertType);
+                                displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, ordertType);
                                 result = false;
                             }
                         }
@@ -299,7 +298,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                         customerList.add(customer);
                                     }
                                 });
-                                displaySearchByOrder(rowsPerPage, customerList, customerDisplayFrame, ordertType);
+                                displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, ordertType);
                                 result = false;
                             }
                         }
@@ -314,7 +313,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                         customerList.add(customer);
                                     }
                                 });
-                                displaySearchByOrder(rowsPerPage, customerList, customerDisplayFrame, ordertType);
+                                displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, ordertType);
                                 result = false;
                             }
                         }
@@ -358,12 +357,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             gbc.gridx = 1;
             gbc.anchor = GridBagConstraints.LINE_END;
             if (i == 3) {
-//                gbc.fill = GridBagConstraints.HORIZONTAL;
-//                gbc.gridwidth = 2;
                 customerDisplayPanel.add(inputForSearchField, gbc);
             } else {
-//                gbc.fill = GridBagConstraints.NONE;
-//                gbc.gridwidth = 1;
                 customerDisplayPanel.add(comboBoxes[i], gbc);
             }
         }
@@ -420,8 +415,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
     }
 
-    private void displaySearchByOrder(String rowsPerPage, List<Customer> customerList,
-                                      JFrame customerDisplayFrame, String orderType) {
+    private void displaySearchByOrderCustomer(String rowsPerPage, List<Customer> customerList,
+                                              JFrame customerDisplayFrame, String orderType) {
         switch (orderType) {
             case "Order by NIF":
                 customerList.sort(Comparator.comparing(Customer::getNif));
@@ -468,7 +463,225 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     }
 
     private void employeeDisplayPage(JFrame searchMenuFrame) {
+        JFrame employeeDisplayFrame = new JFrame("Employee Search Menu");
+        employeeDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
 
+        JPanel employeeDisplayPanel = new JPanel(new GridBagLayout());
+
+        JLabel customerDisplayLabel = new JLabel("Employee Search Menu");
+        customerDisplayLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        customerDisplayLabel.setForeground(new Color(0, 0, 90));
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        employeeDisplayPanel.add(customerDisplayLabel, gbc);
+
+        JLabel rowsPerPageLabel = new JLabel("Rows per page:");
+        JComboBox<String> rowsPerPageOptions = new JComboBox<>(new String[]{"20", "30", "50", "100"});
+
+        JLabel employeeDisplaySearchLabel = new JLabel("Search by:");
+        JComboBox<String> employeeDisplaySearchOptions = new JComboBox<>(new String[]{" ", "General Search",
+                "Search by NIF", "Search by Name", "Search by Address", "Search by Access Level"});
+
+        JLabel inputForSearch = new JLabel("Input for search:");
+        JTextField inputForSearchField = new JTextField(20);
+
+        JLabel employeeDisplayOrderLabel = new JLabel("Order by:");
+        JComboBox<String> employeeDisplayOrderOptions = new JComboBox<>(new String[]{" ", "Order by NIF",
+                "Order by Name", "Order by Address", "Order by Access Level", "Order by Date of Birth"});
+
+        JButton searchButton = new JButton("Search");
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setBackground(GREEN);
+        searchButton.addActionListener(e -> {
+            String searchOption = (String) employeeDisplaySearchOptions.getSelectedItem();
+            String orderType = (String) employeeDisplayOrderOptions.getSelectedItem();
+            String rowsPerPage = (String) rowsPerPageOptions.getSelectedItem();
+            String input = inputForSearchField.getText();
+
+            if (searchOption.isBlank() || searchOption.isBlank() || orderType.isEmpty() || orderType.isBlank()) {
+                JOptionPane.showMessageDialog(employeeDisplayFrame, "Please select a search option and an order option");
+            } else if (!isInteger(rowsPerPage)) {
+                JOptionPane.showMessageDialog(employeeDisplayFrame, "Please select a search option and an order option");
+            } else {
+                boolean result = true;
+                while (result) {
+                    switch (searchOption) {
+                        case "General Search" -> {
+                            displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
+                                    employeeDisplayFrame, orderType);
+                            result = false;
+                        }
+                        case "Search NIF" -> {
+                            if (!isNIF(input)) {
+                                JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid NIF");
+                            } else {
+                                List<Employee> employees = new ArrayList<>();
+                                for (Employee employee1 : dataSource.queryEmployees()) {
+                                    if (employee1.getNif() == Integer.parseInt(input)) {
+                                        employees.add(employee1);
+                                        result = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        case "Search by Name" -> {
+                            if (!isValidString(input)) {
+                                JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid name");
+                            } else {
+                                List<Employee> employees = new ArrayList<>();
+                                for (Employee employee1 : dataSource.queryEmployees()) {
+                                    if (employee1.getName().equals(input)) {
+                                        employees.add(employee1);
+                                        result = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        case "Search by Address" -> {
+                            if (!isValidString(input)) {
+                                JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid address");
+                            } else {
+                                List<Employee> employees = new ArrayList<>();
+                                for (Employee employee1 : dataSource.queryEmployees()) {
+                                    if (employee1.getAddress().equals(input)) {
+                                        employees.add(employee1);
+                                        result = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        case "Search by Access Level" -> {
+                            if (!isInteger(input)) {
+                                JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid access level");
+                            } else {
+                                List<Employee> employees = new ArrayList<>();
+                                for (Employee employee1 : dataSource.queryEmployees()) {
+                                    if (employee1.getAccess_level() == Integer.parseInt(input)) {
+                                        employees.add(employee1);
+                                        result = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        });
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {rowsPerPageLabel, employeeDisplaySearchLabel, employeeDisplayOrderLabel, inputForSearch};
+        JComboBox[] comboBoxes = {rowsPerPageOptions, employeeDisplaySearchOptions, employeeDisplayOrderOptions};
+
+        for (int i = 0; i < labels.length; i++) {
+            /*gbc.gridx = 0;
+            gbc.gridy++;
+            employeeDisplayPanel.add(labels[i], gbc);
+            gbc.gridx = 1;
+            employeeDisplayPanel.add(comboBoxes[i], gbc);*/
+
+            gbc.gridx = 0;
+            gbc.gridy = i + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            employeeDisplayPanel.add(labels[i], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+            if (i == 3) {
+//                gbc.fill = GridBagConstraints.HORIZONTAL;
+                employeeDisplayPanel.add(inputForSearchField, gbc);
+            } else {
+//                gbc.fill = GridBagConstraints.NONE;
+                employeeDisplayPanel.add(comboBoxes[i], gbc);
+            }
+        }
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            employeeDisplayFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            searchMenuFrame.setVisible(true);
+            employeeDisplayFrame.setVisible(false);
+        });
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        employeeDisplayPanel.add(searchButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        employeeDisplayPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        employeeDisplayPanel.add(backButton, gbc);
+
+        employeeDisplayFrame.add(employeeDisplayPanel);
+        employeeDisplayFrame.pack();
+        employeeDisplayFrame.setVisible(true);
+
+        employeeDisplayFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+    }
+
+    private void displaySearchByOrderEmployee(String rowsPerPage, List<Employee> employees, JFrame employeeDisplayFrame, String orderType) {
+        switch (orderType) {
+            case "Order by NIF":
+                employees.sort(Comparator.comparing(Employee::getNif));
+                new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
+                        employeeDisplayFrame, employees);
+                break;
+            case "Order by Name":
+                employees.sort(Comparator.comparing(Employee::getName));
+                new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
+                        employeeDisplayFrame, employees);
+                break;
+            case "Order by Address":
+                employees.sort(Comparator.comparing(Employee::getAddress));
+                new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
+                        employeeDisplayFrame, employees);
+                break;
+            case "Order by Access Level":
+                employees.sort(Comparator.comparing(Employee::getAccess_level));
+                new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
+                        employeeDisplayFrame, employees);
+                break;
+            case "Order by Date of Birth":
+                employees.sort(Comparator.comparing(Employee::getBirht_date));
+                new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
+                        employeeDisplayFrame, employees);
+                break;
+        }
     }
 
     private void vehicleDisplayPage(JFrame searchMenuFrame) {
@@ -668,49 +881,40 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submitButton.setBackground(GREEN);
         submitButton.setForeground(Color.WHITE);
         submitButton.addActionListener(e -> {
-            String plate = plateField.getText();
-            String insuranceCategory = (String) insuranceCategoryField.getSelectedItem();
-            String policy = policyField.getText();
-            String startDate = startDateField.getText();
-            String endDate = endDateField.getText();
-            String companyName = companyNameField.getText();
 
-            if (!isPlate(plate)) {
-                JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (!isDate(startDate)) {
-                JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+            while (true) {
+                String plate = plateField.getText();
+                String insuranceCategory = (String) insuranceCategoryField.getSelectedItem();
+                String policy = policyField.getText();
+                String startDate = startDateField.getText();
+                String endDate = endDateField.getText();
+                String companyName = companyNameField.getText();
 
-            } else if (!isDate(endDate)) {
-                JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
-
-            } else if (!isValidString(companyName)) {
-                JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
-
-            } else if (!isPolicy(policy)) {
-                JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
-
-            } else if (insuranceCategory.isEmpty() || insuranceCategory.isBlank()) {
-                JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
-
-            } else {
-                if (dataSource.insertInsurance(Integer.parseInt(policy), plate, Date.valueOf(startDate),
-                        insuranceCategory, Date.valueOf(endDate), companyName)) {
-                    JOptionPane.showMessageDialog(insertInsuranceFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    insertInsuranceFrame.setVisible(false);
-                    insertMenuFrame.setVisible(true);
+                if (isPlate(plate) && isDate(startDate) && isDate(endDate) && isValidString(companyName) && isPolicy(policy)) {
+                    if (dataSource.insertInsurance(Integer.parseInt(policy), plate, Date.valueOf(startDate),
+                            insuranceCategory, Date.valueOf(endDate), companyName)) {
+                        JOptionPane.showMessageDialog(insertInsuranceFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        insertInsuranceFrame.setVisible(false);
+                        insertInsuranceFrame.dispose();
+                        insertInsurance(insertMenuFrame);
+//                        break;
+                    } else {
+                        JOptionPane.showMessageDialog(insertInsuranceFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+                    break;
                 }
-                JOptionPane.showMessageDialog(insertInsuranceFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            insertInsuranceFrame.setVisible(false);
-            insertInsurance(insertMenuFrame);
         });
-
 
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
-        exitButton.addActionListener(e -> {
+        exitButton.addActionListener(e ->
+
+        {
             insertInsuranceFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -718,7 +922,9 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
-        backButton.addActionListener(e -> {
+        backButton.addActionListener(e ->
+
+        {
             insertMenuFrame.setVisible(true);
             insertInsuranceFrame.setVisible(false);
         });
@@ -729,7 +935,9 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JTextField[] fields = {plateField, policyField,
                 startDateField, endDateField, companyNameField};
 
-        for (int row = 0; row < labels.length; row++) {
+        for (
+                int row = 0;
+                row < labels.length; row++) {
             gbc.gridx = 0;
             gbc.gridy = row + 1;
             gbc.anchor = GridBagConstraints.LINE_START;
@@ -749,32 +957,40 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.gridx = 1;
         gbc.gridy = 11;
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(20, 10, 5, 10);
+        gbc.insets = new
+
+                Insets(20, 10, 5, 10);
         insertInsurancePanel.add(submitButton, gbc);
 
         gbc.gridwidth = 1;
         gbc.gridx = 0;
         gbc.gridy = 12;
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(20, 10, 5, 10);
+        gbc.insets = new
+
+                Insets(20, 10, 5, 10);
         insertInsurancePanel.add(exitButton, gbc);
 
         gbc.gridwidth = 1;
         gbc.gridx = 1;
         gbc.gridy = 12;
-        gbc.insets = new Insets(20, 10, 5, 10);
+        gbc.insets = new
+
+                Insets(20, 10, 5, 10);
         insertInsurancePanel.add(backButton, gbc);
 
         insertInsuranceFrame.add(insertInsurancePanel);
         insertInsuranceFrame.pack();
         insertInsuranceFrame.setVisible(true);
 
-        insertInsuranceFrame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                dataSource.close();
-            }
-        });
+        insertInsuranceFrame.addWindowListener(new
+
+                                                       WindowAdapter() {
+                                                           @Override
+                                                           public void windowClosing(WindowEvent e) {
+                                                               dataSource.close();
+                                                           }
+                                                       });
 
     }
 
@@ -821,37 +1037,30 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submitButton.setBackground(GREEN);
         submitButton.setForeground(Color.WHITE);
         submitButton.addActionListener(e -> {
-            String plate = plateField.getText();
-            String date = dateField.getText();
-            String expirationDate = expirationDateField.getText();
-            String value = valueField.getText();
-            String nif = nifField.getText();
-            String reason = (String) reasonFiel.getSelectedItem();
+            while (true) {
+                String plate = plateField.getText();
+                String date = dateField.getText();
+                String expirationDate = expirationDateField.getText();
+                String value = valueField.getText();
+                String nif = nifField.getText();
+                String reason = (String) reasonFiel.getSelectedItem();
 
-            if (!isPlate(plate)) {
-                JOptionPane.showMessageDialog(insertTicketFrame, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (!isDate(date)) {
-                JOptionPane.showMessageDialog(insertTicketFrame, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (!isDate(expirationDate)) {
-                JOptionPane.showMessageDialog(insertTicketFrame, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (!isDouble(value)) {
-                JOptionPane.showMessageDialog(insertTicketFrame, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (!isNIF(nif)) {
-                JOptionPane.showMessageDialog(insertTicketFrame, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (reason.isBlank() || reason.isEmpty()) {
-                JOptionPane.showMessageDialog(insertTicketFrame, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                if (dataSource.insertTicket(Integer.parseInt(nif), plate, Date.valueOf(date),
-                        reason, Double.parseDouble(value), Date.valueOf(expirationDate))) {
-                    JOptionPane.showMessageDialog(insertTicketFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    insertTicketFrame.setVisible(false);
-                    mainFrame.setVisible(true);
+                if (isPlate(plate) && isDate(date) && isDate(expirationDate) && isDouble(value) && isNIF(nif) && reason != " ") {
+                    if (dataSource.insertTicket(Integer.parseInt(nif), plate, Date.valueOf(date),
+                            reason, Double.parseDouble(value), Date.valueOf(expirationDate))) {
+                        JOptionPane.showMessageDialog(insertTicketFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        insertTicketFrame.setVisible(false);
+                        insertTicketFrame.dispose();
+                        insertTicket(insertMenuFrame);
+//                        break;
+                    } else {
+                        JOptionPane.showMessageDialog(insertTicketFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(insertTicketFrame, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
+                    break;
                 }
-                JOptionPane.showMessageDialog(insertTicketFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            insertTicketFrame.setVisible(false);
-            insertCustomer(insertMenuFrame);
-
         });
 
         JButton exitButton = new JButton("Exit");
@@ -969,40 +1178,33 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submitButton.setBackground(GREEN);
         submitButton.setForeground(Color.WHITE);
         submitButton.addActionListener(e -> {
-            String name = nameField.getText();
-            String address = addressField.getText();
-            String email = emailField.getText();
-            String birthDate = birthDateField.getText();
-            String password = passwordField.getText();
-            String nif = nifField.getText();
-            String accessLevel = (String) accessLevelField.getSelectedItem();
 
-            if (!isValidString(name)) {
-                JOptionPane.showMessageDialog(insertEmployeeFrame, "Please fill the name field");
-            } else if (!isValidString(address)) {
-                JOptionPane.showMessageDialog(insertEmployeeFrame, "Please fill the address field");
-            } else if (!isEmail(email)) {
-                JOptionPane.showMessageDialog(insertEmployeeFrame, "Wrong email format");
-            } else if (!isValidBirthDate(birthDate)) {
-                JOptionPane.showMessageDialog(insertEmployeeFrame, "Wrong birth date format");
-            } else if (!isValidString(password)) {
-                JOptionPane.showMessageDialog(insertEmployeeFrame, "Please fill the password field");
-            } else if (!isNIF(nif)) {
-                JOptionPane.showMessageDialog(insertEmployeeFrame, "Wrong NIF format");
-            } else if (((String) accessLevelField.getSelectedItem()).isEmpty() ||
-                    ((String) accessLevelField.getSelectedItem()).isBlank()) {
-                JOptionPane.showMessageDialog(insertEmployeeFrame, "Please fill the access level option box");
-            } else {
-                password = BCrypt.hashpw(password, BCrypt.gensalt());
-                if (dataSource.insertEmployee(Integer.parseInt(nif),
-                        name, address, Date.valueOf(birthDate), password,
-                        email, Integer.parseInt(accessLevel))) {
-                    JOptionPane.showMessageDialog(insertEmployeeFrame, "Employee registered successfully");
+            while (true) {
+                String name = nameField.getText();
+                String address = addressField.getText();
+                String email = emailField.getText();
+                String birthDate = birthDateField.getText();
+                String password = passwordField.getText();
+                String nif = nifField.getText();
+                String accessLevel = (String) accessLevelField.getSelectedItem();
+
+                if (isValidString(name) && isValidString(address) && isEmail(email) && isValidBirthDate(birthDate) && isValidString(password) && isNIF(nif) && !accessLevel.equals(" ")) {
+                    if (dataSource.insertEmployee(Integer.parseInt(nif),
+                            name, address, Date.valueOf(birthDate), password,
+                            email, Integer.parseInt(accessLevel))) {
+                        JOptionPane.showMessageDialog(insertEmployeeFrame, "Employee registered successfully");
+                        insertEmployeeFrame.dispose();
+                        insertEmployeeFrame.setVisible(false);
+                        insertEmployee(insertMenuFrame);
+                        //break;
+                    } else {
+                        JOptionPane.showMessageDialog(insertEmployeeFrame, "Error registering employee");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(insertEmployeeFrame, "Please fill all the fields");
+                    break;
                 }
-                JOptionPane.showMessageDialog(insertEmployeeFrame, "Error registering employee please try again");
             }
-            insertEmployeeFrame.setVisible(false);
-            insertCustomer(insertMenuFrame);
         });
 
         JButton exitButton = new JButton("Exit");
@@ -1101,7 +1303,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JLabel addressLabel = new JLabel("Address: ");
         JTextField addressField = new JTextField(15);
 
-        JLabel emailLabel = new JLabel("Email: ");
+        JLabel emailLabel = new JLabel("Email: ([...]@[...].com or [...]@[...].pt");
         JTextField emailField = new JTextField(15);
 
         JLabel birthDateLabel = new JLabel("Birth Date: (YYYY-MM-DD)");
@@ -1110,13 +1312,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JLabel passwordLabel = new JLabel("Password: ");
         JTextField passwordField = new JTextField(15);
 
-        JLabel nifLabel = new JLabel("NIF: ");
+        JLabel nifLabel = new JLabel("NIF: (9 digits)");
         JTextField nifField = new JTextField(15);
 
-        JLabel driverLicenseLabel = new JLabel("Driver License: ");
+        JLabel driverLicenseLabel = new JLabel("Driver License: (8 digits)");
         JTextField driverLicenseField = new JTextField(15);
 
-        JLabel licenseTypeLabel = new JLabel("License Type: ");
+        JLabel licenseTypeLabel = new JLabel("License Type: (Select an option");
         JComboBox<String> licenseType = new JComboBox<>(new String[]{" ", "A", "B", "C", "D"});
 
         JLabel licenseDateLabel = new JLabel("License Date: (YYYY-MM-DD)");
@@ -1129,48 +1331,38 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submitButton.setBackground(GREEN);
         submitButton.setForeground(Color.WHITE);
         submitButton.addActionListener(e -> {
-            String name = nameField.getText();
-            String address = addressField.getText();
-            String email = emailField.getText();
-            String birthDate = birthDateField.getText();
-            String password = passwordField.getText();
-            String nif = nifField.getText();
-            String driverLicense = driverLicenseField.getText();
-            String selectedLicenseType = (String) licenseType.getSelectedItem();
-            String licenseDate = licenseDateField.getText();
-            String licenseExpiration = licenseExpirationField.getText();
 
+            while (true) {
+                String name = nameField.getText();
+                String address = addressField.getText();
+                String email = emailField.getText();
+                String birthDate = birthDateField.getText();
+                String password = passwordField.getText();
+                String nif = nifField.getText();
+                String driverLicense = driverLicenseField.getText();
+                String selectedLicenseType = (String) licenseType.getSelectedItem();
+                String licenseDate = licenseDateField.getText();
+                String licenseExpiration = licenseExpirationField.getText();
 
-            if (!isValidString(name)) {
-                JOptionPane.showMessageDialog(insertCustomerFrame, "Please fill the name field");
-            } else if (!isValidString(address)) {
-                JOptionPane.showMessageDialog(insertCustomerFrame, "Please fill the address field");
-            } else if (!isEmail(email)) {
-                JOptionPane.showMessageDialog(insertCustomerFrame, "Wrong email format");
-            } else if (!isValidBirthDate(birthDate)) {
-                JOptionPane.showMessageDialog(insertCustomerFrame, "Wrong birth date format");
-            } else if (!isValidString(password)) {
-                JOptionPane.showMessageDialog(insertCustomerFrame, "Please fill the password field");
-            } else if (!isNIF(nif)) {
-                JOptionPane.showMessageDialog(insertCustomerFrame, "Wrong NIF format");
-            } else if (!isDriverLicense(driverLicense)) {
-                JOptionPane.showMessageDialog(insertCustomerFrame, "Please fill the driver license field");
-            } else if (!isDate(licenseDate)) {
-                JOptionPane.showMessageDialog(insertCustomerFrame, "Wrong license date format");
-            } else if (!isDate(licenseExpiration)) {
-                JOptionPane.showMessageDialog(insertCustomerFrame, "Wrong license expiration format");
-            } else if (((String) licenseType.getSelectedItem()).isEmpty() ||
-                    ((String) licenseType.getSelectedItem()).isBlank()) {
-                JOptionPane.showMessageDialog(insertCustomerFrame, "Please choose an option from the license option box");
-            } else {
-                if (dataSource.insertCustomer(Integer.parseInt(nif), name, address, Date.valueOf(birthDate),
-                        password, email, Integer.parseInt(driverLicense), selectedLicenseType, Date.valueOf(licenseDate), Date.valueOf(licenseExpiration))) {
-                    JOptionPane.showMessageDialog(insertCustomerFrame, "Customer inserted successfully");
+                if (isValidString(name) && isValidString(address) && isNIF(nif) && isDate(licenseDate)
+                        && isDate(licenseExpiration) && isEmail(email) && isValidBirthDate(birthDate)
+                        && isPassword(password) && isDriverLicense(driverLicense) && selectedLicenseType != (" ")) {
+                    if (dataSource.insertCustomer(Integer.parseInt(nif), name, address, Date.valueOf(birthDate),
+                            password, email, Integer.parseInt(driverLicense), selectedLicenseType, Date.valueOf(licenseDate), Date.valueOf(licenseExpiration))) {
+
+                        JOptionPane.showMessageDialog(insertCustomerFrame, "Customer inserted successfully");
+                        insertCustomerFrame.setVisible(false);
+                        insertCustomerFrame.dispose();
+                        insertVehicle(insertMenuFrame);
+//                        break;
+                    } else {
+                        JOptionPane.showMessageDialog(insertCustomerFrame, "Error inserting customer");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(insertCustomerFrame, "Please fill all the fields");
+                    break;
                 }
-                JOptionPane.showMessageDialog(insertCustomerFrame, "Error inserting customer please try again");
             }
-            insertCustomerFrame.setVisible(false);
-            insertCustomer(insertMenuFrame);
         });
 
         JButton exitButton = new JButton("Exit");
@@ -1284,7 +1476,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.anchor = GridBagConstraints.PAGE_START;
         insertVehiclePanel.add(insertVehicleLabel, gbc);
 
-        JLabel brand = new JLabel("Brand: ");
+        JLabel brand = new JLabel("Brand: (Select an option)");
         JComboBox<String> brandField = new JComboBox<>(new String[]{" ", "Abarth", "Alfa Romeo", "Aston Martin", "Audi",
                 "Bentley", "BMW", "Bugatti", "Cadillac", "Chevrolet", "Chrysler", "Citroen", "Dacia", "Daewoo",
                 "Daihatsu", "Dodge", "Donkervoort", "DS", "Ferrari", "Fiat", "Fisker", "Ford", "Honda", "Hummer",
@@ -1297,23 +1489,23 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JLabel model = new JLabel("Model");
         JTextField modelField = new JTextField(15);
 
-        JLabel plate = new JLabel("Plate: ");
+        JLabel plate = new JLabel("Plate: XX-XX-XX ");
         JTextField plateField = new JTextField(15);
 
-        JLabel color = new JLabel("Color: ");
+        JLabel color = new JLabel("Color: (Select an option)");
         JComboBox<String> colorField = new JComboBox<>(new String[]{" ", "Black", "White",
                 "Red", "Blue", "Green", "Yellow", "Gray", "Silver", "Brown", "Orange"});
 
         JLabel registrationDate = new JLabel("Registration Date: (YYYY-MM-DD)");
         JTextField registrationDateField = new JTextField(15);
 
-        JLabel vin = new JLabel("VIN: ");
+        JLabel vin = new JLabel("VIN: (17 characters)");
         JTextField vinField = new JTextField(15);
 
-        JLabel nif = new JLabel("NIF: ");
+        JLabel nif = new JLabel("NIF: (9 digits)");
         JTextField nifField = new JTextField(15);
 
-        JLabel category = new JLabel("Category: ");
+        JLabel category = new JLabel("Category: (Select an option)");
         JComboBox<String> categoryField = new JComboBox<>(new String[]{" ", "Light Commercial Vehicle",
                 "Light Passenger Vehicle",
                 "Heavy-duty Commercial Vehicle",
@@ -1322,41 +1514,35 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 "Heavy-duty Passenger Vehicle"});
 
         submit.addActionListener(e -> {
-            String plateText = plateField.getText();
-            String modelText = modelField.getText();
-            String colorText = (String) colorField.getSelectedItem();
-            String registrationDateText = registrationDateField.getText();
-            String brandText = (String) brandField.getSelectedItem();
-            String vinText = vinField.getText();
-            String nifText = nifField.getText();
-            String categoryText = (String) categoryField.getSelectedItem();
+            while (true) {
 
-            if (!isPlate(plateText)) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please insert a valid plate with format XX-XX-XX");
+                String plateText = plateField.getText();
+                String modelText = modelField.getText();
+                String colorText = (String) colorField.getSelectedItem();
+                String registrationDateText = registrationDateField.getText();
+                String brandText = (String) brandField.getSelectedItem();
+                String vinText = vinField.getText();
+                String nifText = nifField.getText();
+                String categoryText = (String) categoryField.getSelectedItem();
 
-            } else if (!isValidString(modelText)) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill the model field");
-            } else if (!isDate(registrationDateText)) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill the date field with a date in the forma YYYY-MM-DD");
-            } else if (!isVIN(vinText)) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill the VIN field (must contain 17 caracters)");
-            } else if (!isNIF(nifText)) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill all nif field (must contain 9 numbers)");
-            } else if (categoryText.isEmpty() || categoryText.isBlank()) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please select an option for the category field");
-            } else if (colorText.isEmpty() || colorText.isBlank()) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please select an option for the color field");
-            } else if (brandText.isBlank() || brandText.isBlank()) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please select an option for the brand field");
-            } else {
-                if (dataSource.insertVehicle(plateText, vinText, colorText, brandText, modelText, Date.valueOf(registrationDateText), categoryText, Integer.parseInt(nifText))) {
-                    JOptionPane.showMessageDialog(insertVehicleFrame, "Vehicle succefully registered");
+                if (isPlate(plateText) && isValidString(modelText) && isDate(registrationDateText) && isVIN(vinText) && isNIF(nifText) && !categoryText.equals(" ") && !colorText.equals(" ") && !brandText.equals(" ")) {
 
+                    if (dataSource.insertVehicle(plateText, vinText, colorText, brandText,
+                            modelText, Date.valueOf(registrationDateText), categoryText, Integer.parseInt(nifText))) {
+//                        break;
+                        JOptionPane.showMessageDialog(insertVehicleFrame, "Vehicle succefully registered");
+                        insertVehicleFrame.setVisible(false);
+                        insertVehicleFrame.dispose();
+                        insertVehicle(insertMenuFrame);
+
+                    } else {
+                        JOptionPane.showMessageDialog(insertVehicleFrame, "Error inserting vehicle");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill all the fields properly");
+                    break;
                 }
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Vehicle wasn't registered please try again");
             }
-                insertVehicleFrame.setVisible(false);
-                insertVehicle(insertMenuFrame);
         });
 
         gbc.gridwidth = 1;
@@ -1415,6 +1601,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 dataSource.close();
             }
         });
+    }
+
+    public static void main(String[] args) {
+        //Menu interativo
+        Employee employee = new Employee();
+        employee.setName("John Doe");
+        BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
     }
 
 }
