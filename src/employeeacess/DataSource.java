@@ -1,6 +1,7 @@
 package employeeacess;
 
 import model.*;
+import org.mindrot.jbcrypt.BCrypt;
 import util.UserWriterAux;
 
 import java.sql.*;
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * Para Fazer login chamar método authenticateUser e fazer a verificação; de seguida chamar o método getDummy
@@ -269,7 +269,6 @@ public class DataSource {
     }
 
 
-
     //Devolve um arraylist com todos os veículos que estão na base de dados.
     //TESTED
     public List<Vehicle> queryVehicles() {
@@ -384,7 +383,7 @@ public class DataSource {
                 int nif = resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF));
                 customer.setNif(nif);
                 customer.setExpDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_EXPIRATION_DATE)));
-                customer.setLicenseType(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE)));
+                customer.setLicenseType(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE)));
                 customer.setStartingDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE)));
                 customer.setDriverLicenseNum(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_DRIVER_LICENSE)));
                 customers.put(nif, customer);
@@ -421,7 +420,7 @@ public class DataSource {
                 Customer customer = new Customer();
                 customer.setNif(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF)));
                 customer.setExpDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_EXPIRATION_DATE)));
-                customer.setLicenseType(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE)));
+                customer.setLicenseType(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE)));
                 customer.setStartingDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE)));
                 customer.setDriverLicenseNum(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_DRIVER_LICENSE)));
                 customers.add(customer);
@@ -435,8 +434,8 @@ public class DataSource {
                         customer.setName(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_NAME)));
                         customer.setAddress(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_ADDRESS)));
                         customer.setBirht_date(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
-                        customer.setEmail(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_EMAIL)));
                         customer.setPwd(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
+                        customer.setEmail(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_EMAIL)));
                     }
                 }
             }
@@ -529,7 +528,7 @@ public class DataSource {
     }
 
     //TESTED
-    public boolean insertInsurance(int policy, String plate ,
+    public boolean insertInsurance(int policy, String plate,
                                    Date startDate,
                                    String extraCategory, Date expDate,
                                    String companyName) {
@@ -584,8 +583,8 @@ public class DataSource {
 
     //TESTED
     public boolean insertVehicle(String plate, String vin, String color,
-                              String brand, String model, Date registrationDate,
-                              String category, int nif) {
+                                 String brand, String model, Date registrationDate,
+                                 String category, int nif) {
 
         boolean result = false;
         //Verfica se matricula é válida
@@ -651,7 +650,7 @@ public class DataSource {
 
     //TESTED
     public boolean insertTicket(int nif, String plate, Date date,
-                             String reason, double value, Date expiry_date) {
+                                String reason, double value, Date expiry_date) {
 
         boolean result = false;
         if (!isCustomer(nif) || !isVehicleOwner(nif, plate)) {
@@ -1048,7 +1047,6 @@ public class DataSource {
                 return true;
             }
         }
-//        System.out.println("NIF isn't registered in the database");
         return false;
     }
 
@@ -1058,7 +1056,6 @@ public class DataSource {
                 return true;
             }
         }
-//        System.out.println("NIF isn't registered in the database");
         return false;
     }
 
@@ -1403,7 +1400,7 @@ public class DataSource {
     }
 
     public boolean insertCustomer(int nif, String name, String address, Date bDate, String password, String email,
-                               int driverLicense, String licenseType, Date registrationDate, Date expirationDate) {
+                                  int driverLicense, String licenseType, Date registrationDate, Date expirationDate) {
 
         boolean result = false;
 
@@ -1456,7 +1453,7 @@ public class DataSource {
     public boolean insertEmployee(int nif, String name, String address,
                                   Date bDate, String password,
                                   String email,
-                               int accessLevel) {
+                                  int accessLevel) {
 
         boolean result = false;
 
