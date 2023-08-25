@@ -451,145 +451,99 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton searchButton = new JButton("Search");
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(GREEN);
+
         searchButton.addActionListener(e -> {
             String searchOption = (String) ticketDisplaySearchOptions.getSelectedItem();
-            String ordertType = (String) ticketDisplayOrderOptions.getSelectedItem();
+            String orderType = (String) ticketDisplayOrderOptions.getSelectedItem();
             String rowsPerPage = (String) rowsPerPageOptions.getSelectedItem();
             String input = inputForSearchField.getText();
 
-            if (searchOption.isBlank() || searchOption.isBlank() || ordertType.isEmpty() || ordertType.isBlank()) {
-                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please select a search option and an order option");
-            } else if (!isInteger(rowsPerPage)) {
-                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please select the number of rows per page");
-            } else {
-                boolean result = true;
-                while (result) {
+            if (!searchOption.equals(" ") && !orderType.equals(" ")) {
+                if (searchOption.equals("Genearl Search")) {
+                    displaySearchByOrderTicket(rowsPerPage, dataSource.queryTickets(), ticketDisplayFrame, orderType);
+                } else {
                     switch (searchOption) {
-                        case "General Search" -> {
-                            displaySearchByOrderTicket(rowsPerPage,
-                                    dataSource.queryTickets(), ticketDisplayFrame, ordertType);
-                            result = false;
-                        }
                         case "Search by NIF" -> {
-                            if (!isNIF(input)) {
-                                result = false;
-                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid NIF");
-                            } else {
+                            if (isNIF(input)) {
                                 List<Ticket> ticketList = new ArrayList<>();
                                 dataSource.queryTickets().forEach(ticket -> {
                                     if (ticket.getNif() == Integer.parseInt(input)) {
                                         ticketList.add(ticket);
                                     }
                                 });
-                                new TicketTableNavigation(Integer.parseInt(rowsPerPage),
-                                        ticketDisplayFrame, ticketList);
-                            }
-                            result = false;
-                        }
-
-                        case "Search by Plate" -> {
-                            if (!isPlate(input)) {
-                                result = false;
-                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a plate");
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
                             } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid NIF");
+                            }
+                        }
+                        case "Search by Plate" -> {
+                            if (isPlate(input)) {
                                 List<Ticket> ticketList = new ArrayList<>();
                                 dataSource.queryTickets().forEach(ticket -> {
                                     if (ticket.getPlate().equals(input)) {
                                         ticketList.add(ticket);
                                     }
                                 });
-                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, ordertType);
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid plate");
                             }
-                            result = false;
                         }
-
                         case "Search by Reason" -> {
-                            if (!isValidString(input)) {
-                                result = false;
-                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid name");
-                            } else {
+                            if (isValidString(input)) {
                                 List<Ticket> ticketList = new ArrayList<>();
                                 dataSource.queryTickets().forEach(ticket -> {
-                                    if (ticket.getReason().contains(input)) {
+                                    if (ticket.getReason().equals(input)) {
                                         ticketList.add(ticket);
                                     }
                                 });
-                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, ordertType);
-                            }
-                            result = false;
-                        }
-
-                        case "Search by Issue Date" -> {
-                            if (!isValidString(input)) {
-                                result = false;
-                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid license type");
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
                             } else {
-                                List<Ticket> ticketList = new ArrayList<>();
-                                dataSource.queryTickets().forEach(ticket -> {
-                                    if (ticket.getDate().equals(input) || ticket.getDate().after(Date.valueOf(input))) {
-                                        ticketList.add(ticket);
-                                    }
-                                });
-                                ticketList.sort(Comparator.comparing(Ticket::getDate).reversed());
-                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, ordertType);
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid reason");
                             }
-                            result = false;
                         }
-
                         case "Search by Expiration Date" -> {
-                            if (!isDriverLicense(input)) {
-                                result = false;
-                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid NIF");
-                            } else {
+                            if (isDate(input)) {
                                 List<Ticket> ticketList = new ArrayList<>();
                                 dataSource.queryTickets().forEach(ticket -> {
-                                    if (ticket.getExpiry_date().equals(input) || ticket.getExpiry_date().after(Date.valueOf(input))) {
+                                    if (ticket.getExpiry_date().equals(Date.valueOf(input)) || ticket.getExpiry_date().after(Date.valueOf(input))) {
                                         ticketList.add(ticket);
                                     }
                                 });
-                                ticketList.sort(Comparator.comparing(Ticket::getExpiry_date).reversed());
-                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, ordertType);
-                            }
-                            result = false;
-                        }
-
-                        case "Search by Value" -> {
-                            if (!isDouble(input)) {
-                                result = false;
-                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a value for ticket");
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
                             } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid date");
+                            }
+                        }
+                        case "Search by Value" -> {
+                            if (isDouble(input)) {
                                 List<Ticket> ticketList = new ArrayList<>();
                                 dataSource.queryTickets().forEach(ticket -> {
                                     if (ticket.getValue() == Double.parseDouble(input) || ticket.getValue() > Double.parseDouble(input)) {
                                         ticketList.add(ticket);
                                     }
                                 });
-                                ticketList.sort(Comparator.comparing(Ticket::getValue));
-                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, ordertType);
-                            }
-                            result = false;
-                        }
-
-                        case "Search by TicketID" -> {
-                            if (!isInteger(input)) {
-                                result = false;
-                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid TicketID");
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
                             } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid value");
+                            }
+                        }
+                        case "Search by TicketID" -> {
+                            if (isInteger(input)) {
                                 List<Ticket> ticketList = new ArrayList<>();
                                 dataSource.queryTickets().forEach(ticket -> {
                                     if (ticket.getTicketID() == Integer.parseInt(input)) {
                                         ticketList.add(ticket);
                                     }
                                 });
-                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, ordertType);
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid TicketID");
                             }
-                            result = false;
                         }
-
                         case "Search by Paid Y(y) or N(n)" -> {
                             if (input.compareToIgnoreCase("Y(y)") != 0 && input.compareToIgnoreCase("N(n)") != 0) {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter Y(y) or N(n)");
-                                result = false;
                             } else {
                                 List<Ticket> ticketList = new ArrayList<>();
                                 dataSource.queryTickets().forEach(ticket -> {
@@ -598,14 +552,26 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                         ticketList.add(ticket);
                                     }
                                 });
-                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, ordertType);
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
                             }
-                            result = false;
                         }
-                        default -> JOptionPane.showMessageDialog(ticketDisplayFrame, "Please select a search option");
+                        case "Search by Issue Date" -> {
+                            if (isDate(input)) {
+                                List<Ticket> ticketList = new ArrayList<>();
+                                dataSource.queryTickets().forEach(ticket -> {
+                                    if (ticket.getDate().equals(Date.valueOf(input)) || ticket.getDate().after(Date.valueOf(input))) {
+                                        ticketList.add(ticket);
+                                    }
+                                });
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid date");
+                            }
+                        }
                     }
-                    //Method will get here when switch is exited.
                 }
+            } else {
+                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please select a search and order option");
             }
         });
 
