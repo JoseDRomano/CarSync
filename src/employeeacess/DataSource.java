@@ -700,7 +700,7 @@ public class DataSource {
 
 
     //TESTED
-    public boolean updateVehicleColor(String color, String plate) {
+    public boolean updateVehicleColor(String plate, String color) {
 
         boolean result = false;
         /*if (!isVehicleOwner(nif, plate)) {
@@ -900,7 +900,7 @@ public class DataSource {
         }
     }
 
-    public void updatePersonPassword(int nif, String newPassword) {
+    public boolean updatePersonPassword(int nif, String newPassword) {
         try {
             connection.setAutoCommit(false);
             updatePersonPassword.setString(1, newPassword);
@@ -910,6 +910,7 @@ public class DataSource {
             if (affected == 1) {
                 System.out.println("Updated password for person with nif: " + nif);
                 connection.commit();
+                return true;
             } else {
                 throw new SQLException("Couldn't update password for person with nif: " + nif);
             }
@@ -933,10 +934,11 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+        return false;
     }
 
 
-    public void updatePersonAddress(int nif, String newAddress) {
+    public boolean updatePersonAddress(int nif, String newAddress) {
         try {
             connection.setAutoCommit(false);
             updatePersonAddress.setString(1, newAddress);
@@ -946,6 +948,7 @@ public class DataSource {
             if (affected == 1) {
                 System.out.println("Updated address for person with nif: " + nif);
                 connection.commit();
+                return true;
             } else {
                 throw new SQLException("Couldn't update address for person with nif: " + nif);
             }
@@ -969,13 +972,14 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+        return false;
     }
 
-    public void updatePersonEmail(int nif, String newEmail) {
+    public boolean updatePersonEmail(int nif, String newEmail) {
 
         if (!isCustomerOrEmployee(nif)) {
             System.out.println("Person with nif: " + nif + " is not a customer nor employee.");
-            return;
+            return false;
         }
 
         try {
@@ -987,6 +991,7 @@ public class DataSource {
             if (affected == 1) {
                 System.out.println("Updated email for person with nif: " + nif);
                 connection.commit();
+                return true;
             } else {
                 throw new SQLException("Couldn't update email for person with nif: " + nif);
             }
@@ -1010,6 +1015,7 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+        return false;
     }
 
 

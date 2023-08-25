@@ -50,7 +50,7 @@ public enum InsuranceEnum {
                     getString(InsuranceEnum.COLUMN_INSURANCE_COMPANY) + " = ? WHERE " +
                     getString(InsuranceEnum.COLUMN_INSURANCE_POLICY) + " = ?";
             case DEACTIVATE_INSURANCE -> "UPDATE " + getString(InsuranceEnum.TABLE_INSURANCE) + " SET " +
-                    getString(InsuranceEnum.COLUMN_INSURANCE_DEACTIVATED) + " = 1 WHERE " +
+                    getString(InsuranceEnum.COLUMN_INSURANCE_DEACTIVATED) + " = 0 WHERE " +
                     getString(InsuranceEnum.COLUMN_INSURANCE_POLICY) + " = ?";
             default -> throw new IllegalArgumentException("No such column or operation for vehicle table");
         };

@@ -2,6 +2,7 @@
 
 import employeeacess.BackOffice;
 import employeeacess.BackOfficeAdminMenu;
+import employeeacess.MenuEmployee;
 import model.Employee;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -38,7 +39,8 @@ public class MainConnection {
         //Menu interativo
         Employee employee = new Employee();
         employee.setName("John Doe");
-        BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
+//        BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
+        MenuEmployee menuEmployee = new MenuEmployee(employee);
 
 
     }

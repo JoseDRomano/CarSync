@@ -56,15 +56,15 @@ public enum PersonsEnum {
             case COLUMN_EMAIL -> "email";
 
             case DEACTIVATE_PERSON -> "UPDATE " + getString(PersonsEnum.TABLE_PERSON) + " SET " +
-                    getString(PersonsEnum.COLUMN_DEACTIVATED) + " = 1 WHERE " +
+                    getString(PersonsEnum.COLUMN_DEACTIVATED) + " = 0 WHERE " +
                     getString(PersonsEnum.COLUMN_NIF) + " = ?";
 
             case DEACTIVATE_CUSTOMER -> "UPDATE " + getString(PersonsEnum.TABLE_CUSTOMER) + " SET " +
-                    getString(PersonsEnum.COLUMN_DEACTIVATED) + " = 1 WHERE " +
+                    getString(PersonsEnum.COLUMN_DEACTIVATED) + " = 0 WHERE " +
                     getString(PersonsEnum.COLUMN_NIF) + " = ?";
 
             case DEACTIVATE_EMPLOYEE -> "UPDATE " + getString(PersonsEnum.TABLE_EMPLOYEE) + " SET " +
-                    getString(PersonsEnum.COLUMN_DEACTIVATED) + " = 1 WHERE " +
+                    getString(PersonsEnum.COLUMN_DEACTIVATED) + " = 0 WHERE " +
                     getString(PersonsEnum.COLUMN_NIF) + " = ?";
 
             case INSERT_INTO_PERSON -> "INSERT INTO " + getString(PersonsEnum.TABLE_PERSON) + '('
