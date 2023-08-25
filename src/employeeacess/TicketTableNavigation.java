@@ -31,6 +31,7 @@ public class TicketTableNavigation {
 
     public TicketTableNavigation(int rowsPerPage, JFrame originalFrame, List<Ticket> ticketList) {
 
+        originalFrame.setVisible(false);
         this.data = ticketList;
         if (rowsPerPage > 0) {
             this.rowsPerPage = rowsPerPage;
@@ -118,6 +119,8 @@ public class TicketTableNavigation {
 
 
     public TicketTableNavigation(int rowsPerPage, JFrame originalFrame) {
+
+        originalFrame.setVisible(false);
         if (rowsPerPage > 0) {
             this.rowsPerPage = rowsPerPage;
         }

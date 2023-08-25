@@ -34,6 +34,7 @@ public class CustomerTableNavigation {
 
     public CustomerTableNavigation(int rowsPerPage, JFrame originalFrame, List<Customer> customerList) {
 
+        originalFrame.setVisible(false);
         this.data = customerList;
         if (rowsPerPage > 0) {
             this.rowsPerPage = rowsPerPage;
@@ -121,6 +122,8 @@ public class CustomerTableNavigation {
 
 
     public CustomerTableNavigation(int rowsPerPage, JFrame originalFrame) {
+        originalFrame.setVisible(false);
+
         if (rowsPerPage > 0) {
             this.rowsPerPage = rowsPerPage;
         }
