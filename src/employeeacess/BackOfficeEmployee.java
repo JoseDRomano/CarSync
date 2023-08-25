@@ -183,7 +183,7 @@ public class BackOfficeEmployee extends BackOffice{
                     1 - Deactivate a customer
                     2 - Deactivate a vehicle
                     3 - Deactivate an insurance
-                    4 - Deactivate a ticket                  
+                    4 - Deactivate a ticket
                     0 - Exit""");
             System.out.print("Option: ");
 

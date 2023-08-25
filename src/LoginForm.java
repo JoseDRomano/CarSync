@@ -86,33 +86,31 @@ public class LoginForm extends JPanel {
     }
 
     private void performLogin() {
-        String nif = nifField.getText();
-        String password = new String(passwordField.getPassword());
-
-        // Assuming you have the DataSource class and its methods here
-        // DataSource dataSource = new DataSource();
-        // String result = dataSource.authenticateUser(nif, password);
-
-        // Your authentication logic and action code here
-
-        // Example code for different results
-        /*
-        switch (result) {
-            case DataSource.SUCCESSFUL_LOGIN:
-                // Your login success action here
-                break;
-            case DataSource.WRONG_PASSWORD:
-                showLoginErrorMessage("Wrong password. Please try again.");
-                break;
-            case DataSource.NIF_NOT_REGISTERED:
-                showLoginErrorMessage("NIF is not registered. Please register first.");
-                break;
-            default:
-                showLoginErrorMessage("An error occurred. Please try again later.");
-                break;
-        }
-        */
+//        String nif = nifField.getText();
+//        String password = new String(passwordField.getPassword());
+//
+//        // Assuming you have the DataSource class and its methods here
+//         DataSource dataSource = new DataSource();
+//         String result = dataSource.authenticateUser(nif, password);
+//
+//        // Your authentication logic and action code here
+//
+//        // Example code for different results
+//        switch (result) {
+//            case DataSource.SUCCESSFUL_LOGIN:
+//                // Your login success action here
+//                break;
+//            case DataSource.WRONG_PASSWORD:
+//                showLoginErrorMessage("Wrong password. Please try again.");
+//                break;
+//            case DataSource.NIF_NOT_REGISTERED:
+//                showLoginErrorMessage("NIF is not registered. Please register first.");
+//                break;
+//            default:
+//                showLoginErrorMessage("An error occurred. Please try again later.");
+//                break;
     }
+
 
     private void showLoginErrorMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Login Error", JOptionPane.ERROR_MESSAGE);

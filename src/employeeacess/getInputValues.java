@@ -230,7 +230,7 @@ public interface getInputValues {
             } else {
 //                logger.error("Invalid amount: " + s);
                 System.out.println("""
-                        Invalid password. 
+                        Invalid password.
                         Please make sure the password contains at least:
                         - 1 uppercase letter
                         - 1 lowercase letter

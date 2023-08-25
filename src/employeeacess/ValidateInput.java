@@ -1,6 +1,5 @@
 package employeeacess;
 
-import org.apache.log4j.Logger;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -70,33 +69,33 @@ public interface ValidateInput {
         return s.matches("^\\d+\\.\\d{2}$|^\\d+\\.00$");
     }
 
-    default int printValues(Scanner scan, Logger logger, Object... vs) {
-        boolean validInput = false;
-        int decision = -1;
-        int i = 1;
-        System.out.println("The values entered are: ");
-        for (Object o : vs) {
-            System.out.println("Value " + i + ": " + o.toString());
-            i++;
-        }
-        System.out.println("If values are correct, press Y(y) to continue, N(n) to cancel.");
-        do {
-            String s = scan.nextLine().trim();
-            if (s.compareToIgnoreCase("Y") == 0) {
-                System.out.println("Values confirmed.");
-                decision = 1;
-                validInput = true;
-            } else if (s.compareToIgnoreCase("N") == 0) {
-                System.out.println("Procedure cancelled.");
-                validInput = true;
-            } else {
-                System.out.println("Invalid input. Please try again.");
-//                logger.warn("Invalid input received.");
-            }
-        } while (!validInput);
-
-        return decision;
-    }
+//    default int printValues(Scanner scan, Logger logger, Object... vs) {
+//        boolean validInput = false;
+//        int decision = -1;
+//        int i = 1;
+//        System.out.println("The values entered are: ");
+//        for (Object o : vs) {
+//            System.out.println("Value " + i + ": " + o.toString());
+//            i++;
+//        }
+//        System.out.println("If values are correct, press Y(y) to continue, N(n) to cancel.");
+//        do {
+//            String s = scan.nextLine().trim();
+//            if (s.compareToIgnoreCase("Y") == 0) {
+//                System.out.println("Values confirmed.");
+//                decision = 1;
+//                validInput = true;
+//            } else if (s.compareToIgnoreCase("N") == 0) {
+//                System.out.println("Procedure cancelled.");
+//                validInput = true;
+//            } else {
+//                System.out.println("Invalid input. Please try again.");
+////                logger.warn("Invalid input received.");
+//            }
+//        } while (!validInput);
+//
+//        return decision;
+//    }
 
 
     default boolean isPassword(String s) {
