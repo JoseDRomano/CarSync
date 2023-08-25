@@ -2,6 +2,7 @@ package employeeacess;
 
 import model.Customer;
 import model.Employee;
+import model.Vehicle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -685,6 +686,279 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     }
 
     private void vehicleDisplayPage(JFrame searchMenuFrame) {
+        JFrame vehicleDisplayFrame = new JFrame("Vehicle Display");
+        vehicleDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JPanel vehicleDisplayPanel = new JPanel(new GridBagLayout());
+        JLabel vehicleDisplayLabel = new JLabel("Vehicle Display");
+        vehicleDisplayLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        vehicleDisplayLabel.setForeground(new Color(0, 0, 90));
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        vehicleDisplayPanel.add(vehicleDisplayLabel, gbc);
+
+        JLabel rowsPerPageLabel = new JLabel("Rows per page: ");
+        JComboBox<String> rowsPerPageOptions = new JComboBox<>(new String[]{" ", "20",
+                "30", "50", "100"});
+
+        JLabel vehicleDisplayOrderLabel = new JLabel("Order by: ");
+        JComboBox<String> vehicleDisplayOrderOptions = new JComboBox<>(new String[]{" ",
+                "License Plate", "Brand", "Color", "Year", "Issue Date",
+                "VIN", "NIF", "Category"});
+
+        JLabel vehicleDisplaySearchLabel = new JLabel("Search by: ");
+        JComboBox<String> vehicleDisplaySearchOptions = new JComboBox<>(new String[]{" ",
+                "General Search", "Search by Color", "Search by Brand", "Search by NIF",
+                "Search by Plate", "Search by VIN", "Search by Category", "Search by Issue Date"});
+
+        JLabel inputForSearch = new JLabel("Input for search:");
+        JTextField inputForSearchField = new JTextField(20);
+
+
+        JButton searchButton = new JButton("Search");
+        searchButton.setBackground(GREEN);
+        searchButton.setForeground(Color.WHITE);
+        searchButton.addActionListener(e -> {
+            String searchOption = (String) vehicleDisplaySearchOptions.getSelectedItem();
+            String orderOption = (String) vehicleDisplayOrderOptions.getSelectedItem();
+            String rowsPerPage = (String) rowsPerPageOptions.getSelectedItem();
+            String input = (String) inputForSearchField.getText();
+
+            boolean result = false;
+            if (searchOption.equals(" ") || orderOption.equals(" ")) {
+                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please select an option for each field");
+            } else {
+                while (!result) {
+                    switch (searchOption) {
+                        case "General Search" -> {
+                            displaySearchByOrderVehicle(rowsPerPage,
+                                    dataSource.queryVehicles(), vehicleDisplayFrame, orderOption);
+                            result = true;
+                        }
+
+                        case "Search by Brand" -> {
+                            if (!isValidString(input)) {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid input");
+                            } else {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getBrand().equals(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderOption);
+                                result = true;
+                            }
+                        }
+                        case "Search by Color" -> {
+                            if (!isValidString(input)) {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid input");
+                            } else {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getColor().equals(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderOption);
+                                result = true;
+                            }
+                        }
+                        case "Search by Plate" -> {
+                            if (!isPlate(input)) {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid input");
+                            } else {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getPlate().equals(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                new VehicleTableNavigation(Integer.parseInt(rowsPerPage),
+                                        vehicleDisplayFrame, vehicleList);
+
+                                result = true;
+                            }
+                        }
+                        case "Search by NIF" -> {
+                            if (!isNIF(input)) {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid input");
+                            } else {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getNif() == Integer.parseInt(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderOption);
+                                result = true;
+                            }
+                        }
+                        case "Search by VIN" -> {
+                            if (!isVIN(input)) {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid input");
+                            } else {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getVin().equals(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderOption);
+                                result = true;
+                            }
+                        }
+                        case "Search by Category" -> {
+                            if (!isValidString(input)) {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid input");
+                            } else {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getCategory().equals(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderOption);
+                                result = true;
+                            }
+                        }
+                        case "Search by Issue Date" -> {
+                            if (!isDate(input)) {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid input");
+                            } else {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getregistrationDate().equals(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderOption);
+                                result = true;
+                            }
+                        }
+                        default ->
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please, select an option for each field");
+                    }
+                }
+            }
+        });
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {vehicleDisplaySearchLabel, vehicleDisplayOrderLabel, rowsPerPageLabel, inputForSearch};
+        JComboBox[] comboBoxes = {vehicleDisplaySearchOptions, vehicleDisplayOrderOptions, rowsPerPageOptions};
+
+        for (int i = 0; i < labels.length; i++) {
+            gbc.gridx = 0;
+            gbc.gridy = i + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            vehicleDisplayPanel.add(labels[i], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+
+            if (i == 3) {
+                vehicleDisplayPanel.add(inputForSearchField, gbc);
+            } else {
+                vehicleDisplayPanel.add(comboBoxes[i], gbc);
+            }
+        }
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            vehicleDisplayFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            searchMenuFrame.setVisible(true);
+            vehicleDisplayFrame.setVisible(false);
+        });
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        vehicleDisplayPanel.add(searchButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        vehicleDisplayPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        vehicleDisplayPanel.add(backButton, gbc);
+
+        vehicleDisplayFrame.add(vehicleDisplayPanel);
+        vehicleDisplayFrame.pack();
+        vehicleDisplayFrame.setVisible(true);
+
+        vehicleDisplayFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
+    }
+
+    private void displaySearchByOrderVehicle(String srowsPerPage, List<Vehicle> vehicles,
+                                             JFrame vehicleDisplayFrame, String orderOption) {
+        int rowsPerPage = Integer.parseInt(srowsPerPage);
+        switch (orderOption) {
+            case "License Plate" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getPlate));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "NIF" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getNif));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "VIN" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getVin));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "Category" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getCategory));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "Issue Date" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getregistrationDate));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "Brand" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getBrand));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "Model" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getModel));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "Color" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getColor));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            default -> {
+                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please select an option for each field");
+            }
+        }
+
     }
 
     private void buildUpdateMenuPage() {
