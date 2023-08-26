@@ -100,7 +100,7 @@ public interface ValidateInput {
 
 
     default boolean isPassword(String s) {
-        return s.matches("^.{8,10}$\n");
+        return s.matches("^.{8,10}$");
     }
 
     default boolean isInteger(String s) {
