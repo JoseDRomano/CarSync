@@ -26,6 +26,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private JButton insertMenu = new JButton("Insert Menu");
     private JButton updateMenu = new JButton("Update Menu");
     private JButton deleteMenu = new JButton("Delete Menu");
+    private JButton taskMenu = new JButton("Task Menu");
     private final JButton searchMenu = new JButton("Search Menu");
     private final JButton deactivateMenu = new JButton("Deactivate Menu");
     private final Color GREEN = new Color(0, 100, 0);
@@ -64,7 +65,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         mainLabel.setForeground(BLACK);
         mainPanel.add(mainLabel, gbc);
 
-        JButton[] buttons = {insertMenu, deleteMenu, deactivateMenu, updateMenu, searchMenu, exitButton};
+
+        JButton[] buttons = {insertMenu, deleteMenu, deactivateMenu, updateMenu, searchMenu, taskMenu, exitButton};
         gbc.gridwidth = 2;
         for (JButton button : buttons) {
             button.setFont(new Font("Arial", Font.BOLD, 20));
@@ -1444,18 +1446,18 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         updateMenuFrame.setSize(WIDTH, HEIGHT);
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
-        JButton vehicleDisplay = new JButton("Vehicle Update Menu");
-        JButton employeeDisplay = new JButton("Employee Update Menu");
-        JButton customerDisplay = new JButton("Customer Update Menu");
-        JButton ticketDisplay = new JButton("Ticket Update Menu");
-        JButton insuranceDisplay = new JButton("Insurance Update Menu");
+        JButton vehicleUpdate = new JButton("Vehicle Update Menu");
+        JButton employeeUpdate = new JButton("Employee Update Menu");
+        JButton customerUpdate = new JButton("Customer Update Menu");
+        JButton ticketUpdate = new JButton("Ticket Update Menu");
+        JButton insuranceUpdate = new JButton("Insurance Update Menu");
         JPanel updateMenuPanel = new JPanel();
         updateMenuPanel.setLayout(new GridLayout(7, 1));
-        updateMenuPanel.add(vehicleDisplay);
-        updateMenuPanel.add(employeeDisplay);
-        updateMenuPanel.add(customerDisplay);
-        updateMenuPanel.add(ticketDisplay);
-        updateMenuPanel.add(insuranceDisplay);
+        updateMenuPanel.add(vehicleUpdate);
+        updateMenuPanel.add(employeeUpdate);
+        updateMenuPanel.add(customerUpdate);
+        updateMenuPanel.add(ticketUpdate);
+        updateMenuPanel.add(insuranceUpdate);
         updateMenuPanel.add(backButton);
         updateMenuPanel.add(exitButton);
         updateMenuFrame.add(updateMenuPanel);
@@ -1469,6 +1471,42 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             dataSource.close();
             System.exit(0);
         });
+
+        ActionListener goToPageListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton button = (JButton) e.getSource();
+                updateMenuFrame.setVisible(false);
+
+                if (button == vehicleUpdate) vehicleUpdatePage(updateMenuFrame);
+                else if (button == employeeUpdate) employeeUpdatePage(updateMenuFrame);
+                else if (button == customerUpdate) customerUpdatePage(updateMenuFrame);
+                else if (button == ticketUpdate) ticketUpdatePage(updateMenuFrame);
+                else if (button == insuranceUpdate) insuranceUpdatePage(updateMenuFrame);
+            }
+        };
+
+        vehicleUpdate.addActionListener(goToPageListener);
+        employeeUpdate.addActionListener(goToPageListener);
+        customerUpdate.addActionListener(goToPageListener);
+        ticketUpdate.addActionListener(goToPageListener);
+        insuranceUpdate.addActionListener(goToPageListener);
+
+    }
+
+    private void insuranceUpdatePage(JFrame updateMenuFrame) {
+    }
+
+    private void ticketUpdatePage(JFrame updateMenuFrame) {
+    }
+
+    private void customerUpdatePage(JFrame updateMenuFrame) {
+    }
+
+    private void employeeUpdatePage(JFrame updateMenuFrame) {
+    }
+
+    private void vehicleUpdatePage(JFrame updateMenuFrame) {
     }
 
     private void buildDeactivateMenuPage() {

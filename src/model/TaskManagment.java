@@ -8,6 +8,7 @@ import java.util.*;
 
 public class TaskManagment {
 
+
     private List<Task> taskList;
     private final static Path filePath = Path.of("Tasks.txt");
     private Scanner scanner;
@@ -31,7 +32,8 @@ public class TaskManagment {
             while (scanner.hasNextLine()) {
 
                 int taskID = getID(scanner.nextLine());
-                String taskType = taskType(scanner.nextLine());
+                TaskType taskType = TaskType.getTaskType(scanner.nextLine());
+//              String taskType = taskType(scanner.nextLine());
                 String taskStatus = taskStatus(scanner.nextLine());
                 String taskDate = taskDate(scanner.nextLine());
                 int nif = getNIF(scanner.nextLine());
@@ -68,7 +70,7 @@ public class TaskManagment {
     }
 
 
-    public boolean writeTaskToFile(String type, String status, String date, int nif, String info) {
+    public boolean writeTaskToFile(TaskType type, String status, String date, int nif, String info) {
         Task task = new Task(getNewID(), type, status, date, nif, info);
         boolean result = false;
         try {
