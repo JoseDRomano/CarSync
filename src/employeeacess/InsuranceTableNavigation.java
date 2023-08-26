@@ -31,6 +31,7 @@ public class InsuranceTableNavigation {
 
     public InsuranceTableNavigation(int rowsPerPage, JFrame originalFrame, List<Insurance> insuranceList) {
 
+        originalFrame.setVisible(false);
         this.data = insuranceList;
         if (rowsPerPage > 0) {
             this.rowsPerPage = rowsPerPage;
@@ -118,6 +119,8 @@ public class InsuranceTableNavigation {
 
 
     public InsuranceTableNavigation(int rowsPerPage, JFrame originalFrame) {
+        originalFrame.setVisible(false);
+
         if (rowsPerPage > 0) {
             this.rowsPerPage = rowsPerPage;
         }

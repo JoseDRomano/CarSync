@@ -145,7 +145,7 @@ public abstract class BackOffice implements getInputValues {
         System.out.println("Enter driverLicense: ");
         int driverLicense = getDriverLicense(scan);
         System.out.println("""
-                Enter license type: 
+                Enter license type:
                     1 for A
                     2 for B
                     3 for C

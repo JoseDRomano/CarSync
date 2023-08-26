@@ -31,6 +31,8 @@ public class EmployeeTableNavigation {
 
     public EmployeeTableNavigation(int rowsPerPage, JFrame originalFrame, List<Employee> employeeList) {
 
+        originalFrame.setVisible(false);
+
         this.data = employeeList;
         if (rowsPerPage > 0) {
             this.rowsPerPage = rowsPerPage;
@@ -117,6 +119,8 @@ public class EmployeeTableNavigation {
 
 
     public EmployeeTableNavigation(int rowsPerPage, JFrame originalFrame) {
+       originalFrame.setVisible(false);
+
         if (rowsPerPage > 0) {
             this.rowsPerPage = rowsPerPage;
         }

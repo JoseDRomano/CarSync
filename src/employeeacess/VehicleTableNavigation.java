@@ -30,7 +30,7 @@ public class VehicleTableNavigation {
     private java.util.List<Vehicle> data;
 
     public VehicleTableNavigation(int rowsPerPage, JFrame originalFrame, java.util.List<Vehicle> vehicleList) {
-
+        originalFrame.setVisible(false);
         this.data = vehicleList;
         if (rowsPerPage > 0) {
             this.rowsPerPage = rowsPerPage;
@@ -118,6 +118,8 @@ public class VehicleTableNavigation {
 
 
     public VehicleTableNavigation(int rowsPerPage, JFrame originalFrame) {
+        originalFrame.setVisible(false);
+
         if (rowsPerPage > 0) {
             this.rowsPerPage = rowsPerPage;
         }
