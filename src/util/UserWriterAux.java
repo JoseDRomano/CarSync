@@ -2,8 +2,11 @@ package util;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserWriterAux {
+    Map<Integer, String> users = new HashMap<>();
     private int nif;
     private String password;
     private String type;

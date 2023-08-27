@@ -1,7 +1,10 @@
 package employeeacess;
 
+import model.Customer;
 import model.Employee;
+import model.Person;
 import org.mindrot.jbcrypt.BCrypt;
+import util.UserWriterAux;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import static java.awt.Color.BLACK;
 
@@ -117,14 +122,12 @@ public class MenuEmployee implements ValidateInput {
         JButton backButton = new JButton("Back");
         JButton vehicleButton = new JButton("Update Vehicle");
         JButton customerButton = new JButton("Update Customer");
-        JButton ticketButton = new JButton("Update Ticket");
-        JButton insuranceButton = new JButton("Update Insurance");
+        JButton ticketButton = new JButton("Pay Ticket");
         JPanel updateMenuPanel = new JPanel();
         updateMenuPanel.setLayout(new GridLayout(7, 1));
         updateMenuPanel.add(vehicleButton);
         updateMenuPanel.add(customerButton);
         updateMenuPanel.add(ticketButton);
-        updateMenuPanel.add(insuranceButton);
         updateMenuPanel.add(backButton);
         updateMenuPanel.add(exitButton);
         updateMenuFrame.add(updateMenuPanel);
@@ -132,7 +135,6 @@ public class MenuEmployee implements ValidateInput {
         updateMenuFrame.setVisible(true);
         vehicleButton.addActionListener(e -> {
             updateVehiclePage(updateMenuFrame);
-
         });
         customerButton.addActionListener(e -> {
             updateCustomerPage(updateMenuFrame);
@@ -147,7 +149,7 @@ public class MenuEmployee implements ValidateInput {
         exitButton.addActionListener(e -> System.exit(0));
     }
 
-    //DOING
+    //TESTING
     private void payTicketPage(JFrame updateMenuFrame) {
         JFrame updateTicketFrame = new JFrame("Update Ticket");
         updateTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -163,12 +165,13 @@ public class MenuEmployee implements ValidateInput {
         JButton backButton = new JButton("Back");
         backButton.setBackground(BLACK);
         backButton.setForeground(WHITE);
-        JButton submit = new JButton("Submit");
+        JButton submit = new JButton("Pay");
         submit.setBackground(GREEN);
         submit.setForeground(WHITE);
+
         backButton.addActionListener(e -> {
-            updateTicketFrame.setVisible(true);
-            updateMenuFrame.setVisible(false);
+            updateTicketFrame.setVisible(false);
+            updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
             updateTicketFrame.dispose();
@@ -180,17 +183,83 @@ public class MenuEmployee implements ValidateInput {
         JPanel updateTicketPanel = new JPanel(new GridBagLayout());
         updateTicketPanel.setBackground(Color.WHITE);
 
-        JLabel updateTicketLabel = new JLabel("Update Ticket");
+        JLabel updateTicketLabel = new JLabel("Pay Ticket");
         updateTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.PAGE_START;
         updateTicketPanel.add(updateTicketLabel, gbc);
 
-        JLabel idLabel = new JLabel("ID: ");
+        JLabel idLabel = new JLabel("ID of the ticket: ");
         JTextField idField = new JTextField(15);
+
+        JLabel valueLabel = new JLabel("Value to pay: ");
+        JTextField valueField = new JTextField(15);
+
+
+        submit.addActionListener(e -> {
+            String id = idField.getText();
+            String value = valueField.getText();
+
+            if (dataSource.payTicket(Integer.parseInt(id), Float.parseFloat(valueField.getText())))
+                JOptionPane.showMessageDialog(updateTicketFrame, "Ticket successfully paid",
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(updateTicketFrame, "Error paying ticket", "Error", JOptionPane.ERROR_MESSAGE);
+        });
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {idLabel, valueLabel};
+        JTextField[] textFields = {idField, valueField};
+
+
+        for (int row = 0; row < labels.length; row++) {
+            gbc.gridx = 0;
+            gbc.gridy = row + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            updateTicketPanel.add(labels[row], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+
+            updateTicketPanel.add(textFields[row], gbc);
+
+        }
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 6, 10);
+        updateTicketPanel.add(submit, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updateTicketPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updateTicketPanel.add(backButton, gbc);
+
+        updateTicketFrame.add(updateTicketPanel);
+        updateTicketFrame.pack();
+        updateTicketFrame.setVisible(true);
+
+        updateTicketFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
     }
 
-    //DOING
+    //DONE
     private void updateCustomerPage(JFrame updateMenuFrame) {
         JFrame updatePersonFrame = new JFrame("Update Vehicle");
         updatePersonFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -210,8 +279,8 @@ public class MenuEmployee implements ValidateInput {
         submit.setBackground(GREEN);
         submit.setForeground(WHITE);
         backButton.addActionListener(e -> {
-            updatePersonFrame.setVisible(true);
-            updateMenuFrame.setVisible(false);
+            updatePersonFrame.setVisible(false);
+            updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
             updatePersonFrame.dispose();
@@ -227,62 +296,142 @@ public class MenuEmployee implements ValidateInput {
         updatePersonLabel.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.PAGE_START;
-        updatePersonPanel.add(updatePersonPanel, gbc);
+        updatePersonPanel.add(updatePersonLabel, gbc);
 
         JLabel nifLabel = new JLabel("NIF: ");
         JTextField nifField = new JTextField(15);
+//        JComboBox nifField = new JComboBox(arrayInfo(dataSource.queryCustomers()));
 
         JLabel emailLabel = new JLabel("Email: ");
         JTextField emailField = new JTextField(15);
 
-        JButton submitButton1 = new JButton("Submit");
+        JButton submitButton1 = new JButton("Change Email");
         submitButton1.setBackground(GREEN);
         submitButton1.setForeground(Color.WHITE);
         submitButton1.addActionListener(e -> {
+//            String nif = nifField.getSelectedItem().toString();
             String nif = nifField.getText();
             String email = emailField.getText();
             if (!isNIF(nif))
                 JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
             else if (!isEmail(email)) {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Wrong email format");
-            }
-            else {
+            } else {
                 if (dataSource.updatePersonEmail(Integer.parseInt(nif), email)) {
-                    JOptionPane.showMessageDialog(updatePersonFrame, "Person successfully updated",
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Email successfully updated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
-                }
-                JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+                } else
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
         JLabel passwordLabel = new JLabel("Password: ");
         JTextField passwordField = new JTextField(15);
 
-        JButton submitButton2 = new JButton("Submit");
+        JButton submitButton2 = new JButton("Change Password");
         submitButton2.setBackground(GREEN);
         submitButton2.setForeground(Color.WHITE);
         submitButton2.addActionListener(e -> {
+            String password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
+//            String nif = nifField.getSelectedItem().toString();
             String nif = nifField.getText();
-            String email = emailField.getText();
             if (!isNIF(nif))
                 JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
             else if (!isPassword(passwordField.getText())) {
-                JOptionPane.showMessageDialog(updatePersonFrame, "Wrong email format");
-            }
-            else {
-                if (dataSource.updatePersonEmail(Integer.parseInt(nif), email)) {
-                    JOptionPane.showMessageDialog(updatePersonFrame, "Person successfully updated",
+                JOptionPane.showMessageDialog(updatePersonFrame, "Wrong password format");
+            } else {
+                if (dataSource.updatePersonPassword(Integer.parseInt(nif), password)) {
+
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Password successfully updated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
-                }
-                JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+                } else
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
+        JLabel addressLabel = new JLabel("Address: ");
+        JTextField addressField = new JTextField(36);
 
+        JButton submitButton3 = new JButton("Change Address");
+        submitButton3.setBackground(GREEN);
+        submitButton3.setForeground(Color.WHITE);
+        submitButton3.addActionListener(e -> {
+            String address = addressField.getText();
+//            String nif = nifField.getSelectedItem().toString();
+            String nif = nifField.getText();
+            if (!isNIF(nif))
+                JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
+            else if (!isValidString(address)) {
+                JOptionPane.showMessageDialog(updatePersonFrame, "Wrong address format");
+            } else {
+                if (dataSource.updatePersonAddress(Integer.parseInt(nif), address)) {
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Address successfully updated",
+                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
+        //Montar janela
+        gbc.gridwidth = 1;
+        JLabel[] labels = {nifLabel, emailLabel, passwordLabel, addressLabel};
+//        JComboBox[] comboBoxes = {nifField};
+        JTextField[] textFields = {nifField, emailField, passwordField, addressField};
+        JButton[] buttons = {submitButton1, submitButton2, submitButton3};
 
+        // Inside the for loop
+        for (int row = 0; row < labels.length; row++) {
+            gbc.gridx = 0;
+            gbc.gridy = row + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            updatePersonPanel.add(labels[row], gbc);
 
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+            updatePersonPanel.add(textFields[row], gbc);
 
+            // Check if it's not the "NIF" line
+            if (row != 0) {
+                gbc.gridx = 2;
+                gbc.anchor = GridBagConstraints.LINE_END;
+                updatePersonPanel.add(buttons[row - 1], gbc);
+            }
+        }
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updatePersonPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updatePersonPanel.add(backButton, gbc);
+
+        updatePersonFrame.add(updatePersonPanel);
+        updatePersonFrame.pack();
+        updatePersonFrame.setVisible(true);
+        updateMenuFrame.setVisible(false);
+
+        updatePersonFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
+    }
+
+    private String[] arrayInfo(List<Customer> customers) {
+        Iterator<Customer> it = customers.iterator();
+        String res = null;
+        while (it.hasNext()) {
+            res.toString().concat(it.next().getNif() + ";");
+        }
+        return res.split(";");
     }
 
     //DONE
@@ -1251,6 +1400,7 @@ public class MenuEmployee implements ValidateInput {
             }
         });
     }
+
 
     public static void main(String[] args) {
         Employee employee = new Employee();
