@@ -2675,6 +2675,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             }
         };
 
+        customerDelete.addActionListener(goToPageListener);
+        vehicleDelete.addActionListener(goToPageListener);
+        insuranceDelete.addActionListener(goToPageListener);
+        ticketDelete.addActionListener(goToPageListener);
+        employeeDelete.addActionListener(goToPageListener);
+
         deleteMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -2709,13 +2715,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JTextField employeeNIFField = new JTextField(9);
 
         gbc.gridy = 1;
-        gbc.gridx = 1;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.LINE_START;
         employeeDeletePanel.add(employeeNIF, gbc);
-        gbc.gridx = 2;
-        gbc.anchor = GridBagConstraints.LINE_END;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.LINE_START;
         employeeDeletePanel.add(employeeNIFField, gbc);
 
         submit.setBackground(GREEN);
@@ -2751,23 +2756,22 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             deleteMenuFrame.setVisible(true);
         });
 
-        gbc.gridy = 2;
-        gbc.gridx = 1;
+        gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.LINE_START;
+        employeeDeletePanel.add(submit, gbc);
+
+        gbc.gridy = 4;
         gbc.fill = GridBagConstraints.NONE;
         gbc.gridwidth = 1;
-        employeeDeletePanel.add(submit, gbc);
-        gbc.gridx = 2;
         gbc.anchor = GridBagConstraints.LINE_END;
         employeeDeletePanel.add(exitButton, gbc);
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         employeeDeletePanel.add(backButton, gbc);
 
         employeeDeleteFrame.add(employeeDeletePanel);
         deleteMenuFrame.setVisible(false);
         employeeDeleteFrame.setVisible(true);
-
 
 
         deleteMenuFrame.addWindowListener(new WindowAdapter() {
