@@ -43,6 +43,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         this.employee = employee;
         mainFrame = new JFrame("Back Office Menu" + "\n" + "Welcome " + employee.getName());
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainFrame.setSize(WIDTH, HEIGHT);
         mainFrame.setBackground(Color.WHITE);
         mainFrame.setLayout(new BorderLayout());
@@ -94,6 +95,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 else if (button == deactivateMenu) buildDeactivateMenuPage();
                 else if (button == updateMenu) buildUpdateMenuPage();
                 else if (button == searchMenu) buildSearchMenuPage();
+                else if (button == taskMenu) buildTaskMenuPage();
             }
         };
 
@@ -108,9 +110,97 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         });
     }
 
+    private void buildTaskMenuPage() {
+        JFrame taskMenuFrame = new JFrame("Task Menu");
+        taskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        taskMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JPanel taskMenuPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        JLabel taskLabel = new JLabel("Task Menu");
+        taskLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        taskMenuPanel.add(taskLabel, gbc);
+
+        JLabel taskDisplayLabel = new JLabel("Next Task");
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        taskMenuPanel.add(taskDisplayLabel, gbc);
+
+        JTextArea taskDisplay = new JTextArea();
+        Task task = new TaskManagment().getNextTask();
+        taskDisplay.setEditable(false);
+        taskDisplay.setLineWrap(true);
+        taskDisplay.setWrapStyleWord(true);
+        taskDisplay.setBackground(WHITE);
+        taskDisplay.setFont(new Font("Arial", Font.BOLD, 20));
+        taskDisplay.setForeground(BLACK);
+        taskDisplay.setText(task.toString());
+        gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+//        gbc.anchor = GridBagConstraints.CENTER;
+        taskMenuPanel.add(taskDisplay, gbc);
+
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        JButton executeTask = new JButton("Execute Task");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            taskMenuFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            mainFrame.setVisible(true);
+            taskMenuFrame.setVisible(false);
+            taskMenuFrame.dispose();
+        });
+
+        executeTask.setBackground(GREEN);
+        executeTask.setForeground(Color.WHITE);
+        executeTask.addActionListener(e -> {
+            if (task.perFormTask(dataSource)) {
+                JOptionPane.showMessageDialog(null, "Task Completed");
+                taskDisplay.setText(new TaskManagment().getNextTask().toString());
+            } else {
+                JOptionPane.showMessageDialog(null, "Task Failed");
+            }
+        });
+
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0.33;
+        taskMenuPanel.add(exitButton, gbc);
+
+        gbc.gridx = 1;
+        taskMenuPanel.add(backButton, gbc);
+
+        gbc.gridx = 2;
+        taskMenuPanel.add(executeTask, gbc);
+
+        taskMenuFrame.add(taskMenuPanel);
+        taskMenuFrame.setVisible(true);
+        taskMenuFrame.pack();
+    }
+
     private void buildSearchMenuPage() {
         JFrame searchMenuFrame = new JFrame("Search Menu");
         searchMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        searchMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         searchMenuFrame.setSize(WIDTH, HEIGHT);
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
@@ -159,12 +249,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         customerDisplay.addActionListener(goToPageListener);
         ticketDisplay.addActionListener(goToPageListener);
         insuranceDisplay.addActionListener(goToPageListener);
-
     }
 
     private void insuranceDisplayPage(JFrame searchMenuFrame) {
         JFrame insuranceDisplayFrame = new JFrame("Insurance Display Menu");
         insuranceDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        insuranceDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -409,6 +499,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void ticketDisplayPage(JFrame searchMenuFrame) {
         JFrame ticketDisplayFrame = new JFrame("Ticket Search Menu");
         ticketDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ticketDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -691,6 +782,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void customerDisplayPage(JFrame searchMenuFrame) {
         JFrame customerDisplayFrame = new JFrame("Customer Search Menu");
         customerDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        customerDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -942,6 +1034,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void employeeDisplayPage(JFrame searchMenuFrame) {
         JFrame employeeDisplayFrame = new JFrame("Employee Search Menu");
         employeeDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        employeeDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -1165,6 +1258,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void vehicleDisplayPage(JFrame searchMenuFrame) {
         JFrame vehicleDisplayFrame = new JFrame("Vehicle Display");
         vehicleDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        vehicleDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -1443,6 +1537,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void buildUpdateMenuPage() {
         JFrame updateMenuFrame = new JFrame("Update Menu");
         updateMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        updateMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         updateMenuFrame.setSize(WIDTH, HEIGHT);
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");

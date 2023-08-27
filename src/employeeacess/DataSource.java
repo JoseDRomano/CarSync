@@ -865,7 +865,8 @@ public class DataSource {
         }
     }
 
-    public void updateEmployeeAccessLevel(int nif, int newAccessLevel) {
+    public boolean updateEmployeeAccessLevel(int nif, int newAccessLevel) {
+        boolean result = false;
         try {
             connection.setAutoCommit(false);
             updateEmployeeAccessLevel.setInt(1, newAccessLevel);
@@ -873,7 +874,8 @@ public class DataSource {
             int affected = updateEmployeeAccessLevel.executeUpdate();
 
             if (affected == 1) {
-                System.out.println("Updated access level for employee with nif: " + nif);
+                result = true;
+//                System.out.println("Updated access level for employee with nif: " + nif);
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't update access level for employee with nif: " + nif);
@@ -898,6 +900,7 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+        return result;
     }
 
     public boolean updatePersonPassword(int nif, String newPassword) {
@@ -1401,8 +1404,10 @@ public class DataSource {
         return result;
     }
 
-    public boolean insertCustomer(int nif, String name, String address, Date bDate, String password, String email,
-                                  int driverLicense, String licenseType, Date registrationDate, Date expirationDate) {
+    public boolean insertCustomer(int nif, String name, String address,
+                                  Date bDate, String password, String email,
+                                  int driverLicense, String licenseType,
+                                  Date registrationDate, Date expirationDate) {
 
         boolean result = false;
 
@@ -1645,25 +1650,25 @@ public class DataSource {
         return result;
     }
 
-    public boolean deactivateTicket(int nif) {
+    public boolean deactivateTicket(int ticketID) {
 
         boolean result = false;
 
         try {
             connection.setAutoCommit(false);
-            deactivateTicket.setInt(1, nif);
+            deactivateTicket.setInt(1, ticketID);
             int affected = deactivateTicket.executeUpdate();
 
             if (affected == 1) {
                 result = true;
-                System.out.println("Deactivated ticket with nif: " + nif);
+                System.out.println("Deactivated ticket with nif: " + ticketID);
                 connection.commit();
             } else {
-                throw new SQLException("Couldn't deactivate ticket with nif: " + nif);
+                throw new SQLException("Couldn't deactivate ticket with nif: " + ticketID);
             }
 
         } catch (SQLException e) {
-            System.out.println("Couldn't deactivate ticket with nif: " + nif);
+            System.out.println("Couldn't deactivate ticket with nif: " + ticketID);
             e.printStackTrace();
             try {
                 System.out.println("Performing rollback");

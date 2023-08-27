@@ -4,9 +4,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class TaskManagment {
+
+
+    //Criar um metodo que recebe os mesmo argumentos que o dataSource mais o tasktype e
+    //criar o task e manda para o ficheiro a cena boa é que assim os values ficam no
+    //formato que é suposto.
 
 
     private List<Task> taskList;
@@ -18,11 +27,20 @@ public class TaskManagment {
         readTasksFromFile();
     }
 
+    public boolean createTask (String taskType, int nif, String... values) {
+       return writeTaskToFile(TaskType.getTaskType(taskType), "Open",
+                LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                nif,
+                String.join(",", values));
+    }
+
+
+
     public void printList() {
-       if(taskList.isEmpty()) {
-           System.out.println("No tasks to show");
-           return;
-       }
+        if (taskList.isEmpty()) {
+            System.out.println("No tasks to show");
+            return;
+        }
         taskList.forEach(task -> System.out.println(task.toString()));
     }
 
@@ -39,8 +57,8 @@ public class TaskManagment {
                 int nif = getNIF(scanner.nextLine());
                 String taskInfo = taskInfo(scanner.nextLine());
 
-                if(taskID == -1 || taskType == null || taskStatus == null ||
-                        taskDate == null || nif == -1 || taskInfo == null){
+                if (taskID == -1 || taskType == null || taskStatus == null ||
+                        taskDate == null || nif == -1 || taskInfo == null) {
                     System.out.println("File is empty");
                     return;
                 }
@@ -70,6 +88,26 @@ public class TaskManagment {
     }
 
 
+    /*create a method that returns a JTextArea with the next task to be done from the taskList
+     * the next task to be done is the task at position 0 in the taskList*/
+   /* public JTextArea getNextTask() {
+        JTextArea textArea = new JTextArea();
+        if(taskList.isEmpty()) {
+            textArea.setText("No tasks to show");
+            return textArea;
+        }
+        textArea.setText(taskList.get(0).toString());
+        return textArea;
+    }*/
+
+    public Task getNextTask() {
+        if (taskList.isEmpty()) {
+            return null;
+        }
+        return taskList.get(0);
+    }
+
+
     public boolean writeTaskToFile(TaskType type, String status, String date, int nif, String info) {
         Task task = new Task(getNewID(), type, status, date, nif, info);
         boolean result = false;
@@ -87,14 +125,13 @@ public class TaskManagment {
 
     public boolean deleteTaskFromFile(int taskID) {
         boolean result = false;
-        if(getTask(taskID) == null) {
+        if (getTask(taskID) == null) {
             return false;
-        }
-        else {
+        } else {
             taskList.removeIf(task -> task.getTaskID() == taskID);
         }
         taskList.sort(Task::compareTo);
-        for(int i = 0; i < taskList.size(); i++) {
+        for (int i = 0; i < taskList.size(); i++) {
             taskList.get(i).setTaskID(i + 1);
         }
         try {
@@ -114,10 +151,9 @@ public class TaskManagment {
         Path filePath = Path.of("tasks.txt");
         boolean result = false;
 
-        if(getTask(taskID) == null) {
+        if (getTask(taskID) == null) {
             return false;
-        }
-        else {
+        } else {
             getTask(taskID).setTaskStatus(status);
         }
 
@@ -146,7 +182,7 @@ public class TaskManagment {
     }
 
     private int getID(String s) {
-        if(s.isEmpty() || s.isBlank()) {
+        if (s.isEmpty() || s.isBlank()) {
             return -1;
         }
         String[] svalues = s.split(":");
@@ -154,7 +190,7 @@ public class TaskManagment {
     }
 
     private String taskType(String s) {
-        if(s.isEmpty() || s.isBlank()) {
+        if (s.isEmpty() || s.isBlank()) {
             return null;
         }
         String[] svalues = s.split(":");
@@ -163,7 +199,7 @@ public class TaskManagment {
     }
 
     private String taskStatus(String s) {
-        if(s.isEmpty() || s.isBlank()) {
+        if (s.isEmpty() || s.isBlank()) {
             return null;
         }
         String[] svalues = s.split(":");
@@ -172,7 +208,7 @@ public class TaskManagment {
     }
 
     private String taskDate(String s) {
-        if(s.isEmpty() || s.isBlank()) {
+        if (s.isEmpty() || s.isBlank()) {
             return null;
         }
         String[] svalues = s.split(":");
@@ -181,7 +217,7 @@ public class TaskManagment {
     }
 
     private int getNIF(String s) {
-        if(s.isEmpty() || s.isBlank()) {
+        if (s.isEmpty() || s.isBlank()) {
             return -1;
         }
         String[] svalues = s.split(":");
@@ -189,7 +225,7 @@ public class TaskManagment {
     }
 
     private String taskInfo(String s) {
-        if(s.isEmpty() || s.isBlank()) {
+        if (s.isEmpty() || s.isBlank()) {
             return null;
         }
         String[] svalues = s.split(":");

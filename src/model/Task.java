@@ -1,6 +1,8 @@
 package model;
 
-import java.util.List;
+import employeeacess.DataSource;
+
+import java.sql.Date;
 
 public class Task implements Comparable<Task> {
 
@@ -24,6 +26,79 @@ public class Task implements Comparable<Task> {
         new Task(taskID, taskType, "Open", taskDate, nif, values);
     }
 
+    public boolean perFormTask(DataSource dataSource) {
+        String[] allValues = values.split(",");
+        switch (taskType) {
+            case CUSTOMER_REGISTRATION -> {
+                return dataSource.insertCustomer(nif, allValues[0], allValues[1],
+                        Date.valueOf(allValues[2]), allValues[3], allValues[4],
+                        Integer.parseInt(allValues[5]), allValues[6], Date.valueOf(allValues[7]),
+                        Date.valueOf(allValues[8]));
+            }
+
+            case VEHICLE_REGISTRATION -> {
+                return dataSource.insertVehicle(allValues[0], allValues[1], allValues[2],
+                        allValues[3], allValues[4], Date.valueOf(allValues[5]),
+                        allValues[6], nif);
+            }
+
+            case INSURANCE_REGISTRATION -> {
+                return dataSource.insertInsurance(Integer.parseInt(allValues[0]), allValues[1],
+                        Date.valueOf(allValues[2]), allValues[3], Date.valueOf(allValues[4]), allValues[5]);
+            }
+
+            case TICKET_REGISTRATION -> {
+                return dataSource.insertTicket(Integer.parseInt(allValues[0]), allValues[1],
+                        Date.valueOf(allValues[2]), allValues[3], Double.parseDouble(allValues[4]), Date.valueOf(allValues[5]));
+            }
+
+            case CUSTOMER_DEACTIVATION -> {
+                return dataSource.deactivateCustomer(nif);
+            }
+
+            case VEHICLE_DEACTIVATION -> {
+                return dataSource.deactivateVehicle(allValues[0]);
+            }
+
+            case INSURANCE_DEACTIVATION -> {
+                return dataSource.deactivateInsurance(Integer.parseInt(allValues[0]));
+            }
+
+            case TICKET_DEACTIVATION -> {
+                return dataSource.deactivateTicket(Integer.parseInt(allValues[0]));
+            }
+
+            case EMPLOYEE_DEACTIVATION -> {
+                return dataSource.deactivateEmployee(nif);
+            }
+
+            case CUSTOMER_UPDATE_ADDRESS -> {
+                return dataSource.updatePersonAddress(nif, allValues[0]);
+            }
+
+            case CUSTOMER_UPDATE_EMAIL -> {
+                return dataSource.updatePersonEmail(nif, allValues[0]);
+            }
+
+            case CUSTOMER_UPDATE_PASSWORD -> {
+                return dataSource.updatePersonPassword(nif, allValues[0]);
+            }
+
+            case VEHICLE_UPDATE_COLOR -> {
+                return dataSource.updateVehicleColor(allValues[0], allValues[1]);
+            }
+
+            case TICKET_UPDATE_PAY -> {
+                return dataSource.payTicket(Integer.parseInt(allValues[0]), Double.parseDouble(allValues[1]));
+            }
+
+            case EMPLOYEE_UPDATE_ACCESS_LEVEL -> {
+                return dataSource.updateEmployeeAccessLevel(nif, Integer.parseInt(allValues[0]));
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         String s = """
@@ -33,11 +108,10 @@ public class Task implements Comparable<Task> {
                     Date: %s
                     NIF: %d
                     Values: %s
-                
+                                
                 """;
         return String.format(s, taskID, TaskType.getDescription(taskType), taskStatus, taskDate, nif, values);
     }
-
 
     @Override
     public int compareTo(Task o) {
