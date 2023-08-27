@@ -43,7 +43,7 @@ public abstract class BackOffice implements getInputValues {
 
         //Temporario
         employee1.setAccess_level(2);
-        employee1.setName("Pedro");
+        employee1.setName("Pedro");/*
         switch (employee1.getAccess_level()) {
             case 0 -> {
                 logger.info("Starting BackOffice for Employee level 0");
@@ -63,7 +63,7 @@ public abstract class BackOffice implements getInputValues {
                 return;
             }
         }
-        throw new IllegalArgumentException("Invalid access level");
+        throw new IllegalArgumentException("Invalid access level");*/
     }
 
     Logger getLogger() {

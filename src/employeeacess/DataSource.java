@@ -1175,12 +1175,14 @@ public class DataSource {
 
 
     //TESTED
-    public void deleteVehicle(String plate) {
+    public boolean deleteVehicle(String plate) {
 
         /*if (!isVehicleOwner(nif, plate)) {
             System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
             return;
         }*/
+
+        boolean result = false;
 
         try {
             connection.setAutoCommit(false);
@@ -1188,6 +1190,7 @@ public class DataSource {
             int affected = deleteVehicle.executeUpdate();
 
             if (affected == 1) {
+                result = true;
                 System.out.println("Vehicle succefuly deleted");
                 connection.commit();
             } else {
@@ -1213,11 +1216,12 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+        return result;
     }
 
 
     //NOT TESTED
-    public void deleteInsurance(int policy) {
+    public boolean deleteInsurance(int policy) {
 
        /* if (!insuranceExists(policy, nif)) {
             System.out.println("No such insurance with policy number: " + policy +
@@ -1225,12 +1229,15 @@ public class DataSource {
             return;
         }*/
 
+        boolean result = false;
+
         try {
             connection.setAutoCommit(false);
             deleteInsurance.setInt(1, policy);
             int affected = deleteInsurance.executeUpdate();
 
             if (affected == 1) {
+                result = true;
                 System.out.println("Insurance with policy number:  " + policy + " succefuly deleted.");
                 connection.commit();
             } else {
@@ -1256,14 +1263,18 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+
+        return result;
     }
 
-    public void deleteTicket(String plate, Date date) {
+    public boolean deleteTicket(String plate, Date date) {
 
        /* if (!isVehicleOwner(nif, plate)) {
             System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
             return;
         }*/
+
+        boolean result = false;
 
         try {
             connection.setAutoCommit(false);
@@ -1273,6 +1284,7 @@ public class DataSource {
             int affected = deleteTicket.executeUpdate();
 
             if (affected == 1) {
+                result = true;
                 System.out.println("Ticket for plate: " + plate + " and date: " + date + " succefully deleted");
                 connection.commit();
             } else {
@@ -1298,15 +1310,18 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+        return result;
     }
 
 
-    public void deletePerson(int nif) {
+    public boolean deletePerson(int nif) {
 
         if (!isCustomerOrEmployee(nif)) {
             System.out.println("No such person with nif: " + nif);
-            return;
+            return false;
         }
+
+        boolean result = false;
 
         try {
             connection.setAutoCommit(false);
@@ -1314,6 +1329,7 @@ public class DataSource {
             int affected = deletePerson.executeUpdate();
 
             if (affected == 1) {
+                result = true;
                 System.out.println("Person with nif:  " + nif + " succefuly deleted.");
                 connection.commit();
             } else {
@@ -1339,6 +1355,7 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+        return result;
     }
 
     public boolean isCustomerOrEmployee(int nif) {

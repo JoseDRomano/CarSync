@@ -2686,6 +2686,96 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void employeeDelete(JFrame deleteMenuFrame) {
         JFrame employeeDeleteFrame = new JFrame("BackOffice Menu");
         employeeDeleteFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        employeeDeleteFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JPanel employeeDeletePanel = new JPanel(new GridBagLayout());
+        JLabel employeeDeleteLabel = new JLabel("Employee Delete Menu");
+        employeeDeleteLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        employeeDeleteLabel.setForeground(BLUE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridwidth = 2;
+        employeeDeletePanel.add(employeeDeleteLabel, gbc);
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        JButton submit = new JButton("Execute Delete");
+
+        JLabel employeeNIF = new JLabel("NIF: (9 digits)");
+        JTextField employeeNIFField = new JTextField(9);
+
+        gbc.gridy = 1;
+        gbc.gridx = 1;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        employeeDeletePanel.add(employeeNIF, gbc);
+        gbc.gridx = 2;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        employeeDeletePanel.add(employeeNIFField, gbc);
+
+        submit.setBackground(GREEN);
+        submit.setForeground(WHITE);
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+
+        submit.addActionListener(e -> {
+            String nif = employeeNIFField.getText();
+            if(isNIF(nif)) {
+                if(dataSource.deletePerson(Integer.parseInt(nif))) {
+                    JOptionPane.showMessageDialog(employeeDeleteFrame, "Employee deleted successfully!");
+                } else {
+                    JOptionPane.showMessageDialog(employeeDeleteFrame, "Employee not found!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(employeeDeleteFrame, "Invalid NIF!");
+            }
+        });
+
+        exitButton.addActionListener(e -> {
+            dataSource.close();
+            mainFrame.dispose();
+            employeeDeleteFrame.dispose();
+            System.exit(0);
+        });
+
+        backButton.addActionListener(e -> {
+            employeeDeleteFrame.setVisible(false);
+            employeeDeleteFrame.dispose();
+            deleteMenuFrame.setVisible(true);
+        });
+
+        gbc.gridy = 2;
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridwidth = 1;
+        employeeDeletePanel.add(submit, gbc);
+        gbc.gridx = 2;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        employeeDeletePanel.add(exitButton, gbc);
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        employeeDeletePanel.add(backButton, gbc);
+
+        employeeDeleteFrame.add(employeeDeletePanel);
+        deleteMenuFrame.setVisible(false);
+        employeeDeleteFrame.setVisible(true);
+
+
+
+        deleteMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
 
 
     }
