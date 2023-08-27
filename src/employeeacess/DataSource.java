@@ -1267,7 +1267,7 @@ public class DataSource {
         return result;
     }
 
-    public boolean deleteTicket(String plate, Date date) {
+    public boolean deleteTicket(int ticketID) {
 
        /* if (!isVehicleOwner(nif, plate)) {
             System.out.println("Wrong information, plate: " + plate + " nif: " + nif);
@@ -1278,14 +1278,12 @@ public class DataSource {
 
         try {
             connection.setAutoCommit(false);
-//            deleteTicket.setInt(1, nif);
-            deleteTicket.setString(1, plate);
-            deleteTicket.setDate(2, date);
+            deleteTicket.setInt(1, ticketID);
             int affected = deleteTicket.executeUpdate();
 
             if (affected == 1) {
                 result = true;
-                System.out.println("Ticket for plate: " + plate + " and date: " + date + " succefully deleted");
+                System.out.println("Ticket with ID: " + ticketID + " succefully deleted");
                 connection.commit();
             } else {
                 throw new SQLException("Couldn't delete ticket");

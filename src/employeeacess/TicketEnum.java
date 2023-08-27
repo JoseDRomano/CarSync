@@ -40,9 +40,7 @@ public enum TicketEnum {
                     getString(COLUMN_TICKET_REASON) + ", " +
                     getString(COLUMN_TICKET_EXPIRY_DATE) + ") VALUES(?, ?, ?, ?, ?, ?)";
             case DELETE_TICKET -> "DELETE FROM " + getString(TicketEnum.TABLE_TICKET) + " WHERE " +
-//                    getString(TicketEnum.COLUMN_TICKET_NIF) + " = ? AND " +
-                    getString(TicketEnum.COLUMN_TICKET_PLATE) + " = ? AND " +
-                    getString(TicketEnum.COLUMN_TICKET_DATE) + " = ? ";
+                    getString(TicketEnum.COLUMN_TICKET_ID) + " = ? ";
             case QUERY_TABLE_TICKET -> "SELECT * FROM " + getString(TicketEnum.TABLE_TICKET);
             case UPDATE_TICKET -> "UPDATE " + getString(TicketEnum.TABLE_TICKET) + " SET " +
                     getString(TicketEnum.COLUMN_TICKET_DATE) + " = ?, " +
