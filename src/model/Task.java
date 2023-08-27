@@ -3,6 +3,7 @@ package model;
 import employeeacess.DataSource;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class Task implements Comparable<Task> {
 
@@ -26,8 +27,17 @@ public class Task implements Comparable<Task> {
         new Task(taskID, taskType, "Open", taskDate, nif, values);
     }
 
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    public String getTaskStatus() {
+        return Objects.equals(taskStatus, "Open") ? "Open" : "Closed";
+    }
+
     public boolean perFormTask(DataSource dataSource) {
         String[] allValues = values.split(",");
+        taskStatus = "Closed";
         switch (taskType) {
             case CUSTOMER_REGISTRATION -> {
                 return dataSource.insertCustomer(nif, allValues[0], allValues[1],

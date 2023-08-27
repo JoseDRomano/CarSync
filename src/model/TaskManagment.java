@@ -27,14 +27,12 @@ public class TaskManagment {
         readTasksFromFile();
     }
 
-    public boolean createTask (String taskType, int nif, String... values) {
-       return writeTaskToFile(TaskType.getTaskType(taskType), "Open",
+    public boolean createTask(String taskType, int nif, String... values) {
+        return writeTaskToFile(TaskType.getTaskType(taskType), "Open",
                 LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                 nif,
                 String.join(",", values));
     }
-
-
 
     public void printList() {
         if (taskList.isEmpty()) {
@@ -50,8 +48,9 @@ public class TaskManagment {
             while (scanner.hasNextLine()) {
 
                 int taskID = getID(scanner.nextLine());
-                TaskType taskType = TaskType.getTaskType(scanner.nextLine());
-//              String taskType = taskType(scanner.nextLine());
+                String s = scanner.nextLine();
+                String s2 = taskType(s);
+                TaskType taskType = TaskType.getTaskType(s2);
                 String taskStatus = taskStatus(scanner.nextLine());
                 String taskDate = taskDate(scanner.nextLine());
                 int nif = getNIF(scanner.nextLine());
@@ -100,11 +99,79 @@ public class TaskManagment {
         return textArea;
     }*/
 
-    public Task getNextTask() {
-        if (taskList.isEmpty()) {
-            return null;
+    public Task getNextTask(int accessLevel) {
+        switch (accessLevel) {
+            case 2 -> {
+                if (taskList.isEmpty()) {
+                    return null;
+                }
+                for (Task task : taskList) {
+                    if (task.getTaskStatus().equals("Open")) {
+                        return task;
+                    }
+                }
+            }
+            case 1 -> {
+                return getEmployeeManagerTask();
+            }
+            case 0 -> {
+                return getEmployeeTask();
+            }
         }
-        return taskList.get(0);
+        return null;
+    }
+
+
+    private Task getEmployeeManagerTask() {
+        for (Task task : taskList) {
+            if (task.getTaskType() == TaskType.CUSTOMER_DEACTIVATION ||
+                    task.getTaskType() == TaskType.EMPLOYEE_DEACTIVATION ||
+                    task.getTaskType() == TaskType.VEHICLE_DEACTIVATION ||
+                    task.getTaskType() == TaskType.INSURANCE_DEACTIVATION ||
+                    task.getTaskType() == TaskType.VEHICLE_REGISTRATION ||
+                    task.getTaskType() == TaskType.INSURANCE_REGISTRATION ||
+                    task.getTaskType() == TaskType.CUSTOMER_REGISTRATION ||
+                    task.getTaskType() == TaskType.CUSTOMER_UPDATE_ADDRESS ||
+                    task.getTaskType() == TaskType.CUSTOMER_UPDATE_EMAIL ||
+                    task.getTaskType() == TaskType.CUSTOMER_UPDATE_PASSWORD ||
+                    task.getTaskType() == TaskType.EMPLOYEE_UPDATE_ACCESS_LEVEL ||
+
+//            TaskType.EMPLOYEE_UPDATE_ADDRESS || TaskType.EMPLOYEE_UPDATE_EMAIL ||
+//            TaskType.EMPLOYEE_UPDATE_PASSWORD
+
+                    task.getTaskType() == TaskType.VEHICLE_UPDATE_COLOR ||
+                    task.getTaskType() == TaskType.TICKET_UPDATE_PAY) {
+                if (task.getTaskStatus().equals("Open")) {
+                    return task;
+                }
+            }
+        }
+        return null;
+    }
+
+    private Task getEmployeeTask() {
+        for (Task task : taskList) {
+            if (task.getTaskType() == TaskType.CUSTOMER_DEACTIVATION ||
+                    task.getTaskType() == TaskType.VEHICLE_DEACTIVATION ||
+                    task.getTaskType() == TaskType.INSURANCE_DEACTIVATION ||
+                    task.getTaskType() == TaskType.VEHICLE_REGISTRATION ||
+                    task.getTaskType() == TaskType.INSURANCE_REGISTRATION ||
+                    task.getTaskType() == TaskType.CUSTOMER_REGISTRATION ||
+                    task.getTaskType() == TaskType.CUSTOMER_UPDATE_ADDRESS ||
+                    task.getTaskType() == TaskType.CUSTOMER_UPDATE_EMAIL ||
+                    task.getTaskType() == TaskType.CUSTOMER_UPDATE_PASSWORD ||
+
+//            TaskType.EMPLOYEE_UPDATE_ADDRESS || TaskType.EMPLOYEE_UPDATE_EMAIL ||
+//            TaskType.EMPLOYEE_UPDATE_PASSWORD
+
+                    task.getTaskType() == TaskType.VEHICLE_UPDATE_COLOR ||
+                    task.getTaskType() == TaskType.TICKET_UPDATE_PAY) {
+                if (task.getTaskStatus().equals("Open")) {
+                    return task;
+                }
+            }
+        }
+        return null;
     }
 
 
@@ -128,7 +195,7 @@ public class TaskManagment {
         if (getTask(taskID) == null) {
             return false;
         } else {
-            taskList.removeIf(task -> task.getTaskID() == taskID);
+            taskList.removeIf(task -> task.getTaskID() == taskID && task.getTaskStatus().equals("Closed"));
         }
         taskList.sort(Task::compareTo);
         for (int i = 0; i < taskList.size(); i++) {
@@ -193,7 +260,8 @@ public class TaskManagment {
         if (s.isEmpty() || s.isBlank()) {
             return null;
         }
-        String[] svalues = s.split(":");
+        String newS = s.replace("\n", "");
+        String[] svalues = newS.split(":");
         String type = svalues[1];
         return type.trim();
     }
@@ -230,5 +298,11 @@ public class TaskManagment {
         }
         String[] svalues = s.split(":");
         return svalues[1].trim();
+    }
+
+    public static void main(String[] args) {
+        TaskManagment tk = new TaskManagment();
+        String file = "Type: Customer Registration " + "\n";
+        System.out.println(TaskType.getTaskType(tk.taskType(file)));
     }
 }

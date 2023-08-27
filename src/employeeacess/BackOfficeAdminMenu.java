@@ -82,7 +82,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
-        mainFrame.pack();
 
         ActionListener goToPageListener = new ActionListener() {
             @Override
@@ -104,9 +103,17 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deleteMenu.addActionListener(goToPageListener);
         updateMenu.addActionListener(goToPageListener);
         searchMenu.addActionListener(goToPageListener);
+        taskMenu.addActionListener(goToPageListener);
         exitButton.addActionListener(e -> {
             dataSource.close();
             System.exit(0);
+        });
+
+        mainFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
         });
     }
 
@@ -134,14 +141,16 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         taskMenuPanel.add(taskDisplayLabel, gbc);
 
         JTextArea taskDisplay = new JTextArea();
-        Task task = new TaskManagment().getNextTask();
+        TaskManagment taskManagment = new TaskManagment();
+        Task task = taskManagment.getNextTask(employee.getAccess_level());
         taskDisplay.setEditable(false);
         taskDisplay.setLineWrap(true);
         taskDisplay.setWrapStyleWord(true);
         taskDisplay.setBackground(WHITE);
         taskDisplay.setFont(new Font("Arial", Font.BOLD, 20));
         taskDisplay.setForeground(BLACK);
-        taskDisplay.setText(task.toString());
+        String taskInDisplay = (task == null) ? "No tasks to display" : task.toString();
+        taskDisplay.setText(taskInDisplay);
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
@@ -171,11 +180,15 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         executeTask.setBackground(GREEN);
         executeTask.setForeground(Color.WHITE);
         executeTask.addActionListener(e -> {
-            if (task.perFormTask(dataSource)) {
-                JOptionPane.showMessageDialog(null, "Task Completed");
-                taskDisplay.setText(new TaskManagment().getNextTask().toString());
+            if (task == null) {
+                JOptionPane.showMessageDialog(null, "Cannot execute task, no tasks to execute");
             } else {
-                JOptionPane.showMessageDialog(null, "Task Failed");
+                if (task.perFormTask(dataSource)) {
+                    JOptionPane.showMessageDialog(null, "Task Completed");
+                    taskDisplay.setText(new TaskManagment().getNextTask(employee.getAccess_level()).toString());
+                } else {
+                    JOptionPane.showMessageDialog(null, "Task Failed");
+                }
             }
         });
 
@@ -194,7 +207,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         taskMenuFrame.add(taskMenuPanel);
         taskMenuFrame.setVisible(true);
-        taskMenuFrame.pack();
+
+        taskMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
     }
 
     private void buildSearchMenuPage() {
@@ -452,7 +471,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
 
         insuranceDisplayFrame.add(insuranceDisplayPanel);
-        insuranceDisplayFrame.pack();
         insuranceDisplayFrame.setVisible(true);
 
         insuranceDisplayFrame.addWindowListener(new WindowAdapter() {
@@ -725,7 +743,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
 
         ticketDisplayFrame.add(ticketDisplayPanel);
-        ticketDisplayFrame.pack();
         ticketDisplayFrame.setVisible(true);
 
         ticketDisplayFrame.addWindowListener(new WindowAdapter() {
@@ -972,7 +989,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
 
         customerDisplayFrame.add(customerDisplayPanel);
-        customerDisplayFrame.pack();
         customerDisplayFrame.setVisible(true);
 
         customerDisplayFrame.addWindowListener(new WindowAdapter() {
@@ -1213,7 +1229,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         employeeDisplayPanel.add(backButton, gbc);
 
         employeeDisplayFrame.add(employeeDisplayPanel);
-        employeeDisplayFrame.pack();
         employeeDisplayFrame.setVisible(true);
 
         employeeDisplayFrame.addWindowListener(new WindowAdapter() {
@@ -1477,7 +1492,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         vehicleDisplayPanel.add(backButton, gbc);
 
         vehicleDisplayFrame.add(vehicleDisplayPanel);
-        vehicleDisplayFrame.pack();
         vehicleDisplayFrame.setVisible(true);
 
         vehicleDisplayFrame.addWindowListener(new
@@ -1864,7 +1878,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertInsurancePanel.add(backButton, gbc);
 
         insertInsuranceFrame.add(insertInsurancePanel);
-        insertInsuranceFrame.pack();
         insertInsuranceFrame.setVisible(true);
 
         insertInsuranceFrame.addWindowListener(new WindowAdapter() {
@@ -2003,7 +2016,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertTicketPanel.add(backButton, gbc);
 
         insertTicketFrame.add(insertTicketPanel);
-        insertTicketFrame.pack();
         insertTicketFrame.setVisible(true);
 
         insertTicketFrame.addWindowListener(new WindowAdapter() {
@@ -2148,7 +2160,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertEmployeePanel.add(backButton, gbc);
 
         insertEmployeeFrame.add(insertEmployeePanel);
-        insertEmployeeFrame.pack();
         insertEmployeeFrame.setVisible(true);
 
         insertEmployeeFrame.addWindowListener(new WindowAdapter() {
@@ -2309,7 +2320,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertCustomerPanel.add(backButton, gbc);
 
         insertCustomerFrame.add(insertCustomerPanel);
-        insertCustomerFrame.pack();
         insertCustomerFrame.setVisible(true);
 
         insertCustomerFrame.addWindowListener(new WindowAdapter() {
@@ -2474,7 +2484,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertVehiclePanel.add(backButton, gbc);
 
         insertVehicleFrame.add(insertVehiclePanel);
-        insertVehicleFrame.pack();
         insertVehicleFrame.setVisible(true);
 
         insertVehicleFrame.addWindowListener(new WindowAdapter() {
@@ -2489,6 +2498,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         //Menu interativo
         Employee employee = new Employee();
         employee.setName("John Doe");
+        employee.setAccess_level(2);
         BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
     }
 

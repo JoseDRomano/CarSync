@@ -27,6 +27,7 @@ public enum PersonsEnum {
 
     //Constants for the variables of the table Employee
     TABLE_EMPLOYEE,
+    UPDATE_EMPLOYEE_PASSWORD, UPDATE_EMPLOYEE_EMAIL, UPDATE_EMPLOYEE_ADDRESS,
     COLUMN_EMPLOYEE_ACCESS_LEVEL, INSERT_INTO_PERSON,
     INSERT_INTO_EMPLOYEE, INSERT_INTO_CUSTOMER, DELETE_FROM_PERSON,
     DELETE_FROM_EMPLOYEE, DELETE_FROM_CUSTOMER, QUERY_TABLE_CUSTOMER_BY_NIF, QUERY_TABLE_EMPLOYEE_BY_NIF,
@@ -54,6 +55,18 @@ public enum PersonsEnum {
             case COLUMN_EMPLOYEE_ACCESS_LEVEL -> "access_level";
             case COLUMN_DEACTIVATED -> "deactivated";
             case COLUMN_EMAIL -> "email";
+
+            case UPDATE_EMPLOYEE_ADDRESS -> "UPDATE " + getString(PersonsEnum.TABLE_PERSON) + " SET " +
+                    getString(PersonsEnum.COLUMN_ADDRESS) + " = ? WHERE " +
+                    getString(PersonsEnum.COLUMN_NIF) + " = ?";
+
+            case UPDATE_EMPLOYEE_EMAIL -> "UPDATE " + getString(PersonsEnum.TABLE_PERSON) + " SET " +
+                    getString(PersonsEnum.COLUMN_EMAIL) + " = ? WHERE " +
+                    getString(PersonsEnum.COLUMN_NIF) + " = ?";
+
+            case UPDATE_EMPLOYEE_PASSWORD -> "UPDATE " + getString(PersonsEnum.TABLE_PERSON) + " SET " +
+                    getString(PersonsEnum.COLUMN_PWD) + " = ? WHERE " +
+                    getString(PersonsEnum.COLUMN_NIF) + " = ?";
 
             case DEACTIVATE_PERSON -> "UPDATE " + getString(PersonsEnum.TABLE_PERSON) + " SET " +
                     getString(PersonsEnum.COLUMN_DEACTIVATED) + " = 0 WHERE " +
