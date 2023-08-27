@@ -1,6 +1,7 @@
 package employeeacess;
 
 import model.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,7 +47,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         mainFrame = new JFrame("Back Office Menu");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        mainFrame.setLayout(new BorderLayout());
 
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
@@ -58,8 +58,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
 
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new GridBagLayout());
+        mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -67,27 +66,38 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         JLabel mainLabel = new JLabel("Welcome " + employee.getName());
         mainLabel.setFont(new Font("Arial", Font.BOLD, 80));
-        mainLabel.setHorizontalAlignment(JLabel.CENTER);
-        mainLabel.setVerticalAlignment(JLabel.TOP);
         mainLabel.setForeground(BLUE);
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 2;
         mainPanel.add(mainLabel, gbc);
 
 
         JButton[] buttons = {insertMenu, deleteMenu, deactivateMenu, updateMenu, searchMenu, taskMenu};
         gbc.gridwidth = 2;
         for (JButton button : buttons) {
-            button.setFont(new Font("Arial", Font.BOLD, 20));
             button.setBackground(GREEN);
-            button.setSize(50, 50);
             button.setForeground(Color.WHITE);
             gbc.gridy++;
             mainPanel.add(button, gbc);
         }
 
         gbc.gridy++;
-        mainPanel.add(exitButton, gbc);
 
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        mainPanel.add(exitButton, gbc);
+        gbc.gridx = 1;
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        mainPanel.add(backButton, gbc);
 
         mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
@@ -257,27 +267,39 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JPanel searchMenuPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
+        gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
+        searchMenuPanel.add(searchMenuLabel, gbc);
         JButton[] buttons = {vehicleDisplay, employeeDisplay, customerDisplay, ticketDisplay, insuranceDisplay};
 
         gbc.gridwidth = 2;
-        for(int i = 0; i < 5; i++) {
-            gbc.gridy = i;
+        for (int i = 0; i < 5; i++) {
+            gbc.gridy = i + 1;
+            buttons[i].setBackground(GREEN);
+            buttons[i].setForeground(WHITE);
+            ;
             searchMenuPanel.add(buttons[i], gbc);
         }
 
-        gbc.insets = new Insets(20, 10, 5, 10)
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy++;
         gbc.gridwidth = 1;
-        gbc.gridy = 5;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
         searchMenuPanel.add(exitButton, gbc);
-
-        gbc.gridx++;
+        gbc.gridx = 1;
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
         searchMenuPanel.add(backButton, gbc);
 
-        searchMenuPanel.add(backButton);
-        searchMenuPanel.add(exitButton);
+
         searchMenuFrame.add(searchMenuPanel);
         mainFrame.setVisible(false);
         searchMenuFrame.setVisible(true);
@@ -309,6 +331,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         customerDisplay.addActionListener(goToPageListener);
         ticketDisplay.addActionListener(goToPageListener);
         insuranceDisplay.addActionListener(goToPageListener);
+
+        searchMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
     }
 
     private void insuranceDisplayPage(JFrame searchMenuFrame) {
@@ -1535,14 +1564,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         vehicleDisplayFrame.add(vehicleDisplayPanel);
         vehicleDisplayFrame.setVisible(true);
 
-        vehicleDisplayFrame.addWindowListener(new
-
-                                                      WindowAdapter() {
-                                                          @Override
-                                                          public void windowClosing(WindowEvent e) {
-                                                              dataSource.close();
-                                                          }
-                                                      });
+        vehicleDisplayFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
 
     }
 
@@ -1590,35 +1617,70 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     }
 
     private void buildUpdateMenuPage() {
-        JFrame updateMenuFrame = new JFrame("Update Menu");
+        JFrame updateMenuFrame = new JFrame("Back Office Menu");
         updateMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         updateMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        updateMenuFrame.setSize(WIDTH, HEIGHT);
+
+        JLabel updateMenuLabel = new JLabel("update Menu");
+        updateMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        updateMenuLabel.setForeground(BLUE);
+
+
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
         JButton vehicleUpdate = new JButton("Vehicle Update Menu");
         JButton employeeUpdate = new JButton("Employee Update Menu");
         JButton customerUpdate = new JButton("Customer Update Menu");
         JButton ticketUpdate = new JButton("Ticket Update Menu");
-        JButton insuranceUpdate = new JButton("Insurance Update Menu");
-        JPanel updateMenuPanel = new JPanel();
-        updateMenuPanel.setLayout(new GridLayout(7, 1));
-        updateMenuPanel.add(vehicleUpdate);
-        updateMenuPanel.add(employeeUpdate);
-        updateMenuPanel.add(customerUpdate);
-        updateMenuPanel.add(ticketUpdate);
-        updateMenuPanel.add(insuranceUpdate);
-        updateMenuPanel.add(backButton);
-        updateMenuPanel.add(exitButton);
+        JPanel updateMenuPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        updateMenuPanel.add(updateMenuLabel, gbc);
+
+        gbc.gridy = 1;
+
+        JButton[] buttons = {vehicleUpdate, employeeUpdate, customerUpdate, ticketUpdate};
+
+        for (int i = 0; i < 4; i++) {
+            gbc.gridy = i + 1;
+            buttons[i].setBackground(GREEN);
+            buttons[i].setForeground(WHITE);
+            ;
+            updateMenuPanel.add(buttons[i], gbc);
+        }
+
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        updateMenuPanel.add(exitButton, gbc);
+        gbc.gridx = 1;
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        updateMenuPanel.add(backButton, gbc);
+
+
         updateMenuFrame.add(updateMenuPanel);
         mainFrame.setVisible(false);
         updateMenuFrame.setVisible(true);
+
         backButton.addActionListener(e -> {
             mainFrame.setVisible(true);
             updateMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
             dataSource.close();
+            updateMenuFrame.dispose();
             System.exit(0);
         });
 
@@ -1632,7 +1694,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 else if (button == employeeUpdate) employeeUpdatePage(updateMenuFrame);
                 else if (button == customerUpdate) customerUpdatePage(updateMenuFrame);
                 else if (button == ticketUpdate) ticketUpdatePage(updateMenuFrame);
-                else if (button == insuranceUpdate) insuranceUpdatePage(updateMenuFrame);
             }
         };
 
@@ -1640,29 +1701,419 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         employeeUpdate.addActionListener(goToPageListener);
         customerUpdate.addActionListener(goToPageListener);
         ticketUpdate.addActionListener(goToPageListener);
-        insuranceUpdate.addActionListener(goToPageListener);
 
-    }
+        updateMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
 
-    private void insuranceUpdatePage(JFrame updateMenuFrame) {
     }
 
     private void ticketUpdatePage(JFrame updateMenuFrame) {
+        JFrame updateTicketFrame = new JFrame("Update Ticket");
+        updateTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        updateTicketFrame.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        JButton backButton = new JButton("Back");
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        JButton submit = new JButton("Pay");
+        submit.setBackground(GREEN);
+        submit.setForeground(WHITE);
+
+        backButton.addActionListener(e -> {
+            updateTicketFrame.setVisible(false);
+            updateMenuFrame.setVisible(true);
+        });
+        exitButton.addActionListener(e -> {
+            updateTicketFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        //SET UP for exit buttons
+        JPanel updateTicketPanel = new JPanel(new GridBagLayout());
+        updateTicketPanel.setBackground(Color.WHITE);
+
+        JLabel updateTicketLabel = new JLabel("Pay Ticket");
+        updateTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.PAGE_START;
+        updateTicketPanel.add(updateTicketLabel, gbc);
+
+        JLabel idLabel = new JLabel("ID of the ticket: ");
+        JTextField idField = new JTextField(15);
+
+        JLabel valueLabel = new JLabel("Value to pay: ");
+        JTextField valueField = new JTextField(15);
+
+
+        submit.addActionListener(e -> {
+            String id = idField.getText();
+            String value = valueField.getText();
+
+            if (dataSource.payTicket(Integer.parseInt(id), Float.parseFloat(valueField.getText())))
+                JOptionPane.showMessageDialog(updateTicketFrame, "Ticket successfully paid",
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(updateTicketFrame, "Error paying ticket", "Error", JOptionPane.ERROR_MESSAGE);
+        });
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {idLabel, valueLabel};
+        JTextField[] textFields = {idField, valueField};
+
+
+        for (int row = 0; row < labels.length; row++) {
+            gbc.gridx = 0;
+            gbc.gridy = row + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            updateTicketPanel.add(labels[row], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+
+            updateTicketPanel.add(textFields[row], gbc);
+
+        }
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 6, 10);
+        updateTicketPanel.add(submit, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updateTicketPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updateTicketPanel.add(backButton, gbc);
+
+        updateTicketFrame.add(updateTicketPanel);
+        updateTicketFrame.pack();
+        updateTicketFrame.setVisible(true);
+
+        updateTicketFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
     }
 
     private void customerUpdatePage(JFrame updateMenuFrame) {
+        JFrame updatePersonFrame = new JFrame("Update Vehicle");
+        updatePersonFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        updatePersonFrame.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        JButton backButton = new JButton("Back");
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        JButton submit = new JButton("Submit");
+        submit.setBackground(GREEN);
+        submit.setForeground(WHITE);
+        backButton.addActionListener(e -> {
+            updatePersonFrame.setVisible(false);
+            updateMenuFrame.setVisible(true);
+        });
+        exitButton.addActionListener(e -> {
+            updatePersonFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        //SET UP for exit buttons
+        JPanel updatePersonPanel = new JPanel(new GridBagLayout());
+        updatePersonPanel.setBackground(Color.WHITE);
+
+        JLabel updatePersonLabel = new JLabel("Update Person");
+        updatePersonLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.PAGE_START;
+        updatePersonPanel.add(updatePersonLabel, gbc);
+
+        JLabel nifLabel = new JLabel("NIF: ");
+        JTextField nifField = new JTextField(15);
+//        JComboBox nifField = new JComboBox(arrayInfo(dataSource.queryCustomers()));
+
+        JLabel emailLabel = new JLabel("Email: ");
+        JTextField emailField = new JTextField(15);
+
+        JButton submitButton1 = new JButton("Change Email");
+        submitButton1.setBackground(GREEN);
+        submitButton1.setForeground(Color.WHITE);
+        submitButton1.addActionListener(e -> {
+//            String nif = nifField.getSelectedItem().toString();
+            String nif = nifField.getText();
+            String email = emailField.getText();
+            if (!isNIF(nif))
+                JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
+            else if (!isEmail(email)) {
+                JOptionPane.showMessageDialog(updatePersonFrame, "Wrong email format");
+            } else {
+                if (dataSource.updatePersonEmail(Integer.parseInt(nif), email)) {
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Email successfully updated",
+                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        JLabel passwordLabel = new JLabel("Password: ");
+        JTextField passwordField = new JTextField(15);
+
+        JButton submitButton2 = new JButton("Change Password");
+        submitButton2.setBackground(GREEN);
+        submitButton2.setForeground(Color.WHITE);
+        submitButton2.addActionListener(e -> {
+            String password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
+//            String nif = nifField.getSelectedItem().toString();
+            String nif = nifField.getText();
+            if (!isNIF(nif))
+                JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
+            else if (!isPassword(passwordField.getText())) {
+                JOptionPane.showMessageDialog(updatePersonFrame, "Wrong password format");
+            } else {
+                if (dataSource.updatePersonPassword(Integer.parseInt(nif), password)) {
+
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Password successfully updated",
+                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        JLabel addressLabel = new JLabel("Address: ");
+        JTextField addressField = new JTextField(36);
+
+        JButton submitButton3 = new JButton("Change Address");
+        submitButton3.setBackground(GREEN);
+        submitButton3.setForeground(Color.WHITE);
+        submitButton3.addActionListener(e -> {
+            String address = addressField.getText();
+//            String nif = nifField.getSelectedItem().toString();
+            String nif = nifField.getText();
+            if (!isNIF(nif))
+                JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
+            else if (!isValidString(address)) {
+                JOptionPane.showMessageDialog(updatePersonFrame, "Wrong address format");
+            } else {
+                if (dataSource.updatePersonAddress(Integer.parseInt(nif), address)) {
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Address successfully updated",
+                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        //Montar janela
+        gbc.gridwidth = 1;
+        JLabel[] labels = {nifLabel, emailLabel, passwordLabel, addressLabel};
+//        JComboBox[] comboBoxes = {nifField};
+        JTextField[] textFields = {nifField, emailField, passwordField, addressField};
+        JButton[] buttons = {submitButton1, submitButton2, submitButton3};
+
+        // Inside the for loop
+        for (int row = 0; row < labels.length; row++) {
+            gbc.gridx = 0;
+            gbc.gridy = row + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            updatePersonPanel.add(labels[row], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+            updatePersonPanel.add(textFields[row], gbc);
+
+            // Check if it's not the "NIF" line
+            if (row != 0) {
+                gbc.gridx = 2;
+                gbc.anchor = GridBagConstraints.LINE_END;
+                updatePersonPanel.add(buttons[row - 1], gbc);
+            }
+        }
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updatePersonPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updatePersonPanel.add(backButton, gbc);
+
+        updatePersonFrame.add(updatePersonPanel);
+        updatePersonFrame.pack();
+        updatePersonFrame.setVisible(true);
+        updateMenuFrame.setVisible(false);
+
+        updatePersonFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
     }
 
     private void employeeUpdatePage(JFrame updateMenuFrame) {
     }
 
     private void vehicleUpdatePage(JFrame updateMenuFrame) {
+        updateMenuFrame.setVisible(false);
+        JFrame updateVehicleFrame = new JFrame("Update Vehicle");
+        updateVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        updateVehicleFrame.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        JButton backButton = new JButton("Back");
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        JButton submit = new JButton("Submit");
+        submit.setBackground(GREEN);
+        submit.setForeground(WHITE);
+        backButton.addActionListener(e -> {
+            updateVehicleFrame.setVisible(false);
+            updateMenuFrame.setVisible(true);
+        });
+        exitButton.addActionListener(e -> {
+            updateVehicleFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        //SET UP for exit buttons
+        JPanel updateVehiclePanel = new JPanel(new GridBagLayout());
+        updateVehiclePanel.setBackground(Color.WHITE);
+
+        JLabel updateVehicleLabel = new JLabel("Update Vehicle");
+        updateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.PAGE_START;
+        updateVehiclePanel.add(updateVehicleLabel, gbc);
+
+        JLabel plate = new JLabel("Plate: ");
+        JTextField plateField = new JTextField(15);
+
+        JLabel color = new JLabel("Color: ");
+        JComboBox<String> colorField = new JComboBox<>(new String[]{" ", "Black", "White",
+                "Red", "Blue", "Green", "Yellow", "Gray", "Silver", "Brown", "Orange"});
+
+        submit.addActionListener(e -> {
+            String plateText = plateField.getText();
+            String colorText = (String) colorField.getSelectedItem();
+            if (!isPlate(plateText))
+                JOptionPane.showMessageDialog(updateVehicleFrame, "Please insert a valid plate with " +
+                        "format XX-XX-XX");
+            else {
+                if (dataSource.updateVehicleColor(plateText, colorText)) {
+                    JOptionPane.showMessageDialog(updateVehicleFrame, "Vehicle successfully updated",
+                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                }
+                JOptionPane.showMessageDialog(updateVehicleFrame, "Error updating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
+
+            }
+            updateVehicleFrame.setVisible(false);
+            vehicleUpdatePage(updateMenuFrame);
+        });
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {plate, color};
+        JTextField[] textFields = {plateField
+        };
+
+        for (int row = 0; row < labels.length; row++) {
+            gbc.gridx = 0;
+            gbc.gridy = row + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            updateVehiclePanel.add(labels[row], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+            if (row == 0) {
+                updateVehiclePanel.add(textFields[row], gbc);
+            } else {
+                updateVehiclePanel.add(colorField, gbc);
+            }
+
+        }
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 6, 10);
+        updateVehiclePanel.add(submit, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updateVehiclePanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updateVehiclePanel.add(backButton, gbc);
+
+        updateVehicleFrame.add(updateVehiclePanel);
+        updateVehicleFrame.pack();
+        updateVehicleFrame.setVisible(true);
+
+        updateVehicleFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
     }
 
     private void buildDeactivateMenuPage() {
         JFrame deactivateMenuFrame = new JFrame("Deactivation Menu");
         deactivateMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        deactivateMenuFrame.setSize(WIDTH, HEIGHT);
+        deactivateMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JLabel deactivateMenuLabel = new JLabel("Deactivation Menu");
+        deactivateMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        deactivateMenuLabel.setForeground(BLUE);
+
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
         JButton vehicleDeactivation = new JButton("Vehicle Deactivation Menu");
@@ -1670,15 +2121,42 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton customerDeactivation = new JButton("Customer Deactivation Menu");
         JButton ticketDeactivation = new JButton("Ticket Deactivation Menu");
         JButton insuranceDeactivation = new JButton("Insurance Deactivation Menu");
-        JPanel deactivationMenuPanel = new JPanel();
-        deactivationMenuPanel.setLayout(new GridLayout(7, 1));
-        deactivationMenuPanel.add(vehicleDeactivation);
-        deactivationMenuPanel.add(employeeDeactivation);
-        deactivationMenuPanel.add(customerDeactivation);
-        deactivationMenuPanel.add(ticketDeactivation);
-        deactivationMenuPanel.add(insuranceDeactivation);
-        deactivationMenuPanel.add(backButton);
-        deactivationMenuPanel.add(exitButton);
+        JPanel deactivationMenuPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        deactivationMenuPanel.add(deactivateMenuLabel, gbc);
+
+        gbc.gridy = 1;
+        JButton[] buttons = {vehicleDeactivation, employeeDeactivation, customerDeactivation, ticketDeactivation, insuranceDeactivation};
+
+        for (int i = 0; i < 5; i++) {
+            gbc.gridy = i + 1;
+            buttons[i].setBackground(GREEN);
+            buttons[i].setForeground(WHITE);
+            ;
+            deactivationMenuPanel.add(buttons[i], gbc);
+        }
+
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        deactivationMenuPanel.add(exitButton, gbc);
+        gbc.gridx = 1;
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        deactivationMenuPanel.add(backButton, gbc);
+
         deactivateMenuFrame.add(deactivationMenuPanel);
         mainFrame.setVisible(false);
         deactivateMenuFrame.setVisible(true);
@@ -1690,12 +2168,444 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             dataSource.close();
             System.exit(0);
         });
+
+        ActionListener goToPageListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton button = (JButton) e.getSource();
+                deactivateMenuFrame.setVisible(false);
+                if (button == vehicleDeactivation)
+                    deactivateVehiclePage(deactivateMenuFrame);
+                else if (button == customerDeactivation)
+                    deactivateCustomerPage(deactivateMenuFrame);
+                else if (button == ticketDeactivation)
+                    deactivateTicketPage(deactivateMenuFrame);
+                else if (button == insuranceDeactivation)
+                    deactivateInsurancePage(deactivateMenuFrame);
+            }
+        };
+
+        vehicleDeactivation.addActionListener(goToPageListener);
+        customerDeactivation.addActionListener(goToPageListener);
+        ticketDeactivation.addActionListener(goToPageListener);
+        insuranceDeactivation.addActionListener(goToPageListener);
+
+        deactivateMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+    }
+
+    private void deactivateCustomerPage(JFrame deactivateMenuFrame) {
+        JFrame deactivateCustomerFrame = new JFrame("Deactivate Customer");
+        deactivateCustomerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        deactivateCustomerFrame.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        JButton backButton = new JButton("Back");
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        JButton submit = new JButton("Deactivate");
+        submit.setBackground(GREEN);
+        submit.setForeground(WHITE);
+
+        backButton.addActionListener(e -> {
+            deactivateCustomerFrame.setVisible(false);
+            deactivateMenuFrame.setVisible(true);
+        });
+        exitButton.addActionListener(e -> {
+            deactivateCustomerFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        //SET UP for exit buttons
+        JPanel deactivateCustomerPanel = new JPanel(new GridBagLayout());
+        deactivateCustomerPanel.setBackground(Color.WHITE);
+
+        JLabel deactivateVehicleLabel = new JLabel("Deactivate Customer");
+        deactivateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.PAGE_START;
+        deactivateCustomerPanel.add(deactivateVehicleLabel, gbc);
+
+        JLabel nifLabel = new JLabel("NIF: ");
+        JTextField nifField = new JTextField(15);
+
+        submit.addActionListener(e -> {
+            String nif = nifField.getText();
+            if (isNIF(nif)) {
+                if (dataSource.deactivateCustomer(Integer.parseInt(nif)))
+                    JOptionPane.showMessageDialog(deactivateCustomerFrame, "Customer successfully deactivated",
+                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                else
+                    JOptionPane.showMessageDialog(deactivateCustomerFrame, "Error deactivating Customer", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {nifLabel};
+        JTextField[] textFields = {nifField};
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        deactivateCustomerPanel.add(labels[0], gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+
+        deactivateCustomerPanel.add(textFields[0], gbc);
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 6, 10);
+        deactivateCustomerPanel.add(submit, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        deactivateCustomerPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        deactivateCustomerPanel.add(backButton, gbc);
+
+        deactivateCustomerFrame.add(deactivateCustomerPanel);
+        deactivateCustomerFrame.pack();
+        deactivateCustomerFrame.setVisible(true);
+
+        deactivateCustomerFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+    }
+
+    private void deactivateTicketPage(JFrame deactivateMenuFrame) {
+        JFrame deactivateTicketFrame = new JFrame("Deactivate Ticket");
+        deactivateTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        deactivateTicketFrame.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        JButton backButton = new JButton("Back");
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        JButton submit = new JButton("Deactivate");
+        submit.setBackground(GREEN);
+        submit.setForeground(WHITE);
+
+        backButton.addActionListener(e -> {
+            deactivateTicketFrame.setVisible(false);
+            deactivateMenuFrame.setVisible(true);
+        });
+        exitButton.addActionListener(e -> {
+            deactivateTicketFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        //SET UP for exit buttons
+        JPanel deactivateTicketPanel = new JPanel(new GridBagLayout());
+        deactivateTicketPanel.setBackground(Color.WHITE);
+
+        JLabel deactivateTicketLabel = new JLabel("Deactivate Ticket");
+        deactivateTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.PAGE_START;
+        deactivateTicketPanel.add(deactivateTicketLabel, gbc);
+
+        JLabel idLabel = new JLabel("Ticket ID: ");
+        JTextField idField = new JTextField(15);
+
+        submit.addActionListener(e -> {
+            String id = idField.getText();
+            if (dataSource.deactivateTicket(Integer.parseInt(id)))
+                JOptionPane.showMessageDialog(deactivateTicketFrame, "Ticket successfully deactivated",
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(deactivateTicketFrame, "Error deactivating Ticket", "Error", JOptionPane.ERROR_MESSAGE);
+
+        });
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {idLabel};
+        JTextField[] textFields = {idField};
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        deactivateTicketPanel.add(labels[0], gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+
+        deactivateTicketPanel.add(textFields[0], gbc);
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 6, 10);
+        deactivateTicketPanel.add(submit, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        deactivateTicketPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        deactivateTicketPanel.add(backButton, gbc);
+
+        deactivateTicketFrame.add(deactivateTicketPanel);
+        deactivateTicketFrame.pack();
+        deactivateTicketFrame.setVisible(true);
+
+        deactivateTicketFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+    }
+
+    private void deactivateInsurancePage(JFrame deactivateMenuFrame) {
+        JFrame deactivateInsuranceFrame = new JFrame("Deactivate Ticket");
+        deactivateInsuranceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        deactivateInsuranceFrame.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        JButton backButton = new JButton("Back");
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        JButton submit = new JButton("Deactivate");
+        submit.setBackground(GREEN);
+        submit.setForeground(WHITE);
+
+        backButton.addActionListener(e -> {
+            deactivateInsuranceFrame.setVisible(false);
+            deactivateMenuFrame.setVisible(true);
+        });
+        exitButton.addActionListener(e -> {
+            deactivateInsuranceFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        //SET UP for exit buttons
+        JPanel deactivateInsurancePanel = new JPanel(new GridBagLayout());
+        deactivateInsurancePanel.setBackground(Color.WHITE);
+
+        JLabel deactivateInsuranceLabel = new JLabel("Deactivate Insured Policy ");
+        deactivateInsuranceLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.PAGE_START;
+        deactivateInsurancePanel.add(deactivateInsuranceLabel, gbc);
+
+        JLabel policyLabel = new JLabel("Policy number: ");
+        JTextField policyField = new JTextField(15);
+
+        submit.addActionListener(e -> {
+            String policyNum = policyField.getText();
+            if (dataSource.deactivateInsurance(Integer.parseInt(policyNum)))
+                JOptionPane.showMessageDialog(deactivateMenuFrame, "Policy successfully deactivated",
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(deactivateMenuFrame, "Error deactivating Policy", "Error", JOptionPane.ERROR_MESSAGE);
+
+        });
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {policyLabel};
+        JTextField[] textFields = {policyField};
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        deactivateInsurancePanel.add(labels[0], gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+
+        deactivateInsurancePanel.add(textFields[0], gbc);
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 6, 10);
+        deactivateInsurancePanel.add(submit, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        deactivateInsurancePanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        deactivateInsurancePanel.add(backButton, gbc);
+
+        deactivateInsuranceFrame.add(deactivateInsurancePanel);
+        deactivateInsuranceFrame.pack();
+        deactivateInsuranceFrame.setVisible(true);
+
+        deactivateInsuranceFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+    }
+
+    private void deactivateVehiclePage(JFrame deactivateMenuFrame) {
+        JFrame deactivateVehicleFrame = new JFrame("Deactivate Vehicle");
+        deactivateVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        deactivateVehicleFrame.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        JButton backButton = new JButton("Back");
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        JButton submit = new JButton("Deactivate");
+        submit.setBackground(GREEN);
+        submit.setForeground(WHITE);
+
+        backButton.addActionListener(e -> {
+            deactivateVehicleFrame.setVisible(false);
+            deactivateMenuFrame.setVisible(true);
+        });
+
+        exitButton.addActionListener(e -> {
+            deactivateVehicleFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        //SET UP for exit buttons
+        JPanel deactivateVehiclePanel = new JPanel(new GridBagLayout());
+        deactivateVehiclePanel.setBackground(Color.WHITE);
+
+        JLabel deactivateVehicleLabel = new JLabel("Pay Ticket");
+        deactivateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.PAGE_START;
+        deactivateVehiclePanel.add(deactivateVehicleLabel, gbc);
+
+        JLabel plateLabel = new JLabel("Plate: ");
+        JTextField plateField = new JTextField(15);
+
+        submit.addActionListener(e -> {
+            String plate = plateField.getText();
+            if (isPlate(plate)) {
+                if (dataSource.deactivateVehicle(plate))
+                    JOptionPane.showMessageDialog(deactivateVehicleFrame, "Vehicle successfully deactivated",
+                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                else
+                    JOptionPane.showMessageDialog(deactivateVehicleFrame, "Error deactivating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {plateLabel};
+        JTextField[] textFields = {plateField};
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        deactivateVehiclePanel.add(labels[0], gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+
+        deactivateVehiclePanel.add(textFields[0], gbc);
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 6, 10);
+        deactivateVehiclePanel.add(submit, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        deactivateVehiclePanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        deactivateVehiclePanel.add(backButton, gbc);
+
+        deactivateVehicleFrame.add(deactivateVehiclePanel);
+        deactivateVehicleFrame.pack();
+        deactivateVehicleFrame.setVisible(true);
+
+        deactivateVehicleFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
     }
 
     private void buildDeleteMenuPage() {
         JFrame deleteMenuFrame = new JFrame("Delete Menu");
         deleteMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        deleteMenuFrame.setSize(WIDTH, HEIGHT);
+        deleteMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JLabel deleteMenuLabel = new JLabel("Delete Menu");
+        deleteMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        deleteMenuLabel.setForeground(BLUE);
+
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
         JButton vehicleDelete = new JButton("Delete Vehicle Menu");
@@ -1703,15 +2613,42 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton customerDelete = new JButton("Delete Customer Menu");
         JButton ticketDelete = new JButton("Delete Ticket Menu");
         JButton insuranceDelete = new JButton("Delete Insurance Menu");
-        JPanel deleteMenuPanel = new JPanel();
-        deleteMenuPanel.setLayout(new GridLayout(7, 1));
-        deleteMenuPanel.add(vehicleDelete);
-        deleteMenuPanel.add(employeeDelete);
-        deleteMenuPanel.add(customerDelete);
-        deleteMenuPanel.add(ticketDelete);
-        deleteMenuPanel.add(insuranceDelete);
-        deleteMenuPanel.add(backButton);
-        deleteMenuPanel.add(exitButton);
+        JPanel deleteMenuPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        deleteMenuPanel.add(deleteMenuLabel, gbc);
+
+        gbc.gridy = 1;
+        JButton[] buttons = {vehicleDelete, employeeDelete, customerDelete, ticketDelete, insuranceDelete};
+        for (int i = 0; i < 5; i++) {
+            gbc.gridy = i + 1;
+            buttons[i].setBackground(GREEN);
+            buttons[i].setForeground(WHITE);
+            ;
+            deleteMenuPanel.add(buttons[i], gbc);
+        }
+
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        deleteMenuPanel.add(exitButton, gbc);
+        gbc.gridx = 1;
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        deleteMenuPanel.add(backButton, gbc);
+
+
         deleteMenuFrame.add(deleteMenuPanel);
         mainFrame.setVisible(false);
         deleteMenuFrame.setVisible(true);
@@ -1723,12 +2660,57 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             dataSource.close();
             System.exit(0);
         });
+
+        ActionListener goToPageListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton button = (JButton) e.getSource();
+                mainFrame.setVisible(false);
+
+                if (button == customerDelete) customerDelete(deleteMenuFrame);
+                else if (button == vehicleDelete) vehicleDelete(deleteMenuFrame);
+                else if (button == insuranceDelete) insuranceDelete(deleteMenuFrame);
+                else if (button == ticketDelete) ticketDelete(deleteMenuFrame);
+                else if (button == employeeDelete) employeeDelete(deleteMenuFrame);
+            }
+        };
+
+        deleteMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+    }
+
+    private void employeeDelete(JFrame deleteMenuFrame) {
+        JFrame employeeDeleteFrame = new JFrame("BackOffice Menu");
+        employeeDeleteFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+    }
+
+    private void ticketDelete(JFrame deleteMenuFrame) {
+    }
+
+    private void insuranceDelete(JFrame deleteMenuFrame) {
+    }
+
+    private void vehicleDelete(JFrame deleteMenuFrame) {
+    }
+
+    private void customerDelete(JFrame deleteMenuFrame) {
     }
 
     private void buildInsertMenuPage() {
         JFrame insertMenuFrame = new JFrame("Insert Menu");
         insertMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertMenuFrame.setSize(WIDTH, HEIGHT);
+        insertMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JLabel insertMenuLabel = new JLabel("Insert Menu");
+        insertMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        insertMenuLabel.setForeground(BLUE);
+
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
         JButton vehicleInsert = new JButton("Insert Vehicle Menu");
@@ -1736,15 +2718,42 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton customerInsert = new JButton("Insert Customer Menu");
         JButton ticketInsert = new JButton("Insert Ticket Menu");
         JButton insuranceInsert = new JButton("Insert Insurance Menu");
-        JPanel insertMenuPanel = new JPanel();
-        insertMenuPanel.setLayout(new GridLayout(7, 1));
-        insertMenuPanel.add(vehicleInsert);
-        insertMenuPanel.add(employeeInsert);
-        insertMenuPanel.add(customerInsert);
-        insertMenuPanel.add(ticketInsert);
-        insertMenuPanel.add(insuranceInsert);
-        insertMenuPanel.add(backButton);
-        insertMenuPanel.add(exitButton);
+        JPanel insertMenuPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        insertMenuPanel.add(insertMenuLabel, gbc);
+
+        gbc.gridy = 1;
+        JButton[] buttons = {vehicleInsert, employeeInsert, customerInsert, ticketInsert, insuranceInsert};
+        for (int i = 0; i < 5; i++) {
+            gbc.gridy = i + 1;
+            buttons[i].setBackground(GREEN);
+            buttons[i].setForeground(WHITE);
+            ;
+            insertMenuPanel.add(buttons[i], gbc);
+        }
+
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        insertMenuPanel.add(exitButton, gbc);
+        gbc.gridx = 1;
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        insertMenuPanel.add(backButton, gbc);
+
+
         insertMenuFrame.add(insertMenuPanel);
         mainFrame.setVisible(false);
         insertMenuFrame.setVisible(true);
@@ -1775,6 +2784,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         employeeInsert.addActionListener(goToPageListener);
         ticketInsert.addActionListener(goToPageListener);
         insuranceInsert.addActionListener(goToPageListener);
+
+        insertMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
     }
 
     private void insertInsurance(JFrame insertMenuFrame) {
