@@ -1975,6 +1975,111 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     }
 
     private void employeeUpdatePage(JFrame updateMenuFrame) {
+        JFrame employeeUpdateFrame = new JFrame("BackOffice Menu");
+        employeeUpdateFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        employeeUpdateFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JPanel employeeUpdatePanel = new JPanel(new GridBagLayout());
+        JLabel employeeUpdateLabel = new JLabel("Employee Update Menu");
+        employeeUpdateLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        employeeUpdateLabel.setForeground(BLUE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridwidth = 2;
+        employeeUpdatePanel.add(employeeUpdateLabel, gbc);
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        JButton submit = new JButton("Execute Update");
+
+        JLabel employeeNIF = new JLabel("NIF: (9 digits)");
+        JTextField employeeNIFField = new JTextField(9);
+
+        JLabel employeeAccessLevel = new JLabel("New Access Level");
+        JComboBox<String> employeeAccessLevelField = new JComboBox<>(new String[]{
+                " ", "0", "1", "2"});
+
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        employeeUpdatePanel.add(employeeNIF, gbc);
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        employeeUpdatePanel.add(employeeNIFField, gbc);
+
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        employeeUpdatePanel.add(employeeAccessLevel, gbc);
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        employeeUpdatePanel.add(employeeAccessLevelField, gbc);
+
+
+        submit.setBackground(GREEN);
+        submit.setForeground(WHITE);
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+
+        submit.addActionListener(e -> {
+            String accessLevel = (String) employeeAccessLevelField.getSelectedItem();
+            String nif = employeeNIFField.getText();
+            if (!accessLevel.equals(" ") && isNIF(nif)) {
+                if (dataSource.updateEmployeeAccessLevel(Integer.parseInt(nif), Integer.parseInt(accessLevel))) {
+                    JOptionPane.showMessageDialog(employeeUpdateFrame, "Employee Updated successfully!");
+                } else {
+                    JOptionPane.showMessageDialog(employeeUpdateFrame, "Update wasn't successfull!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(employeeUpdateFrame, "Please make sure all the fields are properly fielded!");
+            }
+        });
+
+        exitButton.addActionListener(e -> {
+            dataSource.close();
+            mainFrame.dispose();
+            employeeUpdateFrame.dispose();
+            System.exit(0);
+        });
+
+        backButton.addActionListener(e -> {
+            employeeUpdateFrame.setVisible(false);
+            employeeUpdateFrame.dispose();
+            updateMenuFrame.setVisible(true);
+        });
+
+        gbc.gridy = 6;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        employeeUpdatePanel.add(submit, gbc);
+
+        gbc.gridy = 7;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        employeeUpdatePanel.add(exitButton, gbc);
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        employeeUpdatePanel.add(backButton, gbc);
+
+        employeeUpdateFrame.add(employeeUpdatePanel);
+        updateMenuFrame.setVisible(false);
+        employeeUpdateFrame.setVisible(true);
+
+
+        updateMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
+
     }
 
     private void vehicleUpdatePage(JFrame updateMenuFrame) {
