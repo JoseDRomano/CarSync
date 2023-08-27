@@ -104,7 +104,8 @@ public class InsuranceTableNavigation {
         frame.add(new JScrollPane(table), BorderLayout.CENTER);
         frame.add(navPanel, BorderLayout.SOUTH);
 
-        frame.setSize(1200, 600);
+//        frame.setSize(1200, 600);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
 
         frame.addWindowListener(new WindowAdapter() {
@@ -193,7 +194,8 @@ public class InsuranceTableNavigation {
         frame.add(new JScrollPane(table), BorderLayout.CENTER);
         frame.add(navPanel, BorderLayout.SOUTH);
 
-        frame.setSize(1200, 600);
+//        frame.setSize(1200, 600);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
 
         frame.addWindowListener(new WindowAdapter() {

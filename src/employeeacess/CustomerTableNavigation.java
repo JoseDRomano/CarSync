@@ -58,6 +58,7 @@ public class CustomerTableNavigation {
         nextButton = new JButton("Next");
         prevButton.setBackground(GREEN);
         prevButton.setForeground(WHITE);
+
         nextButton.setBackground(GREEN);
         nextButton.setForeground(WHITE);
 
@@ -107,7 +108,8 @@ public class CustomerTableNavigation {
         frame.add(new JScrollPane(table), BorderLayout.CENTER);
         frame.add(navPanel, BorderLayout.SOUTH);
 
-        frame.setSize(1200, 600);
+//        frame.setSize(1200, 600);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
 
         frame.addWindowListener(new WindowAdapter() {
@@ -196,7 +198,9 @@ public class CustomerTableNavigation {
         frame.add(new JScrollPane(table), BorderLayout.CENTER);
         frame.add(navPanel, BorderLayout.SOUTH);
 
-        frame.setSize(1200, 600);
+//        frame.setSize(1200, 600);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         frame.setVisible(true);
 
         frame.addWindowListener(new WindowAdapter() {

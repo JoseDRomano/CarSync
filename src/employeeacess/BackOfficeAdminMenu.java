@@ -161,6 +161,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton backButton = new JButton("Back");
         JButton exitButton = new JButton("Exit");
         JButton executeTask = new JButton("Execute Task");
+        JButton viewAllTasks = new JButton("View All Tasks");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
@@ -190,6 +191,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                     JOptionPane.showMessageDialog(null, "Task Failed");
                 }
             }
+        });
+
+        viewAllTasks.setBackground(new Color(0, 0, 98));
+        viewAllTasks.setForeground(Color.WHITE);
+        viewAllTasks.addActionListener(e -> {
+            taskMenuFrame.setVisible(false);
+            new TaskTableNavigation(30, taskMenuFrame, employee.getAccess_level());
         });
 
         gbc.gridy = 3;

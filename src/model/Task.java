@@ -123,6 +123,16 @@ public class Task implements Comparable<Task> {
         return String.format(s, taskID, TaskType.getDescription(taskType), taskStatus, taskDate, nif, values);
     }
 
+    public String showTask() {
+        String s = """
+                Task ID: %d
+                    Type: %s
+                    Status: %s
+                    Date: %s            
+                """;
+        return String.format(s, taskID, TaskType.getDescription(taskType), taskStatus, taskDate);
+    }
+
     @Override
     public int compareTo(Task o) {
         return taskID - o.taskID;
@@ -138,5 +148,13 @@ public class Task implements Comparable<Task> {
 
     public void setTaskID(int taskID) {
         this.taskID = taskID;
+    }
+
+    public Date getTaskDate() {
+        return Date.valueOf(taskDate);
+    }
+
+    public String getTaskInfo() {
+        return values;
     }
 }

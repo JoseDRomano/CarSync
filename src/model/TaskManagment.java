@@ -129,24 +129,77 @@ public class TaskManagment {
                     task.getTaskType() == TaskType.VEHICLE_DEACTIVATION ||
                     task.getTaskType() == TaskType.INSURANCE_DEACTIVATION ||
                     task.getTaskType() == TaskType.VEHICLE_REGISTRATION ||
+                    task.getTaskType() == TaskType.TICKET_DEACTIVATION ||
+                    task.getTaskType() == TaskType.TICKET_REGISTRATION ||
+                    task.getTaskType() == TaskType.TICKET_UPDATE_PAY ||
                     task.getTaskType() == TaskType.INSURANCE_REGISTRATION ||
                     task.getTaskType() == TaskType.CUSTOMER_REGISTRATION ||
                     task.getTaskType() == TaskType.CUSTOMER_UPDATE_ADDRESS ||
                     task.getTaskType() == TaskType.CUSTOMER_UPDATE_EMAIL ||
                     task.getTaskType() == TaskType.CUSTOMER_UPDATE_PASSWORD ||
-                    task.getTaskType() == TaskType.EMPLOYEE_UPDATE_ACCESS_LEVEL ||
-
-//            TaskType.EMPLOYEE_UPDATE_ADDRESS || TaskType.EMPLOYEE_UPDATE_EMAIL ||
-//            TaskType.EMPLOYEE_UPDATE_PASSWORD
-
                     task.getTaskType() == TaskType.VEHICLE_UPDATE_COLOR ||
-                    task.getTaskType() == TaskType.TICKET_UPDATE_PAY) {
+                    task.getTaskType() == TaskType.EMPLOYEE_UPDATE_ACCESS_LEVEL) {
                 if (task.getTaskStatus().equals("Open")) {
                     return task;
                 }
             }
         }
         return null;
+    }
+
+    private List<Task> getOtherEmployeesTaskList(int accessLevel) {
+        if (accessLevel == 2) {
+            if (taskList.isEmpty()) {
+                return null;
+            } else {
+                List<Task> taskList2 = List.copyOf(taskList);
+                return taskList2;
+            }
+        }
+        List<Task> taskList2 = new ArrayList<>();
+        switch (accessLevel) {
+            case 1 -> {
+                for (Task task : taskList)
+                    if (task.getTaskType() == TaskType.CUSTOMER_DEACTIVATION ||
+                            task.getTaskType() == TaskType.EMPLOYEE_DEACTIVATION ||
+                            task.getTaskType() == TaskType.VEHICLE_DEACTIVATION ||
+                            task.getTaskType() == TaskType.INSURANCE_DEACTIVATION ||
+                            task.getTaskType() == TaskType.VEHICLE_REGISTRATION ||
+                            task.getTaskType() == TaskType.TICKET_DEACTIVATION ||
+                            task.getTaskType() == TaskType.TICKET_REGISTRATION ||
+                            task.getTaskType() == TaskType.TICKET_UPDATE_PAY ||
+                            task.getTaskType() == TaskType.INSURANCE_REGISTRATION ||
+                            task.getTaskType() == TaskType.CUSTOMER_REGISTRATION ||
+                            task.getTaskType() == TaskType.CUSTOMER_UPDATE_ADDRESS ||
+                            task.getTaskType() == TaskType.CUSTOMER_UPDATE_EMAIL ||
+                            task.getTaskType() == TaskType.CUSTOMER_UPDATE_PASSWORD ||
+                            task.getTaskType() == TaskType.VEHICLE_UPDATE_COLOR ||
+                            task.getTaskType() == TaskType.EMPLOYEE_UPDATE_ACCESS_LEVEL) {
+                        taskList2.add(task);
+                    }
+            }
+
+            case 0 -> {
+                for (Task task : taskList) {
+                    if (task.getTaskType() == TaskType.CUSTOMER_DEACTIVATION ||
+                            task.getTaskType() == TaskType.VEHICLE_DEACTIVATION ||
+                            task.getTaskType() == TaskType.INSURANCE_DEACTIVATION ||
+                            task.getTaskType() == TaskType.VEHICLE_REGISTRATION ||
+                            task.getTaskType() == TaskType.TICKET_DEACTIVATION ||
+                            task.getTaskType() == TaskType.TICKET_REGISTRATION ||
+                            task.getTaskType() == TaskType.TICKET_UPDATE_PAY ||
+                            task.getTaskType() == TaskType.INSURANCE_REGISTRATION ||
+                            task.getTaskType() == TaskType.CUSTOMER_REGISTRATION ||
+                            task.getTaskType() == TaskType.CUSTOMER_UPDATE_ADDRESS ||
+                            task.getTaskType() == TaskType.CUSTOMER_UPDATE_EMAIL ||
+                            task.getTaskType() == TaskType.CUSTOMER_UPDATE_PASSWORD ||
+                            task.getTaskType() == TaskType.VEHICLE_UPDATE_COLOR) {
+                        taskList2.add(task);
+                    }
+                }
+            }
+        }
+        return taskList2;
     }
 
     private Task getEmployeeTask() {
@@ -172,6 +225,11 @@ public class TaskManagment {
             }
         }
         return null;
+    }
+
+
+    public List<Task> getTaskList(int accessLevel) {
+        return taskList;
     }
 
 
