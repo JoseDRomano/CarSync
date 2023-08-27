@@ -13,25 +13,17 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static java.awt.Color.BLACK;
+import static java.awt.Color.*;
 
 public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
     private Employee employee;
-    static final int WIDTH = 800;
-    static final int HEIGHT = 600;
     private DataSource dataSource;
     private JFrame mainFrame;
     private JPanel mainPanel;
-    private JButton insertMenu = new JButton("Insert Menu");
-    private JButton updateMenu = new JButton("Update Menu");
-    private JButton deleteMenu = new JButton("Delete Menu");
-    private JButton taskMenu = new JButton("Task Menu");
-    private final JButton searchMenu = new JButton("Search Menu");
-    private final JButton deactivateMenu = new JButton("Deactivate Menu");
     private final Color GREEN = new Color(0, 100, 0);
-    private final Color RED = new Color(130, 0, 0);
-    private final Color WHITE = new Color(255, 255, 255);
+    private final Color RED = new Color(100, 0, 0);
+    private final Color BLUE = new Color(0, 0, 100);
 
 
     public BackOfficeAdminMenu(Employee employee) {
@@ -40,34 +32,48 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             System.out.println("Can't open datasource");
             return;
         }
+
+        JButton insertMenu = new JButton("Insert Menu");
+        JButton updateMenu = new JButton("Update Menu");
+        JButton deleteMenu = new JButton("Delete Menu");
+        JButton taskMenu = new JButton("Task Menu");
+        JButton searchMenu = new JButton("Search Menu");
+        JButton deactivateMenu = new JButton("Deactivate Menu");
+        JButton exitButton = new JButton("Exit");
+        JButton backButton = new JButton("Back");
+
         this.employee = employee;
-        mainFrame = new JFrame("Back Office Menu" + "\n" + "Welcome " + employee.getName());
+        mainFrame = new JFrame("Back Office Menu");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        mainFrame.setSize(WIDTH, HEIGHT);
-        mainFrame.setBackground(Color.WHITE);
         mainFrame.setLayout(new BorderLayout());
-        JButton exitButton = new JButton("Exit");
-        exitButton.setBackground(new Color(130, 0, 0));
-        exitButton.addActionListener(e -> System.exit(0));
+
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        exitButton.addActionListener(e -> {
+            System.exit(0);
+            dataSource.close();
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
 
         mainPanel = new JPanel();
-        mainPanel.setBackground(Color.WHITE);
         mainPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        JLabel mainLabel = new JLabel("Back Office Menu");
+        JLabel mainLabel = new JLabel("Welcome " + employee.getName());
         mainLabel.setFont(new Font("Arial", Font.BOLD, 80));
         mainLabel.setHorizontalAlignment(JLabel.CENTER);
         mainLabel.setVerticalAlignment(JLabel.TOP);
-        mainLabel.setForeground(BLACK);
+        mainLabel.setForeground(BLUE);
         mainPanel.add(mainLabel, gbc);
 
 
-        JButton[] buttons = {insertMenu, deleteMenu, deactivateMenu, updateMenu, searchMenu, taskMenu, exitButton};
+        JButton[] buttons = {insertMenu, deleteMenu, deactivateMenu, updateMenu, searchMenu, taskMenu};
         gbc.gridwidth = 2;
         for (JButton button : buttons) {
             button.setFont(new Font("Arial", Font.BOLD, 20));
@@ -77,6 +83,9 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             gbc.gridy++;
             mainPanel.add(button, gbc);
         }
+
+        gbc.gridy++;
+        mainPanel.add(exitButton, gbc);
 
         gbc.anchor = GridBagConstraints.CENTER;
 
@@ -118,7 +127,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     }
 
     private void buildTaskMenuPage() {
-        JFrame taskMenuFrame = new JFrame("Task Menu");
+        JFrame taskMenuFrame = new JFrame("Back Office Menu");
         taskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         taskMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -126,8 +135,16 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
+        JButton exitButton = new JButton("Exit");
+        JButton backButton = new JButton("Back");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+
         JLabel taskLabel = new JLabel("Task Menu");
         taskLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        taskLabel.setForeground(BLUE);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
@@ -146,7 +163,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         taskDisplay.setEditable(false);
         taskDisplay.setLineWrap(true);
         taskDisplay.setWrapStyleWord(true);
-        taskDisplay.setBackground(WHITE);
+        taskDisplay.setBackground(white);
         taskDisplay.setFont(new Font("Arial", Font.BOLD, 20));
         taskDisplay.setForeground(BLACK);
         String taskInDisplay = (task == null) ? "No tasks to display" : task.toString();
@@ -158,20 +175,16 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         taskMenuPanel.add(taskDisplay, gbc);
 
 
-        JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
         JButton executeTask = new JButton("Execute Task");
         JButton viewAllTasks = new JButton("View All Tasks");
-        exitButton.setBackground(RED);
-        exitButton.setForeground(Color.WHITE);
+//        exitButton.setBackground(RED);
+//        exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
             taskMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
-        backButton.setBackground(BLACK);
-        backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
             mainFrame.setVisible(true);
             taskMenuFrame.setVisible(false);
@@ -193,7 +206,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             }
         });
 
-        viewAllTasks.setBackground(new Color(0, 0, 98));
+        viewAllTasks.setBackground(BLUE);
         viewAllTasks.setForeground(Color.WHITE);
         viewAllTasks.addActionListener(e -> {
             taskMenuFrame.setVisible(false);
@@ -225,10 +238,15 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     }
 
     private void buildSearchMenuPage() {
-        JFrame searchMenuFrame = new JFrame("Search Menu");
+        JFrame searchMenuFrame = new JFrame("Back Office Menu");
         searchMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         searchMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        searchMenuFrame.setSize(WIDTH, HEIGHT);
+
+        JLabel searchMenuLabel = new JLabel("Search Menu");
+        searchMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        searchMenuLabel.setForeground(BLUE);
+
+
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
         JButton vehicleDisplay = new JButton("Vehicle Display Menu");
@@ -236,13 +254,28 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton customerDisplay = new JButton("Customer Display Menu");
         JButton ticketDisplay = new JButton("Ticket Display Menu");
         JButton insuranceDisplay = new JButton("Insurance Display Menu");
-        JPanel searchMenuPanel = new JPanel();
-        searchMenuPanel.setLayout(new GridLayout(7, 1));
-        searchMenuPanel.add(vehicleDisplay);
-        searchMenuPanel.add(employeeDisplay);
-        searchMenuPanel.add(customerDisplay);
-        searchMenuPanel.add(ticketDisplay);
-        searchMenuPanel.add(insuranceDisplay);
+        JPanel searchMenuPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+        JButton[] buttons = {vehicleDisplay, employeeDisplay, customerDisplay, ticketDisplay, insuranceDisplay};
+
+        gbc.gridwidth = 2;
+        for(int i = 0; i < 5; i++) {
+            gbc.gridy = i;
+            searchMenuPanel.add(buttons[i], gbc);
+        }
+
+        gbc.insets = new Insets(20, 10, 5, 10)
+        gbc.gridwidth = 1;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.CENTER;
+        searchMenuPanel.add(exitButton, gbc);
+
+        gbc.gridx++;
+        searchMenuPanel.add(backButton, gbc);
+
         searchMenuPanel.add(backButton);
         searchMenuPanel.add(exitButton);
         searchMenuFrame.add(searchMenuPanel);
