@@ -149,7 +149,7 @@ public class MenuEmployee implements ValidateInput {
         exitButton.addActionListener(e -> System.exit(0));
     }
 
-    //DOING
+    //TESTING
     private void payTicketPage(JFrame updateMenuFrame) {
         JFrame updateTicketFrame = new JFrame("Update Ticket");
         updateTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -165,12 +165,13 @@ public class MenuEmployee implements ValidateInput {
         JButton backButton = new JButton("Back");
         backButton.setBackground(BLACK);
         backButton.setForeground(WHITE);
-        JButton submit = new JButton("Submit");
+        JButton submit = new JButton("Pay");
         submit.setBackground(GREEN);
         submit.setForeground(WHITE);
+
         backButton.addActionListener(e -> {
-            updateTicketFrame.setVisible(true);
-            updateMenuFrame.setVisible(false);
+            updateTicketFrame.setVisible(false);
+            updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
             updateTicketFrame.dispose();
@@ -182,14 +183,80 @@ public class MenuEmployee implements ValidateInput {
         JPanel updateTicketPanel = new JPanel(new GridBagLayout());
         updateTicketPanel.setBackground(Color.WHITE);
 
-        JLabel updateTicketLabel = new JLabel("Update Ticket");
+        JLabel updateTicketLabel = new JLabel("Pay Ticket");
         updateTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.PAGE_START;
         updateTicketPanel.add(updateTicketLabel, gbc);
 
-        JLabel idLabel = new JLabel("ID: ");
+        JLabel idLabel = new JLabel("ID of the ticket: ");
         JTextField idField = new JTextField(15);
+
+        JLabel valueLabel = new JLabel("Value to pay: ");
+        JTextField valueField = new JTextField(15);
+
+
+        submit.addActionListener(e -> {
+            String id = idField.getText();
+            String value = valueField.getText();
+
+            if (dataSource.payTicket(Integer.parseInt(id), Float.parseFloat(valueField.getText())))
+                JOptionPane.showMessageDialog(updateTicketFrame, "Ticket successfully paid",
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(updateTicketFrame, "Error paying ticket", "Error", JOptionPane.ERROR_MESSAGE);
+        });
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {idLabel, valueLabel};
+        JTextField[] textFields = {idField, valueField};
+
+
+        for (int row = 0; row < labels.length; row++) {
+            gbc.gridx = 0;
+            gbc.gridy = row + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            updateTicketPanel.add(labels[row], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+
+            updateTicketPanel.add(textFields[row], gbc);
+
+        }
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 6, 10);
+        updateTicketPanel.add(submit, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updateTicketPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updateTicketPanel.add(backButton, gbc);
+
+        updateTicketFrame.add(updateTicketPanel);
+        updateTicketFrame.pack();
+        updateTicketFrame.setVisible(true);
+
+        updateTicketFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
     }
 
     //DONE
