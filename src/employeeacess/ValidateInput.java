@@ -1,6 +1,7 @@
 package employeeacess;
 
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +21,26 @@ public interface ValidateInput {
         }
 
         return true;
+    }
+
+    default boolean isValidExpirationDate(String s) {
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        Date sqlDateToday = Date.valueOf(currentDate);
+
+        try {
+            LocalDate localDate = LocalDate.parse(s, dateFormatter);
+            Date sqlDate = Date.valueOf(localDate);
+
+            if (sqlDateToday.after(sqlDate)) {
+                return false;
+            } else {
+                return true;
+            }
+
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 
 

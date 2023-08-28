@@ -440,7 +440,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         }
 
                         case "Search by Expiration Date" -> {
-                            if (isDate(input)) {
+                            if (isValidExpirationDate(input)) {
                                 List<Insurance> insuranceList = new ArrayList<>();
                                 for (Insurance insurance : dataSource.queryInsurances()) {
                                     if (insurance.getExpDate().equals(input) || insurance.getExpDate().after(Date.valueOf(input))) {
@@ -665,7 +665,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                             }
                         }
                         case "Search by Expiration Date" -> {
-                            if (isDate(input)) {
+                            if (isValidExpirationDate(input)) {
                                 List<Ticket> ticketList = new ArrayList<>();
                                 dataSource.queryTickets().forEach(ticket -> {
                                     if (ticket.getExpiry_date().equals(Date.valueOf(input)) || ticket.getExpiry_date().after(Date.valueOf(input))) {
@@ -3392,7 +3392,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String endDate = endDateField.getText();
                 String companyName = companyNameField.getText();
 
-                if (isPlate(plate) && isDate(startDate) && isDate(endDate) && isValidString(companyName) && isPolicy(policy)) {
+                if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isValidString(companyName) && isPolicy(policy)) {
                     if (dataSource.insertInsurance(Integer.parseInt(policy), plate, Date.valueOf(startDate),
                             insuranceCategory, Date.valueOf(endDate), companyName)) {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -3544,7 +3544,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String nif = nifField.getText();
                 String reason = (String) reasonFiel.getSelectedItem();
 
-                if (isPlate(plate) && isDate(date) && isDate(expirationDate) && isDouble(value) && isNIF(nif) && reason != " ") {
+                if (isPlate(plate) && isDate(date) && isValidExpirationDate(expirationDate) && isDouble(value) && isNIF(nif) && reason != " ") {
                     if (dataSource.insertTicket(Integer.parseInt(nif), plate, Date.valueOf(date),
                             reason, Double.parseDouble(value), Date.valueOf(expirationDate))) {
                         JOptionPane.showMessageDialog(insertTicketFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -3842,7 +3842,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String licenseExpiration = licenseExpirationField.getText();
 
                 if (isValidString(name) && isValidString(address) && isNIF(nif) && isDate(licenseDate)
-                        && isDate(licenseExpiration) && isEmail(email) && isValidBirthDate(birthDate)
+                        && isValidExpirationDate(licenseExpiration) && isEmail(email) && isValidBirthDate(birthDate)
                         && isPassword(password) && isDriverLicense(driverLicense) && selectedLicenseType != (" ")) {
                     if (dataSource.insertCustomer(Integer.parseInt(nif), name, address, Date.valueOf(birthDate),
                             password, email, Integer.parseInt(driverLicense), selectedLicenseType, Date.valueOf(licenseDate), Date.valueOf(licenseExpiration))) {
@@ -4021,7 +4021,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String nifText = nifField.getText();
                 String categoryText = (String) categoryField.getSelectedItem();
 
-                if (isPlate(plateText) && isValidString(modelText) && isDate(registrationDateText) && isVIN(vinText) && isNIF(nifText) && !categoryText.equals(" ") && !colorText.equals(" ") && !brandText.equals(" ")) {
+                if (isPlate(plateText) && isValidString(modelText) && isValidExpirationDate(registrationDateText) && isVIN(vinText) && isNIF(nifText) && !categoryText.equals(" ") && !colorText.equals(" ") && !brandText.equals(" ")) {
 
                     if (dataSource.insertVehicle(plateText, vinText, colorText, brandText,
                             modelText, Date.valueOf(registrationDateText), categoryText, Integer.parseInt(nifText))) {
