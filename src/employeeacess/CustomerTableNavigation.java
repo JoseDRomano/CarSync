@@ -1,16 +1,13 @@
 package employeeacess;
 
 import model.Customer;
-import model.Person;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static java.awt.Color.BLACK;
@@ -98,16 +95,45 @@ public class CustomerTableNavigation {
         });
 
         JPanel navPanel = new JPanel();
+//        GridBagConstraints gbc = new GridBagConstraints();
+//        gbc.gridy = 0;
+//        gbc.gridx = 0;
+//        gbc.weightx = 0.5;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+//        gbc.anchor = GridBagConstraints.LINE_START;
+//        navPanel.add(exitButton, gbc);
+//        gbc.gridx = 1;
+//        gbc.weightx = 0.5;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+//        gbc.anchor = GridBagConstraints.LINE_END;
+//        navPanel.add(backButton, gbc);
+//        gbc.gridx = 2;
+//        gbc.weightx = 0.5;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+//        gbc.anchor = GridBagConstraints.CENTER;
+//        navPanel.add(prevButton, gbc);
+//        gbc.gridx = 3;
+//        gbc.weightx = 0.5;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+//        gbc.anchor = GridBagConstraints.CENTER;
+//        navPanel.add(pageInfoLabel, gbc);
+//        gbc.gridx = 4;
+//        gbc.weightx = 0.5;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+//        gbc.anchor = GridBagConstraints.CENTER;
+//        navPanel.add(nextButton, gbc);
+
+        navPanel.add(exitButton);
         navPanel.add(prevButton);
         navPanel.add(pageInfoLabel);
         navPanel.add(nextButton);
-        navPanel.add(exitButton);
         navPanel.add(backButton);
 
         frame.setLayout(new BorderLayout());
         frame.add(new JScrollPane(table), BorderLayout.CENTER);
         frame.add(navPanel, BorderLayout.SOUTH);
 
+//        frame.add(navPanel);
 //        frame.setSize(1200, 600);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
@@ -188,10 +214,10 @@ public class CustomerTableNavigation {
         });
 
         JPanel navPanel = new JPanel();
+        navPanel.add(exitButton);
         navPanel.add(prevButton);
         navPanel.add(pageInfoLabel);
         navPanel.add(nextButton);
-        navPanel.add(exitButton);
         navPanel.add(backButton);
 
         frame.setLayout(new BorderLayout());
