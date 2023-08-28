@@ -34,6 +34,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             return;
         }
 
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         JButton insertMenu = new JButton("Insert Menu");
         JButton updateMenu = new JButton("Update Menu");
         JButton deleteMenu = new JButton("Delete Menu");
@@ -129,6 +135,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     }
 
     private void buildTaskMenuPage() {
+
         JFrame taskMenuFrame = new JFrame("Back Office Menu");
         taskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         taskMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -212,7 +219,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         viewAllTasks.setForeground(Color.WHITE);
         viewAllTasks.addActionListener(e -> {
             taskMenuFrame.setVisible(false);
-            new TaskTableNavigation(30, taskMenuFrame, employee.getAccess_level());
+            new TaskTableNavigation(taskMenuFrame, employee.getAccess_level());
         });
 
         gbc.gridy = 3;
@@ -1360,7 +1367,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         JLabel vehicleDisplayOrderLabel = new JLabel("Order by: ");
         JComboBox<String> vehicleDisplayOrderOptions = new JComboBox<>(new String[]{" ",
-                "License Plate", "Brand", "Color", "Year", "Issue Date",
+                "License Plate", "Brand", "Color", "Issue Date",
                 "VIN", "NIF", "Category"});
 
         JLabel vehicleDisplaySearchLabel = new JLabel("Search by: ");
@@ -4092,11 +4099,16 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     }
 
     public static void main(String[] args) {
-        //Menu interativo
-        Employee employee = new Employee();
-        employee.setName("John Doe");
-        employee.setAccess_level(2);
-        BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Employee employee = new Employee();
+                employee.setName("John Doe");
+                employee.setAccess_level(2);
+                BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
+            }
+        });
     }
 
 }
