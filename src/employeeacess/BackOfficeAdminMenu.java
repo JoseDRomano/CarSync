@@ -512,8 +512,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances for plate: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid plate");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances for plate: " + input);
                             }
                         }
 
@@ -526,8 +530,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances with category: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid category");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances with category: " + input);
                             }
                         }
 
@@ -540,8 +548,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances with expiration date: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances with expiration date: " + input);
                             }
                         }
 
@@ -554,8 +566,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances with issue date: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances with issue date: " + input);
                             }
                         }
                     }
@@ -590,6 +606,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             insuranceDisplayFrame.dispose();
             mainFrame.dispose();
             searchMenuFrame.dispose();
@@ -600,6 +618,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went back to the search menu");
             searchMenuFrame.setVisible(true);
             insuranceDisplayFrame.setVisible(false);
         });
@@ -1511,8 +1531,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with NIF: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid NIF");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with NIF: " + input);
                             }
                         }
 
@@ -1525,8 +1549,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with brand: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid input");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with brand: " + input);
                             }
                         }
 
@@ -1539,8 +1567,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with color: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid color");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with color: " + input);
                             }
                         }
 
@@ -1553,8 +1585,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with category: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid category");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with category: " + input);
                             }
                         }
 
@@ -1567,8 +1603,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with issue date: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid Date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with issue date: " + input);
                             }
                         }
 
@@ -1581,8 +1621,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with VIN: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid VIN");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with VIN: " + input);
                             }
                         }
 
@@ -1595,8 +1639,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with plate: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid plate");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with plate: " + input);
                             }
                         }
                     }
@@ -1632,6 +1680,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.addActionListener(e ->
 
         {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             vehicleDisplayFrame.dispose();
             mainFrame.dispose();
             searchMenuFrame.dispose();
@@ -1644,6 +1694,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         backButton.addActionListener(e ->
 
         {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went back to the search menu");
             searchMenuFrame.setVisible(true);
             vehicleDisplayFrame.setVisible(false);
         });
@@ -1696,34 +1748,50 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             case "License Plate" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getPlate));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by license plate");
             }
             case "NIF" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getNif));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by NIF");
             }
             case "VIN" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getVin));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by VIN");
             }
             case "Category" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getCategory));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by category");
             }
             case "Issue Date" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getregistrationDate));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by issue date");
             }
             case "Brand" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getBrand));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by brand");
             }
             case "Model" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getModel));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by model");
             }
             case "Color" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getColor));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by color");
             }
             default -> {
                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please select an option for each field");
@@ -1791,10 +1859,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         updateMenuFrame.setVisible(true);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went back to the update menu");
             mainFrame.setVisible(true);
             updateMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             mainFrame.dispose();
             dataSource.close();
             updateMenuFrame.dispose();
@@ -1807,10 +1879,23 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 JButton button = (JButton) e.getSource();
                 updateMenuFrame.setVisible(false);
 
-                if (button == vehicleUpdate) vehicleUpdatePage(updateMenuFrame);
-                else if (button == employeeUpdate) employeeUpdatePage(updateMenuFrame);
-                else if (button == customerUpdate) customerUpdatePage(updateMenuFrame);
-                else if (button == ticketUpdate) ticketUpdatePage(updateMenuFrame);
+                if (button == vehicleUpdate) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the vehicle update menu");
+                    vehicleUpdatePage(updateMenuFrame);
+                } else if (button == employeeUpdate) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the employee update menu");
+                    employeeUpdatePage(updateMenuFrame);
+                } else if (button == customerUpdate) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the customer update menu");
+                    customerUpdatePage(updateMenuFrame);
+                } else if (button == ticketUpdate) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the ticket update menu");
+                    ticketUpdatePage(updateMenuFrame);
+                }
             }
         };
 
