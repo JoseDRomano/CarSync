@@ -36,9 +36,9 @@ public class TaskTableNavigation {
     //then the user only has to submit because the page will be already filled with the data
 
 
-    public TaskTableNavigation(int rowsPerPage, JFrame originalFrame, int accessLevel) {
+    public TaskTableNavigation(JFrame originalFrame, int accessLevel) {
 
-        rowsPerPage = 30;
+        int rowsPerPage = 30;
         originalFrame.setVisible(false);
         this.data = new TaskManagment().getTaskList(accessLevel);
 
@@ -161,6 +161,10 @@ public class TaskTableNavigation {
             return columnNames.length;
         }
 
+        public String getColumnName(int column) {
+            return columnNames[column];
+        }
+
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             Task task = taskRows.get(rowIndex);
@@ -189,7 +193,12 @@ public class TaskTableNavigation {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TaskTableNavigation(30, new JFrame(), 2));
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new TaskTableNavigation(new JFrame(), 2);
+            }
+        });
     }
 
 }

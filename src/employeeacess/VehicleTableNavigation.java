@@ -131,7 +131,7 @@ public class VehicleTableNavigation {
         }
 
         tableModel = new VehicleTableModel(new String[]{"NIF", "Name", "Birth Date", "Address", "License number", "License Category",
-                "Registration Date", "Expiration Date", "Email"});
+                "Registration Date", "Expiration Date"});
 
         table = new JTable(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

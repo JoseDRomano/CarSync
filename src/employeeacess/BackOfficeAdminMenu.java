@@ -1,6 +1,8 @@
 package employeeacess;
 
 import model.*;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.swing.*;
@@ -25,6 +27,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private final Color GREEN = new Color(0, 100, 0);
     private final Color RED = new Color(100, 0, 0);
     private final Color BLUE = new Color(0, 0, 100);
+    private static final Logger logger = Logger.getLogger(BackOfficeAdminMenu.class);
 
 
     public BackOfficeAdminMenu(Employee employee) {
@@ -33,6 +36,15 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             System.out.println("Can't open datasource");
             return;
         }
+
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        logger.info("Employee with name: " + employee.getName() + " and NIF: "
+                + employee.getNif() + " initialized the BackOffice Menu");
 
         JButton insertMenu = new JButton("Insert Menu");
         JButton updateMenu = new JButton("Update Menu");
@@ -50,7 +62,10 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         exitButton.addActionListener(e -> {
-            System.exit(0);
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
+            mainFrame.dispose();
+            //Aqui deveria ir para o welcome menu
             dataSource.close();
         });
 
@@ -100,12 +115,31 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 JButton button = (JButton) e.getSource();
                 mainFrame.setVisible(false);
 
-                if (button == insertMenu) buildInsertMenuPage();
-                else if (button == deleteMenu) buildDeleteMenuPage();
-                else if (button == deactivateMenu) buildDeactivateMenuPage();
-                else if (button == updateMenu) buildUpdateMenuPage();
-                else if (button == searchMenu) buildSearchMenuPage();
-                else if (button == taskMenu) buildTaskMenuPage();
+                if (button == insertMenu) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Insert Menu Page");
+                    buildInsertMenuPage();
+                } else if (button == deleteMenu) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Delete Menu Page");
+                    buildDeleteMenuPage();
+                } else if (button == deactivateMenu) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Deactivation Menu Page");
+                    buildDeactivateMenuPage();
+                } else if (button == updateMenu) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Update Menu Page");
+                    buildUpdateMenuPage();
+                } else if (button == searchMenu) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Search Menu Page");
+                    buildSearchMenuPage();
+                } else if (button == taskMenu) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Task Menu Page");
+                    buildTaskMenuPage();
+                }
             }
         };
 
@@ -115,14 +149,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         updateMenu.addActionListener(goToPageListener);
         searchMenu.addActionListener(goToPageListener);
         taskMenu.addActionListener(goToPageListener);
-        exitButton.addActionListener(e -> {
-            dataSource.close();
-            System.exit(0);
-        });
 
         mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " logged out");
+
                 dataSource.close();
             }
         });
@@ -182,12 +215,17 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 //        exitButton.setBackground(RED);
 //        exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + "logged out");
             taskMenuFrame.dispose();
+            mainFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " entered the Main Menu");
             mainFrame.setVisible(true);
             taskMenuFrame.setVisible(false);
             taskMenuFrame.dispose();
@@ -196,13 +234,19 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         executeTask.setBackground(GREEN);
         executeTask.setForeground(Color.WHITE);
         executeTask.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " tried to perform taks with ID: " + task.getTaskID());
             if (task == null) {
                 JOptionPane.showMessageDialog(null, "Cannot execute task, no tasks to execute");
             } else {
                 if (task.perFormTask(dataSource)) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " completed the task with ID: " + task.getTaskID());
                     JOptionPane.showMessageDialog(null, "Task Completed");
                     taskDisplay.setText(new TaskManagment().getNextTask(employee.getAccess_level()).toString());
                 } else {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " failed to perform the task with ID: " + task.getTaskID());
                     JOptionPane.showMessageDialog(null, "Task Failed");
                 }
             }
@@ -211,8 +255,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         viewAllTasks.setBackground(BLUE);
         viewAllTasks.setForeground(Color.WHITE);
         viewAllTasks.addActionListener(e -> {
+
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " entered the View All Tasks Page");
+
             taskMenuFrame.setVisible(false);
-            new TaskTableNavigation(30, taskMenuFrame, employee.getAccess_level());
+            new TaskTableNavigation(taskMenuFrame, employee.getAccess_level());
         });
 
         gbc.gridy = 3;
@@ -220,13 +268,18 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.33;
-        taskMenuPanel.add(exitButton, gbc);
-
-        gbc.gridx = 1;
-        taskMenuPanel.add(backButton, gbc);
+        taskMenuPanel.add(viewAllTasks, gbc);
 
         gbc.gridx = 2;
         taskMenuPanel.add(executeTask, gbc);
+
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        taskMenuPanel.add(exitButton, gbc);
+
+        gbc.gridx = 2;
+        taskMenuPanel.add(backButton, gbc);
+
 
         taskMenuFrame.add(taskMenuPanel);
         taskMenuFrame.setVisible(true);
@@ -234,6 +287,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         taskMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -296,10 +351,20 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         mainFrame.setVisible(false);
         searchMenuFrame.setVisible(true);
         backButton.addActionListener(e -> {
+
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went back to the main menu");
+
             mainFrame.setVisible(true);
             searchMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
+
+            searchMenuFrame.dispose();
+            mainFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -310,11 +375,27 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 JButton button = (JButton) e.getSource();
                 searchMenuFrame.setVisible(false);
 
-                if (button == vehicleDisplay) vehicleDisplayPage(searchMenuFrame);
-                else if (button == employeeDisplay) employeeDisplayPage(searchMenuFrame);
-                else if (button == customerDisplay) customerDisplayPage(searchMenuFrame);
-                else if (button == ticketDisplay) ticketDisplayPage(searchMenuFrame);
-                else if (button == insuranceDisplay) insuranceDisplayPage(searchMenuFrame);
+                if (button == vehicleDisplay) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Vehicle Display Page");
+                    vehicleDisplayPage(searchMenuFrame);
+                } else if (button == employeeDisplay) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Employee Display Page");
+                    employeeDisplayPage(searchMenuFrame);
+                } else if (button == customerDisplay) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Customer Display Page");
+                    customerDisplayPage(searchMenuFrame);
+                } else if (button == ticketDisplay) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Ticket Display Page");
+                    ticketDisplayPage(searchMenuFrame);
+                } else if (button == insuranceDisplay) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Insurance Display Page");
+                    insuranceDisplayPage(searchMenuFrame);
+                }
             }
         };
 
@@ -327,6 +408,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         searchMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -392,8 +475,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances with policy number: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid policy number");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances with policy number: " + input);
+
                             }
                         }
 
@@ -406,8 +494,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances for company: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid company name");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances for company: " + input);
                             }
                         }
 
@@ -420,8 +512,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances for plate: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid plate");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances for plate: " + input);
                             }
                         }
 
@@ -434,8 +530,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances with category: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid category");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances with category: " + input);
                             }
                         }
 
@@ -448,8 +548,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances with expiration date: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances with expiration date: " + input);
                             }
                         }
 
@@ -462,8 +566,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances with issue date: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances with issue date: " + input);
                             }
                         }
                     }
@@ -498,7 +606,11 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             insuranceDisplayFrame.dispose();
+            mainFrame.dispose();
+            searchMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -506,6 +618,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went back to the search menu");
             searchMenuFrame.setVisible(true);
             insuranceDisplayFrame.setVisible(false);
         });
@@ -538,6 +652,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insuranceDisplayFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -550,26 +666,38 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             case "Order by Policy Number" -> {
                 insurances.sort(Comparator.comparing(Insurance::getPolicy));
                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " displayed all the insurances ordered by policy number");
             }
             case "Order by Company" -> {
                 insurances.sort(Comparator.comparing(Insurance::getCompanyName));
                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " displayed all the insurances ordered by company");
             }
             case "Order by Plate" -> {
                 insurances.sort(Comparator.comparing(Insurance::getCarPlate));
                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " displayed all the insurances ordered by plate");
             }
             case "Order by Category" -> {
                 insurances.sort(Comparator.comparing(Insurance::getExtraCategory));
                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " displayed all the insurances ordered by category");
             }
             case "Order by Expiration Date" -> {
                 insurances.sort(Comparator.comparing(Insurance::getExpDate));
                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " displayed all the insurances ordered by expiration date");
             }
             case "Order by Issue Date" -> {
                 insurances.sort(Comparator.comparing(Insurance::getStartDate));
                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " displayed all the insurances ordered by issue date");
             }
             default -> JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please select an order option");
         }
@@ -769,7 +897,11 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             ticketDisplayFrame.dispose();
+            searchMenuFrame.dispose();
+            mainFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -810,6 +942,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         ticketDisplayFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -1016,7 +1150,11 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             customerDisplayFrame.dispose();
+            mainFrame.dispose();
+            searchMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -1056,6 +1194,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         customerDisplayFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -1257,7 +1397,11 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             employeeDisplayFrame.dispose();
+            mainFrame.dispose();
+            searchMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -1296,6 +1440,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         employeeDisplayFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -1355,7 +1501,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         JLabel vehicleDisplayOrderLabel = new JLabel("Order by: ");
         JComboBox<String> vehicleDisplayOrderOptions = new JComboBox<>(new String[]{" ",
-                "License Plate", "Brand", "Color", "Year", "Issue Date",
+                "License Plate", "Brand", "Color", "Issue Date",
                 "VIN", "NIF", "Category"});
 
         JLabel vehicleDisplaySearchLabel = new JLabel("Search by: ");
@@ -1391,8 +1537,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with NIF: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid NIF");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with NIF: " + input);
                             }
                         }
 
@@ -1405,8 +1555,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with brand: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid input");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with brand: " + input);
                             }
                         }
 
@@ -1419,8 +1573,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with color: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid color");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with color: " + input);
                             }
                         }
 
@@ -1433,8 +1591,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with category: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid category");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with category: " + input);
                             }
                         }
 
@@ -1447,8 +1609,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with issue date: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid Date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with issue date: " + input);
                             }
                         }
 
@@ -1461,8 +1627,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with VIN: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid VIN");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with VIN: " + input);
                             }
                         }
 
@@ -1475,8 +1645,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with plate: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid plate");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with plate: " + input);
                             }
                         }
                     }
@@ -1486,8 +1660,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             }
         });
         gbc.gridwidth = 1;
-        JLabel[] labels = {vehicleDisplaySearchLabel, vehicleDisplayOrderLabel, rowsPerPageLabel, inputForSearch};
-        JComboBox[] comboBoxes = {vehicleDisplaySearchOptions, vehicleDisplayOrderOptions, rowsPerPageOptions};
+        JLabel[] labels = {rowsPerPageLabel, vehicleDisplaySearchLabel, vehicleDisplayOrderLabel, inputForSearch};
+        JComboBox[] comboBoxes = {rowsPerPageOptions, vehicleDisplaySearchOptions, vehicleDisplayOrderOptions};
 
         for (int i = 0; i < labels.length; i++) {
             gbc.gridx = 0;
@@ -1512,7 +1686,11 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.addActionListener(e ->
 
         {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             vehicleDisplayFrame.dispose();
+            mainFrame.dispose();
+            searchMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -1522,6 +1700,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         backButton.addActionListener(e ->
 
         {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went back to the search menu");
             searchMenuFrame.setVisible(true);
             vehicleDisplayFrame.setVisible(false);
         });
@@ -1559,6 +1739,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         vehicleDisplayFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -1572,34 +1754,50 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             case "License Plate" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getPlate));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by license plate");
             }
             case "NIF" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getNif));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by NIF");
             }
             case "VIN" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getVin));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by VIN");
             }
             case "Category" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getCategory));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by category");
             }
             case "Issue Date" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getregistrationDate));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by issue date");
             }
             case "Brand" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getBrand));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by brand");
             }
             case "Model" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getModel));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by model");
             }
             case "Color" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getColor));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by color");
             }
             default -> {
                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please select an option for each field");
@@ -1667,10 +1865,15 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         updateMenuFrame.setVisible(true);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went back to the update menu");
             mainFrame.setVisible(true);
             updateMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
+            mainFrame.dispose();
             dataSource.close();
             updateMenuFrame.dispose();
             System.exit(0);
@@ -1682,10 +1885,23 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 JButton button = (JButton) e.getSource();
                 updateMenuFrame.setVisible(false);
 
-                if (button == vehicleUpdate) vehicleUpdatePage(updateMenuFrame);
-                else if (button == employeeUpdate) employeeUpdatePage(updateMenuFrame);
-                else if (button == customerUpdate) customerUpdatePage(updateMenuFrame);
-                else if (button == ticketUpdate) ticketUpdatePage(updateMenuFrame);
+                if (button == vehicleUpdate) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the vehicle update menu");
+                    vehicleUpdatePage(updateMenuFrame);
+                } else if (button == employeeUpdate) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the employee update menu");
+                    employeeUpdatePage(updateMenuFrame);
+                } else if (button == customerUpdate) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the customer update menu");
+                    customerUpdatePage(updateMenuFrame);
+                } else if (button == ticketUpdate) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the ticket update menu");
+                    ticketUpdatePage(updateMenuFrame);
+                }
             }
         };
 
@@ -1697,6 +1913,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         updateMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -1723,18 +1941,23 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submit.setForeground(WHITE);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to the update menu");
             updateTicketFrame.setVisible(false);
             updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             updateTicketFrame.dispose();
+            mainFrame.dispose();
+            updateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel updateTicketPanel = new JPanel(new GridBagLayout());
-        updateTicketPanel.setBackground(Color.WHITE);
 
         JLabel updateTicketLabel = new JLabel("Pay Ticket");
         updateTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -1753,11 +1976,17 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             String id = idField.getText();
             String value = valueField.getText();
 
-            if (dataSource.payTicket(Integer.parseInt(id), Float.parseFloat(valueField.getText())))
+            if
+            (dataSource.payTicket(Integer.parseInt(id), Float.parseFloat(valueField.getText()))) {
                 JOptionPane.showMessageDialog(updateTicketFrame, "Ticket successfully paid",
                         "Success", JOptionPane.INFORMATION_MESSAGE);
-            else
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " paid ticket with id: " + id + " and value: " + value);
+            } else {
                 JOptionPane.showMessageDialog(updateTicketFrame, "Error paying ticket", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.error("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to pay ticket with id: " + id + " and value: " + value);
+            }
         });
 
         gbc.gridwidth = 1;
@@ -1805,6 +2034,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         updateTicketFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -1829,18 +2060,23 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submit.setBackground(GREEN);
         submit.setForeground(WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to the update menu");
             updatePersonFrame.setVisible(false);
             updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             updatePersonFrame.dispose();
+            mainFrame.dispose();
+            updateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel updatePersonPanel = new JPanel(new GridBagLayout());
-        updatePersonPanel.setBackground(Color.WHITE);
 
         JLabel updatePersonLabel = new JLabel("Update Person");
         updatePersonLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -1862,16 +2098,24 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 //            String nif = nifField.getSelectedItem().toString();
             String nif = nifField.getText();
             String email = emailField.getText();
-            if (!isNIF(nif))
+            if (!isNIF(nif)) {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
-            else if (!isEmail(email)) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update email for person with NIF: " + nif);
+            } else if (!isEmail(email)) {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Wrong email format");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update email for person with NIF: " + nif);
             } else {
                 if (dataSource.updatePersonEmail(Integer.parseInt(nif), email)) {
                     JOptionPane.showMessageDialog(updatePersonFrame, "Email successfully updated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to update email for person with NIF: " + nif);
                 } else
                     JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " was not able to update email for person with NIF: " + nif);
             }
         });
 
@@ -1885,17 +2129,24 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             String password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
 //            String nif = nifField.getSelectedItem().toString();
             String nif = nifField.getText();
-            if (!isNIF(nif))
+            if (!isNIF(nif)) {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
-            else if (!isPassword(passwordField.getText())) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update password for person with NIF: " + nif);
+            } else if (!isPassword(passwordField.getText())) {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Wrong password format");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update password for person with NIF: " + nif);
             } else {
                 if (dataSource.updatePersonPassword(Integer.parseInt(nif), password)) {
-
                     JOptionPane.showMessageDialog(updatePersonFrame, "Password successfully updated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + "updated email for person with NIF: " + nif);
                 } else
                     JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " was not able to update email for person with NIF: " + nif);
             }
         });
 
@@ -1909,16 +2160,24 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             String address = addressField.getText();
 //            String nif = nifField.getSelectedItem().toString();
             String nif = nifField.getText();
-            if (!isNIF(nif))
+            if (!isNIF(nif)) {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
-            else if (!isValidString(address)) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update address for person with NIF: " + nif);
+            } else if (!isValidString(address)) {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Wrong address format");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update address for person with NIF: " + nif);
             } else {
                 if (dataSource.updatePersonAddress(Integer.parseInt(nif), address)) {
                     JOptionPane.showMessageDialog(updatePersonFrame, "Address successfully updated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " updated address for person with NIF: " + nif);
                 } else
                     JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " was not able to update address for person with NIF: " + nif);
             }
         });
 
@@ -1968,6 +2227,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         updatePersonFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2033,22 +2294,33 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             if (!accessLevel.equals(" ") && isNIF(nif)) {
                 if (dataSource.updateEmployeeAccessLevel(Integer.parseInt(nif), Integer.parseInt(accessLevel))) {
                     JOptionPane.showMessageDialog(employeeUpdateFrame, "Employee Updated successfully!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " updated access level for person with NIF: " + nif);
                 } else {
                     JOptionPane.showMessageDialog(employeeUpdateFrame, "Update wasn't successfull!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " was not able to update access level for person with NIF: " + nif);
                 }
             } else {
                 JOptionPane.showMessageDialog(employeeUpdateFrame, "Please make sure all the fields are properly fielded!");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update access level for person with NIF: " + nif);
             }
         });
 
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             dataSource.close();
             mainFrame.dispose();
+            updateMenuFrame.dispose();
             employeeUpdateFrame.dispose();
             System.exit(0);
         });
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to the update menu");
             employeeUpdateFrame.setVisible(false);
             employeeUpdateFrame.dispose();
             updateMenuFrame.setVisible(true);
@@ -2075,6 +2347,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         updateMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2106,14 +2380,17 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             updateVehicleFrame.dispose();
+            mainFrame.dispose();
+            updateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel updateVehiclePanel = new JPanel(new GridBagLayout());
-        updateVehiclePanel.setBackground(Color.WHITE);
 
         JLabel updateVehicleLabel = new JLabel("Update Vehicle");
         updateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2131,15 +2408,21 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submit.addActionListener(e -> {
             String plateText = plateField.getText();
             String colorText = (String) colorField.getSelectedItem();
-            if (!isPlate(plateText))
+            if (!isPlate(plateText)) {
                 JOptionPane.showMessageDialog(updateVehicleFrame, "Please insert a valid plate with " +
                         "format XX-XX-XX");
-            else {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update vehicle with plate: " + plateText + " and new color: " + colorText);
+            } else {
                 if (dataSource.updateVehicleColor(plateText, colorText)) {
                     JOptionPane.showMessageDialog(updateVehicleFrame, "Vehicle successfully updated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " updated vehicle with plate " + plateText + " and new color: " + colorText);
                 }
                 JOptionPane.showMessageDialog(updateVehicleFrame, "Error updating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update vehicle with plate: " + plateText + " and new color: " + colorText);
 
             }
             updateVehicleFrame.setVisible(false);
@@ -2194,6 +2477,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         updateVehicleFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2259,7 +2544,11 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             deactivateMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             dataSource.close();
+            mainFrame.dispose();
+            deactivateMenuFrame.dispose();
             System.exit(0);
         });
 
@@ -2268,14 +2557,26 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             public void actionPerformed(ActionEvent e) {
                 JButton button = (JButton) e.getSource();
                 deactivateMenuFrame.setVisible(false);
-                if (button == vehicleDeactivation)
+                if (button == vehicleDeactivation) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " went to vehicle deactivation page");
                     deactivateVehiclePage(deactivateMenuFrame);
-                else if (button == customerDeactivation)
+                } else if (button == customerDeactivation) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " went to customer deactivation page");
                     deactivateCustomerPage(deactivateMenuFrame);
-                else if (button == ticketDeactivation)
+                } else if (button == ticketDeactivation) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " went to ticket deactivation page");
                     deactivateTicketPage(deactivateMenuFrame);
-                else if (button == insuranceDeactivation)
+                } else if (button == insuranceDeactivation) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " went to insurance deactivation page");
+                } else if (button == employeeDeactivation) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " went to employee deactivation page");
                     deactivateInsurancePage(deactivateMenuFrame);
+                }
             }
         };
 
@@ -2283,10 +2584,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         customerDeactivation.addActionListener(goToPageListener);
         ticketDeactivation.addActionListener(goToPageListener);
         insuranceDeactivation.addActionListener(goToPageListener);
+        employeeDeactivation.addActionListener(goToPageListener);
 
         deactivateMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2312,24 +2616,29 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submit.setForeground(WHITE);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went to back to the deactivation menu");
             deactivateCustomerFrame.setVisible(false);
             deactivateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             deactivateCustomerFrame.dispose();
+            mainFrame.dispose();
+            deactivateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel deactivateCustomerPanel = new JPanel(new GridBagLayout());
-        deactivateCustomerPanel.setBackground(Color.WHITE);
 
-        JLabel deactivateVehicleLabel = new JLabel("Deactivate Customer");
-        deactivateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel deactivateCustomerLabel = new JLabel("Deactivate Customer");
+        deactivateCustomerLabel.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.PAGE_START;
-        deactivateCustomerPanel.add(deactivateVehicleLabel, gbc);
+        deactivateCustomerPanel.add(deactivateCustomerLabel, gbc);
 
         JLabel nifLabel = new JLabel("NIF: ");
         JTextField nifField = new JTextField(15);
@@ -2337,11 +2646,16 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submit.addActionListener(e -> {
             String nif = nifField.getText();
             if (isNIF(nif)) {
-                if (dataSource.deactivateCustomer(Integer.parseInt(nif)))
+                if (dataSource.deactivateCustomer(Integer.parseInt(nif))) {
                     JOptionPane.showMessageDialog(deactivateCustomerFrame, "Customer successfully deactivated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
-                else
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " deactivated customer with NIF: " + nif);
+                } else {
                     JOptionPane.showMessageDialog(deactivateCustomerFrame, "Error deactivating Customer", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.error("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to deactivate customer with NIF: " + nif);
+                }
             }
         });
 
@@ -2386,6 +2700,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deactivateCustomerFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2411,18 +2727,23 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submit.setForeground(WHITE);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to the deactivation menu");
             deactivateTicketFrame.setVisible(false);
             deactivateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
+            mainFrame.dispose();
             deactivateTicketFrame.dispose();
+            deactivateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel deactivateTicketPanel = new JPanel(new GridBagLayout());
-        deactivateTicketPanel.setBackground(Color.WHITE);
 
         JLabel deactivateTicketLabel = new JLabel("Deactivate Ticket");
         deactivateTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2435,11 +2756,16 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         submit.addActionListener(e -> {
             String id = idField.getText();
-            if (dataSource.deactivateTicket(Integer.parseInt(id)))
+            if (dataSource.deactivateTicket(Integer.parseInt(id))) {
                 JOptionPane.showMessageDialog(deactivateTicketFrame, "Ticket successfully deactivated",
                         "Success", JOptionPane.INFORMATION_MESSAGE);
-            else
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " deactivate the ticket with ID: " + id);
+            } else {
                 JOptionPane.showMessageDialog(deactivateTicketFrame, "Error deactivating Ticket", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.error("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to deactivate the ticket with ID: " + id);
+            }
 
         });
 
@@ -2484,6 +2810,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deactivateTicketFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2509,18 +2837,23 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submit.setForeground(WHITE);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went to back to deactivation page");
             deactivateInsuranceFrame.setVisible(false);
             deactivateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             deactivateInsuranceFrame.dispose();
+            mainFrame.dispose();
+            deactivateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel deactivateInsurancePanel = new JPanel(new GridBagLayout());
-        deactivateInsurancePanel.setBackground(Color.WHITE);
 
         JLabel deactivateInsuranceLabel = new JLabel("Deactivate Insured Policy ");
         deactivateInsuranceLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2533,11 +2866,16 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         submit.addActionListener(e -> {
             String policyNum = policyField.getText();
-            if (dataSource.deactivateInsurance(Integer.parseInt(policyNum)))
+            if (dataSource.deactivateInsurance(Integer.parseInt(policyNum))) {
                 JOptionPane.showMessageDialog(deactivateMenuFrame, "Policy successfully deactivated",
                         "Success", JOptionPane.INFORMATION_MESSAGE);
-            else
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " deactivated the policy with number: " + policyNum);
+            } else {
                 JOptionPane.showMessageDialog(deactivateMenuFrame, "Error deactivating Policy", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.error("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to deactivate the policy with number: " + policyNum);
+            }
 
         });
 
@@ -2582,6 +2920,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deactivateInsuranceFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2607,19 +2947,24 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submit.setForeground(WHITE);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to deactivation page");
             deactivateVehicleFrame.setVisible(false);
             deactivateMenuFrame.setVisible(true);
         });
 
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             deactivateVehicleFrame.dispose();
+            mainFrame.dispose();
+            deactivateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel deactivateVehiclePanel = new JPanel(new GridBagLayout());
-        deactivateVehiclePanel.setBackground(Color.WHITE);
 
         JLabel deactivateVehicleLabel = new JLabel("Pay Ticket");
         deactivateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2633,11 +2978,16 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submit.addActionListener(e -> {
             String plate = plateField.getText();
             if (isPlate(plate)) {
-                if (dataSource.deactivateVehicle(plate))
+                if (dataSource.deactivateVehicle(plate)) {
                     JOptionPane.showMessageDialog(deactivateVehicleFrame, "Vehicle successfully deactivated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
-                else
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " deactivated the vehicle with plate: " + plate);
+                } else {
                     JOptionPane.showMessageDialog(deactivateVehicleFrame, "Error deactivating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.error("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to deactivate the vehicle with plate: " + plate);
+                }
             }
         });
 
@@ -2682,6 +3032,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deactivateVehicleFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2747,6 +3099,10 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             deleteMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
+            mainFrame.dispose();
+            deleteMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -2757,11 +3113,27 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 JButton button = (JButton) e.getSource();
                 mainFrame.setVisible(false);
 
-                if (button == customerDelete) customerDelete(deleteMenuFrame);
-                else if (button == vehicleDelete) vehicleDelete(deleteMenuFrame);
-                else if (button == insuranceDelete) insuranceDelete(deleteMenuFrame);
-                else if (button == ticketDelete) ticketDelete(deleteMenuFrame);
-                else if (button == employeeDelete) employeeDelete(deleteMenuFrame);
+                if (button == customerDelete) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the delete customer menu");
+                    customerDelete(deleteMenuFrame);
+                } else if (button == vehicleDelete) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the delete vehicle menu");
+                    vehicleDelete(deleteMenuFrame);
+                } else if (button == insuranceDelete) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the delete insurance menu");
+                    insuranceDelete(deleteMenuFrame);
+                } else if (button == ticketDelete) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the delete ticket menu");
+                    ticketDelete(deleteMenuFrame);
+                } else if (button == employeeDelete) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the delete employee menu");
+                    employeeDelete(deleteMenuFrame);
+                }
             }
         };
 
@@ -2774,6 +3146,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deleteMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2825,22 +3199,33 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             if (isNIF(nif)) {
                 if (dataSource.deletePerson(Integer.parseInt(nif))) {
                     JOptionPane.showMessageDialog(employeeDeleteFrame, "Employee deleted successfully!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " deleted employee with NIF: " + nif);
                 } else {
                     JOptionPane.showMessageDialog(employeeDeleteFrame, "Employee not found!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " tried to delete employee with NIF: " + nif + " but it was not found");
                 }
             } else {
                 JOptionPane.showMessageDialog(employeeDeleteFrame, "Invalid NIF!");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to delete employee with NIF: " + nif + " but it was not found");
             }
         });
 
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             dataSource.close();
             mainFrame.dispose();
             employeeDeleteFrame.dispose();
+            deleteMenuFrame.dispose();
             System.exit(0);
         });
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to delete menu");
             employeeDeleteFrame.setVisible(false);
             employeeDeleteFrame.dispose();
             deleteMenuFrame.setVisible(true);
@@ -2867,6 +3252,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deleteMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2920,22 +3307,33 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             if (isInteger(ticketIDValue)) {
                 if (dataSource.deleteTicket(Integer.parseInt(ticketIDValue))) {
                     JOptionPane.showMessageDialog(ticketDeleteFrame, "Ticket deleted successfully!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " deleted ticket with ID: " + ticketIDValue);
                 } else {
                     JOptionPane.showMessageDialog(ticketDeleteFrame, "Ticket not found!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " tried to delete ticket with ID: " + ticketIDValue + " but it was not found");
                 }
             } else {
                 JOptionPane.showMessageDialog(ticketDeleteFrame, "Invalid ticket ID!");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to delete ticket with ID: " + ticketIDValue + " but it was not found");
             }
         });
 
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             dataSource.close();
             mainFrame.dispose();
             ticketDeleteFrame.dispose();
+            deleteMenuFrame.dispose();
             System.exit(0);
         });
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to delete menu");
             ticketDeleteFrame.setVisible(false);
             ticketDeleteFrame.dispose();
             deleteMenuFrame.setVisible(true);
@@ -2961,6 +3359,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deleteMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2989,7 +3389,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton exitButton = new JButton("Exit");
         JButton submit = new JButton("Execute Delete");
 
-        JLabel insurancePolicy = new JLabel("policy: (XX-XX-XX)");
+        JLabel insurancePolicy = new JLabel("Policy: (8 digits)");
         JTextField insurancePolicyField = new JTextField(9);
 
         gbc.gridy = 1;
@@ -3013,22 +3413,33 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             if (isPolicy(policy)) {
                 if (dataSource.deleteInsurance(Integer.parseInt(policy))) {
                     JOptionPane.showMessageDialog(insuranceDeleteFrame, "Insurance deleted successfully!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " deleted insurance with policy: " + policy);
                 } else {
                     JOptionPane.showMessageDialog(insuranceDeleteFrame, "Insurance not found!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " tried to delete insurance with policy: " + policy + " but it was not found");
                 }
             } else {
                 JOptionPane.showMessageDialog(insuranceDeleteFrame, "Invalid policy!");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to delete insurance with policy: " + policy + " but it was not found");
             }
         });
 
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             dataSource.close();
             mainFrame.dispose();
             insuranceDeleteFrame.dispose();
+            deleteMenuFrame.dispose();
             System.exit(0);
         });
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to delete menu");
             insuranceDeleteFrame.setVisible(false);
             insuranceDeleteFrame.dispose();
             deleteMenuFrame.setVisible(true);
@@ -3055,6 +3466,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deleteMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -3107,22 +3520,33 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             if (isPlate(plate)) {
                 if (dataSource.deleteVehicle(plate)) {
                     JOptionPane.showMessageDialog(vehicleDeleteFrame, "Vehicle deleted successfully!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " deleted vehicle with plate: " + plate);
                 } else {
                     JOptionPane.showMessageDialog(vehicleDeleteFrame, "Vehicle not found!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " tried to delete vehicle with plate: " + plate + " but it was not found");
                 }
             } else {
                 JOptionPane.showMessageDialog(vehicleDeleteFrame, "Invalid plate!");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to delete vehicle with plate: " + plate + " but it was not found");
             }
         });
 
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             dataSource.close();
             mainFrame.dispose();
             vehicleDeleteFrame.dispose();
+            deleteMenuFrame.dispose();
             System.exit(0);
         });
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to delete menu");
             vehicleDeleteFrame.setVisible(false);
             vehicleDeleteFrame.dispose();
             deleteMenuFrame.setVisible(true);
@@ -3149,6 +3573,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deleteMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -3201,22 +3627,33 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             if (isNIF(nif)) {
                 if (dataSource.deletePerson(Integer.parseInt(nif))) {
                     JOptionPane.showMessageDialog(customerDeleteFrame, "Customer deleted successfully!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " deleted customer with NIF: " + nif);
                 } else {
                     JOptionPane.showMessageDialog(customerDeleteFrame, "Customer not found!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " tried to delete customer with NIF: " + nif + " but it was not found");
                 }
             } else {
                 JOptionPane.showMessageDialog(customerDeleteFrame, "Invalid NIF!");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to delete customer with NIF: " + nif + " but it was not found");
             }
         });
 
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             dataSource.close();
             mainFrame.dispose();
             customerDeleteFrame.dispose();
+            deleteMenuFrame.dispose();
             System.exit(0);
         });
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to delete menu");
             customerDeleteFrame.setVisible(false);
             customerDeleteFrame.dispose();
             deleteMenuFrame.setVisible(true);
@@ -3243,6 +3680,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deleteMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -3305,11 +3744,17 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         mainFrame.setVisible(false);
         insertMenuFrame.setVisible(true);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to main menu");
             mainFrame.setVisible(true);
             insertMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             dataSource.close();
+            mainFrame.dispose();
+            insertMenuFrame.dispose();
             System.exit(0);
         });
         ActionListener goToPageListener = new ActionListener() {
@@ -3318,11 +3763,27 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 JButton button = (JButton) e.getSource();
                 insertMenuFrame.setVisible(false);
 
-                if (button == vehicleInsert) insertVehicle(insertMenuFrame);
-                else if (button == employeeInsert) insertEmployee(insertMenuFrame);
-                else if (button == customerInsert) insertCustomer(insertMenuFrame);
-                else if (button == ticketInsert) insertTicket(insertMenuFrame);
-                else if (button == insuranceInsert) insertInsurance(insertMenuFrame);
+                if (button == vehicleInsert) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the insert vehicle menu");
+                    insertVehicle(insertMenuFrame);
+                } else if (button == employeeInsert) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the insert employee menu");
+                    insertEmployee(insertMenuFrame);
+                } else if (button == customerInsert) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the insert customer menu");
+                    insertCustomer(insertMenuFrame);
+                } else if (button == ticketInsert) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the insert ticket menu");
+                    insertTicket(insertMenuFrame);
+                } else if (button == insuranceInsert) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the insert insurance menu");
+                    insertInsurance(insertMenuFrame);
+                }
             }
         };
 
@@ -3335,6 +3796,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -3343,14 +3806,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void insertInsurance(JFrame insertMenuFrame) {
         JFrame insertInsuranceFrame = new JFrame("Register Insurance");
         insertInsuranceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertInsuranceFrame.setBackground(Color.WHITE);
+        insertInsuranceFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
         JPanel insertInsurancePanel = new JPanel(new GridBagLayout());
-        insertInsurancePanel.setBackground(Color.WHITE);
 
         JLabel insertInsuranceLabel = new JLabel("Insert Insurance Page");
         insertInsuranceLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -3396,15 +3858,21 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                     if (dataSource.insertInsurance(Integer.parseInt(policy), plate, Date.valueOf(startDate),
                             insuranceCategory, Date.valueOf(endDate), companyName)) {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " registered a new insurance and went back to the insert menu");
                         insertInsuranceFrame.setVisible(false);
                         insertInsuranceFrame.dispose();
                         insertInsurance(insertMenuFrame);
 //                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " tried to register a new insurance but failed");
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " tried to register a new insurance but failed");
                     break;
                 }
             }
@@ -3417,8 +3885,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.addActionListener(e ->
 
         {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             insertInsuranceFrame.dispose();
             dataSource.close();
+            mainFrame.dispose();
+            insertMenuFrame.dispose();
             System.exit(0);
         });
 
@@ -3427,6 +3899,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         backButton.addActionListener(e ->
 
         {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to the insert menu");
             insertMenuFrame.setVisible(true);
             insertInsuranceFrame.setVisible(false);
         });
@@ -3487,6 +3961,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertInsuranceFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -3496,14 +3972,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void insertTicket(JFrame insertMenuFrame) {
         JFrame insertTicketFrame = new JFrame("Register Ticket");
         insertTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertTicketFrame.setBackground(Color.WHITE);
+        insertTicketFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
         JPanel insertTicketPanel = new JPanel(new GridBagLayout());
-        insertTicketPanel.setBackground(Color.WHITE);
 
         JLabel insertTicketLabel = new JLabel("Insert Ticket Page");
         insertTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -3551,12 +4026,18 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         insertTicketFrame.setVisible(false);
                         insertTicketFrame.dispose();
                         insertTicket(insertMenuFrame);
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " registered a new ticket for customer with NIF: " + nif + " and Date: " + date);
 //                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertTicketFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " tried to register a new ticket for customer with NIF: " + nif + " and Date: " + date);
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertTicketFrame, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " tried to register a new ticket for customer with NIF: " + nif + " and Date: " + date);
                     break;
                 }
             }
@@ -3567,14 +4048,20 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             insertTicketFrame.dispose();
             dataSource.close();
+            mainFrame.dispose();
+            insertMenuFrame.dispose();
             System.exit(0);
         });
 
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " returned to the insert menu");
             insertMenuFrame.setVisible(true);
             insertTicketFrame.setVisible(false);
         });
@@ -3625,6 +4112,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertTicketFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -3633,14 +4122,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void insertEmployee(JFrame insertMenuFrame) {
         JFrame insertEmployeeFrame = new JFrame("Insert Employee");
         insertEmployeeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertEmployeeFrame.setBackground(Color.WHITE);
+        insertEmployeeFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
         JPanel insertEmployeePanel = new JPanel(new GridBagLayout());
-        insertEmployeePanel.setBackground(Color.WHITE);
 
         JLabel insertEmployeeLabel = new JLabel("Insert Employee Page");
         insertEmployeeLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -3694,12 +4182,18 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         insertEmployeeFrame.dispose();
                         insertEmployeeFrame.setVisible(false);
                         insertEmployee(insertMenuFrame);
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " registered a new employee with NIF: " + nif);
                         //break;
                     } else {
                         JOptionPane.showMessageDialog(insertEmployeeFrame, "Error registering employee");
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " failed to register a new employee with NIF: " + nif);
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertEmployeeFrame, "Please fill all the fields");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to registered a new employee with NIF: " + nif);
                     break;
                 }
             }
@@ -3710,7 +4204,11 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             insertEmployeeFrame.dispose();
+            mainFrame.dispose();
+            insertMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -3718,6 +4216,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " returned to insert menu");
             insertMenuFrame.setVisible(true);
             insertEmployeeFrame.setVisible(false);
         });
@@ -3769,6 +4269,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertEmployeeFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -3777,14 +4279,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void insertCustomer(JFrame insertMenuFrame) {
         JFrame insertCustomerFrame = new JFrame("Insert Customer");
         insertCustomerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertCustomerFrame.setBackground(Color.WHITE);
+        insertCustomerFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
         JPanel insertCustomerPanel = new JPanel(new GridBagLayout());
-        insertCustomerPanel.setBackground(Color.WHITE);
 
         JLabel insertCustomerLabel = new JLabel("Insert Customer Page");
         insertCustomerLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -3846,17 +4347,23 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         && isPassword(password) && isDriverLicense(driverLicense) && selectedLicenseType != (" ")) {
                     if (dataSource.insertCustomer(Integer.parseInt(nif), name, address, Date.valueOf(birthDate),
                             password, email, Integer.parseInt(driverLicense), selectedLicenseType, Date.valueOf(licenseDate), Date.valueOf(licenseExpiration))) {
-
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " registered a new customer with NIF: " + nif);
                         JOptionPane.showMessageDialog(insertCustomerFrame, "Customer inserted successfully");
                         insertCustomerFrame.setVisible(false);
                         insertCustomerFrame.dispose();
                         insertVehicle(insertMenuFrame);
+
 //                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertCustomerFrame, "Error inserting customer");
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " failed to register new employee with NIF: " + nif);
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertCustomerFrame, "Please fill all the fields");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to register new employee with NIF: " + nif);
                     break;
                 }
             }
@@ -3867,14 +4374,20 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             insertCustomerFrame.dispose();
             dataSource.close();
+            mainFrame.dispose();
+            insertMenuFrame.dispose();
             System.exit(0);
         });
 
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " returned to insert menu");
             insertMenuFrame.setVisible(true);
             insertCustomerFrame.setVisible(false);
         });
@@ -3929,6 +4442,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertCustomerFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -3937,7 +4452,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void insertVehicle(JFrame insertMenuFrame) {
         JFrame insertVehicleFrame = new JFrame("Insert Vehicle");
         insertVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertVehicleFrame.setBackground(Color.WHITE);
+        insertVehicleFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -3953,10 +4468,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submit.setBackground(GREEN);
         submit.setForeground(WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             insertMenuFrame.setVisible(true);
             insertVehicleFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             insertVehicleFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -3964,7 +4483,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         //SET UP para botoes de exit
         JPanel insertVehiclePanel = new JPanel(new GridBagLayout());
-        insertVehiclePanel.setBackground(Color.WHITE);
 
         JLabel insertVehicleLabel = new JLabel("Insert Vehicle");
         insertVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -4025,6 +4543,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
                     if (dataSource.insertVehicle(plateText, vinText, colorText, brandText,
                             modelText, Date.valueOf(registrationDateText), categoryText, Integer.parseInt(nifText))) {
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " registered a new vehicle with plate: " + plateText);
 //                        break;
                         JOptionPane.showMessageDialog(insertVehicleFrame, "Vehicle succefully registered");
                         insertVehicleFrame.setVisible(false);
@@ -4033,9 +4553,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
                     } else {
                         JOptionPane.showMessageDialog(insertVehicleFrame, "Error inserting vehicle");
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " failed to registered a new vehicle with plate: " + plateText);
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill all the fields properly");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to registered a new vehicle with plate: " + plateText);
                     break;
                 }
             }
@@ -4093,17 +4617,25 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertVehicleFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     public static void main(String[] args) {
-        //Menu interativo
-        Employee employee = new Employee();
-        employee.setName("John Doe");
-        employee.setAccess_level(2);
-        BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
+
+        PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Employee employee = new Employee();
+                employee.setName("John Doe");
+                employee.setAccess_level(2);
+                BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
+            }
+        });
     }
 
 }
