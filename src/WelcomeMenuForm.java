@@ -13,6 +13,13 @@ public class WelcomeMenuForm {
     private JButton exitButton;
 
     public WelcomeMenuForm() {
+
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         frame = new JFrame("Welcome to IMT");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);

@@ -1,11 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.awt.event.*;
+import java.sql.*;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class RegisterForm extends JPanel {
@@ -16,44 +12,90 @@ public class RegisterForm extends JPanel {
     public static final String USERNAME = "root";
     public static final String PASSWORD = "";
 
+    private JTextField nifField, nameField, emailField, addressField, b_dateField, licenseField;
+    private JComboBox<String> licenseTypeComboBox;
+    private JTextField startingDateField, expirationDateField;
+    private JPasswordField passwordField;
+
     public RegisterForm() {
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         setLayout(new BorderLayout());
+        initComponents();
+        buildUI();
+    }
 
+    private void initComponents() {
+        nifField = new JTextField(50);
+        passwordField = new JPasswordField(20);
+        nameField = new JTextField(50);
+        emailField = new JTextField(20);
+        addressField = new JTextField(20);
+        b_dateField = new JTextField(20);
+        licenseField = new JTextField(20);
+        licenseTypeComboBox = new JComboBox<>(new String[]{"A", "B", "C", "D"});
+        startingDateField = new JTextField(20);
+        expirationDateField = new JTextField(20);
+    }
 
+    private void buildUI() {
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
-
-        JLabel nameLabel = new JLabel("Name:");
-        JTextField nameField = new JTextField();
-        nameField.setPreferredSize(new Dimension(200, 30));
-
-        JLabel addressLabel = new JLabel("Address:");
-        JTextField addressField = new JTextField();
-        addressField.setPreferredSize(new Dimension(200, 30));
-
-        JLabel birthdateLabel = new JLabel("Birthdate (YYYY-MM-DD):");
-        JTextField birthdateField = new JTextField();
-        birthdateField.setPreferredSize(new Dimension(200, 30));
-
-        JLabel licenseLabel = new JLabel("Driver License:");
-        JTextField licenseField = new JTextField();
-        licenseField.setPreferredSize(new Dimension(200, 30));
-
-        JLabel licenseTypeLabel = new JLabel("License Type (A/B/C/D):");
-        JComboBox<String> licenseTypeComboBox = new JComboBox<>(new String[]{"A", "B", "C", "D"});
-        licenseTypeComboBox.setPreferredSize(new Dimension(200, 30));
-
-        JLabel startingDateLabel = new JLabel("Starting Date (YYYY-MM-DD):");
-        JTextField startingDateField = new JTextField();
-        startingDateField.setPreferredSize(new Dimension(200, 30));
-
-        JLabel expirationDateLabel = new JLabel("Expiration Date (YYYY-MM-DD):");
-        JTextField expirationDateField = new JTextField();
-        expirationDateField.setPreferredSize(new Dimension(200, 30));
-
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        formPanel.add(new JLabel("NIF:"), gbc);
+        gbc.gridx++;
+        formPanel.add(nifField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        formPanel.add(new JLabel("Password:"), gbc);
+        gbc.gridx++;
+        formPanel.add(passwordField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        formPanel.add(new JLabel("Name:"), gbc);
+        gbc.gridx++;
+        formPanel.add(nameField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        formPanel.add(new JLabel("Email:"), gbc);
+        gbc.gridx++;
+        formPanel.add(emailField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        formPanel.add(new JLabel("Address:"), gbc);
+        gbc.gridx++;
+        formPanel.add(addressField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        formPanel.add(new JLabel("Birthdate (YYYY-MM-DD):"), gbc);
+        gbc.gridx++;
+        formPanel.add(b_dateField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        formPanel.add(new JLabel("Driver License:"), gbc);
+        gbc.gridx++;
+        formPanel.add(licenseField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        formPanel.add(new JLabel("License Type (A/B/C/D):"), gbc);
+        gbc.gridx++;
+        formPanel.add(licenseTypeComboBox, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        formPanel.add(new JLabel("Starting Date (YYYY-MM-DD):"), gbc);
+        gbc.gridx++;
+        formPanel.add(startingDateField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        formPanel.add(new JLabel("Expiration Date (YYYY-MM-DD):"), gbc);
+        gbc.gridx++;
+        formPanel.add(expirationDateField, gbc);
         JButton registerButton = new JButton("Register");
         registerButton.setBackground(new Color(6, 65, 16));
         registerButton.setForeground(Color.white);
@@ -61,125 +103,55 @@ public class RegisterForm extends JPanel {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String name = nameField.getText();
-                String address = addressField.getText();
-                String birthdate = birthdateField.getText();
-                String driverLicense = licenseField.getText();
-                String licenseType = (String) licenseTypeComboBox.getSelectedItem();
-                String startingDate = startingDateField.getText();
-                String expirationDate = expirationDateField.getText();
-
-                if (insertUserData(name, address, birthdate, driverLicense, licenseType, startingDate, expirationDate)) {
-                    showRegistrationSuccessMessage();
-                } else {
-                    showRegistrationErrorMessage();
-                }
+                insertUserData();
             }
         });
-
+        gbc.gridx = 0;
+        gbc.gridy++;
         gbc.gridwidth = 2;
-        formPanel.add(nameLabel, gbc);
-        gbc.gridy++;
-        formPanel.add(nameField, gbc);
-        gbc.gridy++;
-        formPanel.add(addressLabel, gbc);
-        gbc.gridy++;
-        formPanel.add(addressField, gbc);
-        gbc.gridy++;
-        formPanel.add(birthdateLabel, gbc);
-        gbc.gridy++;
-        formPanel.add(birthdateField, gbc);
-        gbc.gridy++;
-        formPanel.add(licenseLabel, gbc);
-        gbc.gridy++;
-        formPanel.add(licenseField, gbc);
-        gbc.gridy++;
-        formPanel.add(licenseTypeLabel, gbc);
-        gbc.gridy++;
-        formPanel.add(licenseTypeComboBox, gbc);
-        gbc.gridy++;
-        formPanel.add(startingDateLabel, gbc);
-        gbc.gridy++;
-        formPanel.add(startingDateField, gbc);
-        gbc.gridy++;
-        formPanel.add(expirationDateLabel, gbc);
-        gbc.gridy++;
-        formPanel.add(expirationDateField, gbc);
-        gbc.gridy++;
         gbc.anchor = GridBagConstraints.CENTER;
         formPanel.add(registerButton, gbc);
-
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton goBackButton = new JButton("Go Back");
         goBackButton.setBackground(new Color(32, 32, 32));
-        goBackButton.setForeground(Color.white);
         goBackButton.setPreferredSize(new Dimension(120, 40));
+        goBackButton.setForeground(Color.white);
         goBackButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 handleGoBackButton();
             }
         });
         buttonPanel.add(goBackButton);
-
         add(formPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
+    }
 
+    private void insertUserData() {
         try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (Exception e) {
+            Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            String insertIntoPerson = "INSERT INTO person(nif, name, address, b_date, password, email) VALUES(?,?,?,?,?,?)";
+            PreparedStatement pstmt = conn.prepareStatement(insertIntoPerson);
+            pstmt.setInt(1, Integer.parseInt(nifField.getText()));
+            pstmt.setString(2, nameField.getText());
+            pstmt.setString(3, addressField.getText());
+            pstmt.setString(4, b_dateField.getText());
+            pstmt.setString(5, BCrypt.hashpw(new String(passwordField.getPassword()), BCrypt.gensalt()));
+            pstmt.setString(6, emailField.getText());
+            pstmt.executeUpdate();
+            String insertIntoCustomer = "INSERT INTO customer(driver_license_number, license_type, start_date, expiration_date, nif) VALUES(?,?,?,?,?)";
+            pstmt = conn.prepareStatement(insertIntoCustomer);
+            pstmt.setString(1, licenseField.getText());
+            pstmt.setString(2, (String) licenseTypeComboBox.getSelectedItem());
+            pstmt.setString(3, startingDateField.getText());
+            pstmt.setString(4, expirationDateField.getText());
+            pstmt.setInt(5, Integer.parseInt(nifField.getText()));
+            pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Registration Successful!");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Unable to Register. Please Try Again.");
             e.printStackTrace();
         }
-
-        JFrame frame = new JFrame("Register Form");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.add(this);
-        frame.setVisible(true);
-    }
-
-    private boolean insertUserData(String nif, String name, String address, String birthdate,
-                                   String driverLicense, String licenseType, String startingDate) {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
-            String hashedPassword = BCrypt.hashpw("yourPasswordHere", BCrypt.gensalt());
-
-            PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO person (nif, name, address, birthdate, password) VALUES (?, ?, ?, ?, ?)");
-            statement.setString(1, nif);
-            statement.setString(2, name);
-            statement.setString(3, address);
-            statement.setString(4, birthdate);
-            statement.setString(5, hashedPassword);
-
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-
-                PreparedStatement customerStatement = connection.prepareStatement(
-                        "INSERT INTO customer (nif, driver_license, license_type, starting_date, expiration_date) " +
-                                "VALUES (?, ?, ?, ?, ?)");
-                customerStatement.setString(1, nif);
-                customerStatement.setString(2, driverLicense);
-                customerStatement.setString(3, licenseType);
-                customerStatement.setString(4, startingDate);
-
-                int customerRowsAffected = customerStatement.executeUpdate();
-                return customerRowsAffected > 0;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return false;
-    }
-
-    private void showRegistrationSuccessMessage() {
-        JOptionPane.showMessageDialog(this, "Registration successful. Please log in.",
-                "Registration Complete", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void showRegistrationErrorMessage() {
-        JOptionPane.showMessageDialog(this, "Registration failed. Please try again later.",
-                "Registration Error", JOptionPane.ERROR_MESSAGE);
     }
 
     private void handleGoBackButton() {
@@ -193,7 +165,12 @@ public class RegisterForm extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new RegisterForm();
+                RegisterForm registerForm = new RegisterForm();
+                JFrame frame = new JFrame("Register Form");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                frame.add(registerForm);
+                frame.setVisible(true);
             }
         });
     }

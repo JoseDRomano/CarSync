@@ -1,5 +1,7 @@
 
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import javax.mail.MessagingException;
 import javax.swing.*;
 import java.awt.*;
@@ -19,11 +21,14 @@ public class MainConnection {
 //        BackOffice.startBackOffice(296789012);
 //        MainConnection.initiate();
 
-        //Password para Pedro Ribeiro - 123abc / NIF - 200000000
+        //Password para Pedro Ribeiro - abc123 / NIF - 200000000
         // Licença - 10000000
-        //Password para nif 200000001 (Diogo Amazonia) - Password é abc123
+        //Password para nif 200000001 (Diogo Amazonia) - Password é 123abc
         //Password para nif 200000002 (Jose Sem Fim) - Password a1b2c3
+        String password = "a1b2c3";
 
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        System.out.println(password + "\n" + hashedPassword);
 
 //        WelcomeMenuForm welcomeMenuForm = new WelcomeMenuForm();
 //        welcomeMenuForm.show();

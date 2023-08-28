@@ -19,7 +19,7 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.Scanner;
 
-public class WelcomeMenu {
+public class WelcomeMenu extends WelcomeMenuForm {
 
     public void run() throws SQLException, MessagingException {
         System.out.println("Welcome to IMT (but better). For every menu you'll have a few options to choose and you'll"
@@ -328,9 +328,11 @@ class RegisterEmployee {
 
 
 class Login {
-    private static final String SUCCESSFUL_LOGIN = "Login successful";
-    private static final String WRONG_PASSWORD = "Wrong password. Wanna go back? (y/n)";
-    private static final String NIF_NOT_REGISTERED = "NIF is not registered in our System. Please register first";
+
+
+    public static final String SUCCESSFUL_LOGIN = "Login successful";
+    public static final String WRONG_PASSWORD = "Wrong password. Wanna go back? (y/n)";
+    public static final String NIF_NOT_REGISTERED = "NIF is not registered in our System. Please register first";
 
     private static final String LOGIN = "------ Login ------";
     private static final String ENTER_NIF = "Please enter your NIF:";
@@ -434,25 +436,32 @@ class Login {
 
     }
 
-    private String authenticateUser(String nif, String password) {
+    public String authenticateUser(String nif, String password) {
+        Statement statement = null;
         try {
-            Statement statement = connection.createStatement();
+            if (connection == null || connection.isClosed()) {
+                connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            }
+
+            statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM person WHERE nif = '" + nif + "'");
-            //PreparedStatement statement = connection.prepareStatement("SELECT * FROM person WHERE nif =?");
-            //ResultSet resultSet = statement.getResultSet();
-            //verify if this password is equals to the password in the database
+
             if (resultSet.next()) {
-                //if pwd is correct, return info of the person (nif, name, email, phone)
                 if (BCrypt.checkpw(password, resultSet.getString("password"))) return SUCCESSFUL_LOGIN;
                 else return WRONG_PASSWORD;
             } else return NIF_NOT_REGISTERED;
 
-
         } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
-
 }
