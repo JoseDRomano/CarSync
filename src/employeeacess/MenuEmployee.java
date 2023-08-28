@@ -1,10 +1,7 @@
 package employeeacess;
 
-import model.Customer;
-import model.Employee;
-import model.Person;
+import model.*;
 import org.mindrot.jbcrypt.BCrypt;
-import util.UserWriterAux;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,10 +10,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import static java.awt.Color.BLACK;
+import static java.awt.Color.*;
 
 public class MenuEmployee implements ValidateInput {
 
@@ -31,32 +30,70 @@ public class MenuEmployee implements ValidateInput {
     private final Color GREEN = new Color(0, 100, 0);
     private final Color RED = new Color(130, 0, 0);
     private final Color WHITE = new Color(255, 255, 255);
-
-    private JFrame updateMenuFrame;
-    private JFrame deactivateMenuFrame;
-    private JButton insertMenu = new JButton("Insert Menu");
-    private JButton updateMenu = new JButton("Update Menu");
-    private final JButton searchMenu = new JButton("Search Menu");
-    private final JButton deactivateMenu = new JButton("Deactivate Menu");
+    private final Color BLUE = new Color(0, 0, 100);
 
     public MenuEmployee(Employee employee) {
-        this.dataSource = new DataSource();
-        dataSource.open();
-        this.employee = employee;
-        mainFrame = new JFrame("Back Office Menu" + "\n" + "Welcome " + employee.getName());
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setSize(WIDTH, HEIGHT);
+        dataSource = new DataSource();
+        if (!dataSource.open()) {
+            System.out.println("Can't open datasource");
+            return;
+        }
+
+        JButton insertMenu = new JButton("Insert Menu");
+        JButton updateMenu = new JButton("Update Menu");
+        JButton taskMenu = new JButton("Task Menu");
+        JButton searchMenu = new JButton("Search Menu");
+        JButton deactivateMenu = new JButton("Deactivate Menu");
         JButton exitButton = new JButton("Exit");
 
-        exitButton.addActionListener(e -> System.exit(0));
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(6, 1));
+        this.employee = employee;
+        mainFrame = new JFrame("Back Office Menu");
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        mainPanel.add(insertMenu);
-        mainPanel.add(deactivateMenu);
-        mainPanel.add(updateMenu);
-        mainPanel.add(searchMenu);
-        mainPanel.add(exitButton);
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        exitButton.addActionListener(e -> {
+            System.exit(0);
+            dataSource.close();
+        });
+
+
+        mainPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        JLabel mainLabel = new JLabel("Welcome " + employee.getName());
+        mainLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        mainLabel.setForeground(BLUE);
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 2;
+        mainPanel.add(mainLabel, gbc);
+
+
+        JButton[] buttons = {insertMenu, deactivateMenu, updateMenu, searchMenu, taskMenu};
+        gbc.gridwidth = 2;
+        for (JButton button : buttons) {
+            button.setBackground(GREEN);
+            button.setForeground(Color.WHITE);
+            gbc.gridy++;
+            mainPanel.add(button, gbc);
+        }
+
+        gbc.gridy++;
+
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        mainPanel.add(exitButton, gbc);
+        gbc.gridx = 1;
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
 
         mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
@@ -71,6 +108,7 @@ public class MenuEmployee implements ValidateInput {
                 else if (button == deactivateMenu) buildDeactivateMenuPage();
                 else if (button == updateMenu) buildUpdateMenuPage();
                 else if (button == searchMenu) buildSearchMenuPage();
+                else if (button == taskMenu) buildTaskMenuPage();
             }
         };
 
@@ -78,15 +116,142 @@ public class MenuEmployee implements ValidateInput {
         deactivateMenu.addActionListener(goToPageListener);
         updateMenu.addActionListener(goToPageListener);
         searchMenu.addActionListener(goToPageListener);
-        exitButton.addActionListener(e -> System.exit(0));
+        taskMenu.addActionListener(goToPageListener);
+        exitButton.addActionListener(e -> {
+            dataSource.close();
+            System.exit(0);
+        });
+
+        mainFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
 
     }
 
-    //Search Menu
+    private void buildTaskMenuPage() {
+        JFrame taskMenuFrame = new JFrame("Back Office Menu");
+        taskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        taskMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JPanel taskMenuPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        JButton exitButton = new JButton("Exit");
+        JButton backButton = new JButton("Back");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+
+        JLabel taskLabel = new JLabel("Task Menu");
+        taskLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        taskLabel.setForeground(BLUE);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        taskMenuPanel.add(taskLabel, gbc);
+
+        JLabel taskDisplayLabel = new JLabel("Next Task");
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        taskMenuPanel.add(taskDisplayLabel, gbc);
+
+        JTextArea taskDisplay = new JTextArea();
+        TaskManagment taskManagment = new TaskManagment();
+        Task task = taskManagment.getNextTask(employee.getAccess_level());
+        taskDisplay.setEditable(false);
+        taskDisplay.setLineWrap(true);
+        taskDisplay.setWrapStyleWord(true);
+        taskDisplay.setBackground(white);
+        taskDisplay.setFont(new Font("Arial", Font.BOLD, 20));
+        taskDisplay.setForeground(BLACK);
+        String taskInDisplay = (task == null) ? "No tasks to display" : task.toString();
+        taskDisplay.setText(taskInDisplay);
+        gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+//        gbc.anchor = GridBagConstraints.CENTER;
+        taskMenuPanel.add(taskDisplay, gbc);
+
+
+        JButton executeTask = new JButton("Execute Task");
+        JButton viewAllTasks = new JButton("View All Tasks");
+//        exitButton.setBackground(RED);
+//        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            taskMenuFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.addActionListener(e -> {
+            mainFrame.setVisible(true);
+            taskMenuFrame.setVisible(false);
+            taskMenuFrame.dispose();
+        });
+
+        executeTask.setBackground(GREEN);
+        executeTask.setForeground(Color.WHITE);
+        executeTask.addActionListener(e -> {
+            if (task == null) {
+                JOptionPane.showMessageDialog(null, "Cannot execute task, no tasks to execute");
+            } else {
+                if (task.perFormTask(dataSource)) {
+                    JOptionPane.showMessageDialog(null, "Task Completed");
+                    taskDisplay.setText(new TaskManagment().getNextTask(employee.getAccess_level()).toString());
+                } else {
+                    JOptionPane.showMessageDialog(null, "Task Failed");
+                }
+            }
+        });
+
+        viewAllTasks.setBackground(BLUE);
+        viewAllTasks.setForeground(Color.WHITE);
+        viewAllTasks.addActionListener(e -> {
+            taskMenuFrame.setVisible(false);
+            new TaskTableNavigation(30, taskMenuFrame, employee.getAccess_level());
+        });
+
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0.33;
+        taskMenuPanel.add(exitButton, gbc);
+
+        gbc.gridx = 1;
+        taskMenuPanel.add(backButton, gbc);
+
+        gbc.gridx = 2;
+        taskMenuPanel.add(executeTask, gbc);
+
+        taskMenuFrame.add(taskMenuPanel);
+        taskMenuFrame.setVisible(true);
+
+        taskMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+    }
+
     private void buildSearchMenuPage() {
-        JFrame searchMenuFrame = new JFrame("Search Menu");
-        searchMenuFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        searchMenuFrame.setSize(WIDTH, HEIGHT);
+        JFrame searchMenuFrame = new JFrame("Back Office Menu");
+        searchMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        searchMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JLabel searchMenuLabel = new JLabel("Search Menu");
+        searchMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        searchMenuLabel.setForeground(BLUE);
+
+
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
         JButton vehicleDisplay = new JButton("Vehicle Display Menu");
@@ -94,15 +259,42 @@ public class MenuEmployee implements ValidateInput {
         JButton customerDisplay = new JButton("Customer Display Menu");
         JButton ticketDisplay = new JButton("Ticket Display Menu");
         JButton insuranceDisplay = new JButton("Insurance Display Menu");
-        JPanel searchMenuPanel = new JPanel();
-        searchMenuPanel.setLayout(new GridLayout(7, 1));
-        searchMenuPanel.add(vehicleDisplay);
-        searchMenuPanel.add(employeeDisplay);
-        searchMenuPanel.add(customerDisplay);
-        searchMenuPanel.add(ticketDisplay);
-        searchMenuPanel.add(insuranceDisplay);
-        searchMenuPanel.add(backButton);
-        searchMenuPanel.add(exitButton);
+        JPanel searchMenuPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        searchMenuPanel.add(searchMenuLabel, gbc);
+        JButton[] buttons = {vehicleDisplay, employeeDisplay, customerDisplay, ticketDisplay, insuranceDisplay};
+
+        gbc.gridwidth = 2;
+        for (int i = 0; i < buttons.length; i++) {
+            gbc.gridy = i + 1;
+            buttons[i].setBackground(GREEN);
+            buttons[i].setForeground(WHITE);
+            ;
+            searchMenuPanel.add(buttons[i], gbc);
+        }
+
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        searchMenuPanel.add(exitButton, gbc);
+        gbc.gridx = 1;
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        searchMenuPanel.add(backButton, gbc);
+
+
         searchMenuFrame.add(searchMenuPanel);
         mainFrame.setVisible(false);
         searchMenuFrame.setVisible(true);
@@ -110,43 +302,1406 @@ public class MenuEmployee implements ValidateInput {
             mainFrame.setVisible(true);
             searchMenuFrame.setVisible(false);
         });
-        exitButton.addActionListener(e -> System.exit(0));
+        exitButton.addActionListener(e -> {
+            dataSource.close();
+            System.exit(0);
+        });
+
+        ActionListener goToPageListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton button = (JButton) e.getSource();
+                searchMenuFrame.setVisible(false);
+
+                if (button == vehicleDisplay) vehicleDisplayPage(searchMenuFrame);
+                else if (button == employeeDisplay) employeeDisplayPage(searchMenuFrame);
+                else if (button == customerDisplay) customerDisplayPage(searchMenuFrame);
+                else if (button == ticketDisplay) ticketDisplayPage(searchMenuFrame);
+                else if (button == insuranceDisplay) insuranceDisplayPage(searchMenuFrame);
+            }
+        };
+
+        vehicleDisplay.addActionListener(goToPageListener);
+        employeeDisplay.addActionListener(goToPageListener);
+        customerDisplay.addActionListener(goToPageListener);
+        ticketDisplay.addActionListener(goToPageListener);
+        insuranceDisplay.addActionListener(goToPageListener);
+
+        searchMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+    }
+
+    private void insuranceDisplayPage(JFrame searchMenuFrame) {
+        JFrame insuranceDisplayFrame = new JFrame("Insurance Display Menu");
+        insuranceDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        insuranceDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JPanel insuranceDisplayPanel = new JPanel(new GridBagLayout());
+
+        JLabel insuranceDisplayLabel = new JLabel("Insurance Display Menu");
+        insuranceDisplayLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        insuranceDisplayLabel.setForeground(new Color(0, 0, 90));
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        insuranceDisplayPanel.add(insuranceDisplayLabel, gbc);
+
+        JLabel rowsPerPageLabel = new JLabel("Rows per page:");
+        JComboBox<String> rowsPerPageOptions = new JComboBox<>(new String[]{"20", "30", "50", "100"});
+
+        JLabel insuranceDisplaySearchLabel = new JLabel("Search by:");
+        JComboBox<String> insuranceDisplaySearchOptions = new JComboBox<>(new String[]{" ", "General Search",
+                "Search by Policy Number", "Search by Company", "Search by Plate",
+                "Search by Category", "Search by Expiration Date", "Search by Issue Date"});
+
+        JLabel insuranceDisplayOrderLabel = new JLabel("Order by:");
+        JComboBox<String> insuranceDisplayOrderOptions = new JComboBox<>(new String[]{" ",
+                "Order by Policy Number", "Order by Company", "Order by Plate",
+                "Order by Category", "Order by Expiration Date", "Order by Issue Date"});
+
+        JLabel inputForSearch = new JLabel("Input for search:");
+        JTextField inputForSearchField = new JTextField(20);
+
+        JButton searchButton = new JButton("Search");
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setBackground(GREEN);
+
+        searchButton.addActionListener(e -> {
+            String searchOption = (String) insuranceDisplaySearchOptions.getSelectedItem();
+            String orderType = (String) insuranceDisplayOrderOptions.getSelectedItem();
+            String rowsPerPage = (String) rowsPerPageOptions.getSelectedItem();
+            String input = inputForSearchField.getText();
+
+            if (!searchOption.equals(" ") && !orderType.equals(" ")) {
+                if (searchOption.equals("General Search")) {
+                    displaySearchByOrderInsurance(rowsPerPage, dataSource.queryInsurances(), insuranceDisplayFrame, orderType);
+                } else {
+                    switch (searchOption) {
+
+                        case "Search by Policy Number" -> {
+                            if (isPolicy(input)) {
+                                List<Insurance> insuranceList = new ArrayList<>();
+                                for (Insurance insurance : dataSource.queryInsurances()) {
+                                    if (insurance.getPolicy() == Integer.parseInt(input)) {
+                                        insuranceList.add(insurance);
+                                        break;
+                                    }
+                                }
+                                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                            } else {
+                                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid policy number");
+                            }
+                        }
+
+                        case "Search by Company" -> {
+                            if (isValidString(input)) {
+                                List<Insurance> insuranceList = new ArrayList<>();
+                                for (Insurance insurance : dataSource.queryInsurances()) {
+                                    if (insurance.getCompanyName().equals(input)) {
+                                        insuranceList.add(insurance);
+                                    }
+                                }
+                                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                            } else {
+                                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid company name");
+                            }
+                        }
+
+                        case "Search by Plate" -> {
+                            if (isPlate(input)) {
+                                List<Insurance> insuranceList = new ArrayList<>();
+                                for (Insurance insurance : dataSource.queryInsurances()) {
+                                    if (insurance.getCarPlate().equals(input)) {
+                                        insuranceList.add(insurance);
+                                    }
+                                }
+                                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                            } else {
+                                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid plate");
+                            }
+                        }
+
+                        case "Search by Category" -> {
+                            if (isValidString(input)) {
+                                List<Insurance> insuranceList = new ArrayList<>();
+                                for (Insurance insurance : dataSource.queryInsurances()) {
+                                    if (insurance.getExtraCategory().equals(input)) {
+                                        insuranceList.add(insurance);
+                                    }
+                                }
+                                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                            } else {
+                                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid category");
+                            }
+                        }
+
+                        case "Search by Expiration Date" -> {
+                            if (isDate(input)) {
+                                List<Insurance> insuranceList = new ArrayList<>();
+                                for (Insurance insurance : dataSource.queryInsurances()) {
+                                    if (insurance.getExpDate().equals(input) || insurance.getExpDate().after(Date.valueOf(input))) {
+                                        insuranceList.add(insurance);
+                                    }
+                                }
+                                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                            } else {
+                                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid date");
+                            }
+                        }
+
+                        case "Search by Issue Date" -> {
+                            if (isDate(input)) {
+                                List<Insurance> insuranceList = new ArrayList<>();
+                                for (Insurance insurance : dataSource.queryInsurances()) {
+                                    if (insurance.getStartDate().equals(input) || insurance.getStartDate().after(Date.valueOf(input))) {
+                                        insuranceList.add(insurance);
+                                    }
+                                }
+                                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                            } else {
+                                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid date");
+                            }
+                        }
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please select a search option and order option");
+            }
+
+        });
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {rowsPerPageLabel, insuranceDisplaySearchLabel, insuranceDisplayOrderLabel, inputForSearch};
+        JComboBox[] comboBoxes = {rowsPerPageOptions, insuranceDisplaySearchOptions, insuranceDisplayOrderOptions};
+
+        for (int i = 0; i < labels.length; i++) {
+            gbc.gridx = 0;
+            gbc.gridy = i + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            insuranceDisplayPanel.add(labels[i], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+            if (i == 3) {
+                insuranceDisplayPanel.add(inputForSearchField, gbc);
+            } else {
+                insuranceDisplayPanel.add(comboBoxes[i], gbc);
+            }
+        }
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            insuranceDisplayFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            searchMenuFrame.setVisible(true);
+            insuranceDisplayFrame.setVisible(false);
+        });
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        insuranceDisplayPanel.add(searchButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        insuranceDisplayPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        insuranceDisplayPanel.add(backButton, gbc);
+
+
+        insuranceDisplayFrame.add(insuranceDisplayPanel);
+        insuranceDisplayFrame.setVisible(true);
+
+        insuranceDisplayFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+    }
+
+    private void displaySearchByOrderInsurance(String rowsPerPage, List<Insurance> insurances, JFrame
+            insuranceDisplayFrame, String orderType) {
+
+        switch (orderType) {
+            case "Order by Policy Number" -> {
+                insurances.sort(Comparator.comparing(Insurance::getPolicy));
+                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+            }
+            case "Order by Company" -> {
+                insurances.sort(Comparator.comparing(Insurance::getCompanyName));
+                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+            }
+            case "Order by Plate" -> {
+                insurances.sort(Comparator.comparing(Insurance::getCarPlate));
+                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+            }
+            case "Order by Category" -> {
+                insurances.sort(Comparator.comparing(Insurance::getExtraCategory));
+                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+            }
+            case "Order by Expiration Date" -> {
+                insurances.sort(Comparator.comparing(Insurance::getExpDate));
+                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+            }
+            case "Order by Issue Date" -> {
+                insurances.sort(Comparator.comparing(Insurance::getStartDate));
+                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+            }
+            default -> JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please select an order option");
+        }
+
+    }
+
+    private void ticketDisplayPage(JFrame searchMenuFrame) {
+        JFrame ticketDisplayFrame = new JFrame("Ticket Search Menu");
+        ticketDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ticketDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JPanel ticketDisplayPanel = new JPanel(new GridBagLayout());
+
+        JLabel ticketDisplayLabel = new JLabel("Ticket Search Menu");
+        ticketDisplayLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        ticketDisplayLabel.setForeground(new Color(0, 0, 90));
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        ticketDisplayPanel.add(ticketDisplayLabel, gbc);
+
+        JLabel rowsPerPageLabel = new JLabel("Rows per page:");
+        JComboBox<String> rowsPerPageOptions = new JComboBox<>(new String[]{"20", "30", "50", "100"});
+
+        JLabel ticketDisplaySearchLabel = new JLabel("Search by:");
+        JComboBox<String> ticketDisplaySearchOptions = new JComboBox<>(new String[]{" ", "General Search",
+                "Search by NIF", "Search by Plate", "Search by Reason", "Search by Issue Date", "Search by Expiration Date", "Search by Value",
+                "Search by TicketID", "Search by Paid Y(y) or N(n)"});
+
+        JLabel inputForSearch = new JLabel("Input for search: ");
+        JTextField inputForSearchField = new JTextField(20);
+
+        JLabel ticketDisplayOrderLabel = new JLabel("Order by:");
+        JComboBox<String> ticketDisplayOrderOptions = new JComboBox<>(new String[]{" ", "Order by NIF",
+                "Order by TicketID", "Order by Plate", "Order by Issua Date", "Order by Expiration Date",
+                "Order by Reason", "Order by Value"});
+
+        JButton searchButton = new JButton("Search");
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setBackground(GREEN);
+
+        searchButton.addActionListener(e -> {
+            String searchOption = (String) ticketDisplaySearchOptions.getSelectedItem();
+            String orderType = (String) ticketDisplayOrderOptions.getSelectedItem();
+            String rowsPerPage = (String) rowsPerPageOptions.getSelectedItem();
+            String input = inputForSearchField.getText();
+
+            if (!searchOption.equals(" ") && !orderType.equals(" ")) {
+                if (searchOption.equals("General Search")) {
+                    displaySearchByOrderTicket(rowsPerPage, dataSource.queryTickets(), ticketDisplayFrame, orderType);
+                } else {
+                    switch (searchOption) {
+                        case "Search by NIF" -> {
+                            if (isNIF(input)) {
+                                List<Ticket> ticketList = new ArrayList<>();
+                                dataSource.queryTickets().forEach(ticket -> {
+                                    if (ticket.getNif() == Integer.parseInt(input)) {
+                                        ticketList.add(ticket);
+                                    }
+                                });
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid NIF");
+                            }
+                        }
+                        case "Search by Plate" -> {
+                            if (isPlate(input)) {
+                                List<Ticket> ticketList = new ArrayList<>();
+                                dataSource.queryTickets().forEach(ticket -> {
+                                    if (ticket.getPlate().equals(input)) {
+                                        ticketList.add(ticket);
+                                    }
+                                });
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid plate");
+                            }
+                        }
+                        case "Search by Reason" -> {
+                            if (isValidString(input)) {
+                                List<Ticket> ticketList = new ArrayList<>();
+                                dataSource.queryTickets().forEach(ticket -> {
+                                    if (ticket.getReason().equals(input)) {
+                                        ticketList.add(ticket);
+                                    }
+                                });
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid reason");
+                            }
+                        }
+                        case "Search by Expiration Date" -> {
+                            if (isDate(input)) {
+                                List<Ticket> ticketList = new ArrayList<>();
+                                dataSource.queryTickets().forEach(ticket -> {
+                                    if (ticket.getExpiry_date().equals(Date.valueOf(input)) || ticket.getExpiry_date().after(Date.valueOf(input))) {
+                                        ticketList.add(ticket);
+                                    }
+                                });
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid date");
+                            }
+                        }
+                        case "Search by Value" -> {
+                            if (isDouble(input)) {
+                                List<Ticket> ticketList = new ArrayList<>();
+                                dataSource.queryTickets().forEach(ticket -> {
+                                    if (ticket.getValue() == Double.parseDouble(input) || ticket.getValue() > Double.parseDouble(input)) {
+                                        ticketList.add(ticket);
+                                    }
+                                });
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid value");
+                            }
+                        }
+                        case "Search by TicketID" -> {
+                            if (isInteger(input)) {
+                                List<Ticket> ticketList = new ArrayList<>();
+                                dataSource.queryTickets().forEach(ticket -> {
+                                    if (ticket.getTicketID() == Integer.parseInt(input)) {
+                                        ticketList.add(ticket);
+                                    }
+                                });
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid TicketID");
+                            }
+                        }
+                        case "Search by Paid Y(y) or N(n)" -> {
+                            if (input.compareToIgnoreCase("Y(y)") != 0 && input.compareToIgnoreCase("N(n)") != 0) {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter Y(y) or N(n)");
+                            } else {
+                                List<Ticket> ticketList = new ArrayList<>();
+                                dataSource.queryTickets().forEach(ticket -> {
+                                    final boolean booleanInput = input.compareToIgnoreCase("Y(y)") == 0;
+                                    if (ticket.isPaid() == booleanInput) {
+                                        ticketList.add(ticket);
+                                    }
+                                });
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                            }
+                        }
+                        case "Search by Issue Date" -> {
+                            if (isDate(input)) {
+                                List<Ticket> ticketList = new ArrayList<>();
+                                dataSource.queryTickets().forEach(ticket -> {
+                                    if (ticket.getDate().equals(Date.valueOf(input)) || ticket.getDate().after(Date.valueOf(input))) {
+                                        ticketList.add(ticket);
+                                    }
+                                });
+                                displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid date");
+                            }
+                        }
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(ticketDisplayFrame, "Please select a search and order option");
+            }
+        });
+
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {rowsPerPageLabel, ticketDisplaySearchLabel, ticketDisplayOrderLabel, inputForSearch};
+        JComboBox[] comboBoxes = {rowsPerPageOptions, ticketDisplaySearchOptions, ticketDisplayOrderOptions};
+
+        for (int i = 0; i < labels.length; i++) {
+           /* gbc.anchor = GridBagConstraints.LINE_START;
+            gbc.gridwidth = 1;
+            gbc.gridy++;
+            insuranceDisplayPanel.add(labels[i], gbc);
+            gbc.gridx++;
+            insuranceDisplayPanel.add(comboBoxes[i], gbc);*/
+
+            gbc.gridx = 0;
+            gbc.gridy = i + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            ticketDisplayPanel.add(labels[i], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+            if (i == 3) {
+                ticketDisplayPanel.add(inputForSearchField, gbc);
+            } else {
+                ticketDisplayPanel.add(comboBoxes[i], gbc);
+            }
+        }
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            ticketDisplayFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            searchMenuFrame.setVisible(true);
+            ticketDisplayFrame.setVisible(false);
+            ticketDisplayFrame.dispose();
+        });
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        ticketDisplayPanel.add(searchButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        ticketDisplayPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        ticketDisplayPanel.add(backButton, gbc);
+
+
+        ticketDisplayFrame.add(ticketDisplayPanel);
+        ticketDisplayFrame.setVisible(true);
+
+        ticketDisplayFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
+    }
+
+    private void displaySearchByOrderTicket(String rowsPerPage, List<Ticket> ticketList, JFrame
+            ticketDisplayFrame, String orderType) {
+        switch (orderType) {
+            case "Order by NIF":
+                ticketList.sort(Comparator.comparing(Ticket::getNif));
+                new TicketTableNavigation(Integer.parseInt(rowsPerPage),
+                        ticketDisplayFrame, ticketList);
+                break;
+            case "Order by TicketID":
+                ticketList.sort(Comparator.comparing(Ticket::getTicketID));
+                new TicketTableNavigation(Integer.parseInt(rowsPerPage),
+                        ticketDisplayFrame, ticketList);
+                break;
+            case "Order by Plate":
+                ticketList.sort(Comparator.comparing(Ticket::getPlate));
+                new TicketTableNavigation(Integer.parseInt(rowsPerPage),
+                        ticketDisplayFrame, ticketList);
+                break;
+            case "Order by Issue Date":
+                ticketList.sort(Comparator.comparing(Ticket::getDate));
+                new TicketTableNavigation(Integer.parseInt(rowsPerPage),
+                        ticketDisplayFrame, ticketList);
+                break;
+            case "Order by Expiration Date":
+                ticketList.sort(Comparator.comparing(Ticket::getExpiry_date));
+                new TicketTableNavigation(Integer.parseInt(rowsPerPage),
+                        ticketDisplayFrame, ticketList);
+                break;
+            case "Order by Reason":
+                ticketList.sort(Comparator.comparing(Ticket::getReason));
+                new TicketTableNavigation(Integer.parseInt(rowsPerPage),
+                        ticketDisplayFrame, ticketList);
+                break;
+            case "Order by Value":
+                ticketList.sort(Comparator.comparing(Ticket::getValue));
+                new TicketTableNavigation(Integer.parseInt(rowsPerPage),
+                        ticketDisplayFrame, ticketList);
+                break;
+        }
+
+    }
+
+    private void customerDisplayPage(JFrame searchMenuFrame) {
+        JFrame customerDisplayFrame = new JFrame("Customer Search Menu");
+        customerDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        customerDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JPanel customerDisplayPanel = new JPanel(new GridBagLayout());
+
+        JLabel customerDisplayLabel = new JLabel("Customer Search Menu");
+        customerDisplayLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        customerDisplayLabel.setForeground(new Color(0, 0, 90));
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        customerDisplayPanel.add(customerDisplayLabel, gbc);
+
+        JLabel rowsPerPageLabel = new JLabel("Rows per page:");
+        JComboBox<String> rowsPerPageOptions = new JComboBox<>(new String[]{"20", "30", "50", "100"});
+
+        JLabel customerDisplaySearchLabel = new JLabel("Search by:");
+        JComboBox<String> customerDisplaySearchOptions = new JComboBox<>(new String[]{" ", "General Search",
+                "Search by NIF", "Search by Name", "Search by Address", "Search by License Type",
+                "Search by License Number"});
+
+        JLabel inputForSearch = new JLabel("Input for search:");
+        JTextField inputForSearchField = new JTextField(20);
+
+        JLabel customerDisplayOrderLabel = new JLabel("Order by:");
+        JComboBox<String> customerDisplayOrderOptions = new JComboBox<>(new String[]{" ", "Order by NIF",
+                "Order by Name", "Order by Address", "Order by License Type", "Order by License Number",
+                "Order by Date of Birth", "Order by Date of License Issue", "Order by Date of License Expiration"});
+
+        JButton searchButton = new JButton("Search");
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setBackground(GREEN);
+        searchButton.addActionListener(e -> {
+            String searchOption = (String) customerDisplaySearchOptions.getSelectedItem();
+            String orderType = (String) customerDisplayOrderOptions.getSelectedItem();
+            String rowsPerPage = (String) rowsPerPageOptions.getSelectedItem();
+            String input = inputForSearchField.getText();
+
+            if (!searchOption.equals(" ") && !orderType.equals(" ")) {
+                if (searchOption.equals("General Search")) {
+                    displaySearchByOrderCustomer(rowsPerPage,
+                            dataSource.queryCustomers(), customerDisplayFrame, orderType);
+                } else {
+                    switch (searchOption) {
+
+                        case "Search by NIF" -> {
+                            if (isNIF(input)) {
+                                List<Customer> customerList = new ArrayList<>();
+                                customerList.add(dataSource.getCustomerByNIF(Integer.parseInt(input)));
+                                new CustomerTableNavigation(
+                                        Integer.parseInt(rowsPerPage), customerDisplayFrame, customerList);
+                            } else {
+                                JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid NIF");
+
+                            }
+                        }
+
+                        case "Search by Name" -> {
+                            if (isValidString(input)) {
+                                List<Customer> customerList = new ArrayList<>();
+                                dataSource.queryCustomers().forEach(customer -> {
+                                    if (customer.getName().contains(input)) {
+                                        customerList.add(customer);
+                                    }
+                                });
+                                displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid name");
+
+                            }
+                        }
+
+                        case "Search by Address" -> {
+                            if (isValidString(input)) {
+                                List<Customer> customerList = new ArrayList<>();
+                                dataSource.queryCustomers().forEach(customer -> {
+                                    if (customer.getAddress().contains(input)) {
+                                        customerList.add(customer);
+                                    }
+                                });
+                                displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid address");
+                            }
+                        }
+
+                        case "Search by License Type" -> {
+                            if (isValidString(input)) {
+                                List<Customer> customerList = new ArrayList<>();
+                                dataSource.queryCustomers().forEach(customer -> {
+                                    if (customer.getLicenseType().contains(input)) {
+                                        customerList.add(customer);
+                                    }
+                                });
+                                displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid license type");
+                            }
+                        }
+
+                        case "Search by License Number" -> {
+                            if (isDriverLicense(input)) {
+                                List<Customer> customerList = new ArrayList<>();
+                                for (Customer customer : dataSource.queryCustomers()) {
+                                    if (customer.getDriverLicenseNum() == Integer.parseInt(input)) {
+                                        customerList.add(customer);
+                                        break;
+                                    }
+                                }
+                                displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid license number");
+                            }
+                        }
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(customerDisplayFrame, "Please select a search and order option");
+            }
+        });
+
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {rowsPerPageLabel, customerDisplaySearchLabel, customerDisplayOrderLabel, inputForSearch};
+        JComboBox[] comboBoxes = {rowsPerPageOptions, customerDisplaySearchOptions, customerDisplayOrderOptions};
+
+        for (int i = 0; i < labels.length; i++) {
+           /* gbc.anchor = GridBagConstraints.LINE_START;
+            gbc.gridwidth = 1;
+            gbc.gridy++;
+            insuranceDisplayPanel.add(labels[i], gbc);
+            gbc.gridx++;
+            insuranceDisplayPanel.add(comboBoxes[i], gbc);*/
+
+            gbc.gridx = 0;
+            gbc.gridy = i + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            customerDisplayPanel.add(labels[i], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+            if (i == 3) {
+                customerDisplayPanel.add(inputForSearchField, gbc);
+            } else {
+                customerDisplayPanel.add(comboBoxes[i], gbc);
+            }
+        }
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            customerDisplayFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            searchMenuFrame.setVisible(true);
+            customerDisplayFrame.setVisible(false);
+        });
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        customerDisplayPanel.add(searchButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        customerDisplayPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        customerDisplayPanel.add(backButton, gbc);
+
+
+        customerDisplayFrame.add(customerDisplayPanel);
+        customerDisplayFrame.setVisible(true);
+
+        customerDisplayFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
+    }
+
+    private void displaySearchByOrderCustomer(String rowsPerPage, List<Customer> customerList,
+                                              JFrame customerDisplayFrame, String orderType) {
+        switch (orderType) {
+            case "Order by NIF":
+                customerList.sort(Comparator.comparing(Customer::getNif));
+                new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
+                        customerDisplayFrame, customerList);
+                break;
+            case "Order by Name":
+                customerList.sort(Comparator.comparing(Customer::getName));
+                new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
+                        customerDisplayFrame, customerList);
+                break;
+            case "Order by Address":
+                customerList.sort(Comparator.comparing(Customer::getAddress));
+                new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
+                        customerDisplayFrame, customerList);
+                break;
+            case "Order by License Type":
+                customerList.sort(Comparator.comparing(Customer::getLicenseType));
+                new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
+                        customerDisplayFrame, customerList);
+                break;
+            case "Order by License Number":
+                customerList.sort(Comparator.comparing(Customer::getDriverLicenseNum));
+                new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
+                        customerDisplayFrame, customerList);
+                break;
+            case "Order by Date of Birth":
+                customerList.sort(Comparator.comparing(Customer::getBirht_date));
+                new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
+                        customerDisplayFrame, customerList);
+                break;
+            case "Order by Date of License Issue":
+                customerList.sort(Comparator.comparing(Customer::getStartingDate));
+                new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
+                        customerDisplayFrame, customerList);
+                break;
+            case "Order by Date of License Expiration":
+                customerList.sort(Comparator.comparing(Customer::getExpDate));
+                new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
+                        customerDisplayFrame, customerList);
+                break;
+        }
+
+    }
+
+    private void employeeDisplayPage(JFrame searchMenuFrame) {
+        JFrame employeeDisplayFrame = new JFrame("Employee Search Menu");
+        employeeDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        employeeDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JPanel employeeDisplayPanel = new JPanel(new GridBagLayout());
+
+        JLabel customerDisplayLabel = new JLabel("Employee Search Menu");
+        customerDisplayLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        customerDisplayLabel.setForeground(new Color(0, 0, 90));
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        employeeDisplayPanel.add(customerDisplayLabel, gbc);
+
+        JLabel rowsPerPageLabel = new JLabel("Rows per page:");
+        JComboBox<String> rowsPerPageOptions = new JComboBox<>(new String[]{"20", "30", "50", "100"});
+
+        JLabel employeeDisplaySearchLabel = new JLabel("Search by:");
+        JComboBox<String> employeeDisplaySearchOptions = new JComboBox<>(new String[]{" ", "General Search",
+                "Search by NIF", "Search by Name", "Search by Address", "Search by Access Level"});
+
+        JLabel inputForSearch = new JLabel("Input for search:");
+        JTextField inputForSearchField = new JTextField(20);
+
+        JLabel employeeDisplayOrderLabel = new JLabel("Order by:");
+        JComboBox<String> employeeDisplayOrderOptions = new JComboBox<>(new String[]{" ", "Order by NIF",
+                "Order by Name", "Order by Address", "Order by Access Level", "Order by Date of Birth"});
+
+        JButton searchButton = new JButton("Search");
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setBackground(GREEN);
+
+        searchButton.addActionListener(e -> {
+            String searchOption = (String) employeeDisplaySearchOptions.getSelectedItem();
+            String orderType = (String) employeeDisplayOrderOptions.getSelectedItem();
+            String rowsPerPage = (String) rowsPerPageOptions.getSelectedItem();
+            String input = inputForSearchField.getText();
+
+            if (!searchOption.equals(" ") && !orderType.equals(" ")) {
+                if (searchOption.equals("General Search")) {
+                    displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
+                            employeeDisplayFrame, orderType);
+                } else {
+                    switch (searchOption) {
+
+                        case "Search by NIF" -> {
+                            if (isNIF(input)) {
+                                List<Employee> employees = new ArrayList<>();
+                                for (Employee employee1 : dataSource.queryEmployees()) {
+                                    if (employee1.getNif() == Integer.parseInt(input)) {
+                                        employees.add(employee1);
+                                        break;
+                                    }
+                                }
+                                displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
+                                        employeeDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid NIF");
+                            }
+                        }
+
+                        case "Search by Name" -> {
+                            if (isValidString(input)) {
+                                List<Employee> employees = new ArrayList<>();
+                                for (Employee employee1 : dataSource.queryEmployees()) {
+                                    if (employee1.getName().equals(input)) {
+                                        employees.add(employee1);
+                                    }
+                                }
+                                displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
+                                        employeeDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid name");
+                            }
+                        }
+
+                        case "Search by Address" -> {
+                            if (isValidString(input)) {
+                                List<Employee> employees = new ArrayList<>();
+                                for (Employee employee1 : dataSource.queryEmployees()) {
+                                    if (employee1.getAddress().equals(input)) {
+                                        employees.add(employee1);
+                                    }
+                                }
+                                displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
+                                        employeeDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid address");
+                            }
+                        }
+
+                        case "Search by Access Level" -> {
+                            if (isInteger(input)) {
+                                List<Employee> employees = new ArrayList<>();
+                                for (Employee employee1 : dataSource.queryEmployees()) {
+                                    if (employee1.getAccess_level() == Integer.parseInt(input)) {
+                                        employees.add(employee1);
+                                    }
+                                }
+                                displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
+                                        employeeDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid access level");
+                            }
+                        }
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(employeeDisplayFrame, "Please select a search option and an order option");
+            }
+        });
+
+        gbc.gridwidth = 1;
+        JLabel[] labels = {rowsPerPageLabel, employeeDisplaySearchLabel, employeeDisplayOrderLabel, inputForSearch};
+        JComboBox[] comboBoxes = {rowsPerPageOptions, employeeDisplaySearchOptions, employeeDisplayOrderOptions};
+
+        for (int i = 0; i < labels.length; i++) {
+            /*gbc.gridx = 0;
+            gbc.gridy++;
+            employeeDisplayPanel.add(labels[i], gbc);
+            gbc.gridx = 1;
+            employeeDisplayPanel.add(comboBoxes[i], gbc);*/
+
+            gbc.gridx = 0;
+            gbc.gridy = i + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            employeeDisplayPanel.add(labels[i], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+            if (i == 3) {
+//                gbc.fill = GridBagConstraints.HORIZONTAL;
+                employeeDisplayPanel.add(inputForSearchField, gbc);
+            } else {
+//                gbc.fill = GridBagConstraints.NONE;
+                employeeDisplayPanel.add(comboBoxes[i], gbc);
+            }
+        }
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            employeeDisplayFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            searchMenuFrame.setVisible(true);
+            employeeDisplayFrame.setVisible(false);
+        });
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        employeeDisplayPanel.add(searchButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        employeeDisplayPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(20, 10, 5, 10);
+        employeeDisplayPanel.add(backButton, gbc);
+
+        employeeDisplayFrame.add(employeeDisplayPanel);
+        employeeDisplayFrame.setVisible(true);
+
+        employeeDisplayFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+    }
+
+    private void displaySearchByOrderEmployee(String rowsPerPage, List<Employee> employees, JFrame
+            employeeDisplayFrame, String orderType) {
+        switch (orderType) {
+            case "Order by NIF":
+                employees.sort(Comparator.comparing(Employee::getNif));
+                new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
+                        employeeDisplayFrame, employees);
+                break;
+            case "Order by Name":
+                employees.sort(Comparator.comparing(Employee::getName));
+                new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
+                        employeeDisplayFrame, employees);
+                break;
+            case "Order by Address":
+                employees.sort(Comparator.comparing(Employee::getAddress));
+                new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
+                        employeeDisplayFrame, employees);
+                break;
+            case "Order by Access Level":
+                employees.sort(Comparator.comparing(Employee::getAccess_level));
+                new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
+                        employeeDisplayFrame, employees);
+                break;
+            case "Order by Date of Birth":
+                employees.sort(Comparator.comparing(Employee::getBirht_date));
+                new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
+                        employeeDisplayFrame, employees);
+                break;
+        }
+    }
+
+    private void vehicleDisplayPage(JFrame searchMenuFrame) {
+        JFrame vehicleDisplayFrame = new JFrame("Vehicle Display");
+        vehicleDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        vehicleDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        JPanel vehicleDisplayPanel = new JPanel(new GridBagLayout());
+        JLabel vehicleDisplayLabel = new JLabel("Vehicle Display");
+        vehicleDisplayLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        vehicleDisplayLabel.setForeground(new Color(0, 0, 90));
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        vehicleDisplayPanel.add(vehicleDisplayLabel, gbc);
+
+        JLabel rowsPerPageLabel = new JLabel("Rows per page: ");
+        JComboBox<String> rowsPerPageOptions = new JComboBox<>(new String[]{"20",
+                "30", "50", "100"});
+
+        JLabel vehicleDisplayOrderLabel = new JLabel("Order by: ");
+        JComboBox<String> vehicleDisplayOrderOptions = new JComboBox<>(new String[]{" ",
+                "License Plate", "Brand", "Color", "Year", "Issue Date",
+                "VIN", "NIF", "Category"});
+
+        JLabel vehicleDisplaySearchLabel = new JLabel("Search by: ");
+        JComboBox<String> vehicleDisplaySearchOptions = new JComboBox<>(new String[]{" ",
+                "General Search", "Search by Color", "Search by Brand", "Search by NIF",
+                "Search by Plate", "Search by VIN", "Search by Category", "Search by Issue Date"});
+
+        JLabel inputForSearch = new JLabel("Input for search:");
+        JTextField inputForSearchField = new JTextField(20);
+
+
+        JButton searchButton = new JButton("Search");
+        searchButton.setBackground(GREEN);
+        searchButton.setForeground(Color.WHITE);
+
+        searchButton.addActionListener(e -> {
+            String searchOption = (String) vehicleDisplaySearchOptions.getSelectedItem();
+            String orderType = (String) vehicleDisplayOrderOptions.getSelectedItem();
+            String rowsPerPage = (String) rowsPerPageOptions.getSelectedItem();
+            String input = (String) inputForSearchField.getText();
+
+            if (!searchOption.equals(" ") && !orderType.equals(" ")) {
+                if (searchOption.equals("General Search")) {
+                    displaySearchByOrderVehicle(rowsPerPage, dataSource.queryVehicles(), vehicleDisplayFrame, orderType);
+                } else {
+                    switch (searchOption) {
+                        case "Search by NIF" -> {
+                            if (isNIF(input)) {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getNif() == Integer.parseInt(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid NIF");
+                            }
+                        }
+
+                        case "Search by Brand" -> {
+                            if (isValidString(input)) {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getBrand().equals(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid input");
+                            }
+                        }
+
+                        case "Search by Color" -> {
+                            if (isValidString(input)) {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getColor().equals(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid color");
+                            }
+                        }
+
+                        case "Search by Category" -> {
+                            if (isValidString(input)) {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getCategory().equals(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid category");
+                            }
+                        }
+
+                        case "Search by Issue Date" -> {
+                            if (isDate(input)) {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getregistrationDate().equals(input) || vehicle.getregistrationDate().after(Date.valueOf(input))) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid Date");
+                            }
+                        }
+
+                        case "Search by VIN" -> {
+                            if (isVIN(input)) {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getVin().equals(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid VIN");
+                            }
+                        }
+
+                        case "Search by Plate" -> {
+                            if (isPlate(input)) {
+                                List<Vehicle> vehicleList = new ArrayList<>();
+                                dataSource.queryVehicles().forEach(vehicle -> {
+                                    if (vehicle.getPlate().equals(input)) {
+                                        vehicleList.add(vehicle);
+                                    }
+                                });
+                                displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                            } else {
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid plate");
+                            }
+                        }
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please, select an option for each field");
+            }
+        });
+        gbc.gridwidth = 1;
+        JLabel[] labels = {vehicleDisplaySearchLabel, vehicleDisplayOrderLabel, rowsPerPageLabel, inputForSearch};
+        JComboBox[] comboBoxes = {vehicleDisplaySearchOptions, vehicleDisplayOrderOptions, rowsPerPageOptions};
+
+        for (int i = 0; i < labels.length; i++) {
+            gbc.gridx = 0;
+            gbc.gridy = i + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            vehicleDisplayPanel.add(labels[i], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+
+            if (i == 3) {
+                vehicleDisplayPanel.add(inputForSearchField, gbc);
+            } else {
+                vehicleDisplayPanel.add(comboBoxes[i], gbc);
+            }
+        }
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e ->
+
+        {
+            vehicleDisplayFrame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e ->
+
+        {
+            searchMenuFrame.setVisible(true);
+            vehicleDisplayFrame.setVisible(false);
+        });
+
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.RELATIVE;
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new
+
+                Insets(20, 10, 5, 10);
+        vehicleDisplayPanel.add(searchButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new
+
+                Insets(20, 10, 5, 10);
+        vehicleDisplayPanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new
+
+                Insets(20, 10, 5, 10);
+        vehicleDisplayPanel.add(backButton, gbc);
+
+        vehicleDisplayFrame.add(vehicleDisplayPanel);
+        vehicleDisplayFrame.setVisible(true);
+
+        vehicleDisplayFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
+    }
+
+    private void displaySearchByOrderVehicle(String srowsPerPage, List<Vehicle> vehicles,
+                                             JFrame vehicleDisplayFrame, String orderOption) {
+        int rowsPerPage = Integer.parseInt(srowsPerPage);
+        switch (orderOption) {
+            case "License Plate" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getPlate));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "NIF" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getNif));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "VIN" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getVin));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "Category" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getCategory));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "Issue Date" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getregistrationDate));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "Brand" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getBrand));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "Model" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getModel));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            case "Color" -> {
+                vehicles.sort(Comparator.comparing(Vehicle::getColor));
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+            }
+            default -> {
+                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please select an option for each field");
+            }
+        }
+
     }
 
     //Update Menu
     private void buildUpdateMenuPage() {
-        JFrame updateMenuFrame = new JFrame("Update Menu");
-        updateMenuFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        updateMenuFrame.setSize(WIDTH, HEIGHT);
+        JFrame updateMenuFrame = new JFrame("Back Office Menu");
+        updateMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        updateMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JLabel updateMenuLabel = new JLabel("update Menu");
+        updateMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        updateMenuLabel.setForeground(BLUE);
+
+
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
-        JButton vehicleButton = new JButton("Update Vehicle");
-        JButton customerButton = new JButton("Update Customer");
-        JButton ticketButton = new JButton("Pay Ticket");
-        JPanel updateMenuPanel = new JPanel();
-        updateMenuPanel.setLayout(new GridLayout(7, 1));
-        updateMenuPanel.add(vehicleButton);
-        updateMenuPanel.add(customerButton);
-        updateMenuPanel.add(ticketButton);
-        updateMenuPanel.add(backButton);
-        updateMenuPanel.add(exitButton);
+        JButton vehicleUpdate = new JButton("Vehicle Update Menu");
+        JButton customerUpdate = new JButton("Customer Update Menu");
+        JButton ticketUpdate = new JButton("Pay Ticket Menu");
+        JPanel updateMenuPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        updateMenuPanel.add(updateMenuLabel, gbc);
+
+        gbc.gridy = 1;
+
+        JButton[] buttons = {vehicleUpdate, customerUpdate, ticketUpdate};
+
+        for (int i = 0; i < buttons.length; i++) {
+            gbc.gridy = i + 1;
+            buttons[i].setBackground(GREEN);
+            buttons[i].setForeground(WHITE);
+            ;
+            updateMenuPanel.add(buttons[i], gbc);
+        }
+
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        updateMenuPanel.add(exitButton, gbc);
+        gbc.gridx = 1;
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        updateMenuPanel.add(backButton, gbc);
+
+
         updateMenuFrame.add(updateMenuPanel);
         mainFrame.setVisible(false);
         updateMenuFrame.setVisible(true);
-        vehicleButton.addActionListener(e -> {
-            updateVehiclePage(updateMenuFrame);
-        });
-        customerButton.addActionListener(e -> {
-            updateCustomerPage(updateMenuFrame);
-        });
-        ticketButton.addActionListener(e -> {
-            payTicketPage(updateMenuFrame);
-        });
+
         backButton.addActionListener(e -> {
             mainFrame.setVisible(true);
             updateMenuFrame.setVisible(false);
         });
-        exitButton.addActionListener(e -> System.exit(0));
+        exitButton.addActionListener(e -> {
+            dataSource.close();
+            updateMenuFrame.dispose();
+            System.exit(0);
+        });
+
+        ActionListener goToPageListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton button = (JButton) e.getSource();
+                updateMenuFrame.setVisible(false);
+
+                if (button == vehicleUpdate) updateVehiclePage(updateMenuFrame);
+                else if (button == customerUpdate) updateCustomerPage(updateMenuFrame);
+                else if (button == ticketUpdate) payTicketPage(updateMenuFrame);
+            }
+        };
+
+        vehicleUpdate.addActionListener(goToPageListener);
+        customerUpdate.addActionListener(goToPageListener);
+        ticketUpdate.addActionListener(goToPageListener);
+
+        updateMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
     }
 
     //DONE
@@ -555,28 +2110,67 @@ public class MenuEmployee implements ValidateInput {
 
     //Deactivate Menu
     private void buildDeactivateMenuPage() {
-        deactivateMenuFrame = new JFrame("Deactivation Menu");
-        deactivateMenuFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        deactivateMenuFrame.setSize(WIDTH, HEIGHT);
+        JFrame deactivateMenuFrame = new JFrame("Deactivation Menu");
+        deactivateMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        deactivateMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JLabel deactivateMenuLabel = new JLabel("Deactivation Menu");
+        deactivateMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        deactivateMenuLabel.setForeground(BLUE);
+
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
         JButton vehicleDeactivation = new JButton("Vehicle Deactivation Menu");
         JButton customerDeactivation = new JButton("Customer Deactivation Menu");
         JButton ticketDeactivation = new JButton("Ticket Deactivation Menu");
         JButton insuranceDeactivation = new JButton("Insurance Deactivation Menu");
-        JPanel deactivationMenuPanel = new JPanel();
-        deactivationMenuPanel.setLayout(new GridLayout(7, 1));
+        JPanel deactivationMenuPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        deactivationMenuPanel.add(deactivateMenuLabel, gbc);
 
-        deactivationMenuPanel.add(vehicleDeactivation);
-        deactivationMenuPanel.add(customerDeactivation);
-        deactivationMenuPanel.add(ticketDeactivation);
-        deactivationMenuPanel.add(insuranceDeactivation);
-        deactivationMenuPanel.add(backButton);
-        deactivationMenuPanel.add(exitButton);
+        gbc.gridy = 1;
+        JButton[] buttons = {vehicleDeactivation, customerDeactivation, ticketDeactivation, insuranceDeactivation};
+
+        for (int i = 0; i < buttons.length; i++) {
+            gbc.gridy = i + 1;
+            buttons[i].setBackground(GREEN);
+            buttons[i].setForeground(WHITE);
+            ;
+            deactivationMenuPanel.add(buttons[i], gbc);
+        }
+
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        deactivationMenuPanel.add(exitButton, gbc);
+        gbc.gridx = 1;
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        deactivationMenuPanel.add(backButton, gbc);
 
         deactivateMenuFrame.add(deactivationMenuPanel);
         mainFrame.setVisible(false);
         deactivateMenuFrame.setVisible(true);
+        backButton.addActionListener(e -> {
+            mainFrame.setVisible(true);
+            deactivateMenuFrame.setVisible(false);
+        });
+        exitButton.addActionListener(e -> {
+            dataSource.close();
+            System.exit(0);
+        });
 
         ActionListener goToPageListener = new ActionListener() {
             @Override
@@ -584,13 +2178,13 @@ public class MenuEmployee implements ValidateInput {
                 JButton button = (JButton) e.getSource();
                 deactivateMenuFrame.setVisible(false);
                 if (button == vehicleDeactivation)
-                    deactivateVehiclePage();
+                    deactivateVehiclePage(deactivateMenuFrame);
                 else if (button == customerDeactivation)
-                    deactivateCustomerPage();
+                    deactivateCustomerPage(deactivateMenuFrame);
                 else if (button == ticketDeactivation)
-                    deactivateTicketPage();
+                    deactivateTicketPage(deactivateMenuFrame);
                 else if (button == insuranceDeactivation)
-                    deactivateInsurancePage();
+                    deactivateInsurancePage(deactivateMenuFrame);
             }
         };
 
@@ -599,16 +2193,16 @@ public class MenuEmployee implements ValidateInput {
         ticketDeactivation.addActionListener(goToPageListener);
         insuranceDeactivation.addActionListener(goToPageListener);
 
-        backButton.addActionListener(e -> {
-            JButton button = (JButton) e.getSource();
-            mainFrame.setVisible(true);
-            deactivateMenuFrame.setVisible(false);
+        deactivateMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
         });
-        exitButton.addActionListener(e -> System.exit(0));
     }
 
     //receives an insurance number and then proceeds to deactivate the insurance sending a success message
-    private void deactivateInsurancePage() {
+    private void deactivateInsurancePage(JFrame deactivateMenuFrame) {
         JFrame deactivateInsuranceFrame = new JFrame("Deactivate Ticket");
         deactivateInsuranceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateInsuranceFrame.setBackground(Color.WHITE);
@@ -708,7 +2302,7 @@ public class MenuEmployee implements ValidateInput {
     }
 
     //receives a ticket id and then proceeds to deactivate the ticket sending a success message
-    private void deactivateTicketPage() {
+    private void deactivateTicketPage(JFrame deactivateMenuFrame) {
         JFrame deactivateTicketFrame = new JFrame("Deactivate Ticket");
         deactivateTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateTicketFrame.setBackground(Color.WHITE);
@@ -808,7 +2402,7 @@ public class MenuEmployee implements ValidateInput {
     }
 
     //receives a customer nif and then proceeds to deactivate the customer sending a success message
-    private void deactivateCustomerPage() {
+    private void deactivateCustomerPage(JFrame deactivateMenuFrame) {
         JFrame deactivateCustomerFrame = new JFrame("Deactivate Customer");
         deactivateCustomerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateCustomerFrame.setBackground(Color.WHITE);
@@ -911,7 +2505,7 @@ public class MenuEmployee implements ValidateInput {
     }
 
     //receives a license plate and then proceeds to deactivate the vehicle sending a success message
-    private void deactivateVehiclePage() {
+    private void deactivateVehiclePage(JFrame deactivateMenuFrame) {
         JFrame deactivateVehicleFrame = new JFrame("Deactivate Vehicle");
         deactivateVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateVehicleFrame.setBackground(Color.WHITE);
@@ -1016,46 +2610,90 @@ public class MenuEmployee implements ValidateInput {
     //Insert Menu
     private void buildInsertMenuPage() {
         JFrame insertMenuFrame = new JFrame("Insert Menu");
-        insertMenuFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        insertMenuFrame.setSize(WIDTH, HEIGHT);
+        insertMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        insertMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JLabel insertMenuLabel = new JLabel("Insert Menu");
+        insertMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        insertMenuLabel.setForeground(BLUE);
+
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
         JButton vehicleInsert = new JButton("Insert Vehicle Menu");
-        JButton employeeInsert = new JButton("Insert Employee Menu");
         JButton customerInsert = new JButton("Insert Customer Menu");
         JButton ticketInsert = new JButton("Insert Ticket Menu");
         JButton insuranceInsert = new JButton("Insert Insurance Menu");
-        JPanel insertMenuPanel = new JPanel();
-        insertMenuPanel.setLayout(new GridLayout(7, 1));
-        insertMenuPanel.add(vehicleInsert);
-        insertMenuPanel.add(customerInsert);
-        insertMenuPanel.add(ticketInsert);
-        insertMenuPanel.add(insuranceInsert);
-        insertMenuPanel.add(backButton);
-        insertMenuPanel.add(exitButton);
+        JPanel insertMenuPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        insertMenuPanel.add(insertMenuLabel, gbc);
+
+        gbc.gridy = 1;
+        JButton[] buttons = {vehicleInsert, customerInsert, ticketInsert, insuranceInsert};
+        for (int i = 0; i < buttons.length; i++) {
+            gbc.gridy = i + 1;
+            buttons[i].setBackground(GREEN);
+            buttons[i].setForeground(WHITE);
+            ;
+            insertMenuPanel.add(buttons[i], gbc);
+        }
+
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        insertMenuPanel.add(exitButton, gbc);
+        gbc.gridx = 1;
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        insertMenuPanel.add(backButton, gbc);
+
+
         insertMenuFrame.add(insertMenuPanel);
         mainFrame.setVisible(false);
         insertMenuFrame.setVisible(true);
-
-        //Action listeners for the buttons
-        vehicleInsert.addActionListener(e -> {
-            insertVehicle(insertMenuFrame);
-        });
-        customerInsert.addActionListener(e -> {
-            insertCustomer(insertMenuFrame);
-        });
-        ticketInsert.addActionListener(e -> {
-            insertTicket(insertMenuFrame);
-        });
-        insuranceInsert.addActionListener(e -> {
-            insertInsurance(insertMenuFrame);
-        });
         backButton.addActionListener(e -> {
             mainFrame.setVisible(true);
             insertMenuFrame.setVisible(false);
         });
-        exitButton.addActionListener(e -> System.exit(0));
+        exitButton.addActionListener(e -> {
+            dataSource.close();
+            System.exit(0);
+        });
+        ActionListener goToPageListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton button = (JButton) e.getSource();
+                insertMenuFrame.setVisible(false);
 
+                if (button == vehicleInsert) insertVehicle(insertMenuFrame);
+                else if (button == customerInsert) insertCustomer(insertMenuFrame);
+                else if (button == ticketInsert) insertTicket(insertMenuFrame);
+                else if (button == insuranceInsert) insertInsurance(insertMenuFrame);
+            }
+        };
+
+        vehicleInsert.addActionListener(goToPageListener);
+        customerInsert.addActionListener(goToPageListener);
+        ticketInsert.addActionListener(goToPageListener);
+        insuranceInsert.addActionListener(goToPageListener);
+
+        insertMenuFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
     }
 
     //Methods that build the Little insert Windows
