@@ -220,13 +220,18 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.33;
-        taskMenuPanel.add(exitButton, gbc);
-
-        gbc.gridx = 1;
-        taskMenuPanel.add(backButton, gbc);
+        taskMenuPanel.add(viewAllTasks, gbc);
 
         gbc.gridx = 2;
         taskMenuPanel.add(executeTask, gbc);
+
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        taskMenuPanel.add(exitButton, gbc);
+
+        gbc.gridx = 2;
+        taskMenuPanel.add(backButton, gbc);
+
 
         taskMenuFrame.add(taskMenuPanel);
         taskMenuFrame.setVisible(true);
@@ -1486,8 +1491,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             }
         });
         gbc.gridwidth = 1;
-        JLabel[] labels = {vehicleDisplaySearchLabel, vehicleDisplayOrderLabel, rowsPerPageLabel, inputForSearch};
-        JComboBox[] comboBoxes = {vehicleDisplaySearchOptions, vehicleDisplayOrderOptions, rowsPerPageOptions};
+        JLabel[] labels = {rowsPerPageLabel, vehicleDisplaySearchLabel, vehicleDisplayOrderLabel, inputForSearch};
+        JComboBox[] comboBoxes = {rowsPerPageOptions, vehicleDisplaySearchOptions, vehicleDisplayOrderOptions};
 
         for (int i = 0; i < labels.length; i++) {
             gbc.gridx = 0;
@@ -1734,7 +1739,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel updateTicketPanel = new JPanel(new GridBagLayout());
-        updateTicketPanel.setBackground(Color.WHITE);
 
         JLabel updateTicketLabel = new JLabel("Pay Ticket");
         updateTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -1840,7 +1844,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel updatePersonPanel = new JPanel(new GridBagLayout());
-        updatePersonPanel.setBackground(Color.WHITE);
 
         JLabel updatePersonLabel = new JLabel("Update Person");
         updatePersonLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2113,7 +2116,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel updateVehiclePanel = new JPanel(new GridBagLayout());
-        updateVehiclePanel.setBackground(Color.WHITE);
 
         JLabel updateVehicleLabel = new JLabel("Update Vehicle");
         updateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2323,7 +2325,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel deactivateCustomerPanel = new JPanel(new GridBagLayout());
-        deactivateCustomerPanel.setBackground(Color.WHITE);
 
         JLabel deactivateVehicleLabel = new JLabel("Deactivate Customer");
         deactivateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2422,7 +2423,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel deactivateTicketPanel = new JPanel(new GridBagLayout());
-        deactivateTicketPanel.setBackground(Color.WHITE);
 
         JLabel deactivateTicketLabel = new JLabel("Deactivate Ticket");
         deactivateTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2520,7 +2520,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel deactivateInsurancePanel = new JPanel(new GridBagLayout());
-        deactivateInsurancePanel.setBackground(Color.WHITE);
 
         JLabel deactivateInsuranceLabel = new JLabel("Deactivate Insured Policy ");
         deactivateInsuranceLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2619,7 +2618,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel deactivateVehiclePanel = new JPanel(new GridBagLayout());
-        deactivateVehiclePanel.setBackground(Color.WHITE);
 
         JLabel deactivateVehicleLabel = new JLabel("Pay Ticket");
         deactivateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2989,7 +2987,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton exitButton = new JButton("Exit");
         JButton submit = new JButton("Execute Delete");
 
-        JLabel insurancePolicy = new JLabel("policy: (XX-XX-XX)");
+        JLabel insurancePolicy = new JLabel("Policy: (8 digits)");
         JTextField insurancePolicyField = new JTextField(9);
 
         gbc.gridy = 1;
@@ -3343,14 +3341,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void insertInsurance(JFrame insertMenuFrame) {
         JFrame insertInsuranceFrame = new JFrame("Register Insurance");
         insertInsuranceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertInsuranceFrame.setBackground(Color.WHITE);
+        insertInsuranceFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
         JPanel insertInsurancePanel = new JPanel(new GridBagLayout());
-        insertInsurancePanel.setBackground(Color.WHITE);
 
         JLabel insertInsuranceLabel = new JLabel("Insert Insurance Page");
         insertInsuranceLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -3496,14 +3493,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void insertTicket(JFrame insertMenuFrame) {
         JFrame insertTicketFrame = new JFrame("Register Ticket");
         insertTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertTicketFrame.setBackground(Color.WHITE);
+        insertTicketFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
         JPanel insertTicketPanel = new JPanel(new GridBagLayout());
-        insertTicketPanel.setBackground(Color.WHITE);
 
         JLabel insertTicketLabel = new JLabel("Insert Ticket Page");
         insertTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -3633,14 +3629,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void insertEmployee(JFrame insertMenuFrame) {
         JFrame insertEmployeeFrame = new JFrame("Insert Employee");
         insertEmployeeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertEmployeeFrame.setBackground(Color.WHITE);
+        insertEmployeeFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
         JPanel insertEmployeePanel = new JPanel(new GridBagLayout());
-        insertEmployeePanel.setBackground(Color.WHITE);
 
         JLabel insertEmployeeLabel = new JLabel("Insert Employee Page");
         insertEmployeeLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -3777,14 +3772,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void insertCustomer(JFrame insertMenuFrame) {
         JFrame insertCustomerFrame = new JFrame("Insert Customer");
         insertCustomerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertCustomerFrame.setBackground(Color.WHITE);
+        insertCustomerFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
         JPanel insertCustomerPanel = new JPanel(new GridBagLayout());
-        insertCustomerPanel.setBackground(Color.WHITE);
 
         JLabel insertCustomerLabel = new JLabel("Insert Customer Page");
         insertCustomerLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -3937,7 +3931,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private void insertVehicle(JFrame insertMenuFrame) {
         JFrame insertVehicleFrame = new JFrame("Insert Vehicle");
         insertVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertVehicleFrame.setBackground(Color.WHITE);
+        insertVehicleFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -3964,7 +3958,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         //SET UP para botoes de exit
         JPanel insertVehiclePanel = new JPanel(new GridBagLayout());
-        insertVehiclePanel.setBackground(Color.WHITE);
 
         JLabel insertVehicleLabel = new JLabel("Insert Vehicle");
         insertVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
