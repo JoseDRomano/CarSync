@@ -3,6 +3,8 @@ package model;
 import employeeacess.DataSource;
 
 import javax.swing.table.AbstractTableModel;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -99,6 +101,16 @@ public class Insurance implements Comparable<Insurance> {
     @Override
     public int compareTo(Insurance o) {
         return this.policy - o.policy;
+    }
+
+    public void renew() {
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        java.sql.Date sqlDate = java.sql.Date.valueOf(currentDate);
+        if(expDate.after(sqlDate)) {
+            LocalDate newDate = currentDate.plusYears(1);
+            expDate = java.sql.Date.valueOf(newDate);
+        }
     }
 
     public static class InsuranceTableModel extends AbstractTableModel {

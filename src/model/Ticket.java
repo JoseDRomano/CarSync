@@ -1,6 +1,8 @@
 package model;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Ticket implements Comparable<Ticket> {
 
@@ -129,6 +131,16 @@ public class Ticket implements Comparable<Ticket> {
     @Override
     public int compareTo(Ticket o) {
         return this.nif - o.nif;
+    }
+
+    public void renew() {
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        Date sqlDate = Date.valueOf(currentDate);
+        if(expiry_date.after(sqlDate)) {
+            LocalDate newDate = currentDate.plusMonths(3);
+            expiry_date = Date.valueOf(newDate);
+        }
     }
 
 

@@ -5,6 +5,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import util.UserWriterAux;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -312,6 +314,7 @@ public class DataSource {
                 insurance.setCompanyName(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_COMPANY)));
                 insurances.add(insurance);
             }
+            insurances.forEach(i -> i.renew());
             return insurances;
 
         } catch (SQLException e) {
@@ -364,6 +367,7 @@ public class DataSource {
                 ticket.setTicketID(resultSet.getInt(TicketEnum.getString(TicketEnum.COLUMN_TICKET_ID)));
                 tickets.add(ticket);
             }
+            tickets.forEach(t -> t.renew());
             return tickets;
 
         } catch (SQLException e) {
