@@ -2,6 +2,7 @@ package employeeacess;
 
 import model.*;
 import org.mindrot.jbcrypt.BCrypt;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +26,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private final Color GREEN = new Color(0, 100, 0);
     private final Color RED = new Color(100, 0, 0);
     private final Color BLUE = new Color(0, 0, 100);
+    private static final Logger logger = Logger.getLogger(BackOfficeAdminMenu.class);
 
 
     public BackOfficeAdminMenu(Employee employee) {
