@@ -8,7 +8,7 @@ import model.Vehicle;
 import java.util.List;
 import java.util.Scanner;
 
-public class FrontOffice implements getInputValues{
+public class FrontOffice {
     private DataSource dataSource;
     private Customer customer;
     private Scanner scan;
@@ -211,7 +211,7 @@ public class FrontOffice implements getInputValues{
             return;
         }
         System.out.println("Insert the plate of the vehicle you want to insert: ");
-        String plate = getPlate(scan);
+        /*String plate = getPlate(scan);
         System.out.println("Insert the brand of the vehicle you want to insert: ");
         String brand = getString(scan);
         System.out.println("Insert the model of the vehicle you want to insert: ");
@@ -219,7 +219,7 @@ public class FrontOffice implements getInputValues{
         System.out.println("Insert the registration date of the vehicle you want to insert: ");
         java.sql.Date registrationDate = getDate(scan);
         System.out.println("Insert the VIN of the owner of the vehicle you want to insert: ");
-        String vin = getVIN(scan);
+        String vin = getVIN(scan);*/
 
 
     }
