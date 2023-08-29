@@ -59,6 +59,22 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+//        mainFrame.setLayout(new BorderLayout());
+
+
+        ImageIcon imageIcon = new ImageIcon("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\CarSyncSmaller.png");
+        JLabel imageLabel = new JLabel(imageIcon);
+
+//        GridBagConstraints gbc2 = new GridBagConstraints();
+//        gbc2.gridx = 0;
+//        gbc2.gridy = 0;
+//        gbc2.gridheight = 3;
+//        gbc2.insets = new Insets(5, 5, 5, 5);
+//        gbc2.anchor = GridBagConstraints.NORTHWEST;
+//        JPanel logoPanel = new JPanel();
+//        logoPanel.add(imageLabel, gbc2);
+//        mainFrame.add(logoPanel, BorderLayout.WEST);
+
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         exitButton.addActionListener(e -> {
@@ -72,12 +88,16 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
+//        gbc.anchor = GridBagConstraints.NORTHWEST;
+//        mainPanel.add(imageLabel, gbc);
 
+//        gbc.gridy = 1;
         JLabel mainLabel = new JLabel("Welcome " + employee.getName());
-        mainLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        mainLabel.setFont(new Font("Arial", Font.BOLD, 40));
         mainLabel.setForeground(BLUE);
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -106,7 +126,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
 
-        mainFrame.add(mainPanel);
+        mainFrame.add(mainPanel, BorderLayout.CENTER);
         mainFrame.setVisible(true);
 
         ActionListener goToPageListener = new ActionListener() {
@@ -751,6 +771,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             if (!searchOption.equals(" ") && !orderType.equals(" ")) {
                 if (searchOption.equals("General Search")) {
                     displaySearchByOrderTicket(rowsPerPage, dataSource.queryTickets(), ticketDisplayFrame, orderType);
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " displayed all the tickets order by: " + orderType);
                 } else {
                     switch (searchOption) {
                         case "Search by NIF" -> {
@@ -762,8 +784,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with NIF: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid NIF");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with NIF: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by Plate" -> {
@@ -775,8 +803,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with plate: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid plate");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with plate: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by Reason" -> {
@@ -788,8 +822,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with reason: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid reason");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with reason: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by Expiration Date" -> {
@@ -801,8 +841,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with expiration date: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with expiration date: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by Value" -> {
@@ -814,8 +860,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with value: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid value");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with value: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by TicketID" -> {
@@ -827,8 +879,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with ticketID: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid TicketID");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with ticketID: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by Paid Y(y) or N(n)" -> {
@@ -843,6 +901,9 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with paid: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by Issue Date" -> {
@@ -854,8 +915,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with issue date: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with issue date: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                     }
@@ -909,6 +976,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to search menu page");
             searchMenuFrame.setVisible(true);
             ticketDisplayFrame.setVisible(false);
             ticketDisplayFrame.dispose();
@@ -1162,6 +1231,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to search menu page");
             searchMenuFrame.setVisible(true);
             customerDisplayFrame.setVisible(false);
         });
@@ -1295,6 +1366,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 if (searchOption.equals("General Search")) {
                     displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
                             employeeDisplayFrame, orderType);
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " displayed all the employees order by: " + orderType);
                 } else {
                     switch (searchOption) {
 
@@ -1309,8 +1382,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                 }
                                 displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
                                         employeeDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the employees with NIF: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid NIF");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the employees with NIF: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
 
@@ -1324,8 +1403,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                 }
                                 displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
                                         employeeDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the employees with name: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid name");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the employees with name: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
 
@@ -1339,8 +1424,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                 }
                                 displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
                                         employeeDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the employees with address: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid address");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the employees with address: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
 
@@ -1354,8 +1445,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                 }
                                 displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
                                         employeeDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the employees with access level: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid access level");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the employees with access level: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                     }
@@ -1409,6 +1506,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to search menu page");
             searchMenuFrame.setVisible(true);
             employeeDisplayFrame.setVisible(false);
         });
@@ -2376,6 +2475,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submit.setBackground(GREEN);
         submit.setForeground(WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to update menu page");
             updateVehicleFrame.setVisible(false);
             updateMenuFrame.setVisible(true);
         });
@@ -2540,6 +2641,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         mainFrame.setVisible(false);
         deactivateMenuFrame.setVisible(true);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to update menu page");
             mainFrame.setVisible(true);
             deactivateMenuFrame.setVisible(false);
         });
@@ -3095,6 +3198,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         mainFrame.setVisible(false);
         deleteMenuFrame.setVisible(true);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to delete menu page");
             mainFrame.setVisible(true);
             deleteMenuFrame.setVisible(false);
         });

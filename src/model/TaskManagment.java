@@ -147,7 +147,7 @@ public class TaskManagment {
         return null;
     }
 
-    private List<Task> getOtherEmployeesTaskList(int accessLevel) {
+    public List<Task> getTaskList(int accessLevel) {
         if (accessLevel == 2) {
             if (taskList.isEmpty()) {
                 return null;
@@ -228,9 +228,13 @@ public class TaskManagment {
     }
 
 
-    public List<Task> getTaskList(int accessLevel) {
-        return taskList;
-    }
+//    public List<Task> getTaskList(int accessLevel) {
+//        if (accessLevel == 2) {
+//            return taskList;
+//        } else {
+//            return getOtherEmployeesTaskList(accessLevel);
+//        }
+//    }
 
 
     public boolean writeTaskToFile(TaskType type, String status, String date, int nif, String info) {
