@@ -103,10 +103,10 @@ public class TaskTableNavigation {
         });
 
         JPanel navPanel = new JPanel();
+        navPanel.add(exitButton);
         navPanel.add(prevButton);
         navPanel.add(pageInfoLabel);
         navPanel.add(nextButton);
-        navPanel.add(exitButton);
         navPanel.add(backButton);
 
         frame.setLayout(new BorderLayout());
