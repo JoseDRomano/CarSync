@@ -216,13 +216,16 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 //        exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
-            dataSource.close();
+                    + " NIF: " + employee.getNif() + "logged out");
             taskMenuFrame.dispose();
+            mainFrame.dispose();
+            dataSource.close();
             System.exit(0);
         });
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " entered the Main Menu");
             mainFrame.setVisible(true);
             taskMenuFrame.setVisible(false);
             taskMenuFrame.dispose();
@@ -260,19 +263,23 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             new TaskTableNavigation(taskMenuFrame, employee.getAccess_level());
         });
 
-
         gbc.gridy = 3;
         gbc.gridx = 0;
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.33;
-        taskMenuPanel.add(exitButton, gbc);
-
-        gbc.gridx = 1;
-        taskMenuPanel.add(backButton, gbc);
+        taskMenuPanel.add(viewAllTasks, gbc);
 
         gbc.gridx = 2;
         taskMenuPanel.add(executeTask, gbc);
+
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        taskMenuPanel.add(exitButton, gbc);
+
+        gbc.gridx = 2;
+        taskMenuPanel.add(backButton, gbc);
+
 
         taskMenuFrame.add(taskMenuPanel);
         taskMenuFrame.setVisible(true);
