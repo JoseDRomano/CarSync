@@ -142,7 +142,7 @@ public class MenuEmployee implements ValidateInput {
     }
 
     private void buildTaskMenuPage() {
-        JFrame taskMenuFrame = new JFrame("Back Office Menu");
+        JFrame taskMenuFrame = new JFrame("CarSync");
         taskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         taskMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -195,12 +195,17 @@ public class MenuEmployee implements ValidateInput {
 //        exitButton.setBackground(RED);
 //        exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + "logged out");
             taskMenuFrame.dispose();
+            mainFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " entered the Main Menu");
             mainFrame.setVisible(true);
             taskMenuFrame.setVisible(false);
             taskMenuFrame.dispose();
@@ -213,9 +218,19 @@ public class MenuEmployee implements ValidateInput {
                 JOptionPane.showMessageDialog(null, "Cannot execute task, no tasks to execute");
             } else {
                 if (task.perFormTask(dataSource)) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " completed the task with ID: " + task.getTaskID());
                     JOptionPane.showMessageDialog(null, "Task Completed");
-                    taskDisplay.setText(new TaskManagment().getNextTask(employee.getAccess_level()).toString());
+//                    taskDisplay.setText(new TaskManagment().getNextTask(employee.getAccess_level()).toString());
+//                    TaskManagment taskManagment2 = new TaskManagment();
+//                    Task task2 = taskManagment2.getNextTask(employee.getAccess_level());
+//                    String taskInDisplay2 = (task2 == null) ? "No tasks to display" : task2.toString();
+//                    taskDisplay.setText(taskInDisplay2);
+                    taskMenuFrame.dispose();
+                    buildTaskMenuPage();
                 } else {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " failed to perform the task with ID: " + task.getTaskID());
                     JOptionPane.showMessageDialog(null, "Task Failed");
                 }
             }
@@ -224,6 +239,10 @@ public class MenuEmployee implements ValidateInput {
         viewAllTasks.setBackground(BLUE);
         viewAllTasks.setForeground(Color.WHITE);
         viewAllTasks.addActionListener(e -> {
+
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " entered the View All Tasks Page");
+
             taskMenuFrame.setVisible(false);
             new TaskTableNavigation(taskMenuFrame, employee.getAccess_level());
         });
@@ -233,13 +252,18 @@ public class MenuEmployee implements ValidateInput {
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.33;
-        taskMenuPanel.add(exitButton, gbc);
-
-        gbc.gridx = 1;
-        taskMenuPanel.add(backButton, gbc);
+        taskMenuPanel.add(viewAllTasks, gbc);
 
         gbc.gridx = 2;
         taskMenuPanel.add(executeTask, gbc);
+
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        taskMenuPanel.add(exitButton, gbc);
+
+        gbc.gridx = 2;
+        taskMenuPanel.add(backButton, gbc);
+
 
         taskMenuFrame.add(taskMenuPanel);
         taskMenuFrame.setVisible(true);
@@ -247,6 +271,8 @@ public class MenuEmployee implements ValidateInput {
         taskMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
