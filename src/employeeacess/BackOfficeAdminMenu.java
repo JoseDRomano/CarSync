@@ -55,7 +55,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton exitButton = new JButton("Exit");
 
         this.employee = employee;
-        mainFrame = new JFrame("CarSync ");
+        mainFrame = new JFrame("CarSync - Back Office");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -1109,6 +1109,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 if (searchOption.equals("General Search")) {
                     displaySearchByOrderCustomer(rowsPerPage,
                             dataSource.queryCustomers(), customerDisplayFrame, orderType);
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " displayed all the customers ordered by: " + orderType);
                 } else {
                     switch (searchOption) {
 
@@ -1118,8 +1120,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                 customerList.add(dataSource.getCustomerByNIF(Integer.parseInt(input)));
                                 new CustomerTableNavigation(
                                         Integer.parseInt(rowsPerPage), customerDisplayFrame, customerList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the customers with NIF: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid NIF");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the customers with NIF: " + input
+                                        + "ordered by: " + orderType);
 
                             }
                         }
@@ -1133,9 +1141,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the customers with name: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid name");
-
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the customers with name: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
 
@@ -1148,8 +1161,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the customers with address: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid address");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the customers with address: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
 
@@ -1162,8 +1181,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the customers with license type: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid license type");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the customers with license type: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
 
@@ -1177,8 +1202,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                     }
                                 }
                                 displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the customers with license number: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid license number");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the customers with license number: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                     }

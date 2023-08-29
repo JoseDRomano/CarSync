@@ -47,7 +47,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 + employee.getNif() + " initialized the BackOffice Menu");
 
 
-        JButton insertMenu = new JButton("Insert Menu");
+        JButton insertMenu = new JButton("Registration Menu");
         JButton updateMenu = new JButton("Update Menu");
         JButton taskMenu = new JButton("Task Menu");
         JButton searchMenu = new JButton("Search Menu");
@@ -55,7 +55,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         JButton exitButton = new JButton("Exit");
 
         this.employee = employee;
-        mainFrame = new JFrame("Back Office Menu");
+        mainFrame = new JFrame("CarSync - Back Office");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -115,12 +115,33 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 JButton button = (JButton) e.getSource();
                 mainFrame.setVisible(false);
 
-                if (button == insertMenu) buildInsertMenuPage();
+//                if (button == insertMenu) buildInsertMenuPage();
+//                else if (button == deactivateMenu) buildDeactivateMenuPage();
+//                else if (button == updateMenu) buildUpdateMenuPage();
+//                else if (button == searchMenu) buildSearchMenuPage();
+//                else if (button == taskMenu) buildTaskMenuPage();
 
-                else if (button == deactivateMenu) buildDeactivateMenuPage();
-                else if (button == updateMenu) buildUpdateMenuPage();
-                else if (button == searchMenu) buildSearchMenuPage();
-                else if (button == taskMenu) buildTaskMenuPage();
+                if (button == insertMenu) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Registration Menu Page");
+                    buildInsertMenuPage();
+                } else if (button == deactivateMenu) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Deactivation Menu Page");
+                    buildDeactivateMenuPage();
+                } else if (button == updateMenu) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Update Menu Page");
+                    buildUpdateMenuPage();
+                } else if (button == searchMenu) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Search Menu Page");
+                    buildSearchMenuPage();
+                } else if (button == taskMenu) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Task Menu Page");
+                    buildTaskMenuPage();
+                }
             }
         };
 
@@ -133,13 +154,15 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     private void buildTaskMenuPage() {
-        JFrame taskMenuFrame = new JFrame("Back Office Menu");
+        JFrame taskMenuFrame = new JFrame("CarSync");
         taskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         taskMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -208,13 +231,19 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         executeTask.setBackground(GREEN);
         executeTask.setForeground(Color.WHITE);
         executeTask.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " tried to perform taks with ID: " + task.getTaskID());
             if (task == null) {
                 JOptionPane.showMessageDialog(null, "Cannot execute task, no tasks to execute");
             } else {
                 if (task.perFormTask(dataSource)) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " completed the task with ID: " + task.getTaskID());
                     JOptionPane.showMessageDialog(null, "Task Completed");
                     taskDisplay.setText(new TaskManagment().getNextTask(employee.getAccess_level()).toString());
                 } else {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " failed to perform the task with ID: " + task.getTaskID());
                     JOptionPane.showMessageDialog(null, "Task Failed");
                 }
             }
@@ -223,9 +252,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         viewAllTasks.setBackground(BLUE);
         viewAllTasks.setForeground(Color.WHITE);
         viewAllTasks.addActionListener(e -> {
+
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " entered the View All Tasks Page");
+
             taskMenuFrame.setVisible(false);
             new TaskTableNavigation(taskMenuFrame, employee.getAccess_level());
         });
+
 
         gbc.gridy = 3;
         gbc.gridx = 0;
@@ -246,6 +280,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         taskMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -308,6 +344,10 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         mainFrame.setVisible(false);
         searchMenuFrame.setVisible(true);
         backButton.addActionListener(e -> {
+
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went back to the main menu");
+
             mainFrame.setVisible(true);
             searchMenuFrame.setVisible(false);
         });
@@ -325,11 +365,27 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 JButton button = (JButton) e.getSource();
                 searchMenuFrame.setVisible(false);
 
-                if (button == vehicleDisplay) vehicleDisplayPage(searchMenuFrame);
-                else if (button == employeeDisplay) employeeDisplayPage(searchMenuFrame);
-                else if (button == customerDisplay) customerDisplayPage(searchMenuFrame);
-                else if (button == ticketDisplay) ticketDisplayPage(searchMenuFrame);
-                else if (button == insuranceDisplay) insuranceDisplayPage(searchMenuFrame);
+                if (button == vehicleDisplay) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Vehicle Display Page");
+                    vehicleDisplayPage(searchMenuFrame);
+                } else if (button == employeeDisplay) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Employee Display Page");
+                    employeeDisplayPage(searchMenuFrame);
+                } else if (button == customerDisplay) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Customer Display Page");
+                    customerDisplayPage(searchMenuFrame);
+                } else if (button == ticketDisplay) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Ticket Display Page");
+                    ticketDisplayPage(searchMenuFrame);
+                } else if (button == insuranceDisplay) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the Insurance Display Page");
+                    insuranceDisplayPage(searchMenuFrame);
+                }
             }
         };
 
@@ -342,6 +398,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         searchMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -407,8 +465,13 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances with policy number: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid policy number");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances with policy number: " + input);
+
                             }
                         }
 
@@ -421,8 +484,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances for company: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid company name");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances for company: " + input);
                             }
                         }
 
@@ -435,8 +502,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances for plate: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid plate");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances for plate: " + input);
                             }
                         }
 
@@ -449,8 +520,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances with category: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid category");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances with category: " + input);
                             }
                         }
 
@@ -463,8 +538,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances with expiration date: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances with expiration date: " + input);
                             }
                         }
 
@@ -477,8 +556,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 }
                                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insuranceList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the insurances with issue date: " + input);
                             } else {
                                 JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please enter a valid date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the insurances with issue date: " + input);
                             }
                         }
                     }
@@ -523,6 +606,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went back to the search menu");
             searchMenuFrame.setVisible(true);
             insuranceDisplayFrame.setVisible(false);
         });
@@ -555,6 +640,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         insuranceDisplayFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -567,26 +654,38 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             case "Order by Policy Number" -> {
                 insurances.sort(Comparator.comparing(Insurance::getPolicy));
                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " displayed all the insurances ordered by policy number");
             }
             case "Order by Company" -> {
                 insurances.sort(Comparator.comparing(Insurance::getCompanyName));
                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " displayed all the insurances ordered by company");
             }
             case "Order by Plate" -> {
                 insurances.sort(Comparator.comparing(Insurance::getCarPlate));
                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " displayed all the insurances ordered by plate");
             }
             case "Order by Category" -> {
                 insurances.sort(Comparator.comparing(Insurance::getExtraCategory));
                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " displayed all the insurances ordered by category");
             }
             case "Order by Expiration Date" -> {
                 insurances.sort(Comparator.comparing(Insurance::getExpDate));
                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " displayed all the insurances ordered by expiration date");
             }
             case "Order by Issue Date" -> {
                 insurances.sort(Comparator.comparing(Insurance::getStartDate));
                 new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                logger.info("Employee with name: " + employee.getName()
+                        + " NIF: " + employee.getNif() + " displayed all the insurances ordered by issue date");
             }
             default -> JOptionPane.showMessageDialog(insuranceDisplayFrame, "Please select an order option");
         }
@@ -640,6 +739,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             if (!searchOption.equals(" ") && !orderType.equals(" ")) {
                 if (searchOption.equals("General Search")) {
                     displaySearchByOrderTicket(rowsPerPage, dataSource.queryTickets(), ticketDisplayFrame, orderType);
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " displayed all the tickets order by: " + orderType);
                 } else {
                     switch (searchOption) {
                         case "Search by NIF" -> {
@@ -651,8 +752,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with NIF: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid NIF");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with NIF: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by Plate" -> {
@@ -664,8 +771,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with plate: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid plate");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with plate: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by Reason" -> {
@@ -677,8 +790,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with reason: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid reason");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with reason: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by Expiration Date" -> {
@@ -690,8 +809,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with expiration date: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with expiration date: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by Value" -> {
@@ -703,8 +828,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with value: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid value");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with value: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by TicketID" -> {
@@ -716,8 +847,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with ticketID: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid TicketID");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with ticketID: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by Paid Y(y) or N(n)" -> {
@@ -732,6 +869,9 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with paid: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                         case "Search by Issue Date" -> {
@@ -743,8 +883,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderTicket(rowsPerPage, ticketList, ticketDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the tickets with issue date: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(ticketDisplayFrame, "Please enter a valid date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the tickets with issue date: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                     }
@@ -789,6 +935,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             logger.info("Employee with name: " + employee.getName()
                     + " NIF: " + employee.getNif() + " logged out");
             ticketDisplayFrame.dispose();
+            mainFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -796,6 +943,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to search menu page");
             searchMenuFrame.setVisible(true);
             ticketDisplayFrame.setVisible(false);
             ticketDisplayFrame.dispose();
@@ -829,7 +978,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         ticketDisplayFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                dataSource.close();
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
             }
         });
 
@@ -924,6 +1074,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 if (searchOption.equals("General Search")) {
                     displaySearchByOrderCustomer(rowsPerPage,
                             dataSource.queryCustomers(), customerDisplayFrame, orderType);
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " displayed all the customers ordered by: " + orderType);
                 } else {
                     switch (searchOption) {
 
@@ -933,8 +1085,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                 customerList.add(dataSource.getCustomerByNIF(Integer.parseInt(input)));
                                 new CustomerTableNavigation(
                                         Integer.parseInt(rowsPerPage), customerDisplayFrame, customerList);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the customers with NIF: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid NIF");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the customers with NIF: " + input
+                                        + "ordered by: " + orderType);
 
                             }
                         }
@@ -948,9 +1106,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the customers with name: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid name");
-
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the customers with name: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
 
@@ -963,8 +1126,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the customers with address: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid address");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the customers with address: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
 
@@ -977,8 +1146,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the customers with license type: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid license type");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the customers with license type: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
 
@@ -992,8 +1167,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 }
                                 displaySearchByOrderCustomer(rowsPerPage, customerList, customerDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the customers with license number: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(customerDisplayFrame, "Please enter a valid license number");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the customers with license number: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                     }
@@ -1002,7 +1183,6 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 JOptionPane.showMessageDialog(customerDisplayFrame, "Please select a search and order option");
             }
         });
-
 
         gbc.gridwidth = 1;
         JLabel[] labels = {rowsPerPageLabel, customerDisplaySearchLabel, customerDisplayOrderLabel, inputForSearch};
