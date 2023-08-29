@@ -1,14 +1,21 @@
-Task ID: 1
-    Type: Vehicle Registration
-    Status: Open
-    Date: 2023-08-29
-    NIF: 200000000
-    Values: DD-SS-10,1234560900ASDFG43,Black,SIAT,PUNTO,2019-09-11,Light Passenger Vehicle
-
 Task ID: 2
     Type: Vehicle Registration
     Status: Closed
     Date: 2023-08-29
     NIF: 200000000
     Values: DD-SS-10,1234560900ASDFG43,Black,SIAT,PUNTO,2019-09-11,Light Passenger Vehicle
+
+Task ID: 3
+    Type: Vehicle Registration
+    Status: Closed
+    Date: 2023-08-29
+    NIF: 200000000
+    Values: FG-SS-10,1000560900ASDFG43,Black,FORD,FIESTA,2020-09-11,Light Passenger Vehicle
+
+Task ID: 4
+    Type: Vehicle Registration
+    Status: Closed
+    Date: 2023-08-29
+    NIF: 200000000
+    Values: FG-SS-10,1000560900ASDFG43,Black,FORD,FIESTA,2020-09-11,Light Passenger Vehicle
 

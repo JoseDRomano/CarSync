@@ -32,8 +32,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private static final Logger logger = Logger.getLogger(BackOfficeAdminMenu.class);
 
 
-    //Alterar os inserts
-    //Bloquear a textbox quando o utilizador escolhe general search
+    //Resolver problemas da Task
     public BackOfficeAdminMenu(Employee employee) {
         dataSource = new DataSource();
         if (!dataSource.open()) {
