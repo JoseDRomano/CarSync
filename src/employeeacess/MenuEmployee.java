@@ -1972,7 +1972,7 @@ public class MenuEmployee implements ValidateInput {
     private void payTicketPage(JFrame updateMenuFrame) {
         JFrame updateTicketFrame = new JFrame("Update Ticket");
         updateTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        updateTicketFrame.setBackground(Color.WHITE);
+        updateTicketFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -2000,7 +2000,6 @@ public class MenuEmployee implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel updateTicketPanel = new JPanel(new GridBagLayout());
-        updateTicketPanel.setBackground(Color.WHITE);
 
         JLabel updateTicketLabel = new JLabel("Pay Ticket");
         updateTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2066,7 +2065,6 @@ public class MenuEmployee implements ValidateInput {
         updateTicketPanel.add(backButton, gbc);
 
         updateTicketFrame.add(updateTicketPanel);
-        updateTicketFrame.pack();
         updateTicketFrame.setVisible(true);
 
         updateTicketFrame.addWindowListener(new WindowAdapter() {
@@ -2082,7 +2080,8 @@ public class MenuEmployee implements ValidateInput {
     private void updateCustomerPage(JFrame updateMenuFrame) {
         JFrame updatePersonFrame = new JFrame("Update Vehicle");
         updatePersonFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        updatePersonFrame.setBackground(Color.WHITE);
+        updatePersonFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -2109,7 +2108,7 @@ public class MenuEmployee implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel updatePersonPanel = new JPanel(new GridBagLayout());
-        updatePersonPanel.setBackground(Color.WHITE);
+
 
         JLabel updatePersonLabel = new JLabel("Update Person");
         updatePersonLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2232,7 +2231,6 @@ public class MenuEmployee implements ValidateInput {
         updatePersonPanel.add(backButton, gbc);
 
         updatePersonFrame.add(updatePersonPanel);
-        updatePersonFrame.pack();
         updatePersonFrame.setVisible(true);
         updateMenuFrame.setVisible(false);
 
@@ -2259,7 +2257,7 @@ public class MenuEmployee implements ValidateInput {
         updateMenuFrame.setVisible(false);
         JFrame updateVehicleFrame = new JFrame("Update Vehicle");
         updateVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        updateVehicleFrame.setBackground(Color.WHITE);
+        updateVehicleFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -2286,7 +2284,6 @@ public class MenuEmployee implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel updateVehiclePanel = new JPanel(new GridBagLayout());
-        updateVehiclePanel.setBackground(Color.WHITE);
 
         JLabel updateVehicleLabel = new JLabel("Update Vehicle");
         updateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2362,7 +2359,6 @@ public class MenuEmployee implements ValidateInput {
         updateVehiclePanel.add(backButton, gbc);
 
         updateVehicleFrame.add(updateVehiclePanel);
-        updateVehicleFrame.pack();
         updateVehicleFrame.setVisible(true);
 
         updateVehicleFrame.addWindowListener(new WindowAdapter() {
@@ -2470,7 +2466,7 @@ public class MenuEmployee implements ValidateInput {
     private void deactivateInsurancePage(JFrame deactivateMenuFrame) {
         JFrame deactivateInsuranceFrame = new JFrame("Deactivate Ticket");
         deactivateInsuranceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        deactivateInsuranceFrame.setBackground(Color.WHITE);
+        deactivateInsuranceFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -2498,7 +2494,6 @@ public class MenuEmployee implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel deactivateInsurancePanel = new JPanel(new GridBagLayout());
-        deactivateInsurancePanel.setBackground(Color.WHITE);
 
         JLabel deactivateInsuranceLabel = new JLabel("Deactivate Insured Policy ");
         deactivateInsuranceLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2555,7 +2550,6 @@ public class MenuEmployee implements ValidateInput {
         deactivateInsurancePanel.add(backButton, gbc);
 
         deactivateInsuranceFrame.add(deactivateInsurancePanel);
-        deactivateInsuranceFrame.pack();
         deactivateInsuranceFrame.setVisible(true);
 
         deactivateInsuranceFrame.addWindowListener(new WindowAdapter() {
@@ -2570,7 +2564,7 @@ public class MenuEmployee implements ValidateInput {
     private void deactivateTicketPage(JFrame deactivateMenuFrame) {
         JFrame deactivateTicketFrame = new JFrame("Deactivate Ticket");
         deactivateTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        deactivateTicketFrame.setBackground(Color.WHITE);
+        deactivateTicketFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -2598,7 +2592,6 @@ public class MenuEmployee implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel deactivateTicketPanel = new JPanel(new GridBagLayout());
-        deactivateTicketPanel.setBackground(Color.WHITE);
 
         JLabel deactivateTicketLabel = new JLabel("Deactivate Ticket");
         deactivateTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2655,7 +2648,6 @@ public class MenuEmployee implements ValidateInput {
         deactivateTicketPanel.add(backButton, gbc);
 
         deactivateTicketFrame.add(deactivateTicketPanel);
-        deactivateTicketFrame.pack();
         deactivateTicketFrame.setVisible(true);
 
         deactivateTicketFrame.addWindowListener(new WindowAdapter() {
@@ -2670,7 +2662,7 @@ public class MenuEmployee implements ValidateInput {
     private void deactivateCustomerPage(JFrame deactivateMenuFrame) {
         JFrame deactivateCustomerFrame = new JFrame("Deactivate Customer");
         deactivateCustomerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        deactivateCustomerFrame.setBackground(Color.WHITE);
+        deactivateCustomerFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -2698,7 +2690,6 @@ public class MenuEmployee implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel deactivateCustomerPanel = new JPanel(new GridBagLayout());
-        deactivateCustomerPanel.setBackground(Color.WHITE);
 
         JLabel deactivateVehicleLabel = new JLabel("Deactivate Customer");
         deactivateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2756,7 +2747,6 @@ public class MenuEmployee implements ValidateInput {
         deactivateCustomerPanel.add(backButton, gbc);
 
         deactivateCustomerFrame.add(deactivateCustomerPanel);
-        deactivateCustomerFrame.pack();
         deactivateCustomerFrame.setVisible(true);
 
         deactivateCustomerFrame.addWindowListener(new WindowAdapter() {
@@ -2773,7 +2763,7 @@ public class MenuEmployee implements ValidateInput {
     private void deactivateVehiclePage(JFrame deactivateMenuFrame) {
         JFrame deactivateVehicleFrame = new JFrame("Deactivate Vehicle");
         deactivateVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        deactivateVehicleFrame.setBackground(Color.WHITE);
+        deactivateVehicleFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -2801,7 +2791,6 @@ public class MenuEmployee implements ValidateInput {
 
         //SET UP for exit buttons
         JPanel deactivateVehiclePanel = new JPanel(new GridBagLayout());
-        deactivateVehiclePanel.setBackground(Color.WHITE);
 
         JLabel deactivateVehicleLabel = new JLabel("Pay Ticket");
         deactivateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2859,7 +2848,6 @@ public class MenuEmployee implements ValidateInput {
         deactivateVehiclePanel.add(backButton, gbc);
 
         deactivateVehicleFrame.add(deactivateVehiclePanel);
-        deactivateVehicleFrame.pack();
         deactivateVehicleFrame.setVisible(true);
 
         deactivateVehicleFrame.addWindowListener(new WindowAdapter() {
