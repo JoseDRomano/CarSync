@@ -2484,7 +2484,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         });
     }
 
-    private void buildDeactivateMenuPage() {
+    void buildDeactivateMenuPage() {
         JFrame deactivateMenuFrame = new JFrame("CarSync");
         deactivateMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -3039,7 +3039,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         });
     }
 
-    private void buildDeleteMenuPage() {
+    protected void buildDeleteMenuPage() {
         JFrame deleteMenuFrame = new JFrame("CarSync");
         deleteMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deleteMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -3688,7 +3688,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
     }
 
-    private void buildInsertMenuPage() {
+    void buildInsertMenuPage() {
         JFrame insertMenuFrame = new JFrame("CarSync");
         insertMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         insertMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
