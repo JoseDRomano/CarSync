@@ -1,6 +1,7 @@
 package employeeacess;
 
 import model.*;
+import org.apache.log4j.PropertyConfigurator;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.swing.*;
@@ -15,7 +16,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import static java.awt.Color.*;
+import static java.awt.Color.BLACK;
+import static java.awt.Color.white;
 
 public class MenuEmployee implements ValidateInput {
 
@@ -1887,7 +1889,7 @@ public class MenuEmployee implements ValidateInput {
         submitButton2.setBackground(GREEN);
         submitButton2.setForeground(Color.WHITE);
         submitButton2.addActionListener(e -> {
-            String password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
+            String password = passwordField.getText();
 //            String nif = nifField.getSelectedItem().toString();
             String nif = nifField.getText();
             if (!isNIF(nif))
@@ -1895,6 +1897,7 @@ public class MenuEmployee implements ValidateInput {
             else if (!isPassword(passwordField.getText())) {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Wrong password format");
             } else {
+                password = BCrypt.hashpw(password, BCrypt.gensalt());
                 if (dataSource.updatePersonPassword(Integer.parseInt(nif), password)) {
 
                     JOptionPane.showMessageDialog(updatePersonFrame, "Password successfully updated",
@@ -3334,9 +3337,17 @@ public class MenuEmployee implements ValidateInput {
     }
 
 
-//    public static void main(String[] args) {
-////        Employee employee = new Employee();
-////        employee.setName("John Doe");
-////        MenuEmployee menuEmployee = new MenuEmployee(employee);
-////    }
+    public static void main(String[] args) {
+        PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Employee employee = new Employee();
+                employee.setName("John Doe");
+                employee.setAccess_level(2);
+                MenuEmployee menuEmployee = new MenuEmployee(employee);
+            }
+        });
+    }
+
 }

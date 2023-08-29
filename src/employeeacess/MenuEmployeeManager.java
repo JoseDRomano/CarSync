@@ -1,6 +1,7 @@
 package employeeacess;
 
 import model.*;
+import org.apache.log4j.PropertyConfigurator;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.swing.*;
@@ -1880,14 +1881,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submitButton2.setBackground(GREEN);
         submitButton2.setForeground(Color.WHITE);
         submitButton2.addActionListener(e -> {
-            String password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
-//            String nif = nifField.getSelectedItem().toString();
+            String password = passwordField.getText();
             String nif = nifField.getText();
             if (!isNIF(nif))
                 JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
             else if (!isPassword(passwordField.getText())) {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Wrong password format");
             } else {
+                password = BCrypt.hashpw(password, BCrypt.gensalt());
                 if (dataSource.updatePersonPassword(Integer.parseInt(nif), password)) {
 
                     JOptionPane.showMessageDialog(updatePersonFrame, "Password successfully updated",
@@ -3122,7 +3123,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 String nif = nifField.getText();
                 String accessLevel = (String) accessLevelField.getSelectedItem();
 
-                if (isValidString(name) && isValidString(address) && isEmail(email) && isValidBirthDate(birthDate) && isValidString(password) && isNIF(nif) && !accessLevel.equals(" ")) {
+                if (isValidString(name) && isValidString(address) && isEmail(email) && isValidBirthDate(birthDate) && isPassword(password) && isNIF(nif) && !accessLevel.equals(" ")) {
+                    password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
                     if (dataSource.insertEmployee(Integer.parseInt(nif),
                             name, address, Date.valueOf(birthDate), password,
                             email, Integer.parseInt(accessLevel))) {
@@ -3280,6 +3282,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 if (isValidString(name) && isValidString(address) && isNIF(nif) && isDate(licenseDate)
                         && isValidExpirationDate(licenseExpiration) && isEmail(email) && isValidBirthDate(birthDate)
                         && isPassword(password) && isDriverLicense(driverLicense) && selectedLicenseType != (" ")) {
+                    password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
                     if (dataSource.insertCustomer(Integer.parseInt(nif), name, address, Date.valueOf(birthDate),
                             password, email, Integer.parseInt(driverLicense), selectedLicenseType, Date.valueOf(licenseDate), Date.valueOf(licenseExpiration))) {
 
@@ -3535,11 +3538,16 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
     }
 
     public static void main(String[] args) {
-        //Menu interativo
-        Employee employee = new Employee();
-        employee.setName("John Doe");
-        employee.setAccess_level(2);
-        MenuEmployeeManager backOfficeAdminMenu = new MenuEmployeeManager(employee);
+        PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Employee employee = new Employee();
+                employee.setName("John Doe");
+                employee.setAccess_level(2);
+                MenuEmployeeManager menuEmployeeManager = new MenuEmployeeManager(employee);
+            }
+        });
     }
 
 }

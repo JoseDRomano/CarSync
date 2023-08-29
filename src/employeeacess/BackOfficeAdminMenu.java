@@ -2225,7 +2225,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submitButton2.setBackground(GREEN);
         submitButton2.setForeground(Color.WHITE);
         submitButton2.addActionListener(e -> {
-            String password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
+            String password = passwordField.getText();
 //            String nif = nifField.getSelectedItem().toString();
             String nif = nifField.getText();
             if (!isNIF(nif)) {
@@ -2237,6 +2237,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 logger.info("Employee with name: " + employee.getName()
                         + "NIF: " + employee.getNif() + " failed to update password for person with NIF: " + nif);
             } else {
+                password = BCrypt.hashpw(password, BCrypt.gensalt());
                 if (dataSource.updatePersonPassword(Integer.parseInt(nif), password)) {
                     JOptionPane.showMessageDialog(updatePersonFrame, "Password successfully updated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -4279,7 +4280,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String nif = nifField.getText();
                 String accessLevel = (String) accessLevelField.getSelectedItem();
 
-                if (isValidString(name) && isValidString(address) && isEmail(email) && isValidBirthDate(birthDate) && isValidString(password) && isNIF(nif) && !accessLevel.equals(" ")) {
+                if (isValidString(name) && isValidString(address) && isEmail(email) && isValidBirthDate(birthDate) && isPassword(password) && isNIF(nif) && !accessLevel.equals(" ")) {
+                   password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
                     if (dataSource.insertEmployee(Integer.parseInt(nif),
                             name, address, Date.valueOf(birthDate), password,
                             email, Integer.parseInt(accessLevel))) {
@@ -4450,6 +4452,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 if (isValidString(name) && isValidString(address) && isNIF(nif) && isDate(licenseDate)
                         && isValidExpirationDate(licenseExpiration) && isEmail(email) && isValidBirthDate(birthDate)
                         && isPassword(password) && isDriverLicense(driverLicense) && selectedLicenseType != (" ")) {
+                    password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
                     if (dataSource.insertCustomer(Integer.parseInt(nif), name, address, Date.valueOf(birthDate),
                             password, email, Integer.parseInt(driverLicense), selectedLicenseType, Date.valueOf(licenseDate), Date.valueOf(licenseExpiration))) {
                         logger.info("Employee with name: " + employee.getName()

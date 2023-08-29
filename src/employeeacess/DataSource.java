@@ -1381,7 +1381,7 @@ public class DataSource {
     private boolean insertPerson(int nif, String name, String address, Date bDate, String password, String email) {
 
         boolean result = false;
-        password = BCrypt.hashpw(password, BCrypt.gensalt());
+//        password = BCrypt.hashpw(password, BCrypt.gensalt());
 
         try {
             connection.setAutoCommit(false);
