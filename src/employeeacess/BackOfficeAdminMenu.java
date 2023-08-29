@@ -80,9 +80,10 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
                     + " NIF: " + employee.getNif() + " logged out");
+            dataSource.close();
             mainFrame.dispose();
             //Aqui deveria ir para o welcome menu
-            dataSource.close();
+            System.exit(0);
         });
 
 

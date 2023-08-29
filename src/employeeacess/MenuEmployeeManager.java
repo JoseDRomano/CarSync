@@ -1,6 +1,7 @@
 package employeeacess;
 
 import model.*;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -26,6 +27,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
     private final Color GREEN = new Color(0, 100, 0);
     private final Color RED = new Color(100, 0, 0);
     private final Color BLUE = new Color(0, 0, 100);
+    private static final Logger logger = Logger.getLogger(BackOfficeAdminMenu.class);
 
 
     public MenuEmployeeManager(Employee employee) {
@@ -40,6 +42,10 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        logger.info("Employee with name: " + employee.getName() + " and NIF: "
+                + employee.getNif() + " initialized the BackOffice Menu");
+
 
         JButton insertMenu = new JButton("Insert Menu");
         JButton updateMenu = new JButton("Update Menu");
@@ -56,8 +62,11 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         exitButton.addActionListener(e -> {
-            System.exit(0);
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             dataSource.close();
+            mainFrame.dispose();
+            System.exit(0);
         });
 
 
@@ -120,10 +129,6 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         updateMenu.addActionListener(goToPageListener);
         searchMenu.addActionListener(goToPageListener);
         taskMenu.addActionListener(goToPageListener);
-        exitButton.addActionListener(e -> {
-            dataSource.close();
-            System.exit(0);
-        });
 
         mainFrame.addWindowListener(new WindowAdapter() {
             @Override
@@ -187,8 +192,10 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 //        exitButton.setBackground(RED);
 //        exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
-            taskMenuFrame.dispose();
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             dataSource.close();
+            taskMenuFrame.dispose();
             System.exit(0);
         });
 
@@ -305,6 +312,9 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             searchMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
+            searchMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -503,8 +513,10 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
-            insuranceDisplayFrame.dispose();
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             dataSource.close();
+            insuranceDisplayFrame.dispose();
             System.exit(0);
         });
 
@@ -774,6 +786,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             ticketDisplayFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -1021,6 +1035,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             customerDisplayFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -1262,6 +1278,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             employeeDisplayFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -1517,6 +1535,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.addActionListener(e ->
 
         {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             vehicleDisplayFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -1676,6 +1696,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             updateMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             dataSource.close();
             updateMenuFrame.dispose();
             System.exit(0);
@@ -1732,6 +1754,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             updateTicketFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -1838,6 +1862,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             updatePersonFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -2047,6 +2073,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         });
 
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             dataSource.close();
             mainFrame.dispose();
             employeeUpdateFrame.dispose();
@@ -2111,6 +2139,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             updateVehicleFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -2264,6 +2294,9 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             deactivateMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
+            deactivateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -2321,6 +2354,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             deactivateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             deactivateCustomerFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -2420,6 +2455,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             deactivateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             deactivateTicketFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -2518,6 +2555,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             deactivateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             deactivateInsuranceFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -2617,6 +2656,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         });
 
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             deactivateVehicleFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -2752,6 +2793,9 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             insertMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
+            insertMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -2860,6 +2904,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.addActionListener(e ->
 
         {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             insertInsuranceFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -3010,6 +3056,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             insertTicketFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -3154,6 +3202,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             insertEmployeeFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -3312,6 +3362,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             insertCustomerFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -3402,6 +3454,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             insertVehicleFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
             insertVehicleFrame.dispose();
             dataSource.close();
             System.exit(0);
