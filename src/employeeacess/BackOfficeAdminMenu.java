@@ -482,6 +482,15 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(GREEN);
 
+        insuranceDisplaySearchOptions.addActionListener(e -> {
+            String searchOption = (String) insuranceDisplaySearchOptions.getSelectedItem();
+            if(searchOption.equals("General Search")) {
+                inputForSearchField.setEnabled(false);
+            } else {
+                inputForSearchField.setEnabled(true);
+            }
+        });
+
         searchButton.addActionListener(e -> {
             String searchOption = (String) insuranceDisplaySearchOptions.getSelectedItem();
             String orderType = (String) insuranceDisplayOrderOptions.getSelectedItem();
@@ -770,6 +779,15 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton searchButton = new JButton("Search");
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(GREEN);
+
+        ticketDisplaySearchOptions.addActionListener(e -> {
+            String searchOption = (String) ticketDisplaySearchOptions.getSelectedItem();
+            if(searchOption.equals("General Search")) {
+                inputForSearchField.setEnabled(false);
+            } else {
+                inputForSearchField.setEnabled(true);
+            }
+        });
 
         searchButton.addActionListener(e -> {
             String searchOption = (String) ticketDisplaySearchOptions.getSelectedItem();
@@ -1104,6 +1122,15 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 "Order by Name", "Order by Address", "Order by License Type", "Order by License Number",
                 "Order by Date of Birth", "Order by Date of License Issue", "Order by Date of License Expiration"});
 
+        customerDisplaySearchOptions.addActionListener(e -> {
+            String searchOption = (String) customerDisplaySearchOptions.getSelectedItem();
+            if(searchOption.equals("General Search")) {
+                inputForSearchField.setEnabled(false);
+            } else {
+                inputForSearchField.setEnabled(true);
+            }
+        });
+
         JButton searchButton = new JButton("Search");
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(GREEN);
@@ -1395,6 +1422,15 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(GREEN);
 
+        employeeDisplaySearchOptions.addActionListener(e -> {
+            String searchOption = (String) employeeDisplaySearchOptions.getSelectedItem();
+            if(searchOption.equals("General Search")) {
+                inputForSearchField.setEnabled(false);
+            } else {
+                inputForSearchField.setEnabled(true);
+            }
+        });
+
         searchButton.addActionListener(e -> {
             String searchOption = (String) employeeDisplaySearchOptions.getSelectedItem();
             String orderType = (String) employeeDisplayOrderOptions.getSelectedItem();
@@ -1649,6 +1685,16 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         JLabel inputForSearch = new JLabel("Input for search:");
         JTextField inputForSearchField = new JTextField(20);
+
+
+        vehicleDisplaySearchOptions.addActionListener(e -> {
+            String searchOption = (String) vehicleDisplaySearchOptions.getSelectedItem();
+            if(searchOption.equals("General Search")) {
+                inputForSearchField.setEnabled(false);
+            } else {
+                inputForSearchField.setEnabled(true);
+            }
+        });
 
 
         JButton searchButton = new JButton("Search");
@@ -2243,6 +2289,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         JLabel passwordLabel = new JLabel("Password: ");
         JTextField passwordField = new JTextField(15);
+
 
         JButton submitButton2 = new JButton("Change Password");
         submitButton2.setBackground(GREEN);
@@ -4310,7 +4357,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JLabel emailLabel = new JLabel("Email: ");
         JTextField emailField = new JTextField(15);
 
-        JLabel birthDateLabel = new JLabel("Birth Date: (YYYY-MM-DD)");
+        JLabel birthDateLabel = new JLabel("Birth Date: ");
 //        JTextField birthDateField = new JTextField(15);
 
         JDateChooser birthDateField = new JDateChooser();
@@ -4500,13 +4547,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JLabel licenseTypeLabel = new JLabel("License Type: (Select an option");
         JComboBox<String> licenseType = new JComboBox<>(new String[]{" ", "A", "B", "C", "D"});
 
-        JLabel licenseDateLabel = new JLabel("License Date: (YYYY-MM-DD)");
+        JLabel licenseDateLabel = new JLabel("License Date: ");
 //        JTextField licenseDateField = new JTextField(15);
 
         JDateChooser licenseDateField = new JDateChooser();
         licenseDateField.setDateFormatString("yyyy-MM-dd");
 
-        JLabel licenseExpirationLabel = new JLabel("License Expiration: (YYYY-MM-DD)");
+        JLabel licenseExpirationLabel = new JLabel("License Expiration: ");
 //        JTextField licenseExpirationField = new JTextField(15);
 
         JDateChooser licenseExpirationField = new JDateChooser();

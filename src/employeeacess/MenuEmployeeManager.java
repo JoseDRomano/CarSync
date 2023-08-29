@@ -415,7 +415,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
     }
 
     private void insuranceDisplayPage(JFrame searchMenuFrame) {
-        JFrame insuranceDisplayFrame = new JFrame("Insurance Display Menu");
+        JFrame insuranceDisplayFrame = new JFrame("CarSync");
         insuranceDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         insuranceDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -451,6 +451,15 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         JButton searchButton = new JButton("Search");
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(GREEN);
+
+        insuranceDisplaySearchOptions.addActionListener(e -> {
+            String searchOption = (String) insuranceDisplaySearchOptions.getSelectedItem();
+            if(searchOption.equals("General Search")) {
+                inputForSearchField.setEnabled(false);
+            } else {
+                inputForSearchField.setEnabled(true);
+            }
+        });
 
         searchButton.addActionListener(e -> {
             String searchOption = (String) insuranceDisplaySearchOptions.getSelectedItem();
@@ -607,8 +616,10 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
                     + " NIF: " + employee.getNif() + " logged out");
-            dataSource.close();
             insuranceDisplayFrame.dispose();
+            mainFrame.dispose();
+            searchMenuFrame.dispose();
+            dataSource.close();
             System.exit(0);
         });
 
@@ -702,7 +713,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
     }
 
     private void ticketDisplayPage(JFrame searchMenuFrame) {
-        JFrame ticketDisplayFrame = new JFrame("Ticket Search Menu");
+        JFrame ticketDisplayFrame = new JFrame("CarSync");
         ticketDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ticketDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -738,6 +749,15 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         JButton searchButton = new JButton("Search");
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(GREEN);
+
+        ticketDisplaySearchOptions.addActionListener(e -> {
+            String searchOption = (String) ticketDisplaySearchOptions.getSelectedItem();
+            if(searchOption.equals("General Search")) {
+                inputForSearchField.setEnabled(false);
+            } else {
+                inputForSearchField.setEnabled(true);
+            }
+        });
 
         searchButton.addActionListener(e -> {
             String searchOption = (String) ticketDisplaySearchOptions.getSelectedItem();
@@ -942,8 +962,9 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             ticketDisplayFrame.dispose();
+            searchMenuFrame.dispose();
             mainFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -989,6 +1010,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             public void windowClosing(WindowEvent e) {
                 logger.info("Employee with name: " + employee.getName()
                         + "NIF: " + employee.getNif() + " logged out");
+                dataSource.close();
             }
         });
 
@@ -1037,7 +1059,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
     }
 
     private void customerDisplayPage(JFrame searchMenuFrame) {
-        JFrame customerDisplayFrame = new JFrame("Customer Search Menu");
+        JFrame customerDisplayFrame = new JFrame("CarSync");
         customerDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         customerDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -1069,6 +1091,15 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         JComboBox<String> customerDisplayOrderOptions = new JComboBox<>(new String[]{" ", "Order by NIF",
                 "Order by Name", "Order by Address", "Order by License Type", "Order by License Number",
                 "Order by Date of Birth", "Order by Date of License Issue", "Order by Date of License Expiration"});
+
+        customerDisplaySearchOptions.addActionListener(e -> {
+            String searchOption = (String) customerDisplaySearchOptions.getSelectedItem();
+            if(searchOption.equals("General Search")) {
+                inputForSearchField.setEnabled(false);
+            } else {
+                inputForSearchField.setEnabled(true);
+            }
+        });
 
         JButton searchButton = new JButton("Search");
         searchButton.setForeground(Color.WHITE);
@@ -1193,6 +1224,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             }
         });
 
+
         gbc.gridwidth = 1;
         JLabel[] labels = {rowsPerPageLabel, customerDisplaySearchLabel, customerDisplayOrderLabel, inputForSearch};
         JComboBox[] comboBoxes = {rowsPerPageOptions, customerDisplaySearchOptions, customerDisplayOrderOptions};
@@ -1225,8 +1257,9 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             customerDisplayFrame.dispose();
+            mainFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -1324,7 +1357,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
     }
 
     private void employeeDisplayPage(JFrame searchMenuFrame) {
-        JFrame employeeDisplayFrame = new JFrame("Employee Search Menu");
+        JFrame employeeDisplayFrame = new JFrame("CarSync");
         employeeDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         employeeDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -1358,6 +1391,15 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         JButton searchButton = new JButton("Search");
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(GREEN);
+
+        employeeDisplaySearchOptions.addActionListener(e -> {
+            String searchOption = (String) employeeDisplaySearchOptions.getSelectedItem();
+            if(searchOption.equals("General Search")) {
+                inputForSearchField.setEnabled(false);
+            } else {
+                inputForSearchField.setEnabled(true);
+            }
+        });
 
         searchButton.addActionListener(e -> {
             String searchOption = (String) employeeDisplaySearchOptions.getSelectedItem();
@@ -1498,8 +1540,10 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             employeeDisplayFrame.dispose();
+            mainFrame.dispose();
+            searchMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -1579,7 +1623,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
     }
 
     private void vehicleDisplayPage(JFrame searchMenuFrame) {
-        JFrame vehicleDisplayFrame = new JFrame("Vehicle Display");
+        JFrame vehicleDisplayFrame = new JFrame("CarSync");
         vehicleDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         vehicleDisplayFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -1601,7 +1645,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
         JLabel vehicleDisplayOrderLabel = new JLabel("Order by: ");
         JComboBox<String> vehicleDisplayOrderOptions = new JComboBox<>(new String[]{" ",
-                "License Plate", "Brand", "Color", "Year", "Issue Date",
+                "License Plate", "Brand", "Color", "Issue Date",
                 "VIN", "NIF", "Category"});
 
         JLabel vehicleDisplaySearchLabel = new JLabel("Search by: ");
@@ -1611,6 +1655,16 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
         JLabel inputForSearch = new JLabel("Input for search:");
         JTextField inputForSearchField = new JTextField(20);
+
+
+        vehicleDisplaySearchOptions.addActionListener(e -> {
+            String searchOption = (String) vehicleDisplaySearchOptions.getSelectedItem();
+            if(searchOption.equals("General Search")) {
+                inputForSearchField.setEnabled(false);
+            } else {
+                inputForSearchField.setEnabled(true);
+            }
+        });
 
 
         JButton searchButton = new JButton("Search");
@@ -1759,10 +1813,9 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please, select an option for each field");
             }
         });
-
         gbc.gridwidth = 1;
-        JLabel[] labels = {vehicleDisplaySearchLabel, vehicleDisplayOrderLabel, rowsPerPageLabel, inputForSearch};
-        JComboBox[] comboBoxes = {vehicleDisplaySearchOptions, vehicleDisplayOrderOptions, rowsPerPageOptions};
+        JLabel[] labels = {rowsPerPageLabel, vehicleDisplaySearchLabel, vehicleDisplayOrderLabel, inputForSearch};
+        JComboBox[] comboBoxes = {rowsPerPageOptions, vehicleDisplaySearchOptions, vehicleDisplayOrderOptions};
 
         for (int i = 0; i < labels.length; i++) {
             gbc.gridx = 0;
@@ -1790,6 +1843,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             logger.info("Employee with name: " + employee.getName()
                     + " NIF: " + employee.getNif() + " logged out");
             vehicleDisplayFrame.dispose();
+            mainFrame.dispose();
+            searchMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -3271,10 +3326,18 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         JTextField policyField = new JTextField(15);
 
         JLabel startDateLabel = new JLabel("Start Date: ");
-        JTextField startDateField = new JTextField(15);
+//        JTextField startDateField = new JTextField(15);
+
+        JDateChooser startDateField = new JDateChooser();
+        startDateField.setDateFormatString("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         JLabel endDateLabel = new JLabel("End Date: ");
-        JTextField endDateField = new JTextField(15);
+//        JTextField endDateField = new JTextField(15);
+
+        JDateChooser endDateField = new JDateChooser();
+        endDateField.setDateFormatString("yyyy-MM-dd");
+
 
         JLabel companyNameLabel = new JLabel("Company Name: ");
         JTextField companyNameField = new JTextField(15);
@@ -3288,8 +3351,10 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 String plate = plateField.getText();
                 String insuranceCategory = (String) insuranceCategoryField.getSelectedItem();
                 String policy = policyField.getText();
-                String startDate = startDateField.getText();
-                String endDate = endDateField.getText();
+//                String startDate = startDateField.getText();
+                String startDate = sdf.format(startDateField.getDate());
+//                String endDate = endDateField.getText();
+                String endDate = sdf.format(endDateField.getDate());
                 String companyName = companyNameField.getText();
 
                 if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isValidString(companyName) && isPolicy(policy)) {
@@ -3301,7 +3366,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                         insertInsuranceFrame.setVisible(false);
                         insertInsuranceFrame.dispose();
                         insertInsurance(insertMenuFrame);
-//                        break;
+                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
@@ -3344,10 +3409,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         });
 
         gbc.gridwidth = 1;
-        JLabel[] labels = {plateLabel, policyLabel,
-                startDateLabel, endDateLabel, companyNameLabel, insuranceCategoryLabel};
-        JTextField[] fields = {plateField, policyField,
-                startDateField, endDateField, companyNameField};
+//        JLabel[] labels = {plateLabel, policyLabel,
+//                startDateLabel, endDateLabel, companyNameLabel, insuranceCategoryLabel};
+//        JTextField[] fields = {plateField, policyField,
+//                startDateField, endDateField, companyNameField};
+
+        JLabel[] labels = {plateLabel, policyLabel
+                , companyNameLabel, insuranceCategoryLabel, startDateLabel, endDateLabel};
+        JTextField[] fields = {plateField, policyField, companyNameField};
 
         for (
                 int row = 0;
@@ -3359,8 +3428,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
             gbc.gridx = 1;
             gbc.anchor = GridBagConstraints.LINE_END;
-            if (row == 5) {
+            if (row == 3) {
                 insertInsurancePanel.add(insuranceCategoryField, gbc);
+            } else if (row == 4) {
+                insertInsurancePanel.add(startDateField, gbc);
+            } else if (row == 5) {
+                insertInsurancePanel.add(endDateField, gbc);
             } else {
                 insertInsurancePanel.add(fields[row], gbc);
             }
@@ -3430,12 +3503,19 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         JTextField plateField = new JTextField(15);
 
         JLabel dateLabel = new JLabel("Date: ");
-        JTextField dateField = new JTextField(15);
+//        JTextField dateField = new JTextField(15);
+
+        JDateChooser dateField = new JDateChooser();
+        dateField.setDateFormatString("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         JLabel expirationDateLabel = new JLabel("Expiration Date: ");
-        JTextField expirationDateField = new JTextField(15);
+//        JTextField expirationDateField = new JTextField(15);
 
-        JLabel valueLabel = new JLabel("Reason: ");
+        JDateChooser expirationDateField = new JDateChooser();
+        expirationDateField.setDateFormatString("yyyy-MM-dd");
+
+        JLabel valueLabel = new JLabel("Value: ");
         JTextField valueField = new JTextField(15);
 
         JLabel nifLabel = new JLabel("NIF: ");
@@ -3451,8 +3531,13 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submitButton.addActionListener(e -> {
             while (true) {
                 String plate = plateField.getText();
-                String date = dateField.getText();
-                String expirationDate = expirationDateField.getText();
+//                String date = dateField.getText();
+
+                String date = sdf.format(dateField.getDate());
+
+//                String expirationDate = expirationDateField.getText();
+                String expirationDate = sdf.format(expirationDateField.getDate());
+
                 String value = valueField.getText();
                 String nif = nifField.getText();
                 String reason = (String) reasonFiel.getSelectedItem();
@@ -3466,7 +3551,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                         insertTicket(insertMenuFrame);
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " registered a new ticket for customer with NIF: " + nif + " and Date: " + date);
-//                        break;
+                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertTicketFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
@@ -3505,8 +3590,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         });
 
         gbc.gridwidth = 1;
-        JLabel[] labels = new JLabel[]{plateLabel, dateLabel, expirationDateLabel, valueLabel, nifLabel, reasonLabel};
-        JTextField[] fields = new JTextField[]{plateField, dateField, expirationDateField, valueField, nifField};
+        JLabel[] labels = new JLabel[]{plateLabel, valueLabel, nifLabel, reasonLabel, dateLabel, expirationDateLabel};
+        JTextField[] fields = new JTextField[]{plateField, valueField, nifField};
 
         for (int row = 0; row < 6; row++) {
             gbc.gridx = 0;
@@ -3516,8 +3601,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             gbc.gridx = 1;
             gbc.gridy = row + 1;
             gbc.anchor = GridBagConstraints.LINE_END;
-            if (row == 5) {
+            if (row == 3) {
                 insertTicketPanel.add(reasonFiel, gbc);
+            } else if (row == 4) {
+                insertTicketPanel.add(dateField, gbc);
+            } else if (row == 5) {
+                insertTicketPanel.add(expirationDateField, gbc);
             } else {
                 insertTicketPanel.add(fields[row], gbc);
             }
@@ -3585,8 +3674,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         JLabel emailLabel = new JLabel("Email: ");
         JTextField emailField = new JTextField(15);
 
-        JLabel birthDateLabel = new JLabel("Birth Date: (YYYY-MM-DD)");
-        JTextField birthDateField = new JTextField(15);
+        JLabel birthDateLabel = new JLabel("Birth Date: ");
+//        JTextField birthDateField = new JTextField(15);
+
+        JDateChooser birthDateField = new JDateChooser();
+        birthDateField.setDateFormatString("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         JLabel passwordLabel = new JLabel("Password: ");
         JTextField passwordField = new JTextField(15);
@@ -3607,7 +3700,9 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 String name = nameField.getText();
                 String address = addressField.getText();
                 String email = emailField.getText();
-                String birthDate = birthDateField.getText();
+//                String birthDate = birthDateField.getText();
+
+                String birthDate = sdf.format(birthDateField.getDate());
                 String password = passwordField.getText();
                 String nif = nifField.getText();
                 String accessLevel = (String) accessLevelField.getSelectedItem();
@@ -3623,7 +3718,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                         insertEmployee(insertMenuFrame);
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " registered a new employee with NIF: " + nif);
-                        //break;
+                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertEmployeeFrame, "Error registering employee");
                         logger.info("Employee with name: " + employee.getName()
@@ -3662,9 +3757,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         });
 
         gbc.gridwidth = 1;
-        JLabel[] labels = {nameLabel, addressLabel, emailLabel, birthDateLabel,
-                passwordLabel, nifLabel, accessLevelLabel};
-        JTextField[] fields = {nameField, addressField, emailField, birthDateField,
+//        JLabel[] labels = {nameLabel, addressLabel, emailLabel, birthDateLabel,
+//                passwordLabel, nifLabel, accessLevelLabel};
+//        JTextField[] fields = {nameField, addressField, emailField, birthDateField,
+//                passwordField, nifField};
+
+        JLabel[] labels = {nameLabel, addressLabel, emailLabel,
+                passwordLabel, nifLabel, accessLevelLabel, birthDateLabel};
+        JTextField[] fields = {nameField, addressField, emailField,
                 passwordField, nifField};
 
         for (int row = 0; row < 7; row++) {
@@ -3676,6 +3776,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             gbc.gridx = 1;
             gbc.anchor = GridBagConstraints.LINE_END;
             if (row == 6) {
+                insertEmployeePanel.add(birthDateField, gbc);
+            } else if (row == 5) {
                 insertEmployeePanel.add(accessLevelField, gbc);
             } else {
                 insertEmployeePanel.add(fields[row], gbc);
@@ -3743,8 +3845,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         JLabel emailLabel = new JLabel("Email: ([...]@[...].com or [...]@[...].pt");
         JTextField emailField = new JTextField(15);
 
-        JLabel birthDateLabel = new JLabel("Birth Date: (YYYY-MM-DD)");
-        JTextField birthDateField = new JTextField(15);
+        JLabel birthDateLabel = new JLabel("Birth Date: ");
+//        JTextField birthDateField = new JTextField(15);
+
+        JDateChooser birthDateField = new JDateChooser();
+        birthDateField.setDateFormatString("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         JLabel passwordLabel = new JLabel("Password: ");
         JTextField passwordField = new JTextField(15);
@@ -3758,11 +3864,17 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         JLabel licenseTypeLabel = new JLabel("License Type: (Select an option");
         JComboBox<String> licenseType = new JComboBox<>(new String[]{" ", "A", "B", "C", "D"});
 
-        JLabel licenseDateLabel = new JLabel("License Date: (YYYY-MM-DD)");
-        JTextField licenseDateField = new JTextField(15);
+        JLabel licenseDateLabel = new JLabel("License Date: ");
+//        JTextField licenseDateField = new JTextField(15);
 
-        JLabel licenseExpirationLabel = new JLabel("License Expiration: (YYYY-MM-DD)");
-        JTextField licenseExpirationField = new JTextField(15);
+        JDateChooser licenseDateField = new JDateChooser();
+        licenseDateField.setDateFormatString("yyyy-MM-dd");
+
+        JLabel licenseExpirationLabel = new JLabel("License Expiration: ");
+//        JTextField licenseExpirationField = new JTextField(15);
+
+        JDateChooser licenseExpirationField = new JDateChooser();
+        licenseExpirationField.setDateFormatString("yyyy-MM-dd");
 
         JButton submitButton = new JButton("Submit");
         submitButton.setBackground(GREEN);
@@ -3773,13 +3885,18 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 String name = nameField.getText();
                 String address = addressField.getText();
                 String email = emailField.getText();
-                String birthDate = birthDateField.getText();
+//                String birthDate = birthDateField.getText();
+                String birthDate = sdf.format(birthDateField.getDate());
+
                 String password = passwordField.getText();
                 String nif = nifField.getText();
                 String driverLicense = driverLicenseField.getText();
                 String selectedLicenseType = (String) licenseType.getSelectedItem();
-                String licenseDate = licenseDateField.getText();
-                String licenseExpiration = licenseExpirationField.getText();
+//                String licenseDate = licenseDateField.getText();
+                String licenseDate = sdf.format(licenseDateField.getDate());
+
+//                String licenseExpiration = licenseExpirationField.getText();
+                String licenseExpiration = sdf.format(licenseExpirationField.getDate());
 
                 if (isValidString(name) && isValidString(address) && isNIF(nif) && isDate(licenseDate)
                         && isValidExpirationDate(licenseExpiration) && isEmail(email) && isValidBirthDate(birthDate)
@@ -3794,7 +3911,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                         insertCustomerFrame.dispose();
                         insertVehicle(insertMenuFrame);
 
-//                        break;
+                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertCustomerFrame, "Error inserting customer");
                         logger.info("Employee with name: " + employee.getName()
@@ -3833,12 +3950,36 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         });
 
         gbc.gridwidth = 1;
-        JLabel[] labels = {nameLabel, addressLabel, emailLabel, birthDateLabel,
+//        JLabel[] labels = {nameLabel, addressLabel, emailLabel, birthDateLabel,
+//                passwordLabel, nifLabel, driverLicenseLabel, licenseDateLabel,
+//                licenseExpirationLabel, licenseTypeLabel};
+//        JTextField[] fields = {nameField, addressField, emailField, birthDateField,
+//                passwordField, nifField, driverLicenseField,
+//                licenseDateField, licenseExpirationField};
+
+        JLabel[] labels = {nameLabel, addressLabel, emailLabel,
                 passwordLabel, nifLabel, driverLicenseLabel, licenseDateLabel,
-                licenseExpirationLabel, licenseTypeLabel};
-        JTextField[] fields = {nameField, addressField, emailField, birthDateField,
-                passwordField, nifField, driverLicenseField,
-                licenseDateField, licenseExpirationField};
+                licenseExpirationLabel, licenseTypeLabel, birthDateLabel};
+        JTextField[] fields = {nameField, addressField, emailField,
+                passwordField, nifField, driverLicenseField};
+
+
+//        for (int row = 0; row < 10; row++) {
+//            gbc.gridx = 0;
+//            gbc.gridy = row + 1;
+//            gbc.anchor = GridBagConstraints.LINE_START;
+//            insertCustomerPanel.add(labels[row], gbc);
+//
+//            gbc.gridx = 1;
+//            gbc.anchor = GridBagConstraints.LINE_END;
+//            if (row == 9) {
+//                insertCustomerPanel.add(licenseType, gbc);
+//            } else if (row == 3) {
+//                insertCustomerPanel.add(birthDateField, gbc);
+//            } else {
+//                insertCustomerPanel.add(fields[row], gbc);
+//            }
+//        }
 
         for (int row = 0; row < 10; row++) {
             gbc.gridx = 0;
@@ -3848,8 +3989,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
             gbc.gridx = 1;
             gbc.anchor = GridBagConstraints.LINE_END;
-            if (row == 9) {
+            if (row == 6) {
+                insertCustomerPanel.add(licenseDateField, gbc);
+            } else if (row == 7) {
+                insertCustomerPanel.add(licenseExpirationField, gbc);
+            } else if (row == 8) {
                 insertCustomerPanel.add(licenseType, gbc);
+            } else if (row == 9) {
+                insertCustomerPanel.add(birthDateField, gbc);
             } else {
                 insertCustomerPanel.add(fields[row], gbc);
             }
@@ -4038,8 +4185,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
             } else if (row == 7) {
                 insertVehiclePanel.add(registrationDateField, gbc);
-            }
-            else {
+            } else {
                 insertVehiclePanel.add(textFields2[row], gbc);
             }
         }
