@@ -484,7 +484,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         insuranceDisplaySearchOptions.addActionListener(e -> {
             String searchOption = (String) insuranceDisplaySearchOptions.getSelectedItem();
-            if(searchOption.equals("General Search")) {
+            if (searchOption.equals("General Search")) {
                 inputForSearchField.setEnabled(false);
             } else {
                 inputForSearchField.setEnabled(true);
@@ -782,7 +782,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         ticketDisplaySearchOptions.addActionListener(e -> {
             String searchOption = (String) ticketDisplaySearchOptions.getSelectedItem();
-            if(searchOption.equals("General Search")) {
+            if (searchOption.equals("General Search")) {
                 inputForSearchField.setEnabled(false);
             } else {
                 inputForSearchField.setEnabled(true);
@@ -1124,7 +1124,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         customerDisplaySearchOptions.addActionListener(e -> {
             String searchOption = (String) customerDisplaySearchOptions.getSelectedItem();
-            if(searchOption.equals("General Search")) {
+            if (searchOption.equals("General Search")) {
                 inputForSearchField.setEnabled(false);
             } else {
                 inputForSearchField.setEnabled(true);
@@ -1424,7 +1424,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         employeeDisplaySearchOptions.addActionListener(e -> {
             String searchOption = (String) employeeDisplaySearchOptions.getSelectedItem();
-            if(searchOption.equals("General Search")) {
+            if (searchOption.equals("General Search")) {
                 inputForSearchField.setEnabled(false);
             } else {
                 inputForSearchField.setEnabled(true);
@@ -1689,7 +1689,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         vehicleDisplaySearchOptions.addActionListener(e -> {
             String searchOption = (String) vehicleDisplaySearchOptions.getSelectedItem();
-            if(searchOption.equals("General Search")) {
+            if (searchOption.equals("General Search")) {
                 inputForSearchField.setEnabled(false);
             } else {
                 inputForSearchField.setEnabled(true);
@@ -2591,11 +2591,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                             "Success", JOptionPane.INFORMATION_MESSAGE);
                     logger.info("Employee with name: " + employee.getName()
                             + "NIF: " + employee.getNif() + " updated vehicle with plate " + plateText + " and new color: " + colorText);
-                }
-                JOptionPane.showMessageDialog(updateVehicleFrame, "Error updating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
-                logger.info("Employee with name: " + employee.getName()
-                        + "NIF: " + employee.getNif() + " failed to update vehicle with plate: " + plateText + " and new color: " + colorText);
+                } else {
+                    JOptionPane.showMessageDialog(updateVehicleFrame, "Error updating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to update vehicle with plate: " + plateText + " and new color: " + colorText);
 
+                }
             }
             updateVehicleFrame.setVisible(false);
             vehicleUpdatePage(updateMenuFrame);
@@ -2830,6 +2831,10 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                     logger.error("Employee with name: " + employee.getName()
                             + "NIF: " + employee.getNif() + " failed to deactivate customer with NIF: " + nif);
                 }
+            } else {
+                JOptionPane.showMessageDialog(deactivateCustomerFrame, "Please write a valid NIF");
+                logger.error("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to deactivate customer with NIF: " + nif);
             }
         });
 
@@ -3162,6 +3167,11 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                     logger.error("Employee with name: " + employee.getName()
                             + "NIF: " + employee.getNif() + " failed to deactivate the vehicle with plate: " + plate);
                 }
+            } else {
+                JOptionPane.showMessageDialog(deactivateVehicleFrame, "Please write a valid plate with " +
+                        "format XX-XX-XX");
+                logger.error("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to deactivate the vehicle with plate: " + plate);
             }
         });
 

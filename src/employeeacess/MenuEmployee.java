@@ -2255,7 +2255,7 @@ public class MenuEmployee implements ValidateInput {
     //DONE
     private void updateVehiclePage(JFrame updateMenuFrame) {
         updateMenuFrame.setVisible(false);
-        JFrame updateVehicleFrame = new JFrame("Update Vehicle");
+        JFrame updateVehicleFrame = new JFrame("CarSync");
         updateVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         updateVehicleFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -2273,11 +2273,17 @@ public class MenuEmployee implements ValidateInput {
         submit.setBackground(GREEN);
         submit.setForeground(WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to update menu page");
             updateVehicleFrame.setVisible(false);
             updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             updateVehicleFrame.dispose();
+            mainFrame.dispose();
+            updateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -2301,16 +2307,23 @@ public class MenuEmployee implements ValidateInput {
         submit.addActionListener(e -> {
             String plateText = plateField.getText();
             String colorText = (String) colorField.getSelectedItem();
-            if (!isPlate(plateText))
-                JOptionPane.showMessageDialog(updateVehicleFrame, "Please insert a valid plate with " +
+            if (!isPlate(plateText)) {
+                JOptionPane.showMessageDialog(updateVehicleFrame, "Please write a valid plate with " +
                         "format XX-XX-XX");
-            else {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update vehicle with plate: " + plateText + " and new color: " + colorText);
+            } else {
                 if (dataSource.updateVehicleColor(plateText, colorText)) {
                     JOptionPane.showMessageDialog(updateVehicleFrame, "Vehicle successfully updated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
-                }
-                JOptionPane.showMessageDialog(updateVehicleFrame, "Error updating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " updated vehicle with plate " + plateText + " and new color: " + colorText);
+                } else {
+                    JOptionPane.showMessageDialog(updateVehicleFrame, "Error updating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to update vehicle with plate: " + plateText + " and new color: " + colorText);
 
+                }
             }
             updateVehicleFrame.setVisible(false);
             updateVehiclePage(updateMenuFrame);
@@ -2364,6 +2377,8 @@ public class MenuEmployee implements ValidateInput {
         updateVehicleFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2660,7 +2675,7 @@ public class MenuEmployee implements ValidateInput {
 
     //receives a customer nif and then proceeds to deactivate the customer sending a success message
     private void deactivateCustomerPage(JFrame deactivateMenuFrame) {
-        JFrame deactivateCustomerFrame = new JFrame("Deactivate Customer");
+        JFrame deactivateCustomerFrame = new JFrame("CarSync");
         deactivateCustomerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateCustomerFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -2679,11 +2694,17 @@ public class MenuEmployee implements ValidateInput {
         submit.setForeground(WHITE);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went to back to the deactivation menu");
             deactivateCustomerFrame.setVisible(false);
             deactivateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             deactivateCustomerFrame.dispose();
+            mainFrame.dispose();
+            deactivateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -2691,11 +2712,11 @@ public class MenuEmployee implements ValidateInput {
         //SET UP for exit buttons
         JPanel deactivateCustomerPanel = new JPanel(new GridBagLayout());
 
-        JLabel deactivateVehicleLabel = new JLabel("Deactivate Customer");
-        deactivateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel deactivateCustomerLabel = new JLabel("Deactivate Customer");
+        deactivateCustomerLabel.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.PAGE_START;
-        deactivateCustomerPanel.add(deactivateVehicleLabel, gbc);
+        deactivateCustomerPanel.add(deactivateCustomerLabel, gbc);
 
         JLabel nifLabel = new JLabel("NIF: ");
         JTextField nifField = new JTextField(15);
@@ -2703,11 +2724,20 @@ public class MenuEmployee implements ValidateInput {
         submit.addActionListener(e -> {
             String nif = nifField.getText();
             if (isNIF(nif)) {
-                if (dataSource.deactivateCustomer(Integer.parseInt(nif)))
+                if (dataSource.deactivateCustomer(Integer.parseInt(nif))) {
                     JOptionPane.showMessageDialog(deactivateCustomerFrame, "Customer successfully deactivated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
-                else
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " deactivated customer with NIF: " + nif);
+                } else {
                     JOptionPane.showMessageDialog(deactivateCustomerFrame, "Error deactivating Customer", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.error("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to deactivate customer with NIF: " + nif);
+                }
+            } else {
+                JOptionPane.showMessageDialog(deactivateCustomerFrame, "Please write a valid NIF");
+                logger.error("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to deactivate customer with NIF: " + nif);
             }
         });
 
@@ -2752,16 +2782,16 @@ public class MenuEmployee implements ValidateInput {
         deactivateCustomerFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
-
-
     }
 
     //receives a license plate and then proceeds to deactivate the vehicle sending a success message
     private void deactivateVehiclePage(JFrame deactivateMenuFrame) {
-        JFrame deactivateVehicleFrame = new JFrame("Deactivate Vehicle");
+        JFrame deactivateVehicleFrame = new JFrame("CarSync");
         deactivateVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateVehicleFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -2780,11 +2810,18 @@ public class MenuEmployee implements ValidateInput {
         submit.setForeground(WHITE);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to deactivation page");
             deactivateVehicleFrame.setVisible(false);
             deactivateMenuFrame.setVisible(true);
         });
+
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             deactivateVehicleFrame.dispose();
+            mainFrame.dispose();
+            deactivateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -2804,11 +2841,21 @@ public class MenuEmployee implements ValidateInput {
         submit.addActionListener(e -> {
             String plate = plateField.getText();
             if (isPlate(plate)) {
-                if (dataSource.deactivateVehicle(plate))
+                if (dataSource.deactivateVehicle(plate)) {
                     JOptionPane.showMessageDialog(deactivateVehicleFrame, "Vehicle successfully deactivated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
-                else
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " deactivated the vehicle with plate: " + plate);
+                } else {
                     JOptionPane.showMessageDialog(deactivateVehicleFrame, "Error deactivating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.error("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to deactivate the vehicle with plate: " + plate);
+                }
+            } else {
+                JOptionPane.showMessageDialog(deactivateVehicleFrame, "Please write a valid plate with " +
+                        "format XX-XX-XX");
+                logger.error("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to deactivate the vehicle with plate: " + plate);
             }
         });
 
@@ -2853,11 +2900,11 @@ public class MenuEmployee implements ValidateInput {
         deactivateVehicleFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
-
-
     }
 
     //Insert Menu

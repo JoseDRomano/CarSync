@@ -2559,11 +2559,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                             "Success", JOptionPane.INFORMATION_MESSAGE);
                     logger.info("Employee with name: " + employee.getName()
                             + "NIF: " + employee.getNif() + " updated vehicle with plate " + plateText + " and new color: " + colorText);
-                }
-                JOptionPane.showMessageDialog(updateVehicleFrame, "Error updating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
-                logger.info("Employee with name: " + employee.getName()
-                        + "NIF: " + employee.getNif() + " failed to update vehicle with plate: " + plateText + " and new color: " + colorText);
+                } else {
+                    JOptionPane.showMessageDialog(updateVehicleFrame, "Error updating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to update vehicle with plate: " + plateText + " and new color: " + colorText);
 
+                }
             }
             updateVehicleFrame.setVisible(false);
             vehicleUpdatePage(updateMenuFrame);
@@ -2798,6 +2799,10 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                     logger.error("Employee with name: " + employee.getName()
                             + "NIF: " + employee.getNif() + " failed to deactivate customer with NIF: " + nif);
                 }
+            } else {
+                JOptionPane.showMessageDialog(deactivateCustomerFrame, "Please write a valid NIF");
+                logger.error("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to deactivate customer with NIF: " + nif);
             }
         });
 
@@ -3130,6 +3135,11 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                     logger.error("Employee with name: " + employee.getName()
                             + "NIF: " + employee.getNif() + " failed to deactivate the vehicle with plate: " + plate);
                 }
+            } else {
+                JOptionPane.showMessageDialog(deactivateVehicleFrame, "Please write a valid plate with " +
+                        "format XX-XX-XX");
+                logger.error("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to deactivate the vehicle with plate: " + plate);
             }
         });
 
