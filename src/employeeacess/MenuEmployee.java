@@ -41,6 +41,12 @@ public class MenuEmployee implements ValidateInput {
             return;
         }
 
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         JButton insertMenu = new JButton("Insert Menu");
         JButton updateMenu = new JButton("Update Menu");
         JButton taskMenu = new JButton("Task Menu");
