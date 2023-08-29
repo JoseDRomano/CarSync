@@ -19,3 +19,10 @@ Task ID: 3
     NIF: 200000000
     Values: DD-SS-10,White
 
+Task ID: 4
+    Type: Update Vehicle Color
+    Status: Closed
+    Date: 2023-08-29
+    NIF: 200000001
+    Values: NA-SS-09,White
+

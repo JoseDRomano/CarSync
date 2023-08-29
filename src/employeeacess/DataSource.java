@@ -1027,7 +1027,7 @@ public class DataSource {
 
 
     //TESTED
-    private boolean insuranceExists(int policy, int nif) {
+    public boolean insuranceExists(int policy, int nif) {
         for (Insurance i : queryInsurances()) {
             if (isVehicleOwner(nif, i.getCarPlate())) {
                 if (i.getPolicy() == policy) {
@@ -1039,7 +1039,7 @@ public class DataSource {
     }
 
     //TESTED
-    private boolean isVehicleOwner(int nif, String plate) {
+    public boolean isVehicleOwner(int nif, String plate) {
         for (Vehicle v : queryVehicles()) {
             if (v.getPlate().equals(plate)) {
                 if (v.getNif() == nif) {

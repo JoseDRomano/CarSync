@@ -389,7 +389,7 @@ public class TaskManagment {
         //Digamos que as próximas String são os inputs do user, no caso de ele querer registar um veiculo
 //        String VIN = "1234567000ASDFG43";
         String plate = "NA-SS-09";
-        String color = "Purple";
+        String color = "White";
 //        String brand = "AUDI";
 //        String model = "A3";
 //        String registrationDate = "2019-09-11";
@@ -397,15 +397,14 @@ public class TaskManagment {
         String nif = "200000000";
 //
 //        //Depois de teres os inputs basta fazeres
-//        tk.createTask("Update Vehicle Color", Integer.parseInt(nif), plate, color);
+        tk.createTask("Update Vehicle Color", Integer.parseInt(nif), plate, color);
 
-        Task t = tk.getNextTask(2);
-        DataSource dataSource = new DataSource();
-        tk.printList();
-        if (dataSource.open()) {
-            t.perFormTask(dataSource);
-        }
-        tk.printList();
+
+//        tk.printList();
+//        if (dataSource.open()) {
+//            t.perFormTask(dataSource);
+//        }
+//        tk.printList();
 //        System.out.println(createAndShowGUI());
 
     }
