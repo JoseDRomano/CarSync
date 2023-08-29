@@ -1225,6 +1225,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to search menu page");
             searchMenuFrame.setVisible(true);
             customerDisplayFrame.setVisible(false);
         });
@@ -1257,6 +1259,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         customerDisplayFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -1356,6 +1360,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 if (searchOption.equals("General Search")) {
                     displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
                             employeeDisplayFrame, orderType);
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " displayed all the employees order by: " + orderType);
                 } else {
                     switch (searchOption) {
 
@@ -1370,8 +1376,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                 }
                                 displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
                                         employeeDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the employees with NIF: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid NIF");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the employees with NIF: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
 
@@ -1385,8 +1397,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                 }
                                 displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
                                         employeeDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the employees with name: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid name");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the employees with name: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
 
@@ -1400,8 +1418,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                 }
                                 displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
                                         employeeDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the employees with address: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid address");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the employees with address: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
 
@@ -1415,8 +1439,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                 }
                                 displaySearchByOrderEmployee(rowsPerPage, dataSource.queryEmployees(),
                                         employeeDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the employees with access level: " + input
+                                        + "ordered by: " + orderType);
                             } else {
                                 JOptionPane.showMessageDialog(employeeDisplayFrame, "Please enter a valid access level");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the employees with access level: " + input
+                                        + "ordered by: " + orderType);
                             }
                         }
                     }
@@ -1468,6 +1498,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to search menu page");
             searchMenuFrame.setVisible(true);
             employeeDisplayFrame.setVisible(false);
         });
@@ -1499,6 +1531,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         employeeDisplayFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -1594,8 +1628,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with NIF: " + input);
                             } else {
-                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid NIF");
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please write a valid NIF");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with NIF: " + input);
                             }
                         }
 
@@ -1608,8 +1646,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with brand: " + input);
                             } else {
-                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid input");
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please write a valid input");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with brand: " + input);
                             }
                         }
 
@@ -1622,8 +1664,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with color: " + input);
                             } else {
-                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid color");
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please write a valid color");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with color: " + input);
                             }
                         }
 
@@ -1636,8 +1682,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with category: " + input);
                             } else {
-                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid category");
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please write a valid category");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with category: " + input);
                             }
                         }
 
@@ -1650,8 +1700,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with issue date: " + input);
                             } else {
-                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid Date");
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please write a valid Date");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with issue date: " + input);
                             }
                         }
 
@@ -1664,8 +1718,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with VIN: " + input);
                             } else {
-                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid VIN");
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please write a valid VIN");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with VIN: " + input);
                             }
                         }
 
@@ -1678,8 +1736,12 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                                     }
                                 });
                                 displaySearchByOrderVehicle(rowsPerPage, vehicleList, vehicleDisplayFrame, orderType);
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " displayed all the vehicles with plate: " + input);
                             } else {
-                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please insert a valid plate");
+                                JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please write a valid plate");
+                                logger.info("Employee with name: " + employee.getName()
+                                        + " NIF: " + employee.getNif() + " tried to display all the vehicles with plate: " + input);
                             }
                         }
                     }
@@ -1688,6 +1750,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please, select an option for each field");
             }
         });
+
         gbc.gridwidth = 1;
         JLabel[] labels = {vehicleDisplaySearchLabel, vehicleDisplayOrderLabel, rowsPerPageLabel, inputForSearch};
         JComboBox[] comboBoxes = {vehicleDisplaySearchOptions, vehicleDisplayOrderOptions, rowsPerPageOptions};
@@ -1727,6 +1790,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         backButton.addActionListener(e ->
 
         {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went back to the search menu");
             searchMenuFrame.setVisible(true);
             vehicleDisplayFrame.setVisible(false);
         });
@@ -1764,6 +1829,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         vehicleDisplayFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -1872,6 +1939,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         updateMenuFrame.setVisible(true);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went back to the update menu");
             mainFrame.setVisible(true);
             updateMenuFrame.setVisible(false);
         });
@@ -1889,10 +1958,23 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 JButton button = (JButton) e.getSource();
                 updateMenuFrame.setVisible(false);
 
-                if (button == vehicleUpdate) vehicleUpdatePage(updateMenuFrame);
-                else if (button == employeeUpdate) employeeUpdatePage(updateMenuFrame);
-                else if (button == customerUpdate) customerUpdatePage(updateMenuFrame);
-                else if (button == ticketUpdate) ticketUpdatePage(updateMenuFrame);
+                if (button == vehicleUpdate) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the vehicle update menu");
+                    vehicleUpdatePage(updateMenuFrame);
+                } else if (button == employeeUpdate) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the employee update menu");
+                    employeeUpdatePage(updateMenuFrame);
+                } else if (button == customerUpdate) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the customer update menu");
+                    customerUpdatePage(updateMenuFrame);
+                } else if (button == ticketUpdate) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " entered the ticket update menu");
+                    ticketUpdatePage(updateMenuFrame);
+                }
             }
         };
 
@@ -1904,6 +1986,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         updateMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -1911,7 +1995,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
     }
 
     private void ticketUpdatePage(JFrame updateMenuFrame) {
-        JFrame updateTicketFrame = new JFrame("Update Ticket");
+        JFrame updateTicketFrame = new JFrame("CarSync");
         updateTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         updateTicketFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -1930,20 +2014,23 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submit.setForeground(WHITE);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to the update menu");
             updateTicketFrame.setVisible(false);
             updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             updateTicketFrame.dispose();
+            mainFrame.dispose();
+            updateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel updateTicketPanel = new JPanel(new GridBagLayout());
-        updateTicketPanel.setBackground(Color.WHITE);
 
         JLabel updateTicketLabel = new JLabel("Pay Ticket");
         updateTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -1962,11 +2049,17 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             String id = idField.getText();
             String value = valueField.getText();
 
-            if (dataSource.payTicket(Integer.parseInt(id), Float.parseFloat(valueField.getText())))
+            if
+            (dataSource.payTicket(Integer.parseInt(id), Float.parseFloat(valueField.getText()))) {
                 JOptionPane.showMessageDialog(updateTicketFrame, "Ticket successfully paid",
                         "Success", JOptionPane.INFORMATION_MESSAGE);
-            else
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " paid ticket with id: " + id + " and value: " + value);
+            } else {
                 JOptionPane.showMessageDialog(updateTicketFrame, "Error paying ticket", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.error("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to pay ticket with id: " + id + " and value: " + value);
+            }
         });
 
         gbc.gridwidth = 1;
@@ -2014,13 +2107,15 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         updateTicketFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     private void customerUpdatePage(JFrame updateMenuFrame) {
-        JFrame updatePersonFrame = new JFrame("Update Vehicle");
+        JFrame updatePersonFrame = new JFrame("CarSync");
         updatePersonFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         updatePersonFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -2038,20 +2133,23 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submit.setBackground(GREEN);
         submit.setForeground(WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to the update menu");
             updatePersonFrame.setVisible(false);
             updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             updatePersonFrame.dispose();
+            mainFrame.dispose();
+            updateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel updatePersonPanel = new JPanel(new GridBagLayout());
-        updatePersonPanel.setBackground(Color.WHITE);
 
         JLabel updatePersonLabel = new JLabel("Update Person");
         updatePersonLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2073,16 +2171,24 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 //            String nif = nifField.getSelectedItem().toString();
             String nif = nifField.getText();
             String email = emailField.getText();
-            if (!isNIF(nif))
-                JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
-            else if (!isEmail(email)) {
+            if (!isNIF(nif)) {
+                JOptionPane.showMessageDialog(updatePersonFrame, "Please write a valid NIF");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update email for person with NIF: " + nif);
+            } else if (!isEmail(email)) {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Wrong email format");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update email for person with NIF: " + nif);
             } else {
                 if (dataSource.updatePersonEmail(Integer.parseInt(nif), email)) {
                     JOptionPane.showMessageDialog(updatePersonFrame, "Email successfully updated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to update email for person with NIF: " + nif);
                 } else
                     JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " was not able to update email for person with NIF: " + nif);
             }
         });
 
@@ -2094,19 +2200,27 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submitButton2.setForeground(Color.WHITE);
         submitButton2.addActionListener(e -> {
             String password = passwordField.getText();
+//            String nif = nifField.getSelectedItem().toString();
             String nif = nifField.getText();
-            if (!isNIF(nif))
-                JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
-            else if (!isPassword(passwordField.getText())) {
+            if (!isNIF(nif)) {
+                JOptionPane.showMessageDialog(updatePersonFrame, "Please write a valid NIF");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update password for person with NIF: " + nif);
+            } else if (!isPassword(passwordField.getText())) {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Wrong password format");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update password for person with NIF: " + nif);
             } else {
                 password = BCrypt.hashpw(password, BCrypt.gensalt());
                 if (dataSource.updatePersonPassword(Integer.parseInt(nif), password)) {
-
                     JOptionPane.showMessageDialog(updatePersonFrame, "Password successfully updated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + "updated email for person with NIF: " + nif);
                 } else
                     JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " was not able to update email for person with NIF: " + nif);
             }
         });
 
@@ -2120,16 +2234,24 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             String address = addressField.getText();
 //            String nif = nifField.getSelectedItem().toString();
             String nif = nifField.getText();
-            if (!isNIF(nif))
-                JOptionPane.showMessageDialog(updatePersonFrame, "Please insert a valid NIF");
-            else if (!isValidString(address)) {
+            if (!isNIF(nif)) {
+                JOptionPane.showMessageDialog(updatePersonFrame, "Please write a valid NIF");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update address for person with NIF: " + nif);
+            } else if (!isValidString(address)) {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Wrong address format");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update address for person with NIF: " + nif);
             } else {
                 if (dataSource.updatePersonAddress(Integer.parseInt(nif), address)) {
                     JOptionPane.showMessageDialog(updatePersonFrame, "Address successfully updated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " updated address for person with NIF: " + nif);
                 } else
                     JOptionPane.showMessageDialog(updatePersonFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " was not able to update address for person with NIF: " + nif);
             }
         });
 
@@ -2179,6 +2301,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         updatePersonFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2186,7 +2310,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
     }
 
     private void employeeUpdatePage(JFrame updateMenuFrame) {
-        JFrame employeeUpdateFrame = new JFrame("BackOffice Menu");
+        JFrame employeeUpdateFrame = new JFrame("CarSync");
         employeeUpdateFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         employeeUpdateFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -2244,24 +2368,33 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             if (!accessLevel.equals(" ") && isNIF(nif)) {
                 if (dataSource.updateEmployeeAccessLevel(Integer.parseInt(nif), Integer.parseInt(accessLevel))) {
                     JOptionPane.showMessageDialog(employeeUpdateFrame, "Employee Updated successfully!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " updated access level for person with NIF: " + nif);
                 } else {
                     JOptionPane.showMessageDialog(employeeUpdateFrame, "Update wasn't successfull!");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " was not able to update access level for person with NIF: " + nif);
                 }
             } else {
                 JOptionPane.showMessageDialog(employeeUpdateFrame, "Please make sure all the fields are properly fielded!");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update access level for person with NIF: " + nif);
             }
         });
 
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             dataSource.close();
             mainFrame.dispose();
+            updateMenuFrame.dispose();
             employeeUpdateFrame.dispose();
             System.exit(0);
         });
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to the update menu");
             employeeUpdateFrame.setVisible(false);
             employeeUpdateFrame.dispose();
             updateMenuFrame.setVisible(true);
@@ -2288,6 +2421,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         updateMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -2297,7 +2432,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
     private void vehicleUpdatePage(JFrame updateMenuFrame) {
         updateMenuFrame.setVisible(false);
-        JFrame updateVehicleFrame = new JFrame("Update Vehicle");
+        JFrame updateVehicleFrame = new JFrame("CarSync");
         updateVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         updateVehicleFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -2315,20 +2450,23 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submit.setBackground(GREEN);
         submit.setForeground(WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to update menu page");
             updateVehicleFrame.setVisible(false);
             updateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             updateVehicleFrame.dispose();
+            mainFrame.dispose();
+            updateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel updateVehiclePanel = new JPanel(new GridBagLayout());
-        updateVehiclePanel.setBackground(Color.WHITE);
 
         JLabel updateVehicleLabel = new JLabel("Update Vehicle");
         updateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2346,15 +2484,21 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submit.addActionListener(e -> {
             String plateText = plateField.getText();
             String colorText = (String) colorField.getSelectedItem();
-            if (!isPlate(plateText))
-                JOptionPane.showMessageDialog(updateVehicleFrame, "Please insert a valid plate with " +
+            if (!isPlate(plateText)) {
+                JOptionPane.showMessageDialog(updateVehicleFrame, "Please write a valid plate with " +
                         "format XX-XX-XX");
-            else {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update vehicle with plate: " + plateText + " and new color: " + colorText);
+            } else {
                 if (dataSource.updateVehicleColor(plateText, colorText)) {
                     JOptionPane.showMessageDialog(updateVehicleFrame, "Vehicle successfully updated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " updated vehicle with plate " + plateText + " and new color: " + colorText);
                 }
                 JOptionPane.showMessageDialog(updateVehicleFrame, "Error updating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update vehicle with plate: " + plateText + " and new color: " + colorText);
 
             }
             updateVehicleFrame.setVisible(false);
@@ -2409,13 +2553,15 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         updateVehicleFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     void buildDeactivateMenuPage() {
-        JFrame deactivateMenuFrame = new JFrame("Deactivation Menu");
+        JFrame deactivateMenuFrame = new JFrame("CarSync");
         deactivateMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -2470,14 +2616,17 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         mainFrame.setVisible(false);
         deactivateMenuFrame.setVisible(true);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to update menu page");
             mainFrame.setVisible(true);
             deactivateMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
-            deactivateMenuFrame.dispose();
+                    + "NIF: " + employee.getNif() + " logged out");
             dataSource.close();
+            mainFrame.dispose();
+            deactivateMenuFrame.dispose();
             System.exit(0);
         });
 
@@ -2486,14 +2635,26 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             public void actionPerformed(ActionEvent e) {
                 JButton button = (JButton) e.getSource();
                 deactivateMenuFrame.setVisible(false);
-                if (button == vehicleDeactivation)
+                if (button == vehicleDeactivation) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " went to vehicle deactivation page");
                     deactivateVehiclePage(deactivateMenuFrame);
-                else if (button == customerDeactivation)
+                } else if (button == customerDeactivation) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " went to customer deactivation page");
                     deactivateCustomerPage(deactivateMenuFrame);
-                else if (button == ticketDeactivation)
+                } else if (button == ticketDeactivation) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " went to ticket deactivation page");
                     deactivateTicketPage(deactivateMenuFrame);
-                else if (button == insuranceDeactivation)
+                } else if (button == insuranceDeactivation) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " went to insurance deactivation page");
+                } else if (button == employeeDeactivation) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " went to employee deactivation page");
                     deactivateInsurancePage(deactivateMenuFrame);
+                }
             }
         };
 
@@ -2501,17 +2662,20 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         customerDeactivation.addActionListener(goToPageListener);
         ticketDeactivation.addActionListener(goToPageListener);
         insuranceDeactivation.addActionListener(goToPageListener);
+        employeeDeactivation.addActionListener(goToPageListener);
 
         deactivateMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     private void deactivateCustomerPage(JFrame deactivateMenuFrame) {
-        JFrame deactivateCustomerFrame = new JFrame("Deactivate Customer");
+        JFrame deactivateCustomerFrame = new JFrame("CarSync");
         deactivateCustomerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateCustomerFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -2530,26 +2694,29 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submit.setForeground(WHITE);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went to back to the deactivation menu");
             deactivateCustomerFrame.setVisible(false);
             deactivateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             deactivateCustomerFrame.dispose();
+            mainFrame.dispose();
+            deactivateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel deactivateCustomerPanel = new JPanel(new GridBagLayout());
-        deactivateCustomerPanel.setBackground(Color.WHITE);
 
-        JLabel deactivateVehicleLabel = new JLabel("Deactivate Customer");
-        deactivateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel deactivateCustomerLabel = new JLabel("Deactivate Customer");
+        deactivateCustomerLabel.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.PAGE_START;
-        deactivateCustomerPanel.add(deactivateVehicleLabel, gbc);
+        deactivateCustomerPanel.add(deactivateCustomerLabel, gbc);
 
         JLabel nifLabel = new JLabel("NIF: ");
         JTextField nifField = new JTextField(15);
@@ -2557,11 +2724,16 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submit.addActionListener(e -> {
             String nif = nifField.getText();
             if (isNIF(nif)) {
-                if (dataSource.deactivateCustomer(Integer.parseInt(nif)))
+                if (dataSource.deactivateCustomer(Integer.parseInt(nif))) {
                     JOptionPane.showMessageDialog(deactivateCustomerFrame, "Customer successfully deactivated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
-                else
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " deactivated customer with NIF: " + nif);
+                } else {
                     JOptionPane.showMessageDialog(deactivateCustomerFrame, "Error deactivating Customer", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.error("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to deactivate customer with NIF: " + nif);
+                }
             }
         });
 
@@ -2606,13 +2778,15 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         deactivateCustomerFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     private void deactivateTicketPage(JFrame deactivateMenuFrame) {
-        JFrame deactivateTicketFrame = new JFrame("Deactivate Ticket");
+        JFrame deactivateTicketFrame = new JFrame("CarSync");
         deactivateTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateTicketFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -2631,20 +2805,23 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submit.setForeground(WHITE);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to the deactivation menu");
             deactivateTicketFrame.setVisible(false);
             deactivateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
+            mainFrame.dispose();
             deactivateTicketFrame.dispose();
+            deactivateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel deactivateTicketPanel = new JPanel(new GridBagLayout());
-        deactivateTicketPanel.setBackground(Color.WHITE);
 
         JLabel deactivateTicketLabel = new JLabel("Deactivate Ticket");
         deactivateTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2657,11 +2834,16 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
         submit.addActionListener(e -> {
             String id = idField.getText();
-            if (dataSource.deactivateTicket(Integer.parseInt(id)))
+            if (dataSource.deactivateTicket(Integer.parseInt(id))) {
                 JOptionPane.showMessageDialog(deactivateTicketFrame, "Ticket successfully deactivated",
                         "Success", JOptionPane.INFORMATION_MESSAGE);
-            else
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " deactivate the ticket with ID: " + id);
+            } else {
                 JOptionPane.showMessageDialog(deactivateTicketFrame, "Error deactivating Ticket", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.error("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to deactivate the ticket with ID: " + id);
+            }
 
         });
 
@@ -2706,13 +2888,15 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         deactivateTicketFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     private void deactivateInsurancePage(JFrame deactivateMenuFrame) {
-        JFrame deactivateInsuranceFrame = new JFrame("Deactivate Ticket");
+        JFrame deactivateInsuranceFrame = new JFrame("CarSync");
         deactivateInsuranceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateInsuranceFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -2731,20 +2915,23 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submit.setForeground(WHITE);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went to back to deactivation page");
             deactivateInsuranceFrame.setVisible(false);
             deactivateMenuFrame.setVisible(true);
         });
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             deactivateInsuranceFrame.dispose();
+            mainFrame.dispose();
+            deactivateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel deactivateInsurancePanel = new JPanel(new GridBagLayout());
-        deactivateInsurancePanel.setBackground(Color.WHITE);
 
         JLabel deactivateInsuranceLabel = new JLabel("Deactivate Insured Policy ");
         deactivateInsuranceLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2757,11 +2944,16 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
         submit.addActionListener(e -> {
             String policyNum = policyField.getText();
-            if (dataSource.deactivateInsurance(Integer.parseInt(policyNum)))
+            if (dataSource.deactivateInsurance(Integer.parseInt(policyNum))) {
                 JOptionPane.showMessageDialog(deactivateMenuFrame, "Policy successfully deactivated",
                         "Success", JOptionPane.INFORMATION_MESSAGE);
-            else
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " deactivated the policy with number: " + policyNum);
+            } else {
                 JOptionPane.showMessageDialog(deactivateMenuFrame, "Error deactivating Policy", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.error("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to deactivate the policy with number: " + policyNum);
+            }
 
         });
 
@@ -2806,13 +2998,15 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         deactivateInsuranceFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     private void deactivateVehiclePage(JFrame deactivateMenuFrame) {
-        JFrame deactivateVehicleFrame = new JFrame("Deactivate Vehicle");
+        JFrame deactivateVehicleFrame = new JFrame("CarSync");
         deactivateVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateVehicleFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -2831,21 +3025,24 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submit.setForeground(WHITE);
 
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to deactivation page");
             deactivateVehicleFrame.setVisible(false);
             deactivateMenuFrame.setVisible(true);
         });
 
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             deactivateVehicleFrame.dispose();
+            mainFrame.dispose();
+            deactivateMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
 
         //SET UP for exit buttons
         JPanel deactivateVehiclePanel = new JPanel(new GridBagLayout());
-        deactivateVehiclePanel.setBackground(Color.WHITE);
 
         JLabel deactivateVehicleLabel = new JLabel("Pay Ticket");
         deactivateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -2859,11 +3056,16 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submit.addActionListener(e -> {
             String plate = plateField.getText();
             if (isPlate(plate)) {
-                if (dataSource.deactivateVehicle(plate))
+                if (dataSource.deactivateVehicle(plate)) {
                     JOptionPane.showMessageDialog(deactivateVehicleFrame, "Vehicle successfully deactivated",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
-                else
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " deactivated the vehicle with plate: " + plate);
+                } else {
                     JOptionPane.showMessageDialog(deactivateVehicleFrame, "Error deactivating vehicle", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.error("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to deactivate the vehicle with plate: " + plate);
+                }
             }
         });
 
@@ -2908,27 +3110,29 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         deactivateVehicleFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     void buildInsertMenuPage() {
-        JFrame insertMenuFrame = new JFrame("Insert Menu");
+        JFrame insertMenuFrame = new JFrame("CarSync");
         insertMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         insertMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        JLabel insertMenuLabel = new JLabel("Insert Menu");
+        JLabel insertMenuLabel = new JLabel("Registration Menu");
         insertMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
         insertMenuLabel.setForeground(BLUE);
 
         JButton exitButton = new JButton("Exit");
         JButton backButton = new JButton("Back");
-        JButton vehicleInsert = new JButton("Insert Vehicle Menu");
-        JButton employeeInsert = new JButton("Insert Employee Menu");
-        JButton customerInsert = new JButton("Insert Customer Menu");
-        JButton ticketInsert = new JButton("Insert Ticket Menu");
-        JButton insuranceInsert = new JButton("Insert Insurance Menu");
+        JButton vehicleInsert = new JButton("Vehicle Registration Page");
+        JButton employeeInsert = new JButton("Employee Registration Page");
+        JButton customerInsert = new JButton("Customer Registration Page");
+        JButton ticketInsert = new JButton("Ticket Registration Page");
+        JButton insuranceInsert = new JButton("Insurance Registration Page");
         JPanel insertMenuPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -2969,14 +3173,17 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         mainFrame.setVisible(false);
         insertMenuFrame.setVisible(true);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to main menu");
             mainFrame.setVisible(true);
             insertMenuFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
-            insertMenuFrame.dispose();
+                    + "NIF: " + employee.getNif() + " logged out");
             dataSource.close();
+            mainFrame.dispose();
+            insertMenuFrame.dispose();
             System.exit(0);
         });
         ActionListener goToPageListener = new ActionListener() {
@@ -2985,11 +3192,27 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                 JButton button = (JButton) e.getSource();
                 insertMenuFrame.setVisible(false);
 
-                if (button == vehicleInsert) insertVehicle(insertMenuFrame);
-                else if (button == employeeInsert) insertEmployee(insertMenuFrame);
-                else if (button == customerInsert) insertCustomer(insertMenuFrame);
-                else if (button == ticketInsert) insertTicket(insertMenuFrame);
-                else if (button == insuranceInsert) insertInsurance(insertMenuFrame);
+                if (button == vehicleInsert) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the vehicle registration page");
+                    insertVehicle(insertMenuFrame);
+                } else if (button == employeeInsert) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the employee registration page");
+                    insertEmployee(insertMenuFrame);
+                } else if (button == customerInsert) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the customer registration page");
+                    insertCustomer(insertMenuFrame);
+                } else if (button == ticketInsert) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the ticket registration page");
+                    insertTicket(insertMenuFrame);
+                } else if (button == insuranceInsert) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " entered the insurance registration page");
+                    insertInsurance(insertMenuFrame);
+                }
             }
         };
 
@@ -3002,24 +3225,25 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         insertMenuFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     private void insertInsurance(JFrame insertMenuFrame) {
-        JFrame insertInsuranceFrame = new JFrame("Register Insurance");
+        JFrame insertInsuranceFrame = new JFrame("CarSync");
         insertInsuranceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertInsuranceFrame.setBackground(Color.WHITE);
+        insertInsuranceFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
         JPanel insertInsurancePanel = new JPanel(new GridBagLayout());
-        insertInsurancePanel.setBackground(Color.WHITE);
 
-        JLabel insertInsuranceLabel = new JLabel("Insert Insurance Page");
+        JLabel insertInsuranceLabel = new JLabel("Insurance Registration Page");
         insertInsuranceLabel.setFont(new Font("Arial", Font.BOLD, 20));
         insertInsuranceLabel.setForeground(BLACK);
         gbc.gridwidth = 3;
@@ -3063,15 +3287,21 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                     if (dataSource.insertInsurance(Integer.parseInt(policy), plate, Date.valueOf(startDate),
                             insuranceCategory, Date.valueOf(endDate), companyName)) {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " registered a new insurance and went back to the insert menu");
                         insertInsuranceFrame.setVisible(false);
                         insertInsuranceFrame.dispose();
                         insertInsurance(insertMenuFrame);
 //                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " tried to register a new insurance but failed");
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " tried to register a new insurance but failed");
                     break;
                 }
             }
@@ -3085,9 +3315,11 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
         {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             insertInsuranceFrame.dispose();
             dataSource.close();
+            mainFrame.dispose();
+            insertMenuFrame.dispose();
             System.exit(0);
         });
 
@@ -3096,6 +3328,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         backButton.addActionListener(e ->
 
         {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " went back to the registration menu page");
             insertMenuFrame.setVisible(true);
             insertInsuranceFrame.setVisible(false);
         });
@@ -3156,6 +3390,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         insertInsuranceFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
@@ -3163,18 +3399,17 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
     }
 
     private void insertTicket(JFrame insertMenuFrame) {
-        JFrame insertTicketFrame = new JFrame("Register Ticket");
+        JFrame insertTicketFrame = new JFrame("CarSync");
         insertTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertTicketFrame.setBackground(Color.WHITE);
+        insertTicketFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
         JPanel insertTicketPanel = new JPanel(new GridBagLayout());
-        insertTicketPanel.setBackground(Color.WHITE);
 
-        JLabel insertTicketLabel = new JLabel("Insert Ticket Page");
+        JLabel insertTicketLabel = new JLabel("Ticket Registration Page");
         insertTicketLabel.setFont(new Font("Arial", Font.BOLD, 20));
         insertTicketLabel.setForeground(BLACK);
         gbc.gridwidth = 3;
@@ -3220,12 +3455,18 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                         insertTicketFrame.setVisible(false);
                         insertTicketFrame.dispose();
                         insertTicket(insertMenuFrame);
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " registered a new ticket for customer with NIF: " + nif + " and Date: " + date);
 //                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertTicketFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " tried to register a new ticket for customer with NIF: " + nif + " and Date: " + date);
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertTicketFrame, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " tried to register a new ticket for customer with NIF: " + nif + " and Date: " + date);
                     break;
                 }
             }
@@ -3237,15 +3478,19 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             insertTicketFrame.dispose();
             dataSource.close();
+            mainFrame.dispose();
+            insertMenuFrame.dispose();
             System.exit(0);
         });
 
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " returned to the registration menu page");
             insertMenuFrame.setVisible(true);
             insertTicketFrame.setVisible(false);
         });
@@ -3296,24 +3541,25 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         insertTicketFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     private void insertEmployee(JFrame insertMenuFrame) {
-        JFrame insertEmployeeFrame = new JFrame("Insert Employee");
+        JFrame insertEmployeeFrame = new JFrame("CarSync");
         insertEmployeeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertEmployeeFrame.setBackground(Color.WHITE);
+        insertEmployeeFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
         JPanel insertEmployeePanel = new JPanel(new GridBagLayout());
-        insertEmployeePanel.setBackground(Color.WHITE);
 
-        JLabel insertEmployeeLabel = new JLabel("Insert Employee Page");
+        JLabel insertEmployeeLabel = new JLabel("Employee Registration Page");
         insertEmployeeLabel.setFont(new Font("Arial", Font.BOLD, 20));
         insertEmployeeLabel.setForeground(BLACK);
         gbc.gridwidth = 3;
@@ -3366,12 +3612,18 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                         insertEmployeeFrame.dispose();
                         insertEmployeeFrame.setVisible(false);
                         insertEmployee(insertMenuFrame);
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " registered a new employee with NIF: " + nif);
                         //break;
                     } else {
                         JOptionPane.showMessageDialog(insertEmployeeFrame, "Error registering employee");
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " failed to register a new employee with NIF: " + nif);
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertEmployeeFrame, "Please fill all the fields");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to registered a new employee with NIF: " + nif);
                     break;
                 }
             }
@@ -3383,8 +3635,10 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             insertEmployeeFrame.dispose();
+            mainFrame.dispose();
+            insertMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -3392,6 +3646,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " returned to registration menu page");
             insertMenuFrame.setVisible(true);
             insertEmployeeFrame.setVisible(false);
         });
@@ -3443,24 +3699,25 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         insertEmployeeFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     private void insertCustomer(JFrame insertMenuFrame) {
-        JFrame insertCustomerFrame = new JFrame("Insert Customer");
+        JFrame insertCustomerFrame = new JFrame("CarSync");
         insertCustomerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertCustomerFrame.setBackground(Color.WHITE);
+        insertCustomerFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
         JPanel insertCustomerPanel = new JPanel(new GridBagLayout());
-        insertCustomerPanel.setBackground(Color.WHITE);
 
-        JLabel insertCustomerLabel = new JLabel("Insert Customer Page");
+        JLabel insertCustomerLabel = new JLabel("Customer Registration Page");
         insertCustomerLabel.setFont(new Font("Arial", Font.BOLD, 20));
         insertCustomerLabel.setForeground(BLACK);
         gbc.gridwidth = 3;
@@ -3521,17 +3778,23 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                     password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
                     if (dataSource.insertCustomer(Integer.parseInt(nif), name, address, Date.valueOf(birthDate),
                             password, email, Integer.parseInt(driverLicense), selectedLicenseType, Date.valueOf(licenseDate), Date.valueOf(licenseExpiration))) {
-
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " registered a new customer with NIF: " + nif);
                         JOptionPane.showMessageDialog(insertCustomerFrame, "Customer inserted successfully");
                         insertCustomerFrame.setVisible(false);
                         insertCustomerFrame.dispose();
                         insertVehicle(insertMenuFrame);
+
 //                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertCustomerFrame, "Error inserting customer");
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " failed to register new employee with NIF: " + nif);
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertCustomerFrame, "Please fill all the fields");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to register new employee with NIF: " + nif);
                     break;
                 }
             }
@@ -3543,15 +3806,19 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             insertCustomerFrame.dispose();
             dataSource.close();
+            mainFrame.dispose();
+            insertMenuFrame.dispose();
             System.exit(0);
         });
 
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " returned to registration menu page");
             insertMenuFrame.setVisible(true);
             insertCustomerFrame.setVisible(false);
         });
@@ -3606,15 +3873,17 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         insertCustomerFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });
     }
 
     private void insertVehicle(JFrame insertMenuFrame) {
-        JFrame insertVehicleFrame = new JFrame("Insert Vehicle");
+        JFrame insertVehicleFrame = new JFrame("CarSync");
         insertVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertVehicleFrame.setBackground(Color.WHITE);
+        insertVehicleFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -3630,12 +3899,14 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         submit.setBackground(GREEN);
         submit.setForeground(WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             insertMenuFrame.setVisible(true);
             insertVehicleFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " logged out");
+                    + "NIF: " + employee.getNif() + " logged out");
             insertVehicleFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -3643,9 +3914,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
         //SET UP para botoes de exit
         JPanel insertVehiclePanel = new JPanel(new GridBagLayout());
-        insertVehiclePanel.setBackground(Color.WHITE);
 
-        JLabel insertVehicleLabel = new JLabel("Insert Vehicle");
+        JLabel insertVehicleLabel = new JLabel("Vehicle Registration Page");
         insertVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.PAGE_START;
@@ -3704,6 +3974,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
                     if (dataSource.insertVehicle(plateText, vinText, colorText, brandText,
                             modelText, Date.valueOf(registrationDateText), categoryText, Integer.parseInt(nifText))) {
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " registered a new vehicle with plate: " + plateText);
 //                        break;
                         JOptionPane.showMessageDialog(insertVehicleFrame, "Vehicle succefully registered");
                         insertVehicleFrame.setVisible(false);
@@ -3712,9 +3984,13 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
                     } else {
                         JOptionPane.showMessageDialog(insertVehicleFrame, "Error inserting vehicle");
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " failed to registered a new vehicle with plate: " + plateText);
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill all the fields properly");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to registered a new vehicle with plate: " + plateText);
                     break;
                 }
             }
@@ -3772,6 +4048,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         insertVehicleFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });

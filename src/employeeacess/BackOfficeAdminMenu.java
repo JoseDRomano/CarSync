@@ -1255,7 +1255,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                     + "NIF: " + employee.getNif() + " logged out");
             customerDisplayFrame.dispose();
             mainFrame.dispose();
-            searchMenuFrame.dispose();
             dataSource.close();
             System.exit(0);
         });
@@ -1885,50 +1884,34 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             case "License Plate" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getPlate));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
-                logger.info("Employee with name: " + employee.getName()
-                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by license plate");
             }
             case "NIF" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getNif));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
-                logger.info("Employee with name: " + employee.getName()
-                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by NIF");
             }
             case "VIN" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getVin));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
-                logger.info("Employee with name: " + employee.getName()
-                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by VIN");
             }
             case "Category" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getCategory));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
-                logger.info("Employee with name: " + employee.getName()
-                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by category");
             }
             case "Issue Date" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getregistrationDate));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
-                logger.info("Employee with name: " + employee.getName()
-                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by issue date");
             }
             case "Brand" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getBrand));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
-                logger.info("Employee with name: " + employee.getName()
-                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by brand");
             }
             case "Model" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getModel));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
-                logger.info("Employee with name: " + employee.getName()
-                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by model");
             }
             case "Color" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getColor));
                 new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
-                logger.info("Employee with name: " + employee.getName()
-                        + " NIF: " + employee.getNif() + " the display had the vehicles ordered by color");
             }
             default -> {
                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please select an option for each field");
