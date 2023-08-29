@@ -364,7 +364,22 @@ public class TaskManagment {
 
     public static void main(String[] args) {
         TaskManagment tk = new TaskManagment();
-        String file = "Type: Customer Registration " + "\n";
-        System.out.println(TaskType.getTaskType(tk.taskType(file)));
+//        String file = "Type: Customer Registration " + "\n";
+//        System.out.println(TaskType.getTaskType(tk.taskType(file)));
+
+        //Digamos que as próximas String são os inputs do user, no caso de ele querer registar um veiculo
+        String VIN = "1234567000ASDFG43";
+        String plate = "NA-SS-09";
+        String color = "Black";
+        String brand = "AUDI";
+        String model = "A3";
+        String registrationDate = "2019-09-11";
+        String category = "Light Passenger Vehicle";
+        String nif = "200000000";
+
+        //Depois de teres os inputs basta fazeres
+        tk.createTask("Vehicle Registration", Integer.parseInt(nif), plate, VIN, color, brand, model, registrationDate, category);
+
+
     }
 }

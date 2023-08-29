@@ -30,6 +30,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private static final Logger logger = Logger.getLogger(BackOfficeAdminMenu.class);
 
 
+    //Alterar os inserts
+    //Bloquear a textbox quando o utilizador escolhe general search
     public BackOfficeAdminMenu(Employee employee) {
         dataSource = new DataSource();
         if (!dataSource.open()) {
@@ -264,7 +266,11 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                     logger.info("Employee with name: " + employee.getName()
                             + " NIF: " + employee.getNif() + " completed the task with ID: " + task.getTaskID());
                     JOptionPane.showMessageDialog(null, "Task Completed");
-                    taskDisplay.setText(new TaskManagment().getNextTask(employee.getAccess_level()).toString());
+//                    taskDisplay.setText(new TaskManagment().getNextTask(employee.getAccess_level()).toString());
+                    TaskManagment taskManagment2 = new TaskManagment();
+                    Task task2 = taskManagment2.getNextTask(employee.getAccess_level());
+                    String taskInDisplay2 = (task2 == null) ? "No tasks to display" : task2.toString();
+                    taskDisplay.setText(taskInDisplay2);
                 } else {
                     logger.info("Employee with name: " + employee.getName()
                             + " NIF: " + employee.getNif() + " failed to perform the task with ID: " + task.getTaskID());
@@ -3984,7 +3990,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         insertInsuranceFrame.setVisible(false);
                         insertInsuranceFrame.dispose();
                         insertInsurance(insertMenuFrame);
-//                        break;
+                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
@@ -4118,7 +4124,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JLabel expirationDateLabel = new JLabel("Expiration Date: ");
         JTextField expirationDateField = new JTextField(15);
 
-        JLabel valueLabel = new JLabel("Reason: ");
+        JLabel valueLabel = new JLabel("Value: ");
         JTextField valueField = new JTextField(15);
 
         JLabel nifLabel = new JLabel("NIF: ");
@@ -4149,7 +4155,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         insertTicket(insertMenuFrame);
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " registered a new ticket for customer with NIF: " + nif + " and Date: " + date);
-//                        break;
+                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertTicketFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
@@ -4296,7 +4302,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String accessLevel = (String) accessLevelField.getSelectedItem();
 
                 if (isValidString(name) && isValidString(address) && isEmail(email) && isValidBirthDate(birthDate) && isPassword(password) && isNIF(nif) && !accessLevel.equals(" ")) {
-                   password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
+                    password = BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt());
                     if (dataSource.insertEmployee(Integer.parseInt(nif),
                             name, address, Date.valueOf(birthDate), password,
                             email, Integer.parseInt(accessLevel))) {
@@ -4306,7 +4312,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         insertEmployee(insertMenuFrame);
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " registered a new employee with NIF: " + nif);
-                        //break;
+                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertEmployeeFrame, "Error registering employee");
                         logger.info("Employee with name: " + employee.getName()
@@ -4477,7 +4483,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         insertCustomerFrame.dispose();
                         insertVehicle(insertMenuFrame);
 
-//                        break;
+                        break;
                     } else {
                         JOptionPane.showMessageDialog(insertCustomerFrame, "Error inserting customer");
                         logger.info("Employee with name: " + employee.getName()
@@ -4652,7 +4658,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         submit.addActionListener(e -> {
             while (true) {
-
                 String plateText = plateField.getText();
                 String modelText = modelField.getText();
                 String colorText = (String) colorField.getSelectedItem();
@@ -4663,16 +4668,15 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String categoryText = (String) categoryField.getSelectedItem();
 
                 if (isPlate(plateText) && isValidString(modelText) && isValidExpirationDate(registrationDateText) && isVIN(vinText) && isNIF(nifText) && !categoryText.equals(" ") && !colorText.equals(" ") && !brandText.equals(" ")) {
-
                     if (dataSource.insertVehicle(plateText, vinText, colorText, brandText,
                             modelText, Date.valueOf(registrationDateText), categoryText, Integer.parseInt(nifText))) {
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " registered a new vehicle with plate: " + plateText);
-//                        break;
                         JOptionPane.showMessageDialog(insertVehicleFrame, "Vehicle succefully registered");
                         insertVehicleFrame.setVisible(false);
                         insertVehicleFrame.dispose();
                         insertVehicle(insertMenuFrame);
+                        break;
 
                     } else {
                         JOptionPane.showMessageDialog(insertVehicleFrame, "Error inserting vehicle");
@@ -4683,7 +4687,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                     JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill all the fields properly");
                     logger.info("Employee with name: " + employee.getName()
                             + "NIF: " + employee.getNif() + " failed to registered a new vehicle with plate: " + plateText);
-                    break;
                 }
             }
         });

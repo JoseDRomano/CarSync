@@ -22,8 +22,6 @@ import static java.awt.Color.white;
 public class MenuEmployee implements ValidateInput {
 
     private Employee employee;
-    static final int WIDTH = 800;
-    static final int HEIGHT = 600;
     private JFrame mainFrame;
     private JPanel mainPanel;
 

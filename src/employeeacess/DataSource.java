@@ -587,8 +587,8 @@ public class DataSource {
 
     //TESTED
     public boolean insertVehicle(String plate, String vin, String color,
-                                 String brand, String model, Date registrationDate,
-                                 String category, int nif) {
+                                 String brand, String model,
+                                 Date registrationDate, String category, int nif) {
 
         boolean result = false;
         //Verfica se matricula é válida

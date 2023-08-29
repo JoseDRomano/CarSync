@@ -42,7 +42,7 @@ public class CustomerTableNavigation {
             return;
         }
 
-        tableModel = new CustomerTableModel(new String[]{"NIF", "Name", "Birth Date", "Address", "License number", "License Category",
+        tableModel = new CustomerTableModel(new String[]{"NIF", "Name", "Birth Date", "Address", "License Number", "License Category",
                 "Registration Date", "Expiration Date", "Email"});
 
         table = new JTable(tableModel);
