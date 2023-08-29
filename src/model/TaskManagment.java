@@ -1,9 +1,9 @@
 package model;
 
 import com.toedter.calendar.JDateChooser;
+import employeeacess.DataSource;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,7 +24,8 @@ public class TaskManagment {
 
 
     private List<Task> taskList;
-    private final static Path filePath = Path.of("Tasks.txt");
+    private final static Path filePath = java.nio.file.Path.of("Tasks.txt");
+    private final static Path filePathToTasks = java.nio.file.Path.of("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\Tasks.txt");
     private Scanner scanner;
 
     public TaskManagment() {
@@ -269,9 +270,14 @@ public class TaskManagment {
             taskList.get(i).setTaskID(i + 1);
         }
         try {
-            for (Task task : taskList) {
-                Files.write(filePath, task.toString().getBytes(), StandardOpenOption.CREATE,
-                        StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+            for (int i = 0; i < taskList.size(); i++) {
+                if (i == 0) {
+                    Files.write(filePath, taskList.get(i).toString().getBytes(), StandardOpenOption.CREATE,
+                            StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+                } else {
+                    Files.write(filePath, taskList.get(i).toString().getBytes(), StandardOpenOption.CREATE,
+                            StandardOpenOption.WRITE, StandardOpenOption.APPEND);
+                }
             }
             result = true;
         } catch (IOException e) {
@@ -292,10 +298,18 @@ public class TaskManagment {
         }
 
         taskList.sort(Task::compareTo);
+        for (int i = 0; i < taskList.size(); i++) {
+            taskList.get(i).setTaskID(i + 1);
+        }
         try {
-            for (Task task : taskList) {
-                Files.write(filePath, task.toString().getBytes(), StandardOpenOption.CREATE,
-                        StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+            for (int i = 0; i < taskList.size(); i++) {
+                if (i == 0) {
+                    Files.write(filePath, taskList.get(i).toString().getBytes(), StandardOpenOption.CREATE,
+                            StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+                } else {
+                    Files.write(filePath, taskList.get(i).toString().getBytes(), StandardOpenOption.CREATE,
+                            StandardOpenOption.WRITE, StandardOpenOption.APPEND);
+                }
             }
             result = true;
         } catch (IOException e) {
@@ -374,18 +388,25 @@ public class TaskManagment {
 
         //Digamos que as próximas String são os inputs do user, no caso de ele querer registar um veiculo
 //        String VIN = "1234567000ASDFG43";
-//        String plate = "NA-SS-09";
-//        String color = "Black";
+        String plate = "NA-SS-09";
+        String color = "Purple";
 //        String brand = "AUDI";
 //        String model = "A3";
 //        String registrationDate = "2019-09-11";
 //        String category = "Light Passenger Vehicle";
-//        String nif = "200000000";
+        String nif = "200000000";
 //
 //        //Depois de teres os inputs basta fazeres
-//        tk.createTask("Vehicle Registration", Integer.parseInt(nif), plate, VIN, color, brand, model, registrationDate, category);
+//        tk.createTask("Update Vehicle Color", Integer.parseInt(nif), plate, color);
 
-        System.out.println(createAndShowGUI());
+        Task t = tk.getNextTask(2);
+        DataSource dataSource = new DataSource();
+        tk.printList();
+        if (dataSource.open()) {
+            t.perFormTask(dataSource);
+        }
+        tk.printList();
+//        System.out.println(createAndShowGUI());
 
     }
 
@@ -400,7 +421,7 @@ public class TaskManagment {
         frame.pack();
         frame.setVisible(true);
 
-        while(dateChooser.getDate() == null) {
+        while (dateChooser.getDate() == null) {
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

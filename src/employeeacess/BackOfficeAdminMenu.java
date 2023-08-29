@@ -258,8 +258,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         executeTask.setBackground(GREEN);
         executeTask.setForeground(Color.WHITE);
         executeTask.addActionListener(e -> {
-            logger.info("Employee with name: " + employee.getName()
-                    + " NIF: " + employee.getNif() + " tried to perform taks with ID: " + task.getTaskID());
             if (task == null) {
                 JOptionPane.showMessageDialog(null, "Cannot execute task, no tasks to execute");
             } else {
@@ -268,10 +266,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                             + " NIF: " + employee.getNif() + " completed the task with ID: " + task.getTaskID());
                     JOptionPane.showMessageDialog(null, "Task Completed");
 //                    taskDisplay.setText(new TaskManagment().getNextTask(employee.getAccess_level()).toString());
-                    TaskManagment taskManagment2 = new TaskManagment();
-                    Task task2 = taskManagment2.getNextTask(employee.getAccess_level());
-                    String taskInDisplay2 = (task2 == null) ? "No tasks to display" : task2.toString();
-                    taskDisplay.setText(taskInDisplay2);
+//                    TaskManagment taskManagment2 = new TaskManagment();
+//                    Task task2 = taskManagment2.getNextTask(employee.getAccess_level());
+//                    String taskInDisplay2 = (task2 == null) ? "No tasks to display" : task2.toString();
+//                    taskDisplay.setText(taskInDisplay2);
+                    taskMenuFrame.dispose();
+                    buildTaskMenuPage();
                 } else {
                     logger.info("Employee with name: " + employee.getName()
                             + " NIF: " + employee.getNif() + " failed to perform the task with ID: " + task.getTaskID());

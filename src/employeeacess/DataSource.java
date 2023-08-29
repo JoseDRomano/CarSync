@@ -709,7 +709,7 @@ public class DataSource {
         boolean result = false;
         /*if (!isVehicleOwner(nif, plate)) {
             System.out.println("Something wrong with provided info");
-            return;
+            return false;
         }*/
 
         try {

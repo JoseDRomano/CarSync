@@ -37,10 +37,11 @@ public class Task implements Comparable<Task> {
 
     public boolean perFormTask(DataSource dataSource) {
         String[] allValues = values.split(",");
-        this.taskStatus = "Closed";
+//        this.taskStatus = "Closed";
         TaskManagment tk = new TaskManagment();
-        tk.deleteTaskFromFile(taskID);
-        tk.writeTaskToFile(taskType, taskStatus, taskDate, nif, values);
+        tk.updateTaskStatus("Closed", taskID);
+//        tk.deleteTaskFromFile(taskID);
+//        tk.writeTaskToFile(taskType, taskStatus, taskDate, nif, values);
 
         switch (taskType) {
             case CUSTOMER_REGISTRATION -> {
