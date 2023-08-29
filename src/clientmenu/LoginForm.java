@@ -1,7 +1,9 @@
+package clientmenu;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.sql.*;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginForm extends JPanel {

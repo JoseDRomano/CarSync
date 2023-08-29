@@ -339,3 +339,25 @@
 2023-08-29 23:54:13 INFO  BackOfficeAdminMenu:287 - Employee with name: John Doe NIF: 0 entered the View All Tasks Page
 2023-08-29 23:54:17 INFO  BackOfficeAdminMenu:276 - Employee with name: John Doe NIF: 0 failed to perform the task with ID: 4
 2023-08-29 23:54:20 INFO  BackOfficeAdminMenu:287 - Employee with name: John Doe NIF: 0 entered the View All Tasks Page
+2023-08-30 00:06:52 INFO  BackOfficeAdminMenu:49 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-30 00:06:56 INFO  BackOfficeAdminMenu:143 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-30 00:06:58 INFO  BackOfficeAdminMenu:3956 - Employee with name: John DoeNIF: 0 entered the employee registration page
+2023-08-30 00:08:13 INFO  BackOfficeAdminMenu:4445 - Employee with name: John DoeNIF: 0 returned to registration menu page
+2023-08-30 00:08:15 INFO  BackOfficeAdminMenu:3956 - Employee with name: John DoeNIF: 0 entered the employee registration page
+2023-08-30 00:08:17 INFO  BackOfficeAdminMenu:4445 - Employee with name: John DoeNIF: 0 returned to registration menu page
+2023-08-30 00:08:18 INFO  BackOfficeAdminMenu:3952 - Employee with name: John DoeNIF: 0 entered the vehicle registration page
+2023-08-30 00:08:27 INFO  BackOfficeAdminMenu:4750 - Employee with name: John DoeNIF: 0 logged out
+2023-08-30 00:08:28 INFO  BackOfficeAdminMenu:3968 - Employee with name: John DoeNIF: 0 entered the insurance registration page
+2023-08-30 00:08:30 INFO  BackOfficeAdminMenu:4097 - Employee with name: John DoeNIF: 0 went back to the registration menu page
+2023-08-30 00:08:31 INFO  BackOfficeAdminMenu:3932 - Employee with name: John DoeNIF: 0 went back to main menu
+2023-08-30 00:08:35 INFO  BackOfficeAdminMenu:84 - Employee with name: John Doe NIF: 0 logged out
+2023-08-30 00:13:09 INFO  BackOfficeAdminMenu:50 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-30 00:13:13 INFO  BackOfficeAdminMenu:85 - Employee with name: John Doe NIF: 0 logged out
+2023-08-30 00:13:43 INFO  BackOfficeAdminMenu:50 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-30 00:13:45 INFO  BackOfficeAdminMenu:85 - Employee with name: John Doe NIF: 0 logged out
+2023-08-30 00:15:01 INFO  BackOfficeAdminMenu:50 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-30 00:15:03 INFO  BackOfficeAdminMenu:85 - Employee with name: John Doe NIF: 0 logged out
+2023-08-30 00:16:22 INFO  BackOfficeAdminMenu:50 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-30 00:16:25 INFO  BackOfficeAdminMenu:85 - Employee with name: John Doe NIF: 0 logged out
+2023-08-30 00:23:25 INFO  BackOfficeAdminMenu:50 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-30 00:23:29 INFO  BackOfficeAdminMenu:85 - Employee with name: John Doe NIF: 0 logged out

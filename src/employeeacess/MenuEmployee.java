@@ -1,5 +1,6 @@
 package employeeacess;
 
+import clientmenu.WelcomeMenuForm;
 import com.toedter.calendar.JDateChooser;
 import model.*;
 import org.apache.log4j.Logger;
@@ -19,8 +20,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import static java.awt.Color.*;
-import static java.awt.Color.WHITE;
+import static java.awt.Color.BLACK;
+import static java.awt.Color.white;
 
 public class MenuEmployee implements ValidateInput {
 
@@ -54,7 +55,7 @@ public class MenuEmployee implements ValidateInput {
         JButton taskMenu = new JButton("Task Menu");
         JButton searchMenu = new JButton("Search Menu");
         JButton deactivateMenu = new JButton("Deactivate Menu");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
 
         this.employee = employee;
         mainFrame = new JFrame("Back Office Menu");
@@ -64,7 +65,7 @@ public class MenuEmployee implements ValidateInput {
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         exitButton.addActionListener(e -> {
-            System.exit(0);
+            new WelcomeMenuForm();
             dataSource.close();
         });
 
@@ -129,7 +130,7 @@ public class MenuEmployee implements ValidateInput {
         taskMenu.addActionListener(goToPageListener);
         exitButton.addActionListener(e -> {
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         mainFrame.addWindowListener(new WindowAdapter() {
@@ -150,7 +151,7 @@ public class MenuEmployee implements ValidateInput {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
@@ -200,7 +201,7 @@ public class MenuEmployee implements ValidateInput {
             taskMenuFrame.dispose();
             mainFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.addActionListener(e -> {
@@ -288,7 +289,7 @@ public class MenuEmployee implements ValidateInput {
         searchMenuLabel.setForeground(BLUE);
 
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         JButton vehicleDisplay = new JButton("Vehicle Display Menu");
         JButton employeeDisplay = new JButton("Employee Display Menu");
@@ -340,7 +341,7 @@ public class MenuEmployee implements ValidateInput {
         });
         exitButton.addActionListener(e -> {
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         ActionListener goToPageListener = new ActionListener() {
@@ -567,7 +568,7 @@ public class MenuEmployee implements ValidateInput {
         }
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
@@ -577,7 +578,7 @@ public class MenuEmployee implements ValidateInput {
             mainFrame.dispose();
             searchMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -914,7 +915,7 @@ public class MenuEmployee implements ValidateInput {
         }
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
@@ -924,7 +925,7 @@ public class MenuEmployee implements ValidateInput {
             searchMenuFrame.dispose();
             mainFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -1209,7 +1210,7 @@ public class MenuEmployee implements ValidateInput {
         }
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
@@ -1218,7 +1219,7 @@ public class MenuEmployee implements ValidateInput {
             customerDisplayFrame.dispose();
             mainFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -1492,7 +1493,7 @@ public class MenuEmployee implements ValidateInput {
         }
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
@@ -1502,7 +1503,7 @@ public class MenuEmployee implements ValidateInput {
             mainFrame.dispose();
             searchMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -1791,7 +1792,7 @@ public class MenuEmployee implements ValidateInput {
         }
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e ->
@@ -1803,7 +1804,7 @@ public class MenuEmployee implements ValidateInput {
             mainFrame.dispose();
             searchMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -1912,7 +1913,7 @@ public class MenuEmployee implements ValidateInput {
         updateMenuLabel.setForeground(BLUE);
 
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         JButton vehicleUpdate = new JButton("Vehicle Update Menu");
         JButton customerUpdate = new JButton("Customer Update Menu");
@@ -1966,7 +1967,7 @@ public class MenuEmployee implements ValidateInput {
         exitButton.addActionListener(e -> {
             dataSource.close();
             updateMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         ActionListener goToPageListener = new ActionListener() {
@@ -2004,7 +2005,7 @@ public class MenuEmployee implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -2021,7 +2022,7 @@ public class MenuEmployee implements ValidateInput {
         exitButton.addActionListener(e -> {
             updateTicketFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -2113,7 +2114,7 @@ public class MenuEmployee implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -2129,7 +2130,7 @@ public class MenuEmployee implements ValidateInput {
         exitButton.addActionListener(e -> {
             updatePersonFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -2289,7 +2290,7 @@ public class MenuEmployee implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -2311,7 +2312,7 @@ public class MenuEmployee implements ValidateInput {
             mainFrame.dispose();
             updateMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -2420,7 +2421,7 @@ public class MenuEmployee implements ValidateInput {
         deactivateMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
         deactivateMenuLabel.setForeground(BLUE);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         JButton vehicleDeactivation = new JButton("Vehicle Deactivation Menu");
         JButton customerDeactivation = new JButton("Customer Deactivation Menu");
@@ -2471,7 +2472,7 @@ public class MenuEmployee implements ValidateInput {
         });
         exitButton.addActionListener(e -> {
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         ActionListener goToPageListener = new ActionListener() {
@@ -2513,7 +2514,7 @@ public class MenuEmployee implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -2530,7 +2531,7 @@ public class MenuEmployee implements ValidateInput {
         exitButton.addActionListener(e -> {
             deactivateInsuranceFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -2611,7 +2612,7 @@ public class MenuEmployee implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -2628,7 +2629,7 @@ public class MenuEmployee implements ValidateInput {
         exitButton.addActionListener(e -> {
             deactivateTicketFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -2709,7 +2710,7 @@ public class MenuEmployee implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -2732,7 +2733,7 @@ public class MenuEmployee implements ValidateInput {
             mainFrame.dispose();
             deactivateMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -2825,7 +2826,7 @@ public class MenuEmployee implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -2849,7 +2850,7 @@ public class MenuEmployee implements ValidateInput {
             mainFrame.dispose();
             deactivateMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -2943,7 +2944,7 @@ public class MenuEmployee implements ValidateInput {
         insertMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
         insertMenuLabel.setForeground(BLUE);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         JButton vehicleInsert = new JButton("Insert Vehicle Menu");
         JButton customerInsert = new JButton("Insert Customer Menu");
@@ -2994,7 +2995,7 @@ public class MenuEmployee implements ValidateInput {
         });
         exitButton.addActionListener(e -> {
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
         ActionListener goToPageListener = new ActionListener() {
             @Override
@@ -3108,7 +3109,7 @@ public class MenuEmployee implements ValidateInput {
             }
         });
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
@@ -3121,7 +3122,7 @@ public class MenuEmployee implements ValidateInput {
             dataSource.close();
             mainFrame.dispose();
             insertMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -3293,7 +3294,7 @@ public class MenuEmployee implements ValidateInput {
             }
         });
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
@@ -3304,7 +3305,7 @@ public class MenuEmployee implements ValidateInput {
             dataSource.close();
             mainFrame.dispose();
             insertMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -3482,7 +3483,7 @@ public class MenuEmployee implements ValidateInput {
             }
         });
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
@@ -3493,7 +3494,7 @@ public class MenuEmployee implements ValidateInput {
             dataSource.close();
             mainFrame.dispose();
             insertMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -3601,7 +3602,7 @@ public class MenuEmployee implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -3621,7 +3622,7 @@ public class MenuEmployee implements ValidateInput {
                     + "NIF: " + employee.getNif() + " logged out");
             insertVehicleFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP para botoes de exit

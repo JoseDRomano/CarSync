@@ -1,3 +1,5 @@
+package clientmenu;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -106,6 +108,8 @@ public class WelcomeMenuForm {
                 System.exit(0);
             }
         });
+
+        frame.setVisible(true);
     }
 
     private void handleLoginButton() {

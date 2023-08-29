@@ -1,4 +1,4 @@
-import com.mysql.cj.protocol.Message;
+import clientmenu.WelcomeMenuForm;
 import employeeacess.DataSource;
 import employeeacess.FrontOffice;
 import org.mindrot.jbcrypt.BCrypt;
@@ -6,16 +6,10 @@ import util.Mail;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Properties;
-import java.util.Random;
 import java.util.Scanner;
 
 public class WelcomeMenu extends WelcomeMenuForm {

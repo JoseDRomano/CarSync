@@ -2,6 +2,7 @@ package employeeacess;
 
 import com.toedter.calendar.JDateChooser;
 import model.*;
+import clientmenu.*;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.mindrot.jbcrypt.BCrypt;
@@ -55,7 +56,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton taskMenu = new JButton("Task Menu");
         JButton searchMenu = new JButton("Search Menu");
         JButton deactivateMenu = new JButton("Deactivate Menu");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
 
         this.employee = employee;
         mainFrame = new JFrame("CarSync - Back Office");
@@ -86,7 +87,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             dataSource.close();
             mainFrame.dispose();
             //Aqui deveria ir para o welcome menu
-            System.exit(0);
+            new WelcomeMenuForm();
+//          new WelcomeMenuForm;
         });
 
 
@@ -194,7 +196,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
@@ -239,12 +241,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 //        exitButton.setBackground(RED);
 //        exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
+
             logger.info("Employee with name: " + employee.getName()
                     + " NIF: " + employee.getNif() + "logged out");
             taskMenuFrame.dispose();
             mainFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.addActionListener(e -> {
@@ -332,7 +335,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         searchMenuLabel.setForeground(BLUE);
 
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         JButton vehicleDisplay = new JButton("Vehicle Display Menu");
         JButton employeeDisplay = new JButton("Employee Display Menu");
@@ -394,7 +397,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             searchMenuFrame.dispose();
             mainFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         ActionListener goToPageListener = new ActionListener() {
@@ -639,7 +642,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         }
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
@@ -649,7 +652,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             searchMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -986,7 +989,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         }
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
@@ -996,7 +999,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             searchMenuFrame.dispose();
             mainFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -1281,7 +1284,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         }
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
@@ -1290,7 +1293,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             customerDisplayFrame.dispose();
             mainFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -1564,7 +1567,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         }
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
@@ -1574,7 +1577,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             searchMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -1863,7 +1866,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         }
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e ->
@@ -1875,7 +1878,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             searchMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -1983,7 +1986,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         updateMenuLabel.setForeground(BLUE);
 
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         JButton vehicleUpdate = new JButton("Vehicle Update Menu");
         JButton employeeUpdate = new JButton("Employee Update Menu");
@@ -2043,7 +2046,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             dataSource.close();
             updateMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         ActionListener goToPageListener = new ActionListener() {
@@ -2097,7 +2100,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -2120,7 +2123,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             updateMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -2217,7 +2220,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -2239,7 +2242,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             updateMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -2423,7 +2426,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         employeeUpdatePanel.add(employeeUpdateLabel, gbc);
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton submit = new JButton("Execute Update");
 
         JLabel employeeNIF = new JLabel("NIF: (9 digits)");
@@ -2484,7 +2487,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             updateMenuFrame.dispose();
             employeeUpdateFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.addActionListener(e -> {
@@ -2535,7 +2538,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -2557,7 +2560,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             updateMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -2665,7 +2668,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deactivateMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
         deactivateMenuLabel.setForeground(BLUE);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         JButton vehicleDeactivation = new JButton("Vehicle Deactivation Menu");
         JButton employeeDeactivation = new JButton("Employee Deactivation Menu");
@@ -2723,7 +2726,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             dataSource.close();
             mainFrame.dispose();
             deactivateMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         ActionListener goToPageListener = new ActionListener() {
@@ -2779,7 +2782,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -2802,7 +2805,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             deactivateMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -2894,7 +2897,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -2917,7 +2920,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             deactivateTicketFrame.dispose();
             deactivateMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -3004,7 +3007,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -3027,7 +3030,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             deactivateMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -3114,7 +3117,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -3138,7 +3141,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             deactivateMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP for exit buttons
@@ -3231,7 +3234,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         deleteMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
         deleteMenuLabel.setForeground(BLUE);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         JButton vehicleDelete = new JButton("Delete Vehicle Menu");
         JButton employeeDelete = new JButton("Delete Employee Menu");
@@ -3289,7 +3292,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             deleteMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         ActionListener goToPageListener = new ActionListener() {
@@ -3357,7 +3360,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         employeeDeletePanel.add(employeeDeleteLabel, gbc);
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton submit = new JButton("Execute Delete");
 
         JLabel employeeNIF = new JLabel("NIF: (9 digits)");
@@ -3405,7 +3408,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             employeeDeleteFrame.dispose();
             deleteMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.addActionListener(e -> {
@@ -3465,7 +3468,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         ticketDeletePanel.add(ticketDeleteLabel, gbc);
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton submit = new JButton("Execute Delete");
 
         JLabel ticketID = new JLabel("Ticket ID: ");
@@ -3513,7 +3516,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             ticketDeleteFrame.dispose();
             deleteMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.addActionListener(e -> {
@@ -3571,7 +3574,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insuranceDeletePanel.add(insuranceDeleteLabel, gbc);
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton submit = new JButton("Execute Delete");
 
         JLabel insurancePolicy = new JLabel("Policy: (8 digits)");
@@ -3619,7 +3622,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             insuranceDeleteFrame.dispose();
             deleteMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.addActionListener(e -> {
@@ -3678,7 +3681,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         vehicleDeletePanel.add(vehicleDeleteLabel, gbc);
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton submit = new JButton("Execute Delete");
 
         JLabel vehiclePlate = new JLabel("Plate: (XX-XX-XX)");
@@ -3726,7 +3729,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             vehicleDeleteFrame.dispose();
             deleteMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.addActionListener(e -> {
@@ -3785,7 +3788,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         customerDeletePanel.add(customerDeleteLabel, gbc);
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton submit = new JButton("Execute Delete");
 
         JLabel customerNIF = new JLabel("NIF: (9 digits)");
@@ -3833,7 +3836,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             customerDeleteFrame.dispose();
             deleteMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.addActionListener(e -> {
@@ -3882,7 +3885,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         insertMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
         insertMenuLabel.setForeground(BLUE);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         JButton vehicleInsert = new JButton("Vehicle Registration Page");
         JButton employeeInsert = new JButton("Employee Registration Page");
@@ -3940,7 +3943,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             dataSource.close();
             mainFrame.dispose();
             insertMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
         ActionListener goToPageListener = new ActionListener() {
             @Override
@@ -4073,7 +4076,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             }
         });
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
@@ -4086,7 +4089,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             dataSource.close();
             mainFrame.dispose();
             insertMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -4258,7 +4261,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             }
         });
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
@@ -4269,7 +4272,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             dataSource.close();
             mainFrame.dispose();
             insertMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -4425,7 +4428,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             }
         });
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
@@ -4436,7 +4439,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             mainFrame.dispose();
             insertMenuFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -4618,7 +4621,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             }
         });
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
         exitButton.setBackground(RED);
         exitButton.setForeground(Color.WHITE);
@@ -4629,7 +4632,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             dataSource.close();
             mainFrame.dispose();
             insertMenuFrame.dispose();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         backButton.setBackground(BLACK);
@@ -4737,7 +4740,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Sign Out");
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
         JButton backButton = new JButton("Back");
@@ -4746,18 +4749,20 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton submit = new JButton("Submit");
         submit.setBackground(GREEN);
         submit.setForeground(WHITE);
+
         backButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
                     + "NIF: " + employee.getNif() + " logged out");
             insertMenuFrame.setVisible(true);
             insertVehicleFrame.setVisible(false);
         });
+
         exitButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
                     + "NIF: " + employee.getNif() + " logged out");
             insertVehicleFrame.dispose();
             dataSource.close();
-            System.exit(0);
+            new WelcomeMenuForm();
         });
 
         //SET UP para botoes de exit
