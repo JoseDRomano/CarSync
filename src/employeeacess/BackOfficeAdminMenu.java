@@ -1,5 +1,6 @@
 package employeeacess;
 
+import com.toedter.calendar.JDateChooser;
 import model.*;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -3960,10 +3962,18 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JTextField policyField = new JTextField(15);
 
         JLabel startDateLabel = new JLabel("Start Date: ");
-        JTextField startDateField = new JTextField(15);
+//        JTextField startDateField = new JTextField(15);
+
+        JDateChooser startDateField = new JDateChooser();
+        startDateField.setDateFormatString("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         JLabel endDateLabel = new JLabel("End Date: ");
-        JTextField endDateField = new JTextField(15);
+//        JTextField endDateField = new JTextField(15);
+
+        JDateChooser endDateField = new JDateChooser();
+        endDateField.setDateFormatString("yyyy-MM-dd");
+
 
         JLabel companyNameLabel = new JLabel("Company Name: ");
         JTextField companyNameField = new JTextField(15);
@@ -3977,8 +3987,10 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String plate = plateField.getText();
                 String insuranceCategory = (String) insuranceCategoryField.getSelectedItem();
                 String policy = policyField.getText();
-                String startDate = startDateField.getText();
-                String endDate = endDateField.getText();
+//                String startDate = startDateField.getText();
+                String startDate = sdf.format(startDateField.getDate());
+//                String endDate = endDateField.getText();
+                String endDate = sdf.format(endDateField.getDate());
                 String companyName = companyNameField.getText();
 
                 if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isValidString(companyName) && isPolicy(policy)) {
@@ -4033,10 +4045,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         });
 
         gbc.gridwidth = 1;
-        JLabel[] labels = {plateLabel, policyLabel,
-                startDateLabel, endDateLabel, companyNameLabel, insuranceCategoryLabel};
-        JTextField[] fields = {plateField, policyField,
-                startDateField, endDateField, companyNameField};
+//        JLabel[] labels = {plateLabel, policyLabel,
+//                startDateLabel, endDateLabel, companyNameLabel, insuranceCategoryLabel};
+//        JTextField[] fields = {plateField, policyField,
+//                startDateField, endDateField, companyNameField};
+
+        JLabel[] labels = {plateLabel, policyLabel
+                , companyNameLabel, insuranceCategoryLabel, startDateLabel, endDateLabel};
+        JTextField[] fields = {plateField, policyField, companyNameField};
 
         for (
                 int row = 0;
@@ -4048,8 +4064,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
             gbc.gridx = 1;
             gbc.anchor = GridBagConstraints.LINE_END;
-            if (row == 5) {
+            if (row == 3) {
                 insertInsurancePanel.add(insuranceCategoryField, gbc);
+            } else if (row == 4) {
+                insertInsurancePanel.add(startDateField, gbc);
+            } else if (row == 5) {
+                insertInsurancePanel.add(endDateField, gbc);
             } else {
                 insertInsurancePanel.add(fields[row], gbc);
             }
@@ -4119,10 +4139,17 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JTextField plateField = new JTextField(15);
 
         JLabel dateLabel = new JLabel("Date: ");
-        JTextField dateField = new JTextField(15);
+//        JTextField dateField = new JTextField(15);
+
+        JDateChooser dateField = new JDateChooser();
+        dateField.setDateFormatString("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         JLabel expirationDateLabel = new JLabel("Expiration Date: ");
-        JTextField expirationDateField = new JTextField(15);
+//        JTextField expirationDateField = new JTextField(15);
+
+        JDateChooser expirationDateField = new JDateChooser();
+        expirationDateField.setDateFormatString("yyyy-MM-dd");
 
         JLabel valueLabel = new JLabel("Value: ");
         JTextField valueField = new JTextField(15);
@@ -4140,8 +4167,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         submitButton.addActionListener(e -> {
             while (true) {
                 String plate = plateField.getText();
-                String date = dateField.getText();
-                String expirationDate = expirationDateField.getText();
+//                String date = dateField.getText();
+
+                String date = sdf.format(dateField.getDate());
+
+//                String expirationDate = expirationDateField.getText();
+                String expirationDate = sdf.format(expirationDateField.getDate());
+
                 String value = valueField.getText();
                 String nif = nifField.getText();
                 String reason = (String) reasonFiel.getSelectedItem();
@@ -4194,8 +4226,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         });
 
         gbc.gridwidth = 1;
-        JLabel[] labels = new JLabel[]{plateLabel, dateLabel, expirationDateLabel, valueLabel, nifLabel, reasonLabel};
-        JTextField[] fields = new JTextField[]{plateField, dateField, expirationDateField, valueField, nifField};
+        JLabel[] labels = new JLabel[]{plateLabel, valueLabel, nifLabel, reasonLabel, dateLabel, expirationDateLabel};
+        JTextField[] fields = new JTextField[]{plateField, valueField, nifField};
 
         for (int row = 0; row < 6; row++) {
             gbc.gridx = 0;
@@ -4205,8 +4237,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             gbc.gridx = 1;
             gbc.gridy = row + 1;
             gbc.anchor = GridBagConstraints.LINE_END;
-            if (row == 5) {
+            if (row == 3) {
                 insertTicketPanel.add(reasonFiel, gbc);
+            } else if (row == 4) {
+                insertTicketPanel.add(dateField, gbc);
+            } else if (row == 5) {
+                insertTicketPanel.add(expirationDateField, gbc);
             } else {
                 insertTicketPanel.add(fields[row], gbc);
             }
@@ -4275,7 +4311,11 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JTextField emailField = new JTextField(15);
 
         JLabel birthDateLabel = new JLabel("Birth Date: (YYYY-MM-DD)");
-        JTextField birthDateField = new JTextField(15);
+//        JTextField birthDateField = new JTextField(15);
+
+        JDateChooser birthDateField = new JDateChooser();
+        birthDateField.setDateFormatString("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         JLabel passwordLabel = new JLabel("Password: ");
         JTextField passwordField = new JTextField(15);
@@ -4296,7 +4336,9 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String name = nameField.getText();
                 String address = addressField.getText();
                 String email = emailField.getText();
-                String birthDate = birthDateField.getText();
+//                String birthDate = birthDateField.getText();
+
+                String birthDate = sdf.format(birthDateField.getDate());
                 String password = passwordField.getText();
                 String nif = nifField.getText();
                 String accessLevel = (String) accessLevelField.getSelectedItem();
@@ -4351,9 +4393,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         });
 
         gbc.gridwidth = 1;
-        JLabel[] labels = {nameLabel, addressLabel, emailLabel, birthDateLabel,
-                passwordLabel, nifLabel, accessLevelLabel};
-        JTextField[] fields = {nameField, addressField, emailField, birthDateField,
+//        JLabel[] labels = {nameLabel, addressLabel, emailLabel, birthDateLabel,
+//                passwordLabel, nifLabel, accessLevelLabel};
+//        JTextField[] fields = {nameField, addressField, emailField, birthDateField,
+//                passwordField, nifField};
+
+        JLabel[] labels = {nameLabel, addressLabel, emailLabel,
+                passwordLabel, nifLabel, accessLevelLabel, birthDateLabel};
+        JTextField[] fields = {nameField, addressField, emailField,
                 passwordField, nifField};
 
         for (int row = 0; row < 7; row++) {
@@ -4365,6 +4412,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             gbc.gridx = 1;
             gbc.anchor = GridBagConstraints.LINE_END;
             if (row == 6) {
+                insertEmployeePanel.add(birthDateField, gbc);
+            } else if (row == 5) {
                 insertEmployeePanel.add(accessLevelField, gbc);
             } else {
                 insertEmployeePanel.add(fields[row], gbc);
@@ -4432,8 +4481,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JLabel emailLabel = new JLabel("Email: ([...]@[...].com or [...]@[...].pt");
         JTextField emailField = new JTextField(15);
 
-        JLabel birthDateLabel = new JLabel("Birth Date: (YYYY-MM-DD)");
-        JTextField birthDateField = new JTextField(15);
+        JLabel birthDateLabel = new JLabel("Birth Date: ");
+//        JTextField birthDateField = new JTextField(15);
+
+        JDateChooser birthDateField = new JDateChooser();
+        birthDateField.setDateFormatString("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         JLabel passwordLabel = new JLabel("Password: ");
         JTextField passwordField = new JTextField(15);
@@ -4448,10 +4501,16 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JComboBox<String> licenseType = new JComboBox<>(new String[]{" ", "A", "B", "C", "D"});
 
         JLabel licenseDateLabel = new JLabel("License Date: (YYYY-MM-DD)");
-        JTextField licenseDateField = new JTextField(15);
+//        JTextField licenseDateField = new JTextField(15);
+
+        JDateChooser licenseDateField = new JDateChooser();
+        licenseDateField.setDateFormatString("yyyy-MM-dd");
 
         JLabel licenseExpirationLabel = new JLabel("License Expiration: (YYYY-MM-DD)");
-        JTextField licenseExpirationField = new JTextField(15);
+//        JTextField licenseExpirationField = new JTextField(15);
+
+        JDateChooser licenseExpirationField = new JDateChooser();
+        licenseExpirationField.setDateFormatString("yyyy-MM-dd");
 
         JButton submitButton = new JButton("Submit");
         submitButton.setBackground(GREEN);
@@ -4462,13 +4521,18 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String name = nameField.getText();
                 String address = addressField.getText();
                 String email = emailField.getText();
-                String birthDate = birthDateField.getText();
+//                String birthDate = birthDateField.getText();
+                String birthDate = sdf.format(birthDateField.getDate());
+
                 String password = passwordField.getText();
                 String nif = nifField.getText();
                 String driverLicense = driverLicenseField.getText();
                 String selectedLicenseType = (String) licenseType.getSelectedItem();
-                String licenseDate = licenseDateField.getText();
-                String licenseExpiration = licenseExpirationField.getText();
+//                String licenseDate = licenseDateField.getText();
+                String licenseDate = sdf.format(licenseDateField.getDate());
+
+//                String licenseExpiration = licenseExpirationField.getText();
+                String licenseExpiration = sdf.format(licenseExpirationField.getDate());
 
                 if (isValidString(name) && isValidString(address) && isNIF(nif) && isDate(licenseDate)
                         && isValidExpirationDate(licenseExpiration) && isEmail(email) && isValidBirthDate(birthDate)
@@ -4522,12 +4586,36 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         });
 
         gbc.gridwidth = 1;
-        JLabel[] labels = {nameLabel, addressLabel, emailLabel, birthDateLabel,
+//        JLabel[] labels = {nameLabel, addressLabel, emailLabel, birthDateLabel,
+//                passwordLabel, nifLabel, driverLicenseLabel, licenseDateLabel,
+//                licenseExpirationLabel, licenseTypeLabel};
+//        JTextField[] fields = {nameField, addressField, emailField, birthDateField,
+//                passwordField, nifField, driverLicenseField,
+//                licenseDateField, licenseExpirationField};
+
+        JLabel[] labels = {nameLabel, addressLabel, emailLabel,
                 passwordLabel, nifLabel, driverLicenseLabel, licenseDateLabel,
-                licenseExpirationLabel, licenseTypeLabel};
-        JTextField[] fields = {nameField, addressField, emailField, birthDateField,
-                passwordField, nifField, driverLicenseField,
-                licenseDateField, licenseExpirationField};
+                licenseExpirationLabel, licenseTypeLabel, birthDateLabel};
+        JTextField[] fields = {nameField, addressField, emailField,
+                passwordField, nifField, driverLicenseField};
+
+
+//        for (int row = 0; row < 10; row++) {
+//            gbc.gridx = 0;
+//            gbc.gridy = row + 1;
+//            gbc.anchor = GridBagConstraints.LINE_START;
+//            insertCustomerPanel.add(labels[row], gbc);
+//
+//            gbc.gridx = 1;
+//            gbc.anchor = GridBagConstraints.LINE_END;
+//            if (row == 9) {
+//                insertCustomerPanel.add(licenseType, gbc);
+//            } else if (row == 3) {
+//                insertCustomerPanel.add(birthDateField, gbc);
+//            } else {
+//                insertCustomerPanel.add(fields[row], gbc);
+//            }
+//        }
 
         for (int row = 0; row < 10; row++) {
             gbc.gridx = 0;
@@ -4537,8 +4625,14 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
             gbc.gridx = 1;
             gbc.anchor = GridBagConstraints.LINE_END;
-            if (row == 9) {
+            if (row == 6) {
+                insertCustomerPanel.add(licenseDateField, gbc);
+            } else if (row == 7) {
+                insertCustomerPanel.add(licenseExpirationField, gbc);
+            } else if (row == 8) {
                 insertCustomerPanel.add(licenseType, gbc);
+            } else if (row == 9) {
+                insertCustomerPanel.add(birthDateField, gbc);
             } else {
                 insertCustomerPanel.add(fields[row], gbc);
             }
@@ -4639,8 +4733,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JComboBox<String> colorField = new JComboBox<>(new String[]{" ", "Black", "White",
                 "Red", "Blue", "Green", "Yellow", "Gray", "Silver", "Brown", "Orange"});
 
-        JLabel registrationDate = new JLabel("Registration Date: (YYYY-MM-DD)");
-        JTextField registrationDateField = new JTextField(15);
+        JLabel registrationDate = new JLabel("Registration Date: ");
+//        JTextField registrationDateField = new JTextField(15);
+
+        JDateChooser registrationDateField = new JDateChooser();
+        registrationDateField.setDateFormatString("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         JLabel vin = new JLabel("VIN: (17 characters)");
         JTextField vinField = new JTextField(15);
@@ -4661,13 +4759,16 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String plateText = plateField.getText();
                 String modelText = modelField.getText();
                 String colorText = (String) colorField.getSelectedItem();
-                String registrationDateText = registrationDateField.getText();
+//                String registrationDateText = registrationDateField.getText();
+
+                String registrationDateText = sdf.format(registrationDateField.getDate());
+
                 String brandText = (String) brandField.getSelectedItem();
                 String vinText = vinField.getText();
                 String nifText = nifField.getText();
                 String categoryText = (String) categoryField.getSelectedItem();
 
-                if (isPlate(plateText) && isValidString(modelText) && isValidExpirationDate(registrationDateText) && isVIN(vinText) && isNIF(nifText) && !categoryText.equals(" ") && !colorText.equals(" ") && !brandText.equals(" ")) {
+                if (isPlate(plateText) && isValidString(modelText) && isDate(registrationDateText) && isVIN(vinText) && isNIF(nifText) && !categoryText.equals(" ") && !colorText.equals(" ") && !brandText.equals(" ")) {
                     if (dataSource.insertVehicle(plateText, vinText, colorText, brandText,
                             modelText, Date.valueOf(registrationDateText), categoryText, Integer.parseInt(nifText))) {
                         logger.info("Employee with name: " + employee.getName()
@@ -4687,32 +4788,41 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                     JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill all the fields properly");
                     logger.info("Employee with name: " + employee.getName()
                             + "NIF: " + employee.getNif() + " failed to registered a new vehicle with plate: " + plateText);
+                    break;
                 }
             }
         });
 
         gbc.gridwidth = 1;
-        JLabel[] labels = {model, plate, registrationDate,
-                vin, nif, category, brand, color};
-        JTextField[] textFields = {modelField, plateField,
-                registrationDateField, vinField, nifField};
+//        JLabel[] labels = {model, plate, registrationDate,
+//                vin, nif, category, brand, color};
+//        JTextField[] textFields = {modelField, plateField,
+//                registrationDateField, vinField, nifField};
+
+        JLabel[] labels2 = {model, plate,
+                vin, nif, category, brand, color, registrationDate};
+        JTextField[] textFields2 = {modelField, plateField,
+                vinField, nifField};
 
         for (int row = 0; row < 8; row++) {
             gbc.gridx = 0;
             gbc.gridy = row + 1;
             gbc.anchor = GridBagConstraints.LINE_START;
-            insertVehiclePanel.add(labels[row], gbc);
+            insertVehiclePanel.add(labels2[row], gbc);
 
             gbc.gridx = 1;
             gbc.anchor = GridBagConstraints.LINE_END;
-            if (row == 5) {
+            if (row == 4) {
                 insertVehiclePanel.add(categoryField, gbc);
-            } else if (row == 6) {
+            } else if (row == 5) {
                 insertVehiclePanel.add(brandField, gbc);
-            } else if (row == 7) {
+            } else if (row == 6) {
                 insertVehiclePanel.add(colorField, gbc);
+
+            } else if (row == 7) {
+                insertVehiclePanel.add(registrationDateField, gbc);
             } else {
-                insertVehiclePanel.add(textFields[row], gbc);
+                insertVehiclePanel.add(textFields2[row], gbc);
             }
         }
 

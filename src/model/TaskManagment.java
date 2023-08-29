@@ -1,9 +1,14 @@
 package model;
 
+import com.toedter.calendar.JDateChooser;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -368,18 +373,38 @@ public class TaskManagment {
 //        System.out.println(TaskType.getTaskType(tk.taskType(file)));
 
         //Digamos que as próximas String são os inputs do user, no caso de ele querer registar um veiculo
-        String VIN = "1234567000ASDFG43";
-        String plate = "NA-SS-09";
-        String color = "Black";
-        String brand = "AUDI";
-        String model = "A3";
-        String registrationDate = "2019-09-11";
-        String category = "Light Passenger Vehicle";
-        String nif = "200000000";
+//        String VIN = "1234567000ASDFG43";
+//        String plate = "NA-SS-09";
+//        String color = "Black";
+//        String brand = "AUDI";
+//        String model = "A3";
+//        String registrationDate = "2019-09-11";
+//        String category = "Light Passenger Vehicle";
+//        String nif = "200000000";
+//
+//        //Depois de teres os inputs basta fazeres
+//        tk.createTask("Vehicle Registration", Integer.parseInt(nif), plate, VIN, color, brand, model, registrationDate, category);
 
-        //Depois de teres os inputs basta fazeres
-        tk.createTask("Vehicle Registration", Integer.parseInt(nif), plate, VIN, color, brand, model, registrationDate, category);
+        System.out.println(createAndShowGUI());
 
+    }
 
+    private static String createAndShowGUI() {
+        JFrame frame = new JFrame("Date Picker Example");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JDateChooser dateChooser = new JDateChooser();
+        dateChooser.setDateFormatString("yyyy-MM-dd"); // Format to display
+
+        frame.add(dateChooser);
+        frame.pack();
+        frame.setVisible(true);
+
+        while(dateChooser.getDate() == null) {
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = sdf.format(dateChooser.getDate());
+        return dateString;
     }
 }

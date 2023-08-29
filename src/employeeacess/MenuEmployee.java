@@ -1,6 +1,8 @@
 package employeeacess;
 
+import com.toedter.calendar.JDateChooser;
 import model.*;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -11,13 +13,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import static java.awt.Color.BLACK;
-import static java.awt.Color.white;
+import static java.awt.Color.*;
+import static java.awt.Color.WHITE;
 
 public class MenuEmployee implements ValidateInput {
 
@@ -31,6 +34,7 @@ public class MenuEmployee implements ValidateInput {
     private final Color RED = new Color(130, 0, 0);
     private final Color WHITE = new Color(255, 255, 255);
     private final Color BLUE = new Color(0, 0, 100);
+    private static Logger logger = Logger.getLogger(MenuEmployee.class);
 
     public MenuEmployee(Employee employee) {
         dataSource = new DataSource();
@@ -3172,9 +3176,9 @@ public class MenuEmployee implements ValidateInput {
     }
 
     private void insertVehicle(JFrame insertMenuFrame) {
-        JFrame insertVehicleFrame = new JFrame("Insert Vehicle");
+        JFrame insertVehicleFrame = new JFrame("CarSync");
         insertVehicleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        insertVehicleFrame.setBackground(Color.WHITE);
+        insertVehicleFrame.setExtendedState((JFrame.MAXIMIZED_BOTH));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -3190,10 +3194,14 @@ public class MenuEmployee implements ValidateInput {
         submit.setBackground(GREEN);
         submit.setForeground(WHITE);
         backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             insertMenuFrame.setVisible(true);
             insertVehicleFrame.setVisible(false);
         });
         exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
             insertVehicleFrame.dispose();
             dataSource.close();
             System.exit(0);
@@ -3201,15 +3209,14 @@ public class MenuEmployee implements ValidateInput {
 
         //SET UP para botoes de exit
         JPanel insertVehiclePanel = new JPanel(new GridBagLayout());
-        insertVehiclePanel.setBackground(Color.WHITE);
 
-        JLabel insertVehicleLabel = new JLabel("Insert Vehicle");
+        JLabel insertVehicleLabel = new JLabel("Vehicle Registration Page");
         insertVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.PAGE_START;
         insertVehiclePanel.add(insertVehicleLabel, gbc);
 
-        JLabel brand = new JLabel("Brand: ");
+        JLabel brand = new JLabel("Brand: (Select an option)");
         JComboBox<String> brandField = new JComboBox<>(new String[]{" ", "Abarth", "Alfa Romeo", "Aston Martin", "Audi",
                 "Bentley", "BMW", "Bugatti", "Cadillac", "Chevrolet", "Chrysler", "Citroen", "Dacia", "Daewoo",
                 "Daihatsu", "Dodge", "Donkervoort", "DS", "Ferrari", "Fiat", "Fisker", "Ford", "Honda", "Hummer",
@@ -3222,23 +3229,27 @@ public class MenuEmployee implements ValidateInput {
         JLabel model = new JLabel("Model");
         JTextField modelField = new JTextField(15);
 
-        JLabel plate = new JLabel("Plate: ");
+        JLabel plate = new JLabel("Plate: XX-XX-XX ");
         JTextField plateField = new JTextField(15);
 
-        JLabel color = new JLabel("Color: ");
+        JLabel color = new JLabel("Color: (Select an option)");
         JComboBox<String> colorField = new JComboBox<>(new String[]{" ", "Black", "White",
                 "Red", "Blue", "Green", "Yellow", "Gray", "Silver", "Brown", "Orange"});
 
-        JLabel registrationDate = new JLabel("Registration Date: (YYYY-MM-DD)");
-        JTextField registrationDateField = new JTextField(15);
+        JLabel registrationDate = new JLabel("Registration Date: ");
+//        JTextField registrationDateField = new JTextField(15);
 
-        JLabel vin = new JLabel("VIN: ");
+        JDateChooser registrationDateField = new JDateChooser();
+        registrationDateField.setDateFormatString("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        JLabel vin = new JLabel("VIN: (17 characters)");
         JTextField vinField = new JTextField(15);
 
-        JLabel nif = new JLabel("NIF: ");
+        JLabel nif = new JLabel("NIF: (9 digits)");
         JTextField nifField = new JTextField(15);
 
-        JLabel category = new JLabel("Category: ");
+        JLabel category = new JLabel("Category: (Select an option)");
         JComboBox<String> categoryField = new JComboBox<>(new String[]{" ", "Light Commercial Vehicle",
                 "Light Passenger Vehicle",
                 "Heavy-duty Commercial Vehicle",
@@ -3247,63 +3258,75 @@ public class MenuEmployee implements ValidateInput {
                 "Heavy-duty Passenger Vehicle"});
 
         submit.addActionListener(e -> {
-            String plateText = plateField.getText();
-            String modelText = modelField.getText();
-            String colorText = (String) colorField.getSelectedItem();
-            String registrationDateText = registrationDateField.getText();
-            String brandText = (String) brandField.getSelectedItem();
-            String vinText = vinField.getText();
-            String nifText = nifField.getText();
-            String categoryText = (String) categoryField.getSelectedItem();
-            if (!isPlate(plateText)) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please insert a valid plate with format XX-XX-XX");
-            } else if (!isValidString(modelText)) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill the model field");
-            } else if (!isDate(registrationDateText)) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill the date field with a date in the forma YYYY-MM-DD");
-            } else if (!isVIN(vinText)) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill the VIN field (must contain 17 caracters)");
-            } else if (!isNIF(nifText)) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill all nif field (must contain 9 numbers)");
-            } else if (categoryText.isEmpty() || categoryText.isBlank()) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please select an option for the category field");
-            } else if (colorText.isEmpty() || colorText.isBlank()) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please select an option for the color field");
-            } else if (brandText.isBlank() || brandText.isBlank()) {
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Please select an option for the brand field");
-            } else {
-                if (dataSource.insertVehicle(plateText, vinText, colorText, brandText, modelText, Date.valueOf(registrationDateText), categoryText, Integer.parseInt(nifText))) {
-                    JOptionPane.showMessageDialog(insertVehicleFrame, "Vehicle succefully registered");
-                }
-                JOptionPane.showMessageDialog(insertVehicleFrame, "Vehicle wasn't registered please try again");
-            }
-            insertVehicleFrame.setVisible(false);
-            insertVehicle(insertMenuFrame);
+            while (true) {
+                String plateText = plateField.getText();
+                String modelText = modelField.getText();
+                String colorText = (String) colorField.getSelectedItem();
+//                String registrationDateText = registrationDateField.getText();
 
+                String registrationDateText = sdf.format(registrationDateField.getDate());
+
+                String brandText = (String) brandField.getSelectedItem();
+                String vinText = vinField.getText();
+                String nifText = nifField.getText();
+                String categoryText = (String) categoryField.getSelectedItem();
+
+                if (isPlate(plateText) && isValidString(modelText) && isDate(registrationDateText) && isVIN(vinText) && isNIF(nifText) && !categoryText.equals(" ") && !colorText.equals(" ") && !brandText.equals(" ")) {
+                    if (dataSource.insertVehicle(plateText, vinText, colorText, brandText,
+                            modelText, Date.valueOf(registrationDateText), categoryText, Integer.parseInt(nifText))) {
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " registered a new vehicle with plate: " + plateText);
+                        JOptionPane.showMessageDialog(insertVehicleFrame, "Vehicle succefully registered");
+                        insertVehicleFrame.setVisible(false);
+                        insertVehicleFrame.dispose();
+                        insertVehicle(insertMenuFrame);
+                        break;
+
+                    } else {
+                        JOptionPane.showMessageDialog(insertVehicleFrame, "Error inserting vehicle");
+                        logger.info("Employee with name: " + employee.getName()
+                                + "NIF: " + employee.getNif() + " failed to registered a new vehicle with plate: " + plateText);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill all the fields properly");
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to registered a new vehicle with plate: " + plateText);
+                    break;
+                }
+            }
         });
 
         gbc.gridwidth = 1;
-        JLabel[] labels = {model, plate, registrationDate,
-                vin, nif, category, brand, color};
-        JTextField[] textFields = {modelField, plateField,
-                registrationDateField, vinField, nifField};
+//        JLabel[] labels = {model, plate, registrationDate,
+//                vin, nif, category, brand, color};
+//        JTextField[] textFields = {modelField, plateField,
+//                registrationDateField, vinField, nifField};
+
+        JLabel[] labels2 = {model, plate,
+                vin, nif, category, brand, color, registrationDate};
+        JTextField[] textFields2 = {modelField, plateField,
+                vinField, nifField};
 
         for (int row = 0; row < 8; row++) {
             gbc.gridx = 0;
             gbc.gridy = row + 1;
             gbc.anchor = GridBagConstraints.LINE_START;
-            insertVehiclePanel.add(labels[row], gbc);
+            insertVehiclePanel.add(labels2[row], gbc);
 
             gbc.gridx = 1;
             gbc.anchor = GridBagConstraints.LINE_END;
-            if (row == 5) {
+            if (row == 4) {
                 insertVehiclePanel.add(categoryField, gbc);
-            } else if (row == 6) {
+            } else if (row == 5) {
                 insertVehiclePanel.add(brandField, gbc);
-            } else if (row == 7) {
+            } else if (row == 6) {
                 insertVehiclePanel.add(colorField, gbc);
-            } else {
-                insertVehiclePanel.add(textFields[row], gbc);
+
+            } else if (row == 7) {
+                insertVehiclePanel.add(registrationDateField, gbc);
+            }
+            else {
+                insertVehiclePanel.add(textFields2[row], gbc);
             }
         }
 
@@ -3329,12 +3352,13 @@ public class MenuEmployee implements ValidateInput {
         insertVehiclePanel.add(backButton, gbc);
 
         insertVehicleFrame.add(insertVehiclePanel);
-        insertVehicleFrame.pack();
         insertVehicleFrame.setVisible(true);
 
         insertVehicleFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
                 dataSource.close();
             }
         });

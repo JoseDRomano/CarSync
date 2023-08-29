@@ -202,3 +202,57 @@
 2023-08-29 17:18:34 INFO  BackOfficeAdminMenu:4166 - Employee with name: John DoeNIF: 0 tried to register a new ticket for customer with NIF: 200000000 and Date: 2023-10-10
 2023-08-29 17:19:16 INFO  BackOfficeAdminMenu:4156 - Employee with name: John DoeNIF: 0 registered a new ticket for customer with NIF: 200000000 and Date: 2023-10-10
 2023-08-29 17:20:17 INFO  BackOfficeAdminMenu:4178 - Employee with name: John DoeNIF: 0 logged out
+2023-08-29 18:33:21 INFO  BackOfficeAdminMenu:48 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-29 18:33:24 INFO  BackOfficeAdminMenu:142 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-29 18:33:38 INFO  BackOfficeAdminMenu:3874 - Employee with name: John DoeNIF: 0 went back to main menu
+2023-08-29 18:33:39 INFO  BackOfficeAdminMenu:142 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-29 18:33:40 INFO  BackOfficeAdminMenu:3894 - Employee with name: John DoeNIF: 0 entered the vehicle registration page
+2023-08-29 18:37:47 INFO  BackOfficeAdminMenu:4688 - Employee with name: John DoeNIF: 0 failed to registered a new vehicle with plate: VX-6G-44
+2023-08-29 18:39:30 INFO  BackOfficeAdminMenu:4688 - Employee with name: John DoeNIF: 0 failed to registered a new vehicle with plate: VX-6G-44
+2023-08-29 18:40:15 INFO  BackOfficeAdminMenu:4688 - Employee with name: John DoeNIF: 0 failed to registered a new vehicle with plate: VX-6G-44
+2023-08-29 18:40:26 INFO  BackOfficeAdminMenu:4688 - Employee with name: John DoeNIF: 0 failed to registered a new vehicle with plate: VX-6G-44
+2023-08-29 18:41:51 INFO  BackOfficeAdminMenu:4606 - Employee with name: John DoeNIF: 0 logged out
+2023-08-29 18:42:21 INFO  BackOfficeAdminMenu:49 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-29 18:42:37 INFO  BackOfficeAdminMenu:143 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-29 18:42:38 INFO  BackOfficeAdminMenu:3895 - Employee with name: John DoeNIF: 0 entered the vehicle registration page
+2023-08-29 18:43:35 INFO  BackOfficeAdminMenu:4674 - Employee with name: John DoeNIF: 0 registered a new vehicle with plate: M9-03-XX
+2023-08-29 18:59:50 INFO  BackOfficeAdminMenu:4689 - Employee with name: John DoeNIF: 0 failed to registered a new vehicle with plate: 
+2023-08-29 18:59:54 INFO  BackOfficeAdminMenu:4601 - Employee with name: John DoeNIF: 0 logged out
+2023-08-29 18:59:55 INFO  BackOfficeAdminMenu:3899 - Employee with name: John DoeNIF: 0 entered the employee registration page
+2023-08-29 19:06:08 INFO  BackOfficeAdminMenu:4336 - Employee with name: John DoeNIF: 0 logged out
+2023-08-29 19:27:13 INFO  BackOfficeAdminMenu:51 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-29 19:27:19 INFO  BackOfficeAdminMenu:145 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-29 19:27:21 INFO  BackOfficeAdminMenu:3897 - Employee with name: John DoeNIF: 0 entered the vehicle registration page
+2023-08-29 19:28:09 INFO  BackOfficeAdminMenu:4609 - Employee with name: John DoeNIF: 0 logged out
+2023-08-29 19:29:13 INFO  BackOfficeAdminMenu:51 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-29 19:29:15 INFO  BackOfficeAdminMenu:145 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-29 19:29:16 INFO  BackOfficeAdminMenu:3897 - Employee with name: John DoeNIF: 0 entered the vehicle registration page
+2023-08-29 19:30:20 INFO  BackOfficeAdminMenu:4609 - Employee with name: John DoeNIF: 0 logged out
+2023-08-29 19:44:06 INFO  BackOfficeAdminMenu:51 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-29 19:44:09 INFO  BackOfficeAdminMenu:145 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-29 19:44:11 INFO  BackOfficeAdminMenu:3905 - Employee with name: John DoeNIF: 0 entered the customer registration page
+2023-08-29 19:48:38 INFO  BackOfficeAdminMenu:51 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-29 19:48:53 INFO  BackOfficeAdminMenu:145 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-29 19:48:57 INFO  BackOfficeAdminMenu:3905 - Employee with name: John DoeNIF: 0 entered the customer registration page
+2023-08-29 19:49:05 INFO  BackOfficeAdminMenu:4524 - Employee with name: John DoeNIF: 0 logged out
+2023-08-29 19:52:34 INFO  BackOfficeAdminMenu:51 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-29 19:52:35 INFO  BackOfficeAdminMenu:145 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-29 19:52:38 INFO  BackOfficeAdminMenu:3897 - Employee with name: John DoeNIF: 0 entered the vehicle registration page
+2023-08-29 19:52:40 INFO  BackOfficeAdminMenu:4662 - Employee with name: John DoeNIF: 0 logged out
+2023-08-29 19:52:41 INFO  BackOfficeAdminMenu:3905 - Employee with name: John DoeNIF: 0 entered the customer registration page
+2023-08-29 19:52:43 INFO  BackOfficeAdminMenu:4549 - Employee with name: John DoeNIF: 0 returned to registration menu page
+2023-08-29 19:52:44 INFO  BackOfficeAdminMenu:3901 - Employee with name: John DoeNIF: 0 entered the employee registration page
+2023-08-29 19:52:52 INFO  BackOfficeAdminMenu:4356 - Employee with name: John DoeNIF: 0 returned to registration menu page
+2023-08-29 19:52:53 INFO  BackOfficeAdminMenu:3883 - Employee with name: John DoeNIF: 0 logged out
+2023-08-29 19:57:46 INFO  BackOfficeAdminMenu:51 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-29 19:57:49 INFO  BackOfficeAdminMenu:145 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-29 19:57:51 INFO  BackOfficeAdminMenu:3909 - Employee with name: John DoeNIF: 0 entered the ticket registration page
+2023-08-29 19:57:57 INFO  BackOfficeAdminMenu:4193 - Employee with name: John DoeNIF: 0 logged out
+2023-08-29 20:02:46 INFO  BackOfficeAdminMenu:51 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-29 20:02:49 INFO  BackOfficeAdminMenu:145 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-29 20:02:50 INFO  BackOfficeAdminMenu:3913 - Employee with name: John DoeNIF: 0 entered the insurance registration page
+2023-08-29 20:02:55 INFO  BackOfficeAdminMenu:4028 - Employee with name: John DoeNIF: 0 logged out
+2023-08-29 20:03:51 INFO  BackOfficeAdminMenu:51 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-29 20:03:52 INFO  BackOfficeAdminMenu:145 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-29 20:03:53 INFO  BackOfficeAdminMenu:3913 - Employee with name: John DoeNIF: 0 entered the insurance registration page
+2023-08-29 20:03:56 INFO  BackOfficeAdminMenu:4028 - Employee with name: John DoeNIF: 0 logged out
