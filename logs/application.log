@@ -334,3 +334,8 @@
 2023-08-29 23:38:21 INFO  BackOfficeAdminMenu:287 - Employee with name: John Doe NIF: 0 entered the View All Tasks Page
 2023-08-29 23:38:25 INFO  BackOfficeAdminMenu:287 - Employee with name: John Doe NIF: 0 entered the View All Tasks Page
 2023-08-29 23:38:32 INFO  BackOfficeAdminMenu:242 - Employee with name: John Doe NIF: 0logged out
+2023-08-29 23:54:07 INFO  BackOfficeAdminMenu:49 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-29 23:54:10 INFO  BackOfficeAdminMenu:163 - Employee with name: John Doe NIF: 0 entered the Task Menu Page
+2023-08-29 23:54:13 INFO  BackOfficeAdminMenu:287 - Employee with name: John Doe NIF: 0 entered the View All Tasks Page
+2023-08-29 23:54:17 INFO  BackOfficeAdminMenu:276 - Employee with name: John Doe NIF: 0 failed to perform the task with ID: 4
+2023-08-29 23:54:20 INFO  BackOfficeAdminMenu:287 - Employee with name: John Doe NIF: 0 entered the View All Tasks Page
