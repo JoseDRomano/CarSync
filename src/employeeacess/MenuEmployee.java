@@ -630,6 +630,7 @@ public class MenuEmployee implements ValidateInput {
     private void displaySearchByOrderInsurance(String rowsPerPage, List<Insurance> insurances, JFrame
             insuranceDisplayFrame, String orderType) {
 
+        insurances.removeIf(Insurance::isDeactivated);
         switch (orderType) {
             case "Order by Policy Number" -> {
                 insurances.sort(Comparator.comparing(Insurance::getPolicy));
@@ -978,6 +979,7 @@ public class MenuEmployee implements ValidateInput {
 
     private void displaySearchByOrderTicket(String rowsPerPage, List<Ticket> ticketList, JFrame
             ticketDisplayFrame, String orderType) {
+        ticketList.removeIf(Ticket::isDeactivated);
         switch (orderType) {
             case "Order by NIF":
                 ticketList.sort(Comparator.comparing(Ticket::getNif));
@@ -1271,6 +1273,7 @@ public class MenuEmployee implements ValidateInput {
 
     private void displaySearchByOrderCustomer(String rowsPerPage, List<Customer> customerList,
                                               JFrame customerDisplayFrame, String orderType) {
+        customerList.removeIf(Customer::isDeactivated);
         switch (orderType) {
             case "Order by NIF":
                 customerList.sort(Comparator.comparing(Customer::getNif));
@@ -1553,6 +1556,7 @@ public class MenuEmployee implements ValidateInput {
 
     private void displaySearchByOrderEmployee(String rowsPerPage, List<Employee> employees, JFrame
             employeeDisplayFrame, String orderType) {
+        employees.removeIf(Employee::isDeactivated);
         switch (orderType) {
             case "Order by NIF":
                 employees.sort(Comparator.comparing(Employee::getNif));
@@ -1864,6 +1868,7 @@ public class MenuEmployee implements ValidateInput {
     private void displaySearchByOrderVehicle(String srowsPerPage, List<Vehicle> vehicles,
                                              JFrame vehicleDisplayFrame, String orderOption) {
         int rowsPerPage = Integer.parseInt(srowsPerPage);
+        vehicles.removeIf(Vehicle::isDeactivated);
         switch (orderOption) {
             case "License Plate" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getPlate));

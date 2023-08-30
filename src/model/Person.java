@@ -12,6 +12,19 @@ public abstract class Person implements Comparable<Person> {
     protected boolean deactivated = false;
     protected String email;
 
+
+    public boolean isDeactivated() {
+        return deactivated;
+    }
+
+    public boolean setDeactivated(int deactivated) {
+        if (deactivated == 0) {
+            this.deactivated = true;
+            return true;
+        }
+        return false;
+    }
+
     public int getNif() {
         return nif;
     }

@@ -1156,7 +1156,13 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         case "Search by NIF" -> {
                             if (isNIF(input)) {
                                 List<Customer> customerList = new ArrayList<>();
-                                customerList.add(dataSource.getCustomerByNIF(Integer.parseInt(input)));
+
+                                dataSource.queryCustomers().forEach(c -> {
+                                    if(c.getNif() == Integer.parseInt(input)) {
+                                        customerList.add(c);
+                                    }
+                                });
+
                                 new CustomerTableNavigation(
                                         Integer.parseInt(rowsPerPage), customerDisplayFrame, customerList);
                                 logger.info("Employee with name: " + employee.getName()

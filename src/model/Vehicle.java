@@ -16,6 +16,18 @@ public class Vehicle implements Comparable<Vehicle>{
     private String category;
     private boolean deactivated = false;
 
+    public boolean isDeactivated() {
+        return deactivated;
+    }
+
+    public boolean setDeactivated(int deactivated) {
+        if (deactivated == 0) {
+            this.deactivated = true;
+            return true;
+        }
+        return false;
+    }
+
     public void deactivate() {
         this.deactivated = true;
     }

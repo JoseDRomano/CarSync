@@ -113,6 +113,18 @@ public class Insurance implements Comparable<Insurance> {
         }
     }
 
+    public boolean isDeactivated() {
+        return deactivated;
+    }
+
+    public boolean setDeactivated(int deactivated) {
+        if (deactivated == 0) {
+            this.deactivated = true;
+            return true;
+        }
+        return false;
+    }
+
     public static class InsuranceTableModel extends AbstractTableModel {
 
         private final String[] columnNames = {"Policy", "Category", "Car Plate",

@@ -288,6 +288,7 @@ public class DataSource {
                 vehicle.setRegistrationDate(resultSet.getDate(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_REGISTRATION_DATE)));
                 vehicle.setVin(resultSet.getString(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_VIN)));
                 vehicle.setNif(resultSet.getInt(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_NIF)));
+                vehicle.setDeactivated(resultSet.getInt(VehicleEnum.getString(VehicleEnum.COLUMN_VEHICLE_DEACTIVATED)));
                 vehicles.add(vehicle);
             }
             return vehicles;
@@ -312,6 +313,7 @@ public class DataSource {
                 insurance.setExtraCategory(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXTRA_CATEGORY)));
                 insurance.setExpDate(resultSet.getDate(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_EXPIRY_DATE)));
                 insurance.setCompanyName(resultSet.getString(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_COMPANY)));
+                insurance.setDeactivated(resultSet.getInt(InsuranceEnum.getString(InsuranceEnum.COLUMN_INSURANCE_DEACTIVATED)));
                 insurances.add(insurance);
             }
             insurances.forEach(i -> i.renew());
@@ -365,6 +367,7 @@ public class DataSource {
                 ticket.setExpiry_date(resultSet.getDate(TicketEnum.getString(TicketEnum.COLUMN_TICKET_EXPIRY_DATE)));
                 ticket.setPaid(resultSet.getInt(TicketEnum.getString(TicketEnum.COLUMN_TICKET_PAID)));
                 ticket.setTicketID(resultSet.getInt(TicketEnum.getString(TicketEnum.COLUMN_TICKET_ID)));
+                ticket.setDeactivated(resultSet.getInt(TicketEnum.getString(TicketEnum.COLUMN_TICKET_DEACTIVATED)));
                 tickets.add(ticket);
             }
             tickets.forEach(t -> t.renew());
@@ -403,6 +406,7 @@ public class DataSource {
                         customer.setBirht_date(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
                         customer.setEmail(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_EMAIL)));
                         customer.setPwd(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
+                        customer.setDeactivated(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_DEACTIVATED)));
                     }
                 }
             }
@@ -461,6 +465,7 @@ public class DataSource {
                 Employee employee = new Employee();
                 employee.setAccess_level(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_EMPLOYEE_ACCESS_LEVEL)));
                 employee.setNif(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_NIF)));
+                employee.setDeactivated(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_DEACTIVATED)));
                 employees.add(employee);
             }
 
@@ -474,6 +479,7 @@ public class DataSource {
                         employee.setBirht_date(resultSet1.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_BIRTH_DATE)));
                         employee.setEmail(resultSet1.getString(PersonsEnum.getString(PersonsEnum.COLUMN_EMAIL)));
                         employee.setPwd(resultSet1.getString(PersonsEnum.getString(PersonsEnum.COLUMN_PWD)));
+                        employee.setDeactivated(resultSet1.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_DEACTIVATED)));
                     }
                 }
             }
@@ -513,7 +519,9 @@ public class DataSource {
 
     //TESTED
     public Customer getCustomerByNIF(int nif) {
-        for (Customer customer : queryCustomers()) {
+        List<Customer> customers = queryCustomers();
+        customers.removeIf(Customer::isDeactivated);
+        for (Customer customer : customers) {
             if (customer.getNif() == nif) {
                 Customer customer1 = new Customer();
                 customer1.setNif(customer.getNif());
@@ -542,6 +550,13 @@ public class DataSource {
             System.out.println("Not owner of vehicle with plate: " + plate);
             return worked;
         }*/
+
+        for(Vehicle vehicle: queryVehicles()) {
+            if(vehicle.getPlate().equals(plate) && vehicle.isDeactivated()) {
+                System.out.println("Vehicle with plate: " + plate + " is deactivated");
+                return worked;
+            }
+        }
 
         try {
             connection.setAutoCommit(false);
@@ -575,13 +590,12 @@ public class DataSource {
             try {
                 System.out.println("Resetting default commit behavior");
                 connection.setAutoCommit(true);
-                return worked;
             } catch (SQLException e) {
                 System.out.println("Couldn't reset auto-commit: " + e.getMessage());
                 e.printStackTrace();
-                return worked;
             }
         }
+        return worked;
     }
 
 
@@ -596,6 +610,10 @@ public class DataSource {
             System.out.println("Wrong input: " + plate + " " + categoryNumber);
             return;
         }*/
+
+        if(!isCustomer(nif)) {
+            return false;
+        }
 
         //Verifica se o veículo já existe na base de dados
         for (Vehicle v : queryVehicles()) {
@@ -711,6 +729,15 @@ public class DataSource {
             System.out.println("Something wrong with provided info");
             return false;
         }*/
+
+        for (Vehicle vehicle: queryVehicles()) {
+            if (vehicle.getPlate().equals(plate)) {
+                if(vehicle.isDeactivated()) {
+                    System.out.println("Vehicle is deactivated");
+                    return false;
+                }
+            }
+        }
 
         try {
             connection.setAutoCommit(false);
@@ -870,6 +897,11 @@ public class DataSource {
     }
 
     public boolean updateEmployeeAccessLevel(int nif, int newAccessLevel) {
+
+        if(!isEmployee(nif)) {
+            return false;
+        }
+
         boolean result = false;
         try {
             connection.setAutoCommit(false);
@@ -908,6 +940,10 @@ public class DataSource {
     }
 
     public boolean updatePersonPassword(int nif, String newPassword) {
+        if(!isCustomerOrEmployee(nif)){
+            System.out.println("Person with nif: " + nif + " is not a customer nor employee.");
+            return false;
+        }
         try {
             connection.setAutoCommit(false);
             updatePersonPassword.setString(1, newPassword);
@@ -946,6 +982,10 @@ public class DataSource {
 
 
     public boolean updatePersonAddress(int nif, String newAddress) {
+        if(!isCustomerOrEmployee(nif)){
+            System.out.println("Person with nif: " + nif + " is not a customer nor employee.");
+            return false;
+        }
         try {
             connection.setAutoCommit(false);
             updatePersonAddress.setString(1, newAddress);
@@ -1028,6 +1068,8 @@ public class DataSource {
 
     //TESTED
     public boolean insuranceExists(int policy, int nif) {
+        List<Insurance> insuranceList = queryInsurances();
+        insuranceList.removeIf(Insurance::isDeactivated);
         for (Insurance i : queryInsurances()) {
             if (isVehicleOwner(nif, i.getCarPlate())) {
                 if (i.getPolicy() == policy) {
@@ -1040,6 +1082,8 @@ public class DataSource {
 
     //TESTED
     public boolean isVehicleOwner(int nif, String plate) {
+        List<Vehicle> vehicleList = queryVehicles();
+        vehicleList.removeIf(Vehicle::isDeactivated);
         for (Vehicle v : queryVehicles()) {
             if (v.getPlate().equals(plate)) {
                 if (v.getNif() == nif) {
@@ -1055,7 +1099,9 @@ public class DataSource {
 
     //TESTED
     public boolean isCustomer(int nif) {
-        for (Customer c : queryCustomers()) {
+        List<Customer> customers = queryCustomers();
+        customers.removeIf(Customer::isDeactivated);
+        for (Customer c : customers) {
             if (c.getNif() == nif) {
                 return true;
             }
@@ -1064,7 +1110,9 @@ public class DataSource {
     }
 
     public boolean isEmployee(int nif) {
-        for (Employee e : queryEmployees()) {
+        List<Employee> employees = queryEmployees();
+        employees.removeIf(Employee::isDeactivated);
+        for (Employee e : employees) {
             if (e.getNif() == nif) {
                 return true;
             }
@@ -1125,7 +1173,9 @@ public class DataSource {
 
         int paid = 1;
 
-        for (Ticket t : queryTickets()) {
+        List<Ticket> tickets = queryTickets();
+        tickets.removeIf(Ticket::isDeactivated);
+        for (Ticket t : tickets) {
             if (t.getTicketID() == ticketID) {
                 if (t.isPaid()) {
                     System.out.println("Ticket is already paid");
@@ -1362,13 +1412,17 @@ public class DataSource {
 
     public boolean isCustomerOrEmployee(int nif) {
 
-        for (Customer customer : queryCustomers()) {
+        List<Customer> customers = queryCustomers();
+        customers.removeIf(Customer::isDeactivated);
+        for (Customer customer : customers) {
             if (customer.getNif() == nif) {
                 return true;
             }
         }
 
-        for (Employee employee : queryEmployees()) {
+        List<Employee> employees = queryEmployees();
+        employees.removeIf(Employee::isDeactivated);
+        for (Employee employee : employees) {
             if (employee.getNif() == nif) {
                 return true;
             }
@@ -1583,6 +1637,15 @@ public class DataSource {
             return false;
         }
 
+        for (Customer c : queryCustomers()) {
+            if (c.getNif() == nif) {
+                if (c.isDeactivated()) {
+                    System.out.println("Customer with nif: " + nif + " is already deactivated");
+                    return false;
+                }
+            }
+        }
+
         boolean result = false;
 
         try {
@@ -1632,6 +1695,15 @@ public class DataSource {
             return false;
         }
 
+        for(Employee e: queryEmployees()) {
+            if(e.getNif() == nif) {
+                if(e.isDeactivated()) {
+                    System.out.println("Employee with nif: " + nif + " is already deactivated");
+                    return false;
+                }
+            }
+        }
+
         boolean result = false;
 
         try {
@@ -1673,6 +1745,15 @@ public class DataSource {
 
         boolean result = false;
 
+        for(Ticket t: queryTickets()) {
+            if(t.getTicketID() == ticketID) {
+                if(t.isDeactivated()) {
+                    System.out.println("Ticket with ID: " + ticketID + " is already deactivated");
+                    return false;
+                }
+            }
+        }
+
         try {
             connection.setAutoCommit(false);
             deactivateTicket.setInt(1, ticketID);
@@ -1712,6 +1793,15 @@ public class DataSource {
 
         boolean result = false;
 
+        for(Insurance i: queryInsurances()) {
+            if(i.getPolicy() == policy) {
+                if(i.isDeactivated()) {
+                    System.out.println("Insurance with policy: " + policy + " is already deactivated");
+                    return false;
+                }
+            }
+        }
+
         try {
             connection.setAutoCommit(false);
             deactivateInsurance.setInt(1, policy);
@@ -1750,6 +1840,15 @@ public class DataSource {
     public boolean deactivateVehicle(String plate) {
 
         boolean result = false;
+
+        for(Vehicle v: queryVehicles()) {
+            if(v.getPlate().equals(plate)) {
+                if(v.isDeactivated()) {
+                    System.out.println("Vehicle with plate: " + plate + " is already deactivated");
+                    return false;
+                }
+            }
+        }
 
         try {
             connection.setAutoCommit(false);
