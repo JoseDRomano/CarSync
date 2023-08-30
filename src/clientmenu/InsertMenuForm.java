@@ -66,16 +66,29 @@ public class InsertMenuForm extends JFrame {
 
     private void showInsertVehicleDialog() {
         JPanel panel = new JPanel(new GridLayout(0, 1));
-        JComboBox<String> brandField = new JComboBox<>(new String[]{" ", "Abarth", "Alfa Romeo"});
+        JComboBox<String> brandField = new JComboBox<>(new String[]{" ", "Abarth", "Alfa Romeo", "Aston Martin", "Audi",
+                "Bentley", "BMW", "Bugatti", "Cadillac", "Chevrolet", "Chrysler", "Citroen", "Dacia", "Daewoo",
+                "Daihatsu", "Dodge", "Donkervoort", "DS", "Ferrari", "Fiat", "Fisker", "Ford", "Honda", "Hummer",
+                "Hyundai", "Infiniti", "Iveco", "Jaguar", "Jeep", "Kia", "KTM", "Lada", "Lamborghini", "Lancia",
+                "Land Rover", "Landwind", "Lexus", "Lotus", "Maserati", "Maybach", "Mazda", "McLaren", "Mercedes-Benz",
+                "MG", "Mini", "Mitsubishi", "Morgan", "Nissan", "Opel", "Peugeot", "Porsche", "Renault", "Rolls-Royce",
+                "Rover", "Saab", "Seat", "Skoda", "Smart", "SsangYong", "Subaru", "Suzuki", "Tesla", "Toyota",
+                "Volkswagen", "Volvo"});
         JTextField modelField = new JTextField(15);
         JTextField plateField = new JTextField(15);
-        JComboBox<String> colorField = new JComboBox<>(new String[]{" ", "Black", "White"});
+        JComboBox<String> colorField = new JComboBox<>(new String[]{" ", "Black", "White",
+                "Red", "Blue", "Green", "Yellow", "Gray", "Silver", "Brown", "Orange"});
         JDateChooser registrationDateField = new JDateChooser();
         registrationDateField.setDateFormatString("yyyy-MM-dd");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         JTextField vinField = new JTextField(15);
         JTextField nifField = new JTextField(15);
-        JComboBox<String> categoryField = new JComboBox<>(new String[]{" ", "Light Commercial Vehicle"});
+        JComboBox<String> categoryField = new JComboBox<>(new String[]{" ", "Light Commercial Vehicle",
+                "Light Passenger Vehicle",
+                "Heavy-duty Commercial Vehicle",
+                "Heavy-duty Passenger Vehicle",
+                "Motorcycle", "Moped",
+                "Heavy-duty Passenger Vehicle"});
 
         panel.add(new JLabel("Brand:"));
         panel.add(brandField);
@@ -114,7 +127,8 @@ public class InsertMenuForm extends JFrame {
     private void showInsertInsuranceDialog() {
         JPanel panel = new JPanel(new GridLayout(0, 1));
         JTextField plateField = new JTextField(15);
-        JComboBox<String> insuranceCategoryField = new JComboBox<>(new String[]{" ", "Third Party"});
+        JComboBox<String> insuranceCategoryField = new JComboBox<>(new String[]{" ", "Third Party",
+                "Third Party Fire and Theft", "Third Party Fire and Auto-Liabitlity", "Comprehensive"});
         JTextField policyField = new JTextField(15);
         JDateChooser startDateField = new JDateChooser();
         startDateField.setDateFormatString("yyyy-MM-dd");
