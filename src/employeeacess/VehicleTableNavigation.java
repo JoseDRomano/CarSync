@@ -117,6 +117,94 @@ public class VehicleTableNavigation {
         updateTable();
     }
 
+    public VehicleTableNavigation(int rowsPerPage, JFrame originalFrame, java.util.List<Vehicle> vehicleList, String admin) {
+        originalFrame.setVisible(false);
+        this.data = vehicleList;
+        if (rowsPerPage > 0) {
+            this.rowsPerPage = rowsPerPage;
+        }
+
+        if (!dataSource.open()) {
+            System.out.println("Can't open datasource");
+            return;
+        }
+
+        tableModel = new VehicleTableModel(new String[]{"Plate", "NIF", "VIN", "Brand",
+                "Model", "Color", "Category", "Registration Date", "Deactivated"});
+
+        table = new JTable(tableModel);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        frame = new JFrame("Vehicle Search");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        prevButton = new JButton("Previous");
+        nextButton = new JButton("Next");
+        prevButton.setBackground(GREEN);
+        prevButton.setForeground(WHITE);
+        nextButton.setBackground(GREEN);
+        nextButton.setForeground(WHITE);
+
+        pageInfoLabel = new JLabel();
+
+
+        prevButton.addActionListener(e -> {
+            if (currentPage > 1) {
+                currentPage--;
+                updateTable();
+            }
+        });
+
+        nextButton.addActionListener(e -> {
+            if (currentPage < getTotalPages()) {
+                currentPage++;
+                updateTable();
+            }
+        });
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            frame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            originalFrame.setVisible(true);
+            frame.dispose();
+            frame.setVisible(false);
+        });
+
+        JPanel navPanel = new JPanel();
+//        navPanel.add(exitButton);
+        navPanel.add(prevButton);
+        navPanel.add(pageInfoLabel);
+        navPanel.add(nextButton);
+        navPanel.add(backButton);
+
+        frame.setLayout(new BorderLayout());
+        frame.add(new JScrollPane(table), BorderLayout.CENTER);
+        frame.add(navPanel, BorderLayout.SOUTH);
+
+//        frame.setSize(1200, 600);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setVisible(true);
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
+        updateTable();
+    }
+
 
     public VehicleTableNavigation(int rowsPerPage, JFrame originalFrame) {
         originalFrame.setVisible(false);
@@ -257,6 +345,7 @@ public class VehicleTableNavigation {
                 case 5 -> vehicle.getColor();
                 case 6 -> vehicle.getCategory();
                 case 7 -> vehicle.getregistrationDate();
+                case 8 -> vehicle.isDeactivated() ? "Yes" : "No";
                 default -> null;
             };
         }

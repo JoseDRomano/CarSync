@@ -118,6 +118,95 @@ public class TicketTableNavigation {
         updateTable();
     }
 
+    public TicketTableNavigation(int rowsPerPage, JFrame originalFrame, List<Ticket> ticketList, String admin) {
+
+        originalFrame.setVisible(false);
+        this.data = ticketList;
+        if (rowsPerPage > 0) {
+            this.rowsPerPage = rowsPerPage;
+        }
+
+        if (!dataSource.open()) {
+            System.out.println("Can't open datasource");
+            return;
+        }
+
+        tableModel = new TicketTableModel(new String[]{"TicketID", "NIF", "Plate", "Reason",
+                "Value", "Paid", "Issue Date", "Expiration Date", "Deactivated"});
+
+        table = new JTable(tableModel);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        frame = new JFrame("Ticket Search");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        prevButton = new JButton("Previous");
+        nextButton = new JButton("Next");
+        prevButton.setBackground(GREEN);
+        prevButton.setForeground(WHITE);
+        nextButton.setBackground(GREEN);
+        nextButton.setForeground(WHITE);
+
+        pageInfoLabel = new JLabel();
+
+
+        prevButton.addActionListener(e -> {
+            if (currentPage > 1) {
+                currentPage--;
+                updateTable();
+            }
+        });
+
+        nextButton.addActionListener(e -> {
+            if (currentPage < getTotalPages()) {
+                currentPage++;
+                updateTable();
+            }
+        });
+
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(RED);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            frame.dispose();
+            dataSource.close();
+            System.exit(0);
+        });
+
+        backButton.setBackground(BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            originalFrame.setVisible(true);
+            frame.dispose();
+            frame.setVisible(false);
+        });
+
+        JPanel navPanel = new JPanel();
+//        navPanel.add(exitButton);
+        navPanel.add(prevButton);
+        navPanel.add(pageInfoLabel);
+        navPanel.add(nextButton);
+        navPanel.add(backButton);
+
+        frame.setLayout(new BorderLayout());
+        frame.add(new JScrollPane(table), BorderLayout.CENTER);
+        frame.add(navPanel, BorderLayout.SOUTH);
+
+//        frame.setSize(1200, 600);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setVisible(true);
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dataSource.close();
+            }
+        });
+
+        updateTable();
+    }
+
 
     public TicketTableNavigation(int rowsPerPage, JFrame originalFrame) {
 
@@ -258,6 +347,7 @@ public class TicketTableNavigation {
                 case 5 -> ticket.isPaid() ? "Yes" : "No";
                 case 6 -> ticket.getDate();
                 case 7 -> ticket.getExpiry_date();
+                case 8 -> ticket.isDeactivated() ? "Yes" : "No";
                 default -> null;
             };
         }

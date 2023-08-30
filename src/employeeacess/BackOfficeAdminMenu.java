@@ -707,37 +707,37 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         switch (orderType) {
             case "Order by Policy Number" -> {
                 insurances.sort(Comparator.comparing(Insurance::getPolicy));
-                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances, "Adimn");
                 logger.info("Employee with name: " + employee.getName()
                         + " NIF: " + employee.getNif() + " displayed all the insurances ordered by policy number");
             }
             case "Order by Company" -> {
                 insurances.sort(Comparator.comparing(Insurance::getCompanyName));
-                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances, "Adimn");
                 logger.info("Employee with name: " + employee.getName()
                         + " NIF: " + employee.getNif() + " displayed all the insurances ordered by company");
             }
             case "Order by Plate" -> {
                 insurances.sort(Comparator.comparing(Insurance::getCarPlate));
-                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances, "Adimn");
                 logger.info("Employee with name: " + employee.getName()
                         + " NIF: " + employee.getNif() + " displayed all the insurances ordered by plate");
             }
             case "Order by Category" -> {
                 insurances.sort(Comparator.comparing(Insurance::getExtraCategory));
-                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances, "Adimn");
                 logger.info("Employee with name: " + employee.getName()
                         + " NIF: " + employee.getNif() + " displayed all the insurances ordered by category");
             }
             case "Order by Expiration Date" -> {
                 insurances.sort(Comparator.comparing(Insurance::getExpDate));
-                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances, "Adimn");
                 logger.info("Employee with name: " + employee.getName()
                         + " NIF: " + employee.getNif() + " displayed all the insurances ordered by expiration date");
             }
             case "Order by Issue Date" -> {
                 insurances.sort(Comparator.comparing(Insurance::getStartDate));
-                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances);
+                new InsuranceTableNavigation(Integer.parseInt(rowsPerPage), insuranceDisplayFrame, insurances, "Adimn");
                 logger.info("Employee with name: " + employee.getName()
                         + " NIF: " + employee.getNif() + " displayed all the insurances ordered by issue date");
             }
@@ -1056,37 +1056,37 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             case "Order by NIF":
                 ticketList.sort(Comparator.comparing(Ticket::getNif));
                 new TicketTableNavigation(Integer.parseInt(rowsPerPage),
-                        ticketDisplayFrame, ticketList);
+                        ticketDisplayFrame, ticketList, "Adimn");
                 break;
             case "Order by TicketID":
                 ticketList.sort(Comparator.comparing(Ticket::getTicketID));
                 new TicketTableNavigation(Integer.parseInt(rowsPerPage),
-                        ticketDisplayFrame, ticketList);
+                        ticketDisplayFrame, ticketList, "Adimn");
                 break;
             case "Order by Plate":
                 ticketList.sort(Comparator.comparing(Ticket::getPlate));
                 new TicketTableNavigation(Integer.parseInt(rowsPerPage),
-                        ticketDisplayFrame, ticketList);
+                        ticketDisplayFrame, ticketList, "Adimn");
                 break;
             case "Order by Issue Date":
                 ticketList.sort(Comparator.comparing(Ticket::getDate));
                 new TicketTableNavigation(Integer.parseInt(rowsPerPage),
-                        ticketDisplayFrame, ticketList);
+                        ticketDisplayFrame, ticketList, "Adimn");
                 break;
             case "Order by Expiration Date":
                 ticketList.sort(Comparator.comparing(Ticket::getExpiry_date));
                 new TicketTableNavigation(Integer.parseInt(rowsPerPage),
-                        ticketDisplayFrame, ticketList);
+                        ticketDisplayFrame, ticketList, "Adimn");
                 break;
             case "Order by Reason":
                 ticketList.sort(Comparator.comparing(Ticket::getReason));
                 new TicketTableNavigation(Integer.parseInt(rowsPerPage),
-                        ticketDisplayFrame, ticketList);
+                        ticketDisplayFrame, ticketList, "Adimn");
                 break;
             case "Order by Value":
                 ticketList.sort(Comparator.comparing(Ticket::getValue));
                 new TicketTableNavigation(Integer.parseInt(rowsPerPage),
-                        ticketDisplayFrame, ticketList);
+                        ticketDisplayFrame, ticketList, "Adimn");
                 break;
         }
 
@@ -1355,42 +1355,42 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             case "Order by NIF":
                 customerList.sort(Comparator.comparing(Customer::getNif));
                 new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
-                        customerDisplayFrame, customerList);
+                        customerDisplayFrame, customerList, "Adimn");
                 break;
             case "Order by Name":
                 customerList.sort(Comparator.comparing(Customer::getName));
                 new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
-                        customerDisplayFrame, customerList);
+                        customerDisplayFrame, customerList, "Adimn");
                 break;
             case "Order by Address":
                 customerList.sort(Comparator.comparing(Customer::getAddress));
                 new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
-                        customerDisplayFrame, customerList);
+                        customerDisplayFrame, customerList, "Adimn");
                 break;
             case "Order by License Type":
                 customerList.sort(Comparator.comparing(Customer::getLicenseType));
                 new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
-                        customerDisplayFrame, customerList);
+                        customerDisplayFrame, customerList, "Adimn");
                 break;
             case "Order by License Number":
                 customerList.sort(Comparator.comparing(Customer::getDriverLicenseNum));
                 new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
-                        customerDisplayFrame, customerList);
+                        customerDisplayFrame, customerList, "Adimn");
                 break;
             case "Order by Date of Birth":
                 customerList.sort(Comparator.comparing(Customer::getBirht_date));
                 new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
-                        customerDisplayFrame, customerList);
+                        customerDisplayFrame, customerList, "Adimn");
                 break;
             case "Order by Date of License Issue":
                 customerList.sort(Comparator.comparing(Customer::getStartingDate));
                 new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
-                        customerDisplayFrame, customerList);
+                        customerDisplayFrame, customerList, "Adimn");
                 break;
             case "Order by Date of License Expiration":
                 customerList.sort(Comparator.comparing(Customer::getExpDate));
                 new CustomerTableNavigation(Integer.parseInt(rowsPerPage),
-                        customerDisplayFrame, customerList);
+                        customerDisplayFrame, customerList, "Adimn");
                 break;
         }
 
@@ -1637,27 +1637,27 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             case "Order by NIF":
                 employees.sort(Comparator.comparing(Employee::getNif));
                 new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
-                        employeeDisplayFrame, employees);
+                        employeeDisplayFrame, employees, "Adimn");
                 break;
             case "Order by Name":
                 employees.sort(Comparator.comparing(Employee::getName));
                 new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
-                        employeeDisplayFrame, employees);
+                        employeeDisplayFrame, employees, "Adimn");
                 break;
             case "Order by Address":
                 employees.sort(Comparator.comparing(Employee::getAddress));
                 new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
-                        employeeDisplayFrame, employees);
+                        employeeDisplayFrame, employees, "Adimn");
                 break;
             case "Order by Access Level":
                 employees.sort(Comparator.comparing(Employee::getAccess_level));
                 new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
-                        employeeDisplayFrame, employees);
+                        employeeDisplayFrame, employees, "Adimn");
                 break;
             case "Order by Date of Birth":
                 employees.sort(Comparator.comparing(Employee::getBirht_date));
                 new EmployeeTableNavigation(Integer.parseInt(rowsPerPage),
-                        employeeDisplayFrame, employees);
+                        employeeDisplayFrame, employees, "Adimn");
                 break;
         }
     }
@@ -1947,35 +1947,35 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         switch (orderOption) {
             case "License Plate" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getPlate));
-                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles, "Adimn");
             }
             case "NIF" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getNif));
-                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles, "Adimn");
             }
             case "VIN" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getVin));
-                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles, "Adimn");
             }
             case "Category" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getCategory));
-                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles, "Adimn");
             }
             case "Issue Date" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getregistrationDate));
-                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles, "Adimn");
             }
             case "Brand" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getBrand));
-                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles, "Adimn");
             }
             case "Model" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getModel));
-                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles, "Adimn");
             }
             case "Color" -> {
                 vehicles.sort(Comparator.comparing(Vehicle::getColor));
-                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles);
+                new VehicleTableNavigation(rowsPerPage, vehicleDisplayFrame, vehicles, "Adimn");
             }
             default -> {
                 JOptionPane.showMessageDialog(vehicleDisplayFrame, "Please select an option for each field");
