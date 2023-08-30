@@ -5,11 +5,13 @@ import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import java.util.List;
 
 import employeeacess.BackOfficeAdminMenu;
 import employeeacess.DataSource;
 import employeeacess.MenuEmployee;
 import employeeacess.MenuEmployeeManager;
+import model.Customer;
 import model.Employee;
 import org.mindrot.jbcrypt.BCrypt;
 import clientmenu.*;
@@ -102,29 +104,34 @@ public class LoginForm extends JPanel {
                     currentFrame.dispose();
                     CustomerForm customerForm = new CustomerForm(loggedInNif);
                     customerForm.setVisible(true);
+                    dataSource.close();
                 } else {
                     for(Employee employee: dataSource.queryEmployees()) {
                         if(employee.getNif() == loggedInNif) {
                             switch (employee.getAccess_level()) {
                                 case 0 -> {
+                                    dataSource.close();
                                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
                                     frame.setVisible(false);
                                     frame.dispose();
                                     new MenuEmployee(employee);
                                 }
                                 case 1 -> {
+                                    dataSource.close();
                                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
                                     frame.setVisible(false);
                                     frame.dispose();
                                     new MenuEmployeeManager(employee);
                                 }
                                 case 2 -> {
+                                    dataSource.close();
                                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
                                     frame.setVisible(false);
                                     frame.dispose();
                                     new BackOfficeAdminMenu(employee);
                                 }
                                 default -> {
+                                    dataSource.close();
                                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
                                     frame.setVisible(false);
                                     frame.dispose();
@@ -147,34 +154,73 @@ public class LoginForm extends JPanel {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
-            conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            String sql = "SELECT password FROM person WHERE nif = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, nif);
-            rs = pstmt.executeQuery();
-            if (rs.next()) {
-                String hashedPassword = rs.getString("password");
-                if (BCrypt.checkpw(password, hashedPassword)) {
-                    loggedInNif = Integer.parseInt(nif);
-                    return "Success";
-                } else {
-                    return "Invalid credentials. Please try again.";
+        DataSource dataSource = new DataSource();
+
+        if(!dataSource.open()) {
+            return "An error occurred. Please try again";
+        }
+
+        List<Customer> customerList = dataSource.queryCustomers();
+        customerList.removeIf(Customer::isDeactivated);
+        if(nif.matches("\\d{9}") && dataSource.isCustomerOrEmployee(Integer.parseInt(nif))) {
+            if(dataSource.isCustomer(Integer.parseInt(nif))) {
+                for (Customer customer : customerList) {
+                    if (customer.getNif() == Integer.parseInt(nif)) {
+                        String hashedPassword = customer.getPwd();
+                        if (BCrypt.checkpw(password, hashedPassword)) {
+                            loggedInNif = Integer.parseInt(nif);
+                            return "Success";
+                        } else {
+                            return "Invalid credentials. Please try again.";
+                        }
+                    }
                 }
             } else {
-                return "Invalid credentials. Please try again.";
-            }
-        } catch (Exception e) {
-            return "An error occurred. Please try again later.";
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+                List<Employee> employeeList = dataSource.queryEmployees();
+                employeeList.removeIf(Employee::isDeactivated);
+                for (Employee employee : employeeList) {
+                    if (employee.getNif() == Integer.parseInt(nif)) {
+                        String hashedPassword = employee.getPwd();
+                        if (BCrypt.checkpw(password, hashedPassword)) {
+                            loggedInNif = Integer.parseInt(nif);
+                            return "Success";
+                        } else {
+                            return "Invalid credentials. Please try again.";
+                        }
+                    }
+                }
             }
         }
+
+//        try {
+//            conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+//            String sql = "SELECT password FROM person WHERE nif = ?";
+//            pstmt = conn.prepareStatement(sql);
+//            pstmt.setString(1, nif);
+//            rs = pstmt.executeQuery();
+//            if (rs.next()) {
+//                String hashedPassword = rs.getString("password");
+//                if (BCrypt.checkpw(password, hashedPassword)) {
+//                    loggedInNif = Integer.parseInt(nif);
+//                    return "Success";
+//                } else {
+//                    return "Invalid credentials. Please try again.";
+//                }
+//            } else {
+//                return "Invalid credentials. Please try again.";
+//            }
+//        } catch (Exception e) {
+//            return "An error occurred. Please try again later.";
+//        } finally {
+//            try {
+//                if (rs != null) rs.close();
+//                if (pstmt != null) pstmt.close();
+//                if (conn != null) conn.close();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+        return "Invalid credentials. Please try again.";
     }
 
     private void showLoginErrorMessage(String message) {
