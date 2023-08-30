@@ -2261,7 +2261,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             }
         });
 
-        JLabel passwordLabel = new JLabel("Password: ");
+        JLabel passwordLabel = new JLabel("Password: (8 - 10 characters)");
         JTextField passwordField = new JTextField(15);
 
         JButton submitButton2 = new JButton("Change Password");
@@ -2456,7 +2456,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
             }
         });
 
-        JLabel passwordLabel = new JLabel("Password: ");
+        JLabel passwordLabel = new JLabel("Password: (8 - 10 characters)");
         JTextField passwordField = new JTextField(15);
 
 
@@ -3771,7 +3771,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         birthDateField.setDateFormatString("yyyy-MM-dd");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        JLabel passwordLabel = new JLabel("Password: ");
+        JLabel passwordLabel = new JLabel("Password: (8 - 10 characters)");
         JTextField passwordField = new JTextField(15);
 
         JLabel nifLabel = new JLabel("NIF: ");
@@ -3942,7 +3942,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         birthDateField.setDateFormatString("yyyy-MM-dd");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        JLabel passwordLabel = new JLabel("Password: ");
+        JLabel passwordLabel = new JLabel("Password: (8 - 10 characters)");
         JTextField passwordField = new JTextField(15);
 
         JLabel nifLabel = new JLabel("NIF: (9 digits)");

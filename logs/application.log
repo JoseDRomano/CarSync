@@ -400,3 +400,60 @@
 2023-08-30 12:23:21 INFO  BackOfficeAdminMenu:136 - Employee with name: John Doe NIF: 0 entered the Update Menu Page
 2023-08-30 12:23:23 INFO  BackOfficeAdminMenu:2035 - Employee with name: John Doe NIF: 0 entered the employee update menu
 2023-08-30 12:23:25 INFO  BackOfficeAdminMenu:2406 - Employee with name: John DoeNIF: 0 logged out
+2023-08-30 12:35:20 INFO  BackOfficeAdminMenu:50 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-30 12:37:50 INFO  BackOfficeAdminMenu:145 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-30 12:37:52 INFO  BackOfficeAdminMenu:4153 - Employee with name: John DoeNIF: 0 entered the employee registration page
+2023-08-30 12:39:33 INFO  BackOfficeAdminMenu:4618 - Employee with name: John DoeNIF: 0 failed to registered a new employee with NIF: 200000004
+2023-08-30 12:39:52 INFO  BackOfficeAdminMenu:4618 - Employee with name: John DoeNIF: 0 failed to registered a new employee with NIF: 200000004
+2023-08-30 12:40:54 INFO  BackOfficeAdminMenu:4618 - Employee with name: John DoeNIF: 0 failed to registered a new employee with NIF: 200000004
+2023-08-30 12:42:29 INFO  BackOfficeAdminMenu:4608 - Employee with name: John DoeNIF: 0 registered a new employee with NIF: 200000004
+2023-08-30 12:44:46 INFO  BackOfficeAdminMenu:4642 - Employee with name: John DoeNIF: 0 returned to registration menu page
+2023-08-30 12:44:47 INFO  BackOfficeAdminMenu:4129 - Employee with name: John DoeNIF: 0 went back to main menu
+2023-08-30 12:44:49 INFO  BackOfficeAdminMenu:161 - Employee with name: John Doe NIF: 0 entered the Search Menu Page
+2023-08-30 12:44:50 INFO  BackOfficeAdminMenu:414 - Employee with name: John Doe NIF: 0 entered the Employee Display Page
+2023-08-30 12:44:56 INFO  BackOfficeAdminMenu:1446 - Employee with name: John Doe NIF: 0 displayed all the employees order by: Order by NIF
+2023-08-30 12:45:29 INFO  BackOfficeAdminMenu:1586 - Employee with name: John DoeNIF: 0 went back to search menu page
+2023-08-30 12:45:30 INFO  BackOfficeAdminMenu:386 - Employee with name: John Doe NIF: 0 went back to the main menu
+2023-08-30 12:45:42 INFO  BackOfficeAdminMenu:85 - Employee with name: John Doe NIF: 0 logged out
+2023-08-30 12:46:00 INFO  BackOfficeAdminMenu:50 - Employee with name: Antonio Costa and NIF: 200000004 initialized the BackOffice Menu
+2023-08-30 12:46:06 INFO  BackOfficeAdminMenu:145 - Employee with name: Antonio Costa NIF: 200000004 entered the Registration Menu Page
+2023-08-30 12:46:08 INFO  BackOfficeAdminMenu:4129 - Employee with name: Antonio CostaNIF: 200000004 went back to main menu
+2023-08-30 12:46:09 INFO  BackOfficeAdminMenu:149 - Employee with name: Antonio Costa NIF: 200000004 entered the Delete Menu Page
+2023-08-30 12:46:10 INFO  BackOfficeAdminMenu:3478 - Employee with name: Antonio CostaNIF: 200000004 went back to delete menu page
+2023-08-30 12:46:12 INFO  BackOfficeAdminMenu:145 - Employee with name: Antonio Costa NIF: 200000004 entered the Registration Menu Page
+2023-08-30 12:46:16 INFO  BackOfficeAdminMenu:4161 - Employee with name: Antonio CostaNIF: 200000004 entered the ticket registration page
+2023-08-30 12:47:06 INFO  BackOfficeAdminMenu:4451 - Employee with name: Antonio CostaNIF: 200000004 tried to register a new ticket for customer with NIF: 200000000 and Date: 2023-08-16
+2023-08-30 12:47:32 INFO  BackOfficeAdminMenu:4451 - Employee with name: Antonio CostaNIF: 200000004 tried to register a new ticket for customer with NIF: 200000000 and Date: 2023-08-16
+2023-08-30 12:51:39 INFO  BackOfficeAdminMenu:4451 - Employee with name: Antonio CostaNIF: 200000004 tried to register a new ticket for customer with NIF: 200000000 and Date: 2023-08-16
+2023-08-30 12:51:55 INFO  BackOfficeAdminMenu:4441 - Employee with name: Antonio CostaNIF: 200000004 registered a new ticket for customer with NIF: 200000000 and Date: 2023-08-16
+2023-08-30 12:52:12 INFO  BackOfficeAdminMenu:4475 - Employee with name: Antonio CostaNIF: 200000004 returned to the registration menu page
+2023-08-30 12:52:13 INFO  BackOfficeAdminMenu:4165 - Employee with name: Antonio CostaNIF: 200000004 entered the insurance registration page
+2023-08-30 13:01:42 INFO  BackOfficeAdminMenu:50 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-30 13:01:49 INFO  BackOfficeAdminMenu:145 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-30 13:01:53 INFO  BackOfficeAdminMenu:4160 - Employee with name: John DoeNIF: 0 entered the ticket registration page
+2023-08-30 13:01:55 INFO  BackOfficeAdminMenu:4474 - Employee with name: John DoeNIF: 0 returned to the registration menu page
+2023-08-30 13:01:56 INFO  BackOfficeAdminMenu:4128 - Employee with name: John DoeNIF: 0 went back to main menu
+2023-08-30 13:02:03 INFO  BackOfficeAdminMenu:157 - Employee with name: John Doe NIF: 0 entered the Update Menu Page
+2023-08-30 13:02:05 INFO  BackOfficeAdminMenu:2071 - Employee with name: John Doe NIF: 0 entered the ticket update menu
+2023-08-30 13:02:14 ERROR BackOfficeAdminMenu:2156 - Employee with name: John DoeNIF: 0 failed to pay ticket with id: 1 and value: 120.00
+2023-08-30 13:03:54 INFO  BackOfficeAdminMenu:2120 - Employee with name: John DoeNIF: 0 logged out
+2023-08-30 13:04:19 INFO  BackOfficeAdminMenu:50 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-30 13:04:23 INFO  BackOfficeAdminMenu:157 - Employee with name: John Doe NIF: 0 entered the Update Menu Page
+2023-08-30 13:04:24 INFO  BackOfficeAdminMenu:2071 - Employee with name: John Doe NIF: 0 entered the ticket update menu
+2023-08-30 13:04:33 INFO  BackOfficeAdminMenu:2152 - Employee with name: John DoeNIF: 0 paid ticket with id: 1 and value: 123.98
+2023-08-30 13:04:55 ERROR BackOfficeAdminMenu:2156 - Employee with name: John DoeNIF: 0 failed to pay ticket with id: 2 and value: 100.00
+2023-08-30 13:05:18 INFO  BackOfficeAdminMenu:2114 - Employee with name: John DoeNIF: 0 went back to the update menu
+2023-08-30 13:05:21 INFO  BackOfficeAdminMenu:2063 - Employee with name: John Doe NIF: 0 entered the employee update menu
+2023-08-30 13:05:27 INFO  BackOfficeAdminMenu:2428 - Employee with name: John DoeNIF: 0 went back to the update menu
+2023-08-30 13:05:29 INFO  BackOfficeAdminMenu:2038 - Employee with name: John Doe NIF: 0 went back to the update menu
+2023-08-30 13:05:32 INFO  BackOfficeAdminMenu:157 - Employee with name: John Doe NIF: 0 entered the Update Menu Page
+2023-08-30 13:05:33 INFO  BackOfficeAdminMenu:2063 - Employee with name: John Doe NIF: 0 entered the employee update menu
+2023-08-30 13:06:27 INFO  BackOfficeAdminMenu:2478 - Employee with name: John DoeNIF: 0 failed to update email for person with NIF: 200000004
+2023-08-30 13:06:27 INFO  BackOfficeAdminMenu:2482 - Employee with name: John DoeNIF: 0 was not able to update email for person with NIF: 200000004
+2023-08-30 13:06:29 INFO  BackOfficeAdminMenu:2511 - Employee with name: John DoeNIF: 0updated email for person with NIF: 200000004
+2023-08-30 13:06:29 INFO  BackOfficeAdminMenu:2515 - Employee with name: John DoeNIF: 0 was not able to update email for person with NIF: 200000004
+2023-08-30 13:06:32 INFO  BackOfficeAdminMenu:2542 - Employee with name: John DoeNIF: 0 updated address for person with NIF: 200000004
+2023-08-30 13:06:32 INFO  BackOfficeAdminMenu:2546 - Employee with name: John DoeNIF: 0 was not able to update address for person with NIF: 200000004
+2023-08-30 13:06:52 INFO  BackOfficeAdminMenu:2434 - Employee with name: John DoeNIF: 0 logged out
+2023-08-30 13:07:15 INFO  BackOfficeAdminMenu:50 - Employee with name: Antonio Costa and NIF: 200000004 initialized the BackOffice Menu
+2023-08-30 13:07:16 INFO  BackOfficeAdminMenu:85 - Employee with name: Antonio Costa NIF: 200000004 logged out

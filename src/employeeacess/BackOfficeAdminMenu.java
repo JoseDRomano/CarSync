@@ -2146,8 +2146,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             String id = idField.getText();
             String value = valueField.getText();
 
-            if
-            (dataSource.payTicket(Integer.parseInt(id), Float.parseFloat(valueField.getText()))) {
+            if (dataSource.payTicket(Integer.parseInt(id), Double.parseDouble(valueField.getText()))) {
                 JOptionPane.showMessageDialog(updateTicketFrame, "Ticket successfully paid",
                         "Success", JOptionPane.INFORMATION_MESSAGE);
                 logger.info("Employee with name: " + employee.getName()
@@ -2289,7 +2288,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             }
         });
 
-        JLabel passwordLabel = new JLabel("Password: ");
+        JLabel passwordLabel = new JLabel("Password: (8 - 10 characters)");
         JTextField passwordField = new JTextField(15);
 
 
@@ -2485,7 +2484,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             }
         });
 
-        JLabel passwordLabel = new JLabel("Password: ");
+        JLabel passwordLabel = new JLabel("Password: (8 - 10 characters)");
         JTextField passwordField = new JTextField(15);
 
 
@@ -4570,7 +4569,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         birthDateField.setDateFormatString("yyyy-MM-dd");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        JLabel passwordLabel = new JLabel("Password: ");
+        JLabel passwordLabel = new JLabel("Password: (8 - 10 characters)");
         JTextField passwordField = new JTextField(15);
 
         JLabel nifLabel = new JLabel("NIF: ");
@@ -4741,7 +4740,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         birthDateField.setDateFormatString("yyyy-MM-dd");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        JLabel passwordLabel = new JLabel("Password: ");
+        JLabel passwordLabel = new JLabel("Password: (8 - 10 characters)");
         JTextField passwordField = new JTextField(15);
 
         JLabel nifLabel = new JLabel("NIF: (9 digits)");

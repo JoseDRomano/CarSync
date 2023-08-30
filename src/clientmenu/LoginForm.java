@@ -106,10 +106,28 @@ public class LoginForm extends JPanel {
                     for(Employee employee: dataSource.queryEmployees()) {
                         if(employee.getNif() == loggedInNif) {
                             switch (employee.getAccess_level()) {
-                                case 0 -> new MenuEmployee(employee);
-                                case 1 -> new MenuEmployeeManager(employee);
-                                case 2 -> new BackOfficeAdminMenu(employee);
+                                case 0 -> {
+                                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                                    frame.setVisible(false);
+                                    frame.dispose();
+                                    new MenuEmployee(employee);
+                                }
+                                case 1 -> {
+                                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                                    frame.setVisible(false);
+                                    frame.dispose();
+                                    new MenuEmployeeManager(employee);
+                                }
+                                case 2 -> {
+                                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                                    frame.setVisible(false);
+                                    frame.dispose();
+                                    new BackOfficeAdminMenu(employee);
+                                }
                                 default -> {
+                                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                                    frame.setVisible(false);
+                                    frame.dispose();
                                     System.out.println("Error: Invalid access level.");
                                     new WelcomeMenuForm();
                                 }

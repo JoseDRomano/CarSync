@@ -38,7 +38,7 @@ public class Ticket implements Comparable<Ticket> {
     }
 
     public boolean setPaid(int paid) {
-        if (paid == 1) {
+        if (paid == 0) {
             isPaid = true;
             return true;
         }
@@ -103,6 +103,10 @@ public class Ticket implements Comparable<Ticket> {
             case 5 -> this.reason = "DUI";
             default -> throw new IllegalStateException("No such reason");
         };
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public int getNif() {

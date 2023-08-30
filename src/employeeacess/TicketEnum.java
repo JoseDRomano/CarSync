@@ -51,8 +51,7 @@ public enum TicketEnum {
                     getString(TicketEnum.COLUMN_TICKET_DATE) + " = ? ";
             case PAY_TICKET -> "UPDATE " + getString(TicketEnum.TABLE_TICKET) + " SET " +
                     getString(TicketEnum.COLUMN_TICKET_PAID) + " = ? " +
-                    " WHERE " + getString(TicketEnum.COLUMN_TICKET_ID) + " = ? AND " +
-                    getString(TicketEnum.COLUMN_TICKET_DATE) + " = ? ";
+                    " WHERE " + getString(TicketEnum.COLUMN_TICKET_ID) + " = ?";
             case DEACTIVATE_TICKET -> "UPDATE " + getString(TicketEnum.TABLE_TICKET) + " SET " +
                     getString(TicketEnum.COLUMN_TICKET_DEACTIVATED) + " = 0 WHERE " +
                     getString(TicketEnum.COLUMN_TICKET_ID) + " = ?";
