@@ -1,10 +1,12 @@
 package clientmenu;
 
+import employeeacess.ValidateInput;
 import model.TaskManagment;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class DeactivateMenuForm extends JFrame {
+public class DeactivateMenuForm extends JFrame implements ValidateInput {
 
     private int nifNum;
 
@@ -62,19 +64,30 @@ public class DeactivateMenuForm extends JFrame {
     private void showDeactivateVehicleDialog() {
         String plate = JOptionPane.showInputDialog(this, "Enter Vehicle Plate to deactivate:");
         if (plate != null && !plate.trim().isEmpty()) {
-            TaskManagment taskManagment = new TaskManagment();
-            taskManagment.createTask("Vehicle Deactivation", nifNum, plate);
-            JOptionPane.showMessageDialog(this, "Deactivation request has been made.");
+            if (isPlate(plate)) {
+                TaskManagment taskManagment = new TaskManagment();
+                taskManagment.createTask("Vehicle Deactivation", nifNum, plate);
+                JOptionPane.showMessageDialog(this, "Deactivation request has been made.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid plate.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid plate.");
         }
     }
 
-    //Mano aqui é suposto ser insurance policy essa é a primary key da tabela insurance
     private void showDeactivateInsuranceDialog() {
-        String insuranceID = JOptionPane.showInputDialog(this, "Enter Insurance ID to deactivate:");
+        String insuranceID = JOptionPane.showInputDialog(this, "Enter policy to deactivate:");
         if (insuranceID != null && !insuranceID.trim().isEmpty()) {
             TaskManagment taskManagment = new TaskManagment();
-            taskManagment.createTask("Insurance Deactivation", nifNum, insuranceID);
-            JOptionPane.showMessageDialog(this, "Deactivation request has been made.");
+            if (isPolicy(insuranceID)) {
+                taskManagment.createTask("Insurance Deactivation", nifNum, insuranceID);
+                JOptionPane.showMessageDialog(this, "Deactivation request has been made.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid policy.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid policy.");
         }
     }
 

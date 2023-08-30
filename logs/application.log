@@ -499,3 +499,5 @@
 2023-08-30 15:05:12 INFO  BackOfficeAdminMenu:1299 - Employee with name: John DoeNIF: 0 logged out
 2023-08-30 15:05:33 INFO  MenuEmployee:1079 - Employee with name: John Doe NIF: 0 displayed all the customers ordered by: Order by NIF
 2023-08-30 15:05:38 INFO  MenuEmployee:1221 - Employee with name: John DoeNIF: 0 logged out
+2023-08-30 16:33:45 INFO  MenuEmployee:1079 - Employee with name: John Doe NIF: 0 displayed all the customers ordered by: Order by NIF
+2023-08-30 16:33:59 INFO  MenuEmployee:1232 - Employee with name: John DoeNIF: 0 went back to search menu page

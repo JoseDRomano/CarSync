@@ -135,6 +135,7 @@ public class LoginForm extends JPanel {
                             break;
                         }
                     }
+                    showLoginErrorMessage(result);
                 }
             }
         } else {

@@ -1,15 +1,17 @@
 package clientmenu;
 
+import com.toedter.calendar.JDateChooser;
+import employeeacess.ValidateInput;
 import model.TaskManagment;
+
 import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
-import com.toedter.calendar.JDateChooser;
 
 
 //No Ticket Registration o createTask deve ser assim please(a ordem das strings):
 //  createTask("Ticket Registration", nifNum, plate, date, reason, value, expirationDate);
-public class InsertMenuForm extends JFrame {
+public class InsertMenuForm extends JFrame implements ValidateInput {
 
     private int nifNum;
 
@@ -119,8 +121,14 @@ public class InsertMenuForm extends JFrame {
             String category = (String) categoryField.getSelectedItem();
 
             TaskManagment taskManagment = new TaskManagment();
-            taskManagment.createTask("Vehicle Registration", Integer.parseInt(nif), plate, vin, color, brand, model, registrationDate, category, nif);
-            JOptionPane.showMessageDialog(this, "Insert request has been made.");
+            if (!brand.equals(" ") && isValidString(model) && isPlate(plate)
+                    && !color.equals(" ") && isDate(registrationDate) && isVIN(vin)
+                    && !category.equals(" ") && isNIF(nif)) {
+                taskManagment.createTask("Vehicle Registration", Integer.parseInt(nif), plate, vin, color, brand, model, registrationDate, category, nif);
+                JOptionPane.showMessageDialog(this, "Insert request has been made.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid input.");
+            }
         }
     }
 
@@ -160,8 +168,14 @@ public class InsertMenuForm extends JFrame {
             String companyName = companyNameField.getText();
 
             TaskManagment taskManagment = new TaskManagment();
-            taskManagment.createTask("Insurance Registration", nifNum, policy, plate, startDate, insuranceCategory, endDate, companyName);
-            JOptionPane.showMessageDialog(this, "Insert request has been made.");
+
+            if (isPlate(plate) && !insuranceCategory.equals(" ") && isPolicy(policy) &&
+                    isDate(startDate) && isDate(endDate) && isValidString(companyName)) {
+                taskManagment.createTask("Insurance Registration", nifNum, policy, plate, startDate, insuranceCategory, endDate, companyName);
+                JOptionPane.showMessageDialog(this, "Insert request has been made.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid input.");
+            }
         }
     }
 
