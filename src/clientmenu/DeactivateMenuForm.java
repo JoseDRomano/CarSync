@@ -68,6 +68,7 @@ public class DeactivateMenuForm extends JFrame {
         }
     }
 
+    //Mano aqui é suposto ser insurance policy essa é a primary key da tabela insurance
     private void showDeactivateInsuranceDialog() {
         String insuranceID = JOptionPane.showInputDialog(this, "Enter Insurance ID to deactivate:");
         if (insuranceID != null && !insuranceID.trim().isEmpty()) {
