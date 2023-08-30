@@ -317,7 +317,11 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         gbc.gridx = 2;
         taskMenuPanel.add(executeTask, gbc);
 
+        gbc.gridx = 0;
         gbc.gridy = 4;
+        taskMenuPanel.add(deleteTask, gbc);
+
+        gbc.gridy = 5;
         gbc.gridx = 0;
         taskMenuPanel.add(exitButton, gbc);
 
@@ -339,6 +343,109 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     }
 
     private void deleteTaskPage(JFrame taskMenuFrame) {
+        JFrame deleteTaskFrame = new JFrame("CarSync");
+        deleteTaskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        deleteTaskFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JPanel deleteTaskPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        JLabel deleteTaskLabel = new JLabel("Delete Task");
+        deleteTaskLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        deleteTaskLabel.setForeground(BLUE);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        deleteTaskPanel.add(deleteTaskLabel, gbc);
+
+        JLabel taskIDLabel = new JLabel("Task ID:");
+        JTextField taskIDField = new JTextField(20);
+        JButton deleteButton = new JButton("Delete");
+        JButton backButton = new JButton("Back");
+        JButton exitButton = new JButton("Sign Out");
+
+        deleteButton.setBackground(RED);
+        deleteButton.setForeground(WHITE);
+        backButton.setBackground(BLACK);
+        backButton.setForeground(WHITE);
+        exitButton.setBackground(RED);
+        exitButton.setForeground(WHITE);
+
+        deleteButton.addActionListener(e -> {
+            String taskID = taskIDField.getText();
+            if (isInteger(taskID)) {
+                TaskManagment taskManagment = new TaskManagment();
+                if (taskManagment.deleteTaskFromFile(Integer.parseInt(taskID))) {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " deleted the task with ID: " + taskID);
+                    JOptionPane.showMessageDialog(null, "Task Deleted");
+                    deleteTaskFrame.dispose();
+                    deleteTaskPage(taskMenuFrame);
+                } else {
+                    logger.info("Employee with name: " + employee.getName()
+                            + " NIF: " + employee.getNif() + " failed to delete the task with ID: " + taskID);
+                    JOptionPane.showMessageDialog(null, "Failed To Delete Task, please try again");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Please enter a valid task ID");
+            }
+        });
+
+        backButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went back to the task menu");
+            deleteTaskFrame.dispose();
+            taskMenuFrame.setVisible(true);
+        });
+
+        exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " logged out");
+            deleteTaskFrame.dispose();
+            taskMenuFrame.dispose();
+            mainFrame.dispose();
+            dataSource.close();
+            new WelcomeMenuForm();
+        });
+
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        deleteTaskPanel.add(taskIDLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        deleteTaskPanel.add(taskIDField, gbc);
+
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        deleteTaskPanel.add(deleteButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        deleteTaskPanel.add(backButton, gbc);
+
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        deleteTaskPanel.add(exitButton, gbc);
+
+        deleteTaskFrame.add(deleteTaskPanel);
+        deleteTaskFrame.setVisible(true);
+
+        deleteTaskFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " logged out");
+                dataSource.close();
+            }
+        });
+
     }
 
     private void buildSearchMenuPage() {
