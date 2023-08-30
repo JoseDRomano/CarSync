@@ -96,6 +96,7 @@ public class WelcomeMenuForm {
         loginButton.addActionListener(e -> handleLoginButton());
         registerButton.addActionListener(e -> handleRegisterButton());
         exitButton.addActionListener(e -> System.exit(0));
+        frame.setVisible(true);
     }
 
     private void handleLoginButton() {

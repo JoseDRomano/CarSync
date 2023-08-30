@@ -1,9 +1,16 @@
 package clientmenu;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+
+import employeeacess.BackOfficeAdminMenu;
+import employeeacess.DataSource;
+import employeeacess.MenuEmployee;
+import employeeacess.MenuEmployeeManager;
+import model.Employee;
 import org.mindrot.jbcrypt.BCrypt;
 import clientmenu.*;
 
@@ -88,10 +95,30 @@ public class LoginForm extends JPanel {
         String password = new String(passwordField.getPassword());
         String result = authenticateUser(nif, password);
         if (result.equals("Success")) {
-            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(LoginForm.this);
-            currentFrame.dispose();
-            CustomerForm customerForm = new CustomerForm(loggedInNif);
-            customerForm.setVisible(true);
+            DataSource dataSource = new DataSource();
+            if(dataSource.open()) {
+                if(dataSource.isCustomer(loggedInNif)) {
+                    JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(LoginForm.this);
+                    currentFrame.dispose();
+                    CustomerForm customerForm = new CustomerForm(loggedInNif);
+                    customerForm.setVisible(true);
+                } else {
+                    for(Employee employee: dataSource.queryEmployees()) {
+                        if(employee.getNif() == loggedInNif) {
+                            switch (employee.getAccess_level()) {
+                                case 0 -> new MenuEmployee(employee);
+                                case 1 -> new MenuEmployeeManager(employee);
+                                case 2 -> new BackOfficeAdminMenu(employee);
+                                default -> {
+                                    System.out.println("Error: Invalid access level.");
+                                    new WelcomeMenuForm();
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
         } else {
             showLoginErrorMessage(result);
         }

@@ -2408,115 +2408,191 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     }
 
     private void employeeUpdatePage(JFrame updateMenuFrame) {
-        JFrame employeeUpdateFrame = new JFrame("CarSync");
-        employeeUpdateFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        employeeUpdateFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        JPanel employeeUpdatePanel = new JPanel(new GridBagLayout());
-        JLabel employeeUpdateLabel = new JLabel("Employee Update Menu");
-        employeeUpdateLabel.setFont(new Font("Arial", Font.BOLD, 80));
-        employeeUpdateLabel.setForeground(BLUE);
+        JFrame updateEmployeeFrame = new JFrame("CarSync");
+        updateEmployeeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        updateEmployeeFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.gridy = 0;
         gbc.gridx = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.gridwidth = 2;
-        employeeUpdatePanel.add(employeeUpdateLabel, gbc);
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 10, 5, 10);
 
-        JButton backButton = new JButton("Back");
         JButton exitButton = new JButton("Sign Out");
-        JButton submit = new JButton("Execute Update");
-
-        JLabel employeeNIF = new JLabel("NIF: (9 digits)");
-        JTextField employeeNIFField = new JTextField(9);
-
-        JLabel employeeAccessLevel = new JLabel("New Access Level");
-        JComboBox<String> employeeAccessLevelField = new JComboBox<>(new String[]{
-                " ", "0", "1", "2"});
-
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.LINE_START;
-        employeeUpdatePanel.add(employeeNIF, gbc);
-        gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.LINE_START;
-        employeeUpdatePanel.add(employeeNIFField, gbc);
-
-        gbc.gridy = 4;
-        gbc.anchor = GridBagConstraints.LINE_START;
-        employeeUpdatePanel.add(employeeAccessLevel, gbc);
-        gbc.gridy = 5;
-        gbc.anchor = GridBagConstraints.LINE_START;
-        employeeUpdatePanel.add(employeeAccessLevelField, gbc);
-
-
-        submit.setBackground(GREEN);
-        submit.setForeground(WHITE);
         exitButton.setBackground(RED);
         exitButton.setForeground(WHITE);
+        JButton backButton = new JButton("Back");
         backButton.setBackground(BLACK);
         backButton.setForeground(WHITE);
-
-        submit.addActionListener(e -> {
-            String accessLevel = (String) employeeAccessLevelField.getSelectedItem();
-            String nif = employeeNIFField.getText();
-            if (!accessLevel.equals(" ") && isNIF(nif)) {
-                if (dataSource.updateEmployeeAccessLevel(Integer.parseInt(nif), Integer.parseInt(accessLevel))) {
-                    JOptionPane.showMessageDialog(employeeUpdateFrame, "Employee Updated successfully!");
-                    logger.info("Employee with name: " + employee.getName()
-                            + "NIF: " + employee.getNif() + " updated access level for person with NIF: " + nif);
-                } else {
-                    JOptionPane.showMessageDialog(employeeUpdateFrame, "Update wasn't successfull!");
-                    logger.info("Employee with name: " + employee.getName()
-                            + "NIF: " + employee.getNif() + " was not able to update access level for person with NIF: " + nif);
-                }
-            } else {
-                JOptionPane.showMessageDialog(employeeUpdateFrame, "Please make sure all the fields are properly fielded!");
-                logger.info("Employee with name: " + employee.getName()
-                        + "NIF: " + employee.getNif() + " failed to update access level for person with NIF: " + nif);
-            }
-        });
-
-        exitButton.addActionListener(e -> {
-            logger.info("Employee with name: " + employee.getName()
-                    + "NIF: " + employee.getNif() + " logged out");
-            dataSource.close();
-            mainFrame.dispose();
-            updateMenuFrame.dispose();
-            employeeUpdateFrame.dispose();
-            new WelcomeMenuForm();
-        });
-
+        JButton submit = new JButton("Submit");
+        submit.setBackground(GREEN);
+        submit.setForeground(WHITE);
         backButton.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
                     + "NIF: " + employee.getNif() + " went back to the update menu");
-            employeeUpdateFrame.setVisible(false);
-            employeeUpdateFrame.dispose();
+            updateEmployeeFrame.setVisible(false);
             updateMenuFrame.setVisible(true);
         });
+        exitButton.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + "NIF: " + employee.getNif() + " logged out");
+            updateEmployeeFrame.dispose();
+            mainFrame.dispose();
+            updateMenuFrame.dispose();
+            dataSource.close();
+            new WelcomeMenuForm();
+        });
 
-        gbc.gridy = 6;
-        gbc.anchor = GridBagConstraints.LINE_START;
-        employeeUpdatePanel.add(submit, gbc);
+        //SET UP for exit buttons
+        JPanel updateEmployeePanel = new JPanel(new GridBagLayout());
 
-        gbc.gridy = 7;
-        gbc.fill = GridBagConstraints.NONE;
+        JLabel updateEmployeeLabel = new JLabel("Update Person");
+        updateEmployeeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.PAGE_START;
+        updateEmployeePanel.add(updateEmployeeLabel, gbc);
+
+        JLabel nifLabel = new JLabel("NIF: ");
+        JTextField nifField = new JTextField(15);
+//        JComboBox nifField = new JComboBox(arrayInfo(dataSource.queryCustomers()));
+
+        JLabel emailLabel = new JLabel("Email: ");
+        JTextField emailField = new JTextField(15);
+
+        JButton submitButton1 = new JButton("Change Email");
+        submitButton1.setBackground(GREEN);
+        submitButton1.setForeground(Color.WHITE);
+        submitButton1.addActionListener(e -> {
+//            String nif = nifField.getSelectedItem().toString();
+            String nif = nifField.getText();
+            String email = emailField.getText();
+            if (!isNIF(nif)) {
+                JOptionPane.showMessageDialog(updateEmployeeFrame, "Please write a valid NIF");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update email for person with NIF: " + nif);
+            } else if (!isEmail(email)) {
+                JOptionPane.showMessageDialog(updateEmployeeFrame, "Wrong email format");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update email for person with NIF: " + nif);
+            } else {
+                if (dataSource.updatePersonEmail(Integer.parseInt(nif), email)) {
+                    JOptionPane.showMessageDialog(updateEmployeeFrame, "Email successfully updated",
+                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " failed to update email for person with NIF: " + nif);
+                } else
+                    JOptionPane.showMessageDialog(updateEmployeeFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " was not able to update email for person with NIF: " + nif);
+            }
+        });
+
+        JLabel passwordLabel = new JLabel("Password: ");
+        JTextField passwordField = new JTextField(15);
+
+
+        JButton submitButton2 = new JButton("Change Password");
+        submitButton2.setBackground(GREEN);
+        submitButton2.setForeground(Color.WHITE);
+        submitButton2.addActionListener(e -> {
+            String password = passwordField.getText();
+//            String nif = nifField.getSelectedItem().toString();
+            String nif = nifField.getText();
+            if (!isNIF(nif)) {
+                JOptionPane.showMessageDialog(updateEmployeeFrame, "Please write a valid NIF");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update password for person with NIF: " + nif);
+            } else if (!isPassword(passwordField.getText())) {
+                JOptionPane.showMessageDialog(updateEmployeeFrame, "Wrong password format");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update password for person with NIF: " + nif);
+            } else {
+                password = BCrypt.hashpw(password, BCrypt.gensalt());
+                if (dataSource.updatePersonPassword(Integer.parseInt(nif), password)) {
+                    JOptionPane.showMessageDialog(updateEmployeeFrame, "Password successfully updated",
+                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + "updated email for person with NIF: " + nif);
+                } else
+                    JOptionPane.showMessageDialog(updateEmployeeFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " was not able to update email for person with NIF: " + nif);
+            }
+        });
+
+        JLabel addressLabel = new JLabel("Address: ");
+        JTextField addressField = new JTextField(36);
+
+        JButton submitButton3 = new JButton("Change Address");
+        submitButton3.setBackground(GREEN);
+        submitButton3.setForeground(Color.WHITE);
+        submitButton3.addActionListener(e -> {
+            String address = addressField.getText();
+//            String nif = nifField.getSelectedItem().toString();
+            String nif = nifField.getText();
+            if (!isNIF(nif)) {
+                JOptionPane.showMessageDialog(updateEmployeeFrame, "Please write a valid NIF");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update address for person with NIF: " + nif);
+            } else if (!isValidString(address)) {
+                JOptionPane.showMessageDialog(updateEmployeeFrame, "Wrong address format");
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " failed to update address for person with NIF: " + nif);
+            } else {
+                if (dataSource.updatePersonAddress(Integer.parseInt(nif), address)) {
+                    JOptionPane.showMessageDialog(updateEmployeeFrame, "Address successfully updated",
+                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                    logger.info("Employee with name: " + employee.getName()
+                            + "NIF: " + employee.getNif() + " updated address for person with NIF: " + nif);
+                } else
+                    JOptionPane.showMessageDialog(updateEmployeeFrame, "Error updating person", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.info("Employee with name: " + employee.getName()
+                        + "NIF: " + employee.getNif() + " was not able to update address for person with NIF: " + nif);
+            }
+        });
+
+        //Montar janela
         gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.LINE_END;
-        employeeUpdatePanel.add(exitButton, gbc);
+        JLabel[] labels = {nifLabel, emailLabel, passwordLabel, addressLabel};
+//        JComboBox[] comboBoxes = {nifField};
+        JTextField[] textFields = {nifField, emailField, passwordField, addressField};
+        JButton[] buttons = {submitButton1, submitButton2, submitButton3};
+
+        // Inside the for loop
+        for (int row = 0; row < labels.length; row++) {
+            gbc.gridx = 0;
+            gbc.gridy = row + 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            updateEmployeePanel.add(labels[row], gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_END;
+            updateEmployeePanel.add(textFields[row], gbc);
+
+            // Check if it's not the "NIF" line
+            if (row != 0) {
+                gbc.gridx = 2;
+                gbc.anchor = GridBagConstraints.LINE_END;
+                updateEmployeePanel.add(buttons[row - 1], gbc);
+            }
+        }
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updateEmployeePanel.add(exitButton, gbc);
+
+        gbc.gridwidth = 1;
         gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.LINE_START;
-        employeeUpdatePanel.add(backButton, gbc);
+        gbc.gridy = 12;
+        gbc.insets = new Insets(21, 10, 5, 10);
+        updateEmployeePanel.add(backButton, gbc);
 
-        employeeUpdateFrame.add(employeeUpdatePanel);
+        updateEmployeeFrame.add(updateEmployeePanel);
+        updateEmployeeFrame.setVisible(true);
         updateMenuFrame.setVisible(false);
-        employeeUpdateFrame.setVisible(true);
 
-
-        updateMenuFrame.addWindowListener(new WindowAdapter() {
+        updateEmployeeFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 logger.info("Employee with name: " + employee.getName()
@@ -2525,8 +2601,126 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             }
         });
 
-
     }
+
+//    private void employeeUpdatePage(JFrame updateMenuFrame) {
+//        JFrame employeeUpdateFrame = new JFrame("CarSync");
+//        employeeUpdateFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        employeeUpdateFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//
+//        JPanel employeeUpdatePanel = new JPanel(new GridBagLayout());
+//        JLabel employeeUpdateLabel = new JLabel("Employee Update Menu");
+//        employeeUpdateLabel.setFont(new Font("Arial", Font.BOLD, 80));
+//        employeeUpdateLabel.setForeground(BLUE);
+//        GridBagConstraints gbc = new GridBagConstraints();
+//        gbc.insets = new Insets(10, 10, 10, 10);
+//        gbc.gridy = 0;
+//        gbc.gridx = 0;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+//        gbc.anchor = GridBagConstraints.CENTER;
+//        gbc.gridwidth = 2;
+//        employeeUpdatePanel.add(employeeUpdateLabel, gbc);
+//
+//        JButton backButton = new JButton("Back");
+//        JButton exitButton = new JButton("Sign Out");
+//        JButton submit = new JButton("Execute Update");
+//
+//        JLabel employeeNIF = new JLabel("NIF: (9 digits)");
+//        JTextField employeeNIFField = new JTextField(9);
+//
+//        JLabel employeeAccessLevel = new JLabel("New Access Level");
+//        JComboBox<String> employeeAccessLevelField = new JComboBox<>(new String[]{
+//                " ", "0", "1", "2"});
+//
+//        gbc.gridy = 1;
+//        gbc.gridwidth = 2;
+//        gbc.fill = GridBagConstraints.NONE;
+//        gbc.anchor = GridBagConstraints.LINE_START;
+//        employeeUpdatePanel.add(employeeNIF, gbc);
+//        gbc.gridy = 2;
+//        gbc.anchor = GridBagConstraints.LINE_START;
+//        employeeUpdatePanel.add(employeeNIFField, gbc);
+//
+//        gbc.gridy = 4;
+//        gbc.anchor = GridBagConstraints.LINE_START;
+//        employeeUpdatePanel.add(employeeAccessLevel, gbc);
+//        gbc.gridy = 5;
+//        gbc.anchor = GridBagConstraints.LINE_START;
+//        employeeUpdatePanel.add(employeeAccessLevelField, gbc);
+//
+//
+//        submit.setBackground(GREEN);
+//        submit.setForeground(WHITE);
+//        exitButton.setBackground(RED);
+//        exitButton.setForeground(WHITE);
+//        backButton.setBackground(BLACK);
+//        backButton.setForeground(WHITE);
+//
+//        submit.addActionListener(e -> {
+//            String accessLevel = (String) employeeAccessLevelField.getSelectedItem();
+//            String nif = employeeNIFField.getText();
+//            if (!accessLevel.equals(" ") && isNIF(nif)) {
+//                if (dataSource.updateEmployeeAccessLevel(Integer.parseInt(nif), Integer.parseInt(accessLevel))) {
+//                    JOptionPane.showMessageDialog(employeeUpdateFrame, "Employee Updated successfully!");
+//                    logger.info("Employee with name: " + employee.getName()
+//                            + "NIF: " + employee.getNif() + " updated access level for person with NIF: " + nif);
+//                } else {
+//                    JOptionPane.showMessageDialog(employeeUpdateFrame, "Update wasn't successfull!");
+//                    logger.info("Employee with name: " + employee.getName()
+//                            + "NIF: " + employee.getNif() + " was not able to update access level for person with NIF: " + nif);
+//                }
+//            } else {
+//                JOptionPane.showMessageDialog(employeeUpdateFrame, "Please make sure all the fields are properly fielded!");
+//                logger.info("Employee with name: " + employee.getName()
+//                        + "NIF: " + employee.getNif() + " failed to update access level for person with NIF: " + nif);
+//            }
+//        });
+//
+//        exitButton.addActionListener(e -> {
+//            logger.info("Employee with name: " + employee.getName()
+//                    + "NIF: " + employee.getNif() + " logged out");
+//            dataSource.close();
+//            mainFrame.dispose();
+//            updateMenuFrame.dispose();
+//            employeeUpdateFrame.dispose();
+//            new WelcomeMenuForm();
+//        });
+//
+//        backButton.addActionListener(e -> {
+//            logger.info("Employee with name: " + employee.getName()
+//                    + "NIF: " + employee.getNif() + " went back to the update menu");
+//            employeeUpdateFrame.setVisible(false);
+//            employeeUpdateFrame.dispose();
+//            updateMenuFrame.setVisible(true);
+//        });
+//
+//        gbc.gridy = 6;
+//        gbc.anchor = GridBagConstraints.LINE_START;
+//        employeeUpdatePanel.add(submit, gbc);
+//
+//        gbc.gridy = 7;
+//        gbc.fill = GridBagConstraints.NONE;
+//        gbc.gridwidth = 1;
+//        gbc.anchor = GridBagConstraints.LINE_END;
+//        employeeUpdatePanel.add(exitButton, gbc);
+//        gbc.gridx = 1;
+//        gbc.anchor = GridBagConstraints.LINE_START;
+//        employeeUpdatePanel.add(backButton, gbc);
+//
+//        employeeUpdateFrame.add(employeeUpdatePanel);
+//        updateMenuFrame.setVisible(false);
+//        employeeUpdateFrame.setVisible(true);
+//
+//
+//        updateMenuFrame.addWindowListener(new WindowAdapter() {
+//            @Override
+//            public void windowClosing(WindowEvent e) {
+//                logger.info("Employee with name: " + employee.getName()
+//                        + "NIF: " + employee.getNif() + " logged out");
+//                dataSource.close();
+//            }
+//        });
+//    }
 
     private void vehicleUpdatePage(JFrame updateMenuFrame) {
         updateMenuFrame.setVisible(false);
