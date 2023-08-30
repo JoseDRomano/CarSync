@@ -77,14 +77,14 @@ public class CustomerTableNavigation {
         });
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
-        exitButton.setBackground(RED);
-        exitButton.setForeground(Color.WHITE);
-        exitButton.addActionListener(e -> {
-            frame.dispose();
-            dataSource.close();
-            System.exit(0);
-        });
+//        JButton exitButton = new JButton("Exit");
+//        exitButton.setBackground(RED);
+//        exitButton.setForeground(Color.WHITE);
+//        exitButton.addActionListener(e -> {
+//            frame.dispose();
+//            dataSource.close();
+//            System.exit(0);
+//        });
 
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
@@ -123,7 +123,7 @@ public class CustomerTableNavigation {
 //        gbc.anchor = GridBagConstraints.CENTER;
 //        navPanel.add(nextButton, gbc);
 
-        navPanel.add(exitButton);
+//        navPanel.add(exitButton);
         navPanel.add(prevButton);
         navPanel.add(pageInfoLabel);
         navPanel.add(nextButton);
@@ -197,14 +197,14 @@ public class CustomerTableNavigation {
         });
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
-        exitButton.setBackground(RED);
-        exitButton.setForeground(Color.WHITE);
-        exitButton.addActionListener(e -> {
-            frame.dispose();
-            dataSource.close();
-            System.exit(0);
-        });
+//        JButton exitButton = new JButton("Exit");
+//        exitButton.setBackground(RED);
+//        exitButton.setForeground(Color.WHITE);
+//        exitButton.addActionListener(e -> {
+//            frame.dispose();
+//            dataSource.close();
+//            System.exit(0);
+//        });
 
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
@@ -214,7 +214,7 @@ public class CustomerTableNavigation {
         });
 
         JPanel navPanel = new JPanel();
-        navPanel.add(exitButton);
+//        navPanel.add(exitButton);
         navPanel.add(prevButton);
         navPanel.add(pageInfoLabel);
         navPanel.add(nextButton);

@@ -57,6 +57,10 @@ public class TaskTableNavigation {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         TableColumn column = table.getColumnModel().getColumn(4);
         column.setPreferredWidth(750);
+        TableColumn column1 = table.getColumnModel().getColumn(2);
+        column.setPreferredWidth(160);
+        TableColumn column2 = table.getColumnModel().getColumn(0);
+        column2.setPreferredWidth(80);
 
         frame = new JFrame("Tasks");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,14 +89,14 @@ public class TaskTableNavigation {
         });
 
         JButton backButton = new JButton("Back");
-        JButton exitButton = new JButton("Exit");
-        exitButton.setBackground(RED);
-        exitButton.setForeground(Color.WHITE);
-        exitButton.addActionListener(e -> {
-            frame.dispose();
-            dataSource.close();
-            System.exit(0);
-        });
+//        JButton exitButton = new JButton("Exit");
+//        exitButton.setBackground(RED);
+//        exitButton.setForeground(Color.WHITE);
+//        exitButton.addActionListener(e -> {
+//            frame.dispose();
+//            dataSource.close();
+//            System.exit(0);
+//        });
 
         backButton.setBackground(BLACK);
         backButton.setForeground(Color.WHITE);
@@ -103,7 +107,7 @@ public class TaskTableNavigation {
         });
 
         JPanel navPanel = new JPanel();
-        navPanel.add(exitButton);
+//        navPanel.add(exitButton);
         navPanel.add(prevButton);
         navPanel.add(pageInfoLabel);
         navPanel.add(nextButton);

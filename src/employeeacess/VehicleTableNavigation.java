@@ -93,7 +93,7 @@ public class VehicleTableNavigation {
         });
 
         JPanel navPanel = new JPanel();
-        navPanel.add(exitButton);
+//        navPanel.add(exitButton);
         navPanel.add(prevButton);
         navPanel.add(pageInfoLabel);
         navPanel.add(nextButton);
@@ -183,7 +183,7 @@ public class VehicleTableNavigation {
         });
 
         JPanel navPanel = new JPanel();
-        navPanel.add(exitButton);
+//        navPanel.add(exitButton);
         navPanel.add(prevButton);
         navPanel.add(pageInfoLabel);
         navPanel.add(nextButton);
