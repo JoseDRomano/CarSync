@@ -86,6 +86,7 @@ public class CustomerForm extends JFrame {
         logoutButton.setPreferredSize(new Dimension(250, 40));
         logoutButton.addActionListener(e -> {
             dispose();
+            new WelcomeMenuForm();
         });
         gbc.gridy = 5;
         panel.add(logoutButton, gbc);
