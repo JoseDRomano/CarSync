@@ -2,9 +2,10 @@ package clientmenu;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.sql.*;
-
 import org.mindrot.jbcrypt.BCrypt;
+import clientmenu.*;
 
 public class LoginForm extends JPanel {
 
@@ -17,6 +18,7 @@ public class LoginForm extends JPanel {
     private JTextField nifField;
     private JPasswordField passwordField;
     private JButton loginButton;
+    private int loggedInNif = -1;
 
     public LoginForm() {
         try {
@@ -86,10 +88,9 @@ public class LoginForm extends JPanel {
         String password = new String(passwordField.getPassword());
         String result = authenticateUser(nif, password);
         if (result.equals("Success")) {
-            int nif_num = Integer.parseInt(nif);
             JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(LoginForm.this);
             currentFrame.dispose();
-            CustomerForm customerForm = new CustomerForm(nif_num);
+            CustomerForm customerForm = new CustomerForm(loggedInNif);
             customerForm.setVisible(true);
         } else {
             showLoginErrorMessage(result);
@@ -109,6 +110,7 @@ public class LoginForm extends JPanel {
             if (rs.next()) {
                 String hashedPassword = rs.getString("password");
                 if (BCrypt.checkpw(password, hashedPassword)) {
+                    loggedInNif = Integer.parseInt(nif);
                     return "Success";
                 } else {
                     return "Invalid credentials. Please try again.";
@@ -136,7 +138,7 @@ public class LoginForm extends JPanel {
     private void handleGoBackButton() {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         frame.dispose();
-        WelcomeMenuForm welcomeMenuForm = new WelcomeMenuForm();
+        WelcomeMenuForm welcomeMenuForm = new WelcomeMenuForm(loggedInNif);
         welcomeMenuForm.show();
     }
 

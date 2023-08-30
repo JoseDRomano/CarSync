@@ -7,14 +7,18 @@ import java.awt.event.ActionListener;
 
 public class WelcomeMenuForm {
 
-
-
     private JFrame frame;
     private JButton loginButton;
     private JButton registerButton;
     private JButton exitButton;
+    private int nifNum;
 
     public WelcomeMenuForm() {
+        this(-1); // Default value for NIF which denotes it's not set.
+    }
+
+    public WelcomeMenuForm(int nifNum) {
+        this.nifNum = nifNum;
 
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -29,8 +33,10 @@ public class WelcomeMenuForm {
 
         JPanel centerPanel = new JPanel(new GridBagLayout());
 
+        ImageIcon logoIcon = new ImageIcon("C:/Users/diogo/Downloads/002eff.png");
+        JLabel logoLabel = new JLabel(logoIcon);
 
-        JLabel titleLabel = new JLabel("Welcome to IMT ");
+        JLabel titleLabel = new JLabel("Welcome to CarSync ");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
         titleLabel.setForeground(new Color(44, 62, 80));
 
@@ -47,18 +53,17 @@ public class WelcomeMenuForm {
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 0, 10, 0);
         gbc.anchor = GridBagConstraints.CENTER;
-        centerPanel.add(titleLabel, gbc);
 
+        centerPanel.add(logoLabel, gbc);
+        gbc.gridy++;
+        centerPanel.add(titleLabel, gbc);
         gbc.gridy++;
         gbc.insets = new Insets(10, 0, 10, 0);
         centerPanel.add(instructionLabel, gbc);
-
         gbc.gridy++;
         centerPanel.add(contactLabel, gbc);
 
-
         JPanel buttonPanel = new JPanel(new GridBagLayout());
-
 
         loginButton = new JButton("Login");
         loginButton.setBackground(new Color(6, 65, 16));
@@ -88,28 +93,9 @@ public class WelcomeMenuForm {
         frame.add(centerPanel, BorderLayout.CENTER);
         frame.add(buttonPanel, BorderLayout.SOUTH);
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleLoginButton();
-            }
-        });
-
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleRegisterButton();
-            }
-        });
-
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-
-        frame.setVisible(true);
+        loginButton.addActionListener(e -> handleLoginButton());
+        registerButton.addActionListener(e -> handleRegisterButton());
+        exitButton.addActionListener(e -> System.exit(0));
     }
 
     private void handleLoginButton() {
@@ -137,12 +123,9 @@ public class WelcomeMenuForm {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                WelcomeMenuForm welcomeMenuForm = new WelcomeMenuForm();
-                welcomeMenuForm.show();
-            }
+        SwingUtilities.invokeLater(() -> {
+            WelcomeMenuForm welcomeMenuForm = new WelcomeMenuForm();
+            welcomeMenuForm.show();
         });
     }
 }

@@ -1,5 +1,6 @@
 package clientmenu;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -50,7 +51,7 @@ public class RegisterForm extends JPanel {
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        formPanel.add(new JLabel("NIF:"), gbc);
+        formPanel.add(new JLabel("NIF (9 Numbers):"), gbc);
         gbc.gridx++;
         formPanel.add(nifField, gbc);
         gbc.gridx = 0;
@@ -80,7 +81,7 @@ public class RegisterForm extends JPanel {
         formPanel.add(b_dateField, gbc);
         gbc.gridx = 0;
         gbc.gridy++;
-        formPanel.add(new JLabel("Driver License:"), gbc);
+        formPanel.add(new JLabel("Driver License (8 Numbers):"), gbc);
         gbc.gridx++;
         formPanel.add(licenseField, gbc);
         gbc.gridx = 0;
