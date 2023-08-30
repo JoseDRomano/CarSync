@@ -1,13 +1,17 @@
 package clientmenu;
 
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.sql.*;
+import employeeacess.DataSource;
+import employeeacess.ValidateInput;
 import org.mindrot.jbcrypt.BCrypt;
 
-public class RegisterForm extends JPanel {
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+
+public class RegisterForm extends JPanel implements ValidateInput {
 
     public static final String DB_NAME = "projeto_imt";
     public static final int PORT_NUMBER = 3306;
@@ -131,29 +135,56 @@ public class RegisterForm extends JPanel {
     }
 
     private void insertUserData() {
-        try {
-            Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            String insertIntoPerson = "INSERT INTO person(nif, name, address, b_date, password, email) VALUES(?,?,?,?,?,?)";
-            PreparedStatement pstmt = conn.prepareStatement(insertIntoPerson);
-            pstmt.setInt(1, Integer.parseInt(nifField.getText()));
-            pstmt.setString(2, nameField.getText());
-            pstmt.setString(3, addressField.getText());
-            pstmt.setString(4, b_dateField.getText());
-            pstmt.setString(5, BCrypt.hashpw(new String(passwordField.getPassword()), BCrypt.gensalt()));
-            pstmt.setString(6, emailField.getText());
-            pstmt.executeUpdate();
-            String insertIntoCustomer = "INSERT INTO customer(driver_license_number, license_type, start_date, expiration_date, nif) VALUES(?,?,?,?,?)";
-            pstmt = conn.prepareStatement(insertIntoCustomer);
-            pstmt.setString(1, licenseField.getText());
-            pstmt.setString(2, (String) licenseTypeComboBox.getSelectedItem());
-            pstmt.setString(3, startingDateField.getText());
-            pstmt.setString(4, expirationDateField.getText());
-            pstmt.setInt(5, Integer.parseInt(nifField.getText()));
-            pstmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Registration Successful!");
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Unable to Register. Please Try Again.");
-            e.printStackTrace();
+        DataSource dataSource = new DataSource();
+        if (!dataSource.open()) {
+            JOptionPane.showMessageDialog(null, "Unexpected error, please try again");
+            System.out.println("Couldn't connect to database");
+            return;
+        }
+
+
+        String nif = nifField.getText();
+        String name = nameField.getText();
+        String email = emailField.getText();
+        String address = addressField.getText();
+        String b_date = b_dateField.getText();
+        String startingDate = startingDateField.getText();
+        String license = licenseField.getText();
+        String password = new String(passwordField.getPassword());
+        String licenseType = (String) licenseTypeComboBox.getSelectedItem();
+        String expirationDate = expirationDateField.getText();
+
+        if (isNIF(nif) && isValidString(name) && isValidString(address)
+                && isValidBirthDate(b_date) && isEmail(email) && isDriverLicense(license)
+                && isValidExpirationDate(expirationDate) && isDate(startingDate)
+                && isPassword(password)) {
+
+            //Fiz esta alteração porque o código abaixo não garante que o input estava no formato correto
+
+            try {
+                Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                String insertIntoPerson = "INSERT INTO person(nif, name, address, b_date, password, email) VALUES(?,?,?,?,?,?)";
+                PreparedStatement pstmt = conn.prepareStatement(insertIntoPerson);
+                pstmt.setInt(1, Integer.parseInt(nif));
+                pstmt.setString(2, name);
+                pstmt.setString(3, address);
+                pstmt.setDate(4, Date.valueOf(b_dateField.getText()));
+                pstmt.setString(5, BCrypt.hashpw(password, BCrypt.gensalt()));
+                pstmt.setString(6, email);
+                pstmt.executeUpdate();
+                String insertIntoCustomer = "INSERT INTO customer(driver_license_number, license_type, start_date, expiration_date, nif) VALUES(?,?,?,?,?)";
+                pstmt = conn.prepareStatement(insertIntoCustomer);
+                pstmt.setInt(1, Integer.parseInt(license));
+                pstmt.setString(2, licenseType);
+                pstmt.setDate(3, Date.valueOf(startingDate));
+                pstmt.setDate(4, Date.valueOf(expirationDateField.getText()));
+                pstmt.setInt(5, Integer.parseInt(nifField.getText()));
+                pstmt.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Registration Successful!");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Unable to Register. Please Try Again.");
+                e.printStackTrace();
+            }
         }
     }
 
@@ -161,7 +192,7 @@ public class RegisterForm extends JPanel {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         frame.dispose();
         WelcomeMenuForm welcomeMenuForm = new WelcomeMenuForm();
-        welcomeMenuForm.show();
+//        welcomeMenuForm.show();
     }
 
     public static void main(String[] args) {
