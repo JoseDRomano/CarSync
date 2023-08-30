@@ -44,8 +44,9 @@ public class Ticket implements Comparable<Ticket> {
         if (deactivated == 0) {
             this.deactivated = true;
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public boolean setPaid(int paid) {

@@ -393,6 +393,7 @@ public class DataSource {
                 customer.setLicenseType(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE)));
                 customer.setStartingDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE)));
                 customer.setDriverLicenseNum(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_DRIVER_LICENSE)));
+                customer.setDeactivated(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_DEACTIVATED)));
                 customers.put(nif, customer);
             }
 
@@ -431,6 +432,7 @@ public class DataSource {
                 customer.setLicenseType(resultSet.getString(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_LICENSE_TYPE)));
                 customer.setStartingDate(resultSet.getDate(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_START_DATE)));
                 customer.setDriverLicenseNum(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_CUSTOMER_DRIVER_LICENSE)));
+                customer.setDeactivated(resultSet.getInt(PersonsEnum.getString(PersonsEnum.COLUMN_DEACTIVATED)));
                 customers.add(customer);
             }
 
@@ -532,6 +534,7 @@ public class DataSource {
                 customer1.setLicenseType(customer.getLicenseType());
                 customer1.setPwd(customer.getPwd());
                 customer1.setStartingDate(customer.getStartingDate());
+                customer1.setEmail(customer.getEmail());
                 return customer1;
             }
         }
@@ -1883,6 +1886,18 @@ public class DataSource {
             }
         }
         return result;
+    }
+
+    public static void main(String[] args) {
+        DataSource dataSource = new DataSource();
+        if (dataSource.open()) {
+            List<Customer> customers = dataSource.queryCustomers();
+            customers.forEach(System.out::println);
+            customers.removeIf(Customer::isDeactivated);
+            System.out.println("--------------------------------");
+            customers.forEach(System.out::println);
+
+        }
     }
 
 }

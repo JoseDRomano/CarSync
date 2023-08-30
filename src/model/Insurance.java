@@ -121,8 +121,9 @@ public class Insurance implements Comparable<Insurance> {
         if (deactivated == 0) {
             this.deactivated = true;
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public static class InsuranceTableModel extends AbstractTableModel {

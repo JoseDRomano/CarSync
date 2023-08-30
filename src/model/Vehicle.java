@@ -24,8 +24,9 @@ public class Vehicle implements Comparable<Vehicle>{
         if (deactivated == 0) {
             this.deactivated = true;
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public void deactivate() {

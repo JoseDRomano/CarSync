@@ -21,8 +21,9 @@ public abstract class Person implements Comparable<Person> {
         if (deactivated == 0) {
             this.deactivated = true;
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public int getNif() {
