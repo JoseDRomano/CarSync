@@ -35,7 +35,7 @@ public class MenuEmployee implements ValidateInput {
     private final Color RED = new Color(130, 0, 0);
     private final Color WHITE = new Color(255, 255, 255);
     private final Color BLUE = new Color(0, 0, 100);
-    private static Logger logger = Logger.getLogger(MenuEmployee.class);
+    private Logger logger;
 
     public MenuEmployee(Employee employee) {
         dataSource = new DataSource();
@@ -43,6 +43,8 @@ public class MenuEmployee implements ValidateInput {
             System.out.println("Can't open datasource");
             return;
         }
+
+        logger = Logger.getLogger(MenuEmployee.class);
 
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -3085,7 +3087,8 @@ public class MenuEmployee implements ValidateInput {
                 String endDate = sdf.format(endDateField.getDate());
                 String companyName = companyNameField.getText();
 
-                if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isValidString(companyName) && isPolicy(policy)) {
+                if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isValidString(companyName) && isPolicy(policy)
+                        && !insuranceCategory.equals(" ")) {
                     if (dataSource.insertInsurance(Integer.parseInt(policy), plate, Date.valueOf(startDate),
                             insuranceCategory, Date.valueOf(endDate), companyName)) {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);

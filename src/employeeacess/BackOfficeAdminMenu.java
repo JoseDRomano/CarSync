@@ -30,7 +30,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     private final Color GREEN = new Color(0, 100, 0);
     private final Color RED = new Color(100, 0, 0);
     private final Color BLUE = new Color(0, 0, 100);
-    private static final Logger logger = Logger.getLogger(BackOfficeAdminMenu.class);
+    private Logger logger;
 
 
     //Resolver problemas da Task
@@ -40,6 +40,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             System.out.println("Can't open datasource");
             return;
         }
+
+        logger = Logger.getLogger(BackOfficeAdminMenu.class);
 
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -4245,7 +4247,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String endDate = sdf.format(endDateField.getDate());
                 String companyName = companyNameField.getText();
 
-                if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isValidString(companyName) && isPolicy(policy)) {
+                if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isValidString(companyName) && isPolicy(policy)
+                && !insuranceCategory.equals(" ")) {
                     if (dataSource.insertInsurance(Integer.parseInt(policy), plate, Date.valueOf(startDate),
                             insuranceCategory, Date.valueOf(endDate), companyName)) {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);
