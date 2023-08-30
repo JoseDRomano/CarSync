@@ -240,6 +240,17 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
         JButton executeTask = new JButton("Execute Task");
         JButton viewAllTasks = new JButton("View All Tasks");
+        JButton deleteTask = new JButton("Delete Task");
+        deleteTask.setBackground(BLUE);
+        deleteTask.setForeground(WHITE);
+        
+        deleteTask.addActionListener(e -> {
+            logger.info("Employee with name: " + employee.getName()
+                    + " NIF: " + employee.getNif() + " went to delete task page");
+            taskMenuFrame.setVisible(false);
+            deleteTaskPage(taskMenuFrame);
+        });
+
 //        exitButton.setBackground(RED);
 //        exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
@@ -325,6 +336,9 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 dataSource.close();
             }
         });
+    }
+
+    private void deleteTaskPage(JFrame taskMenuFrame) {
     }
 
     private void buildSearchMenuPage() {
