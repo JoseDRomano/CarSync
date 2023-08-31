@@ -47,7 +47,7 @@ public class CustomerForm extends JFrame {
         gbc.gridy = 1;
         panel.add(viewMenuButton, gbc);
 
-        JButton insertMenuButton = new JButton("Insert Menu");
+        JButton insertMenuButton = new JButton("Registration Menu");
         insertMenuButton.setBackground(new Color(6, 65, 16));
         insertMenuButton.setForeground(Color.white);
         insertMenuButton.setPreferredSize(new Dimension(250, 40));

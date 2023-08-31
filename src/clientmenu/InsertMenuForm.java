@@ -26,7 +26,7 @@ public class InsertMenuForm extends JFrame implements ValidateInput {
     }
 
     private void initializeUI() {
-        setTitle("Insert Menu");
+        setTitle("Register Menu");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         JPanel panel = new JPanel(new GridBagLayout());
@@ -118,7 +118,7 @@ public class InsertMenuForm extends JFrame implements ValidateInput {
         panel.add(new JLabel("Category:"));
         panel.add(categoryField);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "Insert New Vehicle", JOptionPane.OK_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(this, panel, "Register New Vehicle", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
             String brand = (String) brandField.getSelectedItem();
             String model = modelField.getText();
@@ -134,7 +134,7 @@ public class InsertMenuForm extends JFrame implements ValidateInput {
                     && !color.equals(" ") && isDate(registrationDate) && isVIN(vin)
                     && !category.equals(" ")) {
                 taskManagment.createTask("Vehicle Registration", nifNum, plate, vin, color, brand, model, registrationDate, category, String.valueOf(nifNum));
-                JOptionPane.showMessageDialog(this, "Insert request has been made.");
+                JOptionPane.showMessageDialog(this, "Register request has been made.");
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid input.");
             }
@@ -152,7 +152,8 @@ public class InsertMenuForm extends JFrame implements ValidateInput {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         JDateChooser endDateField = new JDateChooser();
         endDateField.setDateFormatString("yyyy-MM-dd");
-        JTextField companyNameField = new JTextField(15);
+        JComboBox<String> companyNameField2 = new JComboBox<>(new String[]{" ", "Tranquilidade",
+                "Generalli", "Fidelidade", "Logo", "Ok!", "AGEAS Seguros", "Cofidis", "ACP Seguuros", "UNO Seguros", "Allianz"});
 
         panel.add(new JLabel("Plate: "));
         panel.add(plateField);
@@ -165,23 +166,23 @@ public class InsertMenuForm extends JFrame implements ValidateInput {
         panel.add(new JLabel("End Date: "));
         panel.add(endDateField);
         panel.add(new JLabel("Company Name: "));
-        panel.add(companyNameField);
+        panel.add(companyNameField2);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "Insert New Insurance", JOptionPane.OK_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(this, panel, "Register New Insurance", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
             String plate = plateField.getText();
             String insuranceCategory = (String) insuranceCategoryField.getSelectedItem();
             String policy = policyField.getText();
             String startDate = sdf.format(startDateField.getDate());
             String endDate = sdf.format(endDateField.getDate());
-            String companyName = companyNameField.getText();
+            String companyName = (String) companyNameField2.getSelectedItem();
 
             TaskManagment taskManagment = new TaskManagment();
 
             if (isPlate(plate) && !insuranceCategory.equals(" ") && isPolicy(policy) &&
-                    isDate(startDate) && isDate(endDate) && isValidString(companyName)) {
+                    isDate(startDate) && isDate(endDate) && !companyName.equals(" ")) {
                 taskManagment.createTask("Insurance Registration", nifNum, policy, plate, startDate, insuranceCategory, endDate, companyName);
-                JOptionPane.showMessageDialog(this, "Insert request has been made.");
+                JOptionPane.showMessageDialog(this, "Register request has been made.");
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid input.");
             }
