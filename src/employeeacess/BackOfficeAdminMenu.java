@@ -4389,6 +4389,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " tried to register a new insurance but failed");
+                   break;
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
@@ -4574,6 +4575,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         JOptionPane.showMessageDialog(insertTicketFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " tried to register a new ticket for customer with NIF: " + nif + " and Date: " + date);
+                    break;
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertTicketFrame, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
@@ -4719,7 +4721,6 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                 String address = addressField.getText();
                 String email = emailField.getText();
 //                String birthDate = birthDateField.getText();
-
                 String birthDate = sdf.format(birthDateField.getDate());
                 String password = passwordField.getText();
                 String nif = nifField.getText();
@@ -4741,6 +4742,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         JOptionPane.showMessageDialog(insertEmployeeFrame, "Error registering employee");
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " failed to register a new employee with NIF: " + nif);
+                    break;
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertEmployeeFrame, "Please fill all the fields");
@@ -4934,6 +4936,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         JOptionPane.showMessageDialog(insertCustomerFrame, "Error inserting customer");
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " failed to register new employee with NIF: " + nif);
+                        break;
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertCustomerFrame, "Please fill all the fields");
@@ -5167,6 +5170,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         JOptionPane.showMessageDialog(insertVehicleFrame, "Error inserting vehicle");
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " failed to registered a new vehicle with plate: " + plateText);
+                    break;
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill all the fields properly");

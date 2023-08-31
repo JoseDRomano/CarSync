@@ -120,7 +120,10 @@ public interface ValidateInput {
 
 
     default boolean isPassword(String s) {
-        return s.matches("^.{8,10}$");
+        if(s.length() > 10 || s.length() < 8) {
+            return false;
+        }
+        return true;
     }
 
     default boolean isInteger(String s) {
