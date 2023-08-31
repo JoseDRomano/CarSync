@@ -1,6 +1,7 @@
 package clientmenu;
 
 
+import com.toedter.calendar.JDateChooser;
 import employeeacess.DataSource;
 import employeeacess.ValidateInput;
 import org.mindrot.jbcrypt.BCrypt;
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 
 public class RegisterForm extends JPanel implements ValidateInput {
 
@@ -46,6 +48,11 @@ public class RegisterForm extends JPanel implements ValidateInput {
         licenseTypeComboBox = new JComboBox<>(new String[]{"A", "B", "C", "D"});
         startingDateField = new JTextField(20);
         expirationDateField = new JTextField(20);
+        JDateChooser startingDateField2 = new JDateChooser();
+        startingDateField2.setDateFormatString("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+
     }
 
     private void buildUI() {
@@ -159,6 +166,13 @@ public class RegisterForm extends JPanel implements ValidateInput {
                 && isValidExpirationDate(expirationDate) && isDate(startingDate)
                 && isPassword(password)) {
 
+            DataSource dataSource1 = new DataSource();
+            if(dataSource1.open()) {
+                dataSource1.insertCustomer(Integer.parseInt(nif), name, address, Date.valueOf(b_date),
+                        password, email, Integer.parseInt(license),
+                        licenseType, Date.valueOf(startingDate), Date.valueOf(expirationDate));
+            }
+
             //Fiz esta alteração porque o código abaixo não garante que o input estava no formato correto
 
             try {
@@ -181,6 +195,8 @@ public class RegisterForm extends JPanel implements ValidateInput {
                 pstmt.setInt(5, Integer.parseInt(nifField.getText()));
                 pstmt.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Registration Successful!");
+                new LoginForm();
+                setVisible(true);
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "Unable to Register. Please Try Again.");
                 e.printStackTrace();

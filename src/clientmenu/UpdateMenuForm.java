@@ -251,8 +251,7 @@ public class UpdateMenuForm extends JFrame implements ValidateInput {
         gbc.insets = new Insets(21, 10, 5, 10);
         updatePersonPanel.add(backButton, gbc);
 
-        updatePersonFrame.add(updatePersonPanel);
-        updatePersonFrame.setVisible(true);
+        JOptionPane.showConfirmDialog(this, updatePersonPanel, "Update Personal Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         updatePersonFrame.addWindowListener(new WindowAdapter() {
             @Override
