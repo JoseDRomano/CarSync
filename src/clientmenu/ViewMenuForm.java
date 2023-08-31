@@ -156,29 +156,60 @@ public class ViewMenuForm extends JFrame {
     }
 
     private void viewCustomerTickets() {
+
         JPanel ticketsPanel = new JPanel();
+
         ticketsPanel.setLayout(new BoxLayout(ticketsPanel, BoxLayout.Y_AXIS));
 
+
         List<Ticket> ticketList = getTicketsForCustomerDetailed(nifNum);
+
         if (ticketList.isEmpty()) {
+
             JOptionPane.showMessageDialog(this, "No tickets found for the customer.");
+
             return;
+
         }
+
 
         for (Ticket ticket : ticketList) {
+
             JPanel ticketPanel = new JPanel(new FlowLayout());
+
             ticketPanel.add(new JLabel(ticket.toString()));
-            JButton payButton = new JButton("Pay");
-            payButton.addActionListener(e -> {
-                //turn handleTicketPayment into boolean and if retun true remove buttonpay or disable it
-                handleTicketPayment(ticket);
-            });
-            ticketPanel.add(payButton);
+
+
+            if (!ticket.isPaid()) {
+
+                JButton payButton = new JButton("Pay");
+
+                payButton.addActionListener(e -> {
+                    if(handleTicketPayment(ticket)) {
+                        ticket.setPaid(0);
+                    }
+                });
+
+                ticketPanel.add(payButton);
+
+            } else {
+
+                JLabel paidLabel = new JLabel("Paid");
+
+                ticketPanel.add(paidLabel);
+
+            }
+
+
             ticketsPanel.add(ticketPanel);
+
         }
 
+
         JScrollPane scrollPane = new JScrollPane(ticketsPanel);
+
         JOptionPane.showMessageDialog(this, scrollPane, "Your Tickets", JOptionPane.PLAIN_MESSAGE);
+
     }
 
     private List<Ticket> getTicketsForCustomerDetailed(int nif) {
@@ -205,23 +236,24 @@ public class ViewMenuForm extends JFrame {
         return tickets;
     }
 
-    private void handleTicketPayment(Ticket ticket) {
+    private boolean handleTicketPayment(Ticket ticket) {
+        boolean result2 = false;
         if (ticket.isPaid()) {
             JOptionPane.showMessageDialog(this, "This ticket is already paid.");
-            return;
+            return result2;
         }
         int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to pay this ticket?", "Pay Ticket", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
-
-
+            result2 = true;
             payTicketInDatabase(ticket);
             JOptionPane.showMessageDialog(this, "Ticket paid successfully.");
         }
+        return result2;
     }
 
     private void payTicketInDatabase(Ticket ticket) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             PreparedStatement statement = connection.prepareStatement("UPDATE ticket SET paid = 1 WHERE ticketID = ?")) {
+             PreparedStatement statement = connection.prepareStatement("UPDATE ticket SET paid = 0 WHERE ticketID = ?")) {
             statement.setInt(1, ticket.getTicketID());
             statement.executeUpdate();
         } catch (SQLException e) {

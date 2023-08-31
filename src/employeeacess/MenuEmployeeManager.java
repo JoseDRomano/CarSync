@@ -305,7 +305,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
     }
 
     private void buildSearchMenuPage() {
-        JFrame searchMenuFrame = new JFrame("Back Office Menu");
+        JFrame searchMenuFrame = new JFrame("CarSync");
         searchMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         searchMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -1958,7 +1958,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
     }
 
     private void buildUpdateMenuPage() {
-        JFrame updateMenuFrame = new JFrame("Back Office Menu");
+        JFrame updateMenuFrame = new JFrame("CarSync");
         updateMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         updateMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -3440,6 +3440,9 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
         JLabel companyNameLabel = new JLabel("Company Name: ");
         JTextField companyNameField = new JTextField(15);
 
+        JComboBox<String> companyNameField2 = new JComboBox<>(new String[]{" ", "Tranquilidade",
+                "Generalli", "Fidelidade", "Logo", "Ok!", "AGEAS Seguros", "Cofidis", "ACP Seguuros", "UNO Seguros", "Allianz"});
+
         JButton submitButton = new JButton("Submit");
         submitButton.setBackground(GREEN);
         submitButton.setForeground(Color.WHITE);
@@ -3454,14 +3457,15 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 //                String endDate = endDateField.getText();
                 String endDate = sdf.format(endDateField.getDate());
                 String companyName = companyNameField.getText();
+                String companyName2 = (String) companyNameField2.getSelectedItem();
 
-                if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isValidString(companyName) && isPolicy(policy)
-                        && !insuranceCategory.equals(" ")) {
+                if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isPolicy(policy)
+                        && !insuranceCategory.equals(" ") && !companyName2.equals(" ")) {
                     if (dataSource.insertInsurance(Integer.parseInt(policy), plate, Date.valueOf(startDate),
-                            insuranceCategory, Date.valueOf(endDate), companyName)) {
+                            insuranceCategory, Date.valueOf(endDate), companyName2)) {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
-                                + "NIF: " + employee.getNif() + " registered a new insurance and went back to the insert menu");
+                                + "NIF: " + employee.getNif() + " registered a new insurance and went back to the registration menu");
                         insertInsuranceFrame.setVisible(false);
                         insertInsuranceFrame.dispose();
                         insertInsurance(insertMenuFrame);
@@ -3470,7 +3474,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " tried to register a new insurance but failed");
-                   break;
+                        break;
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
@@ -3515,8 +3519,8 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 //                startDateField, endDateField, companyNameField};
 
         JLabel[] labels = {plateLabel, policyLabel
-                , companyNameLabel, insuranceCategoryLabel, startDateLabel, endDateLabel};
-        JTextField[] fields = {plateField, policyField, companyNameField};
+                , insuranceCategoryLabel, startDateLabel, endDateLabel, companyNameLabel};
+        JTextField[] fields = {plateField, policyField};
 
         for (
                 int row = 0;
@@ -3528,7 +3532,9 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
 
             gbc.gridx = 1;
             gbc.anchor = GridBagConstraints.LINE_END;
-            if (row == 3) {
+            if (row == 2) {
+                insertInsurancePanel.add(companyNameField2, gbc);
+            } else if (row == 3) {
                 insertInsurancePanel.add(insuranceCategoryField, gbc);
             } else if (row == 4) {
                 insertInsurancePanel.add(startDateField, gbc);

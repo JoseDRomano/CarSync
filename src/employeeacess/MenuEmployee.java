@@ -52,7 +52,7 @@ public class MenuEmployee implements ValidateInput {
             e.printStackTrace();
         }
 
-        JButton insertMenu = new JButton("Insert Menu");
+        JButton insertMenu = new JButton("Register Menu");
         JButton updateMenu = new JButton("Update Menu");
         JButton taskMenu = new JButton("Task Menu");
         JButton searchMenu = new JButton("Search Menu");
@@ -60,7 +60,7 @@ public class MenuEmployee implements ValidateInput {
         JButton exitButton = new JButton("Sign Out");
 
         this.employee = employee;
-        mainFrame = new JFrame("Back Office Menu");
+        mainFrame = new JFrame("CarSync - Back Office");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -282,7 +282,7 @@ public class MenuEmployee implements ValidateInput {
     }
 
     private void buildSearchMenuPage() {
-        JFrame searchMenuFrame = new JFrame("Back Office Menu");
+        JFrame searchMenuFrame = new JFrame("CarSync");
         searchMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         searchMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -1911,7 +1911,7 @@ public class MenuEmployee implements ValidateInput {
 
     //Update Menu
     private void buildUpdateMenuPage() {
-        JFrame updateMenuFrame = new JFrame("Back Office Menu");
+        JFrame updateMenuFrame = new JFrame("CarSync");
         updateMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         updateMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -2004,7 +2004,7 @@ public class MenuEmployee implements ValidateInput {
 
     //DONE
     private void payTicketPage(JFrame updateMenuFrame) {
-        JFrame updateTicketFrame = new JFrame("Update Ticket");
+        JFrame updateTicketFrame = new JFrame("CarSync");
         updateTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         updateTicketFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -2112,7 +2112,7 @@ public class MenuEmployee implements ValidateInput {
 
     //DONE
     private void updateCustomerPage(JFrame updateMenuFrame) {
-        JFrame updatePersonFrame = new JFrame("Update Vehicle");
+        JFrame updatePersonFrame = new JFrame("CarSync");
         updatePersonFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         updatePersonFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -2420,7 +2420,7 @@ public class MenuEmployee implements ValidateInput {
 
     //Deactivate Menu
     private void buildDeactivateMenuPage() {
-        JFrame deactivateMenuFrame = new JFrame("Deactivation Menu");
+        JFrame deactivateMenuFrame = new JFrame("CarSync");
         deactivateMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -2513,7 +2513,7 @@ public class MenuEmployee implements ValidateInput {
 
     //receives an insurance number and then proceeds to deactivate the insurance sending a success message
     private void deactivateInsurancePage(JFrame deactivateMenuFrame) {
-        JFrame deactivateInsuranceFrame = new JFrame("Deactivate Ticket");
+        JFrame deactivateInsuranceFrame = new JFrame("CarSync");
         deactivateInsuranceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateInsuranceFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -2611,7 +2611,7 @@ public class MenuEmployee implements ValidateInput {
 
     //receives a ticket id and then proceeds to deactivate the ticket sending a success message
     private void deactivateTicketPage(JFrame deactivateMenuFrame) {
-        JFrame deactivateTicketFrame = new JFrame("Deactivate Ticket");
+        JFrame deactivateTicketFrame = new JFrame("CarSync");
         deactivateTicketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         deactivateTicketFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -2943,20 +2943,20 @@ public class MenuEmployee implements ValidateInput {
 
     //Insert Menu
     private void buildInsertMenuPage() {
-        JFrame insertMenuFrame = new JFrame("Insert Menu");
+        JFrame insertMenuFrame = new JFrame("CarSync");
         insertMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         insertMenuFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        JLabel insertMenuLabel = new JLabel("Insert Menu");
+        JLabel insertMenuLabel = new JLabel("Register Menu");
         insertMenuLabel.setFont(new Font("Arial", Font.BOLD, 80));
         insertMenuLabel.setForeground(BLUE);
 
         JButton exitButton = new JButton("Sign Out");
         JButton backButton = new JButton("Back");
-        JButton vehicleInsert = new JButton("Insert Vehicle Menu");
-        JButton customerInsert = new JButton("Insert Customer Menu");
-        JButton ticketInsert = new JButton("Insert Ticket Menu");
-        JButton insuranceInsert = new JButton("Insert Insurance Menu");
+        JButton vehicleInsert = new JButton("Register Vehicle Menu");
+        JButton customerInsert = new JButton("Register Customer Menu");
+        JButton ticketInsert = new JButton("Register Ticket Menu");
+        JButton insuranceInsert = new JButton("Register Insurance Menu");
         JPanel insertMenuPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -3077,6 +3077,9 @@ public class MenuEmployee implements ValidateInput {
         JLabel companyNameLabel = new JLabel("Company Name: ");
         JTextField companyNameField = new JTextField(15);
 
+        JComboBox<String> companyNameField2 = new JComboBox<>(new String[]{" ", "Tranquilidade",
+                "Generalli", "Fidelidade", "Logo", "Ok!", "AGEAS Seguros", "Cofidis", "ACP Seguuros", "UNO Seguros", "Allianz"});
+
         JButton submitButton = new JButton("Submit");
         submitButton.setBackground(GREEN);
         submitButton.setForeground(Color.WHITE);
@@ -3091,14 +3094,15 @@ public class MenuEmployee implements ValidateInput {
 //                String endDate = endDateField.getText();
                 String endDate = sdf.format(endDateField.getDate());
                 String companyName = companyNameField.getText();
+                String companyName2 = (String) companyNameField2.getSelectedItem();
 
-                if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isValidString(companyName) && isPolicy(policy)
-                        && !insuranceCategory.equals(" ")) {
+                if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isPolicy(policy)
+                        && !insuranceCategory.equals(" ") && !companyName2.equals(" ")) {
                     if (dataSource.insertInsurance(Integer.parseInt(policy), plate, Date.valueOf(startDate),
-                            insuranceCategory, Date.valueOf(endDate), companyName)) {
+                            insuranceCategory, Date.valueOf(endDate), companyName2)) {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
-                                + "NIF: " + employee.getNif() + " registered a new insurance and went back to the insert menu");
+                                + "NIF: " + employee.getNif() + " registered a new insurance and went back to the register menu");
                         insertInsuranceFrame.setVisible(false);
                         insertInsuranceFrame.dispose();
                         insertInsurance(insertMenuFrame);
@@ -3107,7 +3111,7 @@ public class MenuEmployee implements ValidateInput {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " tried to register a new insurance but failed");
-                   break;
+                        break;
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
@@ -3152,8 +3156,8 @@ public class MenuEmployee implements ValidateInput {
 //                startDateField, endDateField, companyNameField};
 
         JLabel[] labels = {plateLabel, policyLabel
-                , companyNameLabel, insuranceCategoryLabel, startDateLabel, endDateLabel};
-        JTextField[] fields = {plateField, policyField, companyNameField};
+                , insuranceCategoryLabel, startDateLabel, endDateLabel, companyNameLabel};
+        JTextField[] fields = {plateField, policyField};
 
         for (
                 int row = 0;
@@ -3165,7 +3169,9 @@ public class MenuEmployee implements ValidateInput {
 
             gbc.gridx = 1;
             gbc.anchor = GridBagConstraints.LINE_END;
-            if (row == 3) {
+            if (row == 2) {
+                insertInsurancePanel.add(companyNameField2, gbc);
+            } else if (row == 3) {
                 insertInsurancePanel.add(insuranceCategoryField, gbc);
             } else if (row == 4) {
                 insertInsurancePanel.add(startDateField, gbc);

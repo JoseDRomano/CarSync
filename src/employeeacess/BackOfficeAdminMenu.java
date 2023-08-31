@@ -1,8 +1,8 @@
 package employeeacess;
 
+import clientmenu.WelcomeMenuForm;
 import com.toedter.calendar.JDateChooser;
 import model.*;
-import clientmenu.*;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.mindrot.jbcrypt.BCrypt;
@@ -244,7 +244,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JButton deleteTask = new JButton("Delete Task");
         deleteTask.setBackground(BLUE);
         deleteTask.setForeground(WHITE);
-        
+
         deleteTask.addActionListener(e -> {
             logger.info("Employee with name: " + employee.getName()
                     + " NIF: " + employee.getNif() + " went to delete task page");
@@ -1280,7 +1280,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                                 List<Customer> customerList = new ArrayList<>();
 
                                 dataSource.queryCustomers().forEach(c -> {
-                                    if(c.getNif() == Integer.parseInt(input)) {
+                                    if (c.getNif() == Integer.parseInt(input)) {
                                         customerList.add(c);
                                     }
                                 });
@@ -4360,6 +4360,9 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
         JLabel companyNameLabel = new JLabel("Company Name: ");
         JTextField companyNameField = new JTextField(15);
 
+        JComboBox<String> companyNameField2 = new JComboBox<>(new String[]{" ", "Tranquilidade",
+                "Generalli", "Fidelidade", "Logo", "Ok!", "AGEAS Seguros", "Cofidis", "ACP Seguuros", "UNO Seguros", "Allianz"});
+
         JButton submitButton = new JButton("Submit");
         submitButton.setBackground(GREEN);
         submitButton.setForeground(Color.WHITE);
@@ -4374,11 +4377,12 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 //                String endDate = endDateField.getText();
                 String endDate = sdf.format(endDateField.getDate());
                 String companyName = companyNameField.getText();
+                String companyName2 = (String) companyNameField2.getSelectedItem();
 
-                if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isValidString(companyName) && isPolicy(policy)
-                && !insuranceCategory.equals(" ")) {
+                if (isPlate(plate) && isDate(startDate) && isValidExpirationDate(endDate) && isPolicy(policy)
+                        && !insuranceCategory.equals(" ") && !companyName2.equals(" ")) {
                     if (dataSource.insertInsurance(Integer.parseInt(policy), plate, Date.valueOf(startDate),
-                            insuranceCategory, Date.valueOf(endDate), companyName)) {
+                            insuranceCategory, Date.valueOf(endDate), companyName2)) {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Ticket successfully registered", "Success", JOptionPane.INFORMATION_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " registered a new insurance and went back to the insert menu");
@@ -4390,7 +4394,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         JOptionPane.showMessageDialog(insertInsuranceFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " tried to register a new insurance but failed");
-                   break;
+                        break;
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertInsuranceFrame, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
@@ -4435,8 +4439,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 //                startDateField, endDateField, companyNameField};
 
         JLabel[] labels = {plateLabel, policyLabel
-                , companyNameLabel, insuranceCategoryLabel, startDateLabel, endDateLabel};
-        JTextField[] fields = {plateField, policyField, companyNameField};
+                , insuranceCategoryLabel, startDateLabel, endDateLabel, companyNameLabel};
+        JTextField[] fields = {plateField, policyField};
 
         for (
                 int row = 0;
@@ -4448,7 +4452,9 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
 
             gbc.gridx = 1;
             gbc.anchor = GridBagConstraints.LINE_END;
-            if (row == 3) {
+            if (row == 2) {
+                insertInsurancePanel.add(companyNameField2, gbc);
+            } else if (row == 3) {
                 insertInsurancePanel.add(insuranceCategoryField, gbc);
             } else if (row == 4) {
                 insertInsurancePanel.add(startDateField, gbc);
@@ -4576,7 +4582,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         JOptionPane.showMessageDialog(insertTicketFrame, "Error registering ticket", "Error", JOptionPane.ERROR_MESSAGE);
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " tried to register a new ticket for customer with NIF: " + nif + " and Date: " + date);
-                    break;
+                        break;
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertTicketFrame, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
@@ -4743,7 +4749,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         JOptionPane.showMessageDialog(insertEmployeeFrame, "Error registering employee");
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " failed to register a new employee with NIF: " + nif);
-                    break;
+                        break;
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertEmployeeFrame, "Please fill all the fields");
@@ -5171,7 +5177,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         JOptionPane.showMessageDialog(insertVehicleFrame, "Error inserting vehicle");
                         logger.info("Employee with name: " + employee.getName()
                                 + "NIF: " + employee.getNif() + " failed to registered a new vehicle with plate: " + plateText);
-                    break;
+                        break;
                     }
                 } else {
                     JOptionPane.showMessageDialog(insertVehicleFrame, "Please fill all the fields properly");
@@ -5252,17 +5258,17 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     public static void main(String[] args) {
 
         PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
-//        SwingUtilities.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                Employee employee = new Employee();
-//                employee.setName("John Doe");
-//                employee.setAccess_level(2);
-//                BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
-//            }
-//        });
-//    }
-        System.out.println(BCrypt.hashpw("abc123", BCrypt.gensalt()));
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Employee employee = new Employee();
+                employee.setName("John Doe");
+                employee.setAccess_level(2);
+                BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
+            }
+        });
     }
+//        System.out.println(BCrypt.hashpw("abc123", BCrypt.gensalt()));
+
 
 }
