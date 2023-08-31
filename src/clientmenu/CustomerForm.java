@@ -30,7 +30,7 @@ public class CustomerForm extends JFrame {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel welcomeLabel = new JLabel("Welcome, " + nifNum);
+        JLabel welcomeLabel = new JLabel("Welcome!");
         welcomeLabel.setFont(new Font("Helvetica", Font.BOLD, 36));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 0;
