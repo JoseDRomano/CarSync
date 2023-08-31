@@ -4243,7 +4243,7 @@ public class MenuEmployeeManager extends JFrame implements ValidateInput {
                         JOptionPane.showMessageDialog(insertVehicleFrame, "Vehicle succefully registered");
                         insertVehicleFrame.setVisible(false);
                         insertVehicleFrame.dispose();
-                        insertVehicle(insertMenuFrame);
+                        insertCustomer(insertMenuFrame);
                         break;
 
                     } else {

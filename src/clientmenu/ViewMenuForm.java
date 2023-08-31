@@ -169,7 +169,10 @@ public class ViewMenuForm extends JFrame {
             JPanel ticketPanel = new JPanel(new FlowLayout());
             ticketPanel.add(new JLabel(ticket.toString()));
             JButton payButton = new JButton("Pay");
-            payButton.addActionListener(e -> handleTicketPayment(ticket));
+            payButton.addActionListener(e -> {
+                //turn handleTicketPayment into boolean and if retun true remove buttonpay or disable it
+                handleTicketPayment(ticket);
+            });
             ticketPanel.add(payButton);
             ticketsPanel.add(ticketPanel);
         }

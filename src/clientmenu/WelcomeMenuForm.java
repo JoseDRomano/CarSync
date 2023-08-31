@@ -26,6 +26,7 @@ public class WelcomeMenuForm {
             e.printStackTrace();
         }
 
+
         frame = new JFrame("Welcome to CarSync");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -33,7 +34,7 @@ public class WelcomeMenuForm {
 
         JPanel centerPanel = new JPanel(new GridBagLayout());
 
-        ImageIcon logoIcon = new ImageIcon("C:/Users/diogo/Downloads/002eff.png");
+        ImageIcon logoIcon = new ImageIcon("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\CarSyncSmaller.png");
         JLabel logoLabel = new JLabel(logoIcon);
 
         JLabel titleLabel = new JLabel("Welcome to CarSync ");

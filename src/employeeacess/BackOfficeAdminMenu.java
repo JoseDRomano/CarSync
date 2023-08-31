@@ -4930,7 +4930,7 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
                         JOptionPane.showMessageDialog(insertCustomerFrame, "Customer inserted successfully");
                         insertCustomerFrame.setVisible(false);
                         insertCustomerFrame.dispose();
-                        insertVehicle(insertMenuFrame);
+                        insertCustomer(insertMenuFrame);
 
                         break;
                     } else {

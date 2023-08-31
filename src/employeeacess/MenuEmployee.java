@@ -3476,7 +3476,7 @@ public class MenuEmployee implements ValidateInput {
                         JOptionPane.showMessageDialog(insertCustomerFrame, "Customer inserted successfully");
                         insertCustomerFrame.setVisible(false);
                         insertCustomerFrame.dispose();
-                        insertVehicle(insertMenuFrame);
+                        insertCustomer(insertMenuFrame);
 
                         break;
                     } else {
