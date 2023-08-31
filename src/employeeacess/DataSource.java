@@ -1530,6 +1530,10 @@ public class DataSource {
                 e.printStackTrace();
             }
         }
+
+        if(!result) {
+            return deletePerson(nif);
+        }
         return result;
     }
 
@@ -1581,6 +1585,10 @@ public class DataSource {
                 System.out.println("Couldn't reset auto-commit: " + e.getMessage());
                 e.printStackTrace();
             }
+        }
+
+        if(!result) {
+            return deletePerson(nif);
         }
         return result;
     }

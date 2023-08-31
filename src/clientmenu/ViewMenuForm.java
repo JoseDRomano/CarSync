@@ -1,5 +1,7 @@
 package clientmenu;
 
+import model.Ticket;
+
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
@@ -57,7 +59,6 @@ public class ViewMenuForm extends JFrame {
         viewTicketsButton.setPreferredSize(new Dimension(120, 40));
         viewTicketsButton.addActionListener(e -> viewCustomerTickets());
         panel.add(viewTicketsButton, gbc);
-        add(panel);
         gbc.gridy = 4;
         JButton goBackButton = new JButton("Go Back");
         goBackButton.setBackground(new Color(32, 32, 32));
@@ -139,35 +140,73 @@ public class ViewMenuForm extends JFrame {
     }
 
     private void viewCustomerTickets() {
-        List<String> tickets = getTicketsForCustomer(nifNum);
-        if (tickets.isEmpty()) {
+        JPanel ticketsPanel = new JPanel();
+        ticketsPanel.setLayout(new BoxLayout(ticketsPanel, BoxLayout.Y_AXIS));
+
+        List<Ticket> ticketList = getTicketsForCustomerDetailed(nifNum);
+        if (ticketList.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No tickets found for the customer.");
-        } else {
-            StringBuilder message = new StringBuilder("Here are your tickets customer " + nifNum + ":\n");
-            for (String ticket : tickets) {
-                message.append(ticket).append("\n");
-            }
-            JOptionPane.showMessageDialog(this, message.toString());
+            return;
         }
+
+        for (Ticket ticket : ticketList) {
+            JPanel ticketPanel = new JPanel(new FlowLayout());
+            ticketPanel.add(new JLabel(ticket.toString()));
+            JButton payButton = new JButton("Pay");
+            payButton.addActionListener(e -> handleTicketPayment(ticket));
+            ticketPanel.add(payButton);
+            ticketsPanel.add(ticketPanel);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(ticketsPanel);
+        JOptionPane.showMessageDialog(this, scrollPane, "Your Tickets", JOptionPane.PLAIN_MESSAGE);
     }
 
-    private List<String> getTicketsForCustomer(int nif) {
-        List<String> tickets = new ArrayList<>();
+    private List<Ticket> getTicketsForCustomerDetailed(int nif) {
+        List<Ticket> tickets = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM ticket WHERE nif = ?")) {
             statement.setInt(1, nif);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                String date = resultSet.getString("date");
-                String value = resultSet.getString("value");
-                String expiry_date = resultSet.getString("expiry_date");
-                String ticketDetails = String.format("Date: %s, value: %s, Expiry Date : %s", date, value, expiry_date);
-                tickets.add(ticketDetails);
+                Ticket ticket = new Ticket();
+                ticket.setNif(resultSet.getInt("nif"));
+                ticket.setPlate(resultSet.getString("plate"));
+                ticket.setDate(resultSet.getDate("date"));
+                ticket.setExpiry_date(resultSet.getDate("expiry_date"));
+                ticket.setValue(resultSet.getDouble("value"));
+                ticket.setReason(resultSet.getInt("reason"));
+                ticket.setPaid(resultSet.getInt("paid"));
+                ticket.setTicketID(resultSet.getInt("ticketID"));
+                tickets.add(ticket);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return tickets;
+    }
+
+    private void handleTicketPayment(Ticket ticket) {
+        if (ticket.isPaid()) {
+            JOptionPane.showMessageDialog(this, "This ticket is already paid.");
+            return;
+        }
+        int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to pay this ticket?", "Pay Ticket", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+
+            payTicketInDatabase(ticket);
+            JOptionPane.showMessageDialog(this, "Ticket paid successfully.");
+        }
+    }
+
+    private void payTicketInDatabase(Ticket ticket) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement statement = connection.prepareStatement("UPDATE ticket SET paid = 1 WHERE ticketID = ?")) {
+            statement.setInt(1, ticket.getTicketID());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleGoBackButton() {
