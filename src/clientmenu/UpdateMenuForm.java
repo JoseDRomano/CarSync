@@ -159,7 +159,7 @@ public class UpdateMenuForm extends JFrame implements ValidateInput {
                 JOptionPane.showMessageDialog(updatePersonFrame, "Wrong email format");
             } else {
                 if (tk.createTask("Update Customer Email", nifNum, String.valueOf(nifNum), email)) {
-                    JOptionPane.showMessageDialog(updatePersonFrame, "Email successfully updated",
+                    JOptionPane.showMessageDialog(updatePersonFrame, "Request Succefully created",
                             "Success", JOptionPane.INFORMATION_MESSAGE);
                 } else
                     JOptionPane.showMessageDialog(updatePersonFrame, "Error creating request", "Error", JOptionPane.ERROR_MESSAGE);
@@ -234,7 +234,7 @@ public class UpdateMenuForm extends JFrame implements ValidateInput {
 //            if (row != 0) {
                 gbc.gridx = 2;
                 gbc.anchor = GridBagConstraints.LINE_END;
-                updatePersonPanel.add(buttons[row - 1], gbc);
+                updatePersonPanel.add(buttons[row], gbc);
 //            }
         }
 
@@ -266,7 +266,51 @@ public class UpdateMenuForm extends JFrame implements ValidateInput {
     }
 
     private void handleUpdateCarDetails() {
-        JOptionPane.showMessageDialog(this, "Update Car Details functionality not implemented yet.");
+        JPanel updateVehiclePanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        JLabel updateVehicleLabel = new JLabel("Update Vehicle Color");
+        updateVehicleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.PAGE_START;
+        updateVehiclePanel.add(updateVehicleLabel, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridy = 1;
+        JLabel plateLabel = new JLabel("Plate: ");
+        updateVehiclePanel.add(plateLabel, gbc);
+
+        gbc.gridx = 1;
+        JTextField plateField = new JTextField(15);
+        updateVehiclePanel.add(plateField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        JLabel colorLabel = new JLabel("Color: ");
+        updateVehiclePanel.add(colorLabel, gbc);
+
+        gbc.gridx = 1;
+        JComboBox<String> colorField = new JComboBox<>(new String[]{" ", "Black", "White", "Red", "Blue", "Green", "Yellow", "Gray", "Silver", "Brown", "Orange"});
+        updateVehiclePanel.add(colorField, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(e -> {
+            String plateText = plateField.getText();
+            String colorText = (String) colorField.getSelectedItem();
+            if (!isPlate(plateText)) {
+                JOptionPane.showMessageDialog(this, "Please write a valid plate with format XX-XX-XX");
+            } else {
+                TaskManagment taskManager = new TaskManagment();
+                taskManager.createTask("Update Vehicle Color", nifNum, plateText, colorText);
+                JOptionPane.showMessageDialog(this, "Task created successfully.");
+            }
+        });
+        updateVehiclePanel.add(submitButton, gbc);
+
+        JOptionPane.showConfirmDialog(this, updateVehiclePanel, "Update Vehicle Color Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
     }
 
     private void handleGoBackButton() {

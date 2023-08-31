@@ -50,20 +50,20 @@ public class DeactivateMenuForm extends JFrame implements ValidateInput {
         gbc.gridy = 2;
         panel.add(deactivateInsuranceButton, gbc);
 
-        JButton deactivateTicketButton = new JButton("Deactivate Ticket");
-        deactivateTicketButton.setBackground(new Color(65, 13, 11));
-        deactivateTicketButton.setForeground(Color.white);
-        deactivateTicketButton.setPreferredSize(new Dimension(250, 40));
-        deactivateTicketButton.addActionListener(e -> showDeactivateTicketDialog());
-        gbc.gridy = 3;
-        panel.add(deactivateTicketButton, gbc);
+//        JButton deactivateTicketButton = new JButton("Deactivate Ticket");
+//        deactivateTicketButton.setBackground(new Color(65, 13, 11));
+//        deactivateTicketButton.setForeground(Color.white);
+//        deactivateTicketButton.setPreferredSize(new Dimension(250, 40));
+//        deactivateTicketButton.addActionListener(e -> showDeactivateTicketDialog());
+//        gbc.gridy = 3;
+//        panel.add(deactivateTicketButton, gbc);
 
         JButton goBackButton = new JButton("Go Back");
         goBackButton.setBackground(new Color(32, 32, 32));
         goBackButton.setForeground(Color.white);
         goBackButton.setPreferredSize(new Dimension(250, 40));
         goBackButton.addActionListener(e -> handleGoBackButton());
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         panel.add(goBackButton, gbc);
 
         add(panel);
@@ -99,20 +99,20 @@ public class DeactivateMenuForm extends JFrame implements ValidateInput {
         }
     }
 
-    private void showDeactivateTicketDialog() {
-        String ticketID = JOptionPane.showInputDialog(this, "Enter ticket to deactivate:");
-        if (ticketID != null && !ticketID.trim().isEmpty()) {
-            TaskManagment taskManagment = new TaskManagment();
-            if (isInteger(ticketID)) {
-                taskManagment.createTask("Ticket Deactivation", nifNum, ticketID);
-                JOptionPane.showMessageDialog(this, "Deactivation request has been made.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Invalid ticket.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Invalid ticket.");
-        }
-    }
+//    private void showDeactivateTicketDialog() {
+//        String ticketID = JOptionPane.showInputDialog(this, "Enter ticket to deactivate:");
+//        if (ticketID != null && !ticketID.trim().isEmpty()) {
+//            TaskManagment taskManagment = new TaskManagment();
+//            if (isInteger(ticketID)) {
+//                taskManagment.createTask("Ticket Deactivation", nifNum, ticketID);
+//                JOptionPane.showMessageDialog(this, "Deactivation request has been made.");
+//            } else {
+//                JOptionPane.showMessageDialog(this, "Invalid ticket.");
+//            }
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Invalid ticket.");
+//        }
+//    }
 
     private void handleGoBackButton() {
         this.dispose();

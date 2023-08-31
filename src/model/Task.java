@@ -119,21 +119,21 @@ public class Task implements Comparable<Task> {
             }
 
             case CUSTOMER_UPDATE_ADDRESS -> {
-                if (dataSource.updatePersonAddress(nif, allValues[0])) {
+                if (dataSource.updatePersonAddress(nif, allValues[1])) {
                     tk.updateTaskStatus("Closed", taskID);
                     return true;
                 }
             }
 
             case CUSTOMER_UPDATE_EMAIL -> {
-                if(dataSource.updatePersonEmail(nif, allValues[0])) {
+                if(dataSource.updatePersonEmail(nif, allValues[1])) {
                     tk.updateTaskStatus("Closed", taskID);
                     return true;
                 }
             }
 
             case CUSTOMER_UPDATE_PASSWORD -> {
-                if(dataSource.updatePersonPassword(nif, allValues[0])) {
+                if(dataSource.updatePersonPassword(nif, allValues[1])) {
                     tk.updateTaskStatus("Closed", taskID);
                     return true;
                 }

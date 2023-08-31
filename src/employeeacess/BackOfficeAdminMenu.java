@@ -41,7 +41,8 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
             return;
         }
 
-        logger = Logger.getLogger(BackOfficeAdminMenu.class);
+        logger = Logger.getLogger("Back Office Logs ");
+
 
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -5251,15 +5252,17 @@ public class BackOfficeAdminMenu extends JFrame implements ValidateInput {
     public static void main(String[] args) {
 
         PropertyConfigurator.configure("C:\\Users\\PedroOriakhi\\OneDrive - Polarising, Unipessoal, Lda\\Documentos\\GitHub\\IMTT-alike\\resources\\log4j.properties");
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Employee employee = new Employee();
-                employee.setName("John Doe");
-                employee.setAccess_level(2);
-                BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
-            }
-        });
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                Employee employee = new Employee();
+//                employee.setName("John Doe");
+//                employee.setAccess_level(2);
+//                BackOfficeAdminMenu backOfficeAdminMenu = new BackOfficeAdminMenu(employee);
+//            }
+//        });
+//    }
+        System.out.println(BCrypt.hashpw("abc123", BCrypt.gensalt()));
     }
 
 }

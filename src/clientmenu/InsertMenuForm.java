@@ -55,20 +55,20 @@ public class InsertMenuForm extends JFrame implements ValidateInput {
         gbc.gridy = 2;
         panel.add(insertInsuranceButton, gbc);
 
-        JButton insertTicketButton = new JButton("Register Ticket");
-        insertTicketButton.setBackground(new Color(6, 65, 16));
-        insertTicketButton.setForeground(Color.white);
-        insertTicketButton.setPreferredSize(new Dimension(250, 40));
-        insertTicketButton.addActionListener(e -> showInsertTicketDialog());
-        gbc.gridy = 3;
-        panel.add(insertTicketButton, gbc);
+//        JButton insertTicketButton = new JButton("Register Ticket");
+//        insertTicketButton.setBackground(new Color(6, 65, 16));
+//        insertTicketButton.setForeground(Color.white);
+//        insertTicketButton.setPreferredSize(new Dimension(250, 40));
+//        insertTicketButton.addActionListener(e -> showInsertTicketDialog());
+//        gbc.gridy = 3;
+//        panel.add(insertTicketButton, gbc);
 
         JButton goBackButton = new JButton("Go Back");
         goBackButton.setBackground(new Color(32, 32, 32));
         goBackButton.setForeground(Color.white);
         goBackButton.setPreferredSize(new Dimension(250, 40));
         goBackButton.addActionListener(e -> handleGoBackButton());
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         panel.add(goBackButton, gbc);
 
         add(panel);
@@ -113,8 +113,8 @@ public class InsertMenuForm extends JFrame implements ValidateInput {
         panel.add(registrationDateField);
         panel.add(new JLabel("VIN: (17 characters)"));
         panel.add(vinField);
-        panel.add(new JLabel("NIF: (9 digits)"));
-        panel.add(nifField);
+//        panel.add(new JLabel("NIF: (9 digits)"));
+//        panel.add(nifField);
         panel.add(new JLabel("Category:"));
         panel.add(categoryField);
 
@@ -132,8 +132,8 @@ public class InsertMenuForm extends JFrame implements ValidateInput {
             TaskManagment taskManagment = new TaskManagment();
             if (!brand.equals(" ") && isValidString(model) && isPlate(plate)
                     && !color.equals(" ") && isDate(registrationDate) && isVIN(vin)
-                    && !category.equals(" ") && isNIF(nif)) {
-                taskManagment.createTask("Vehicle Registration", Integer.parseInt(nif), plate, vin, color, brand, model, registrationDate, category, nif);
+                    && !category.equals(" ")) {
+                taskManagment.createTask("Vehicle Registration", nifNum, plate, vin, color, brand, model, registrationDate, category, String.valueOf(nifNum));
                 JOptionPane.showMessageDialog(this, "Insert request has been made.");
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid input.");
@@ -188,52 +188,52 @@ public class InsertMenuForm extends JFrame implements ValidateInput {
         }
     }
 
-    private void showInsertTicketDialog() {
-        JPanel panel = new JPanel(new GridLayout(0, 1));
-        JTextField plateField = new JTextField(15);
-        JDateChooser dateField = new JDateChooser();
-        dateField.setDateFormatString("yyyy-MM-dd");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        JComboBox<String> reasonField = new JComboBox<>(new String[]{" ", "Illegal arking",
-                "Speeding", "Red light", "Reckless driving", "DUI"});
-        JTextField valueField = new JTextField(15);
-        JTextField nifField = new JTextField(15);
-        JTextField expirationDateField = new JTextField(15);
-
-        panel.add(new JLabel("Plate: "));
-        panel.add(plateField);
-        panel.add(new JLabel("Date: "));
-        panel.add(dateField);
-        panel.add(new JLabel("Reason: "));
-        panel.add(reasonField);
-        panel.add(new JLabel("Value: "));
-        panel.add(valueField);
-        panel.add(new JLabel("NIF: "));
-        panel.add(nifField);
-        panel.add(new JLabel("Expiration Date: "));
-        panel.add(expirationDateField);
-
-        int result = JOptionPane.showConfirmDialog(this, panel, "Register New Ticket", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
-            String plate = plateField.getText();
-            String date = sdf.format(dateField.getDate());
-            String reason = (String) reasonField.getSelectedItem();
-            String value = valueField.getText();
-            String nif = nifField.getText();
-            String expirationDate = expirationDateField.getText();
-
-            TaskManagment taskManagment = new TaskManagment();
-
-            if (isPlate(plate) && isDate(date) && isValidExpirationDate(expirationDate) && isDouble(value) && isNIF(nif)
-                    && !reason.equals(" ")) {
-                taskManagment.createTask("Ticket Registration", nifNum, String.valueOf(nifNum),
-                        plate, date, reason, value, expirationDate);
-                JOptionPane.showMessageDialog(this, "Request has been made.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Invalid input.");
-            }
-        }
-    }
+//    private void showInsertTicketDialog() {
+//        JPanel panel = new JPanel(new GridLayout(0, 1));
+//        JTextField plateField = new JTextField(15);
+//        JDateChooser dateField = new JDateChooser();
+//        dateField.setDateFormatString("yyyy-MM-dd");
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        JComboBox<String> reasonField = new JComboBox<>(new String[]{" ", "Illegal arking",
+//                "Speeding", "Red light", "Reckless driving", "DUI"});
+//        JTextField valueField = new JTextField(15);
+//        JTextField nifField = new JTextField(15);
+//        JTextField expirationDateField = new JTextField(15);
+//
+//        panel.add(new JLabel("Plate: "));
+//        panel.add(plateField);
+//        panel.add(new JLabel("Date: "));
+//        panel.add(dateField);
+//        panel.add(new JLabel("Reason: "));
+//        panel.add(reasonField);
+//        panel.add(new JLabel("Value: "));
+//        panel.add(valueField);
+////        panel.add(new JLabel("NIF: "));
+////        panel.add(nifField);
+//        panel.add(new JLabel("Expiration Date: "));
+//        panel.add(expirationDateField);
+//
+//        int result = JOptionPane.showConfirmDialog(this, panel, "Register New Ticket", JOptionPane.OK_CANCEL_OPTION);
+//        if (result == JOptionPane.OK_OPTION) {
+//            String plate = plateField.getText();
+//            String date = sdf.format(dateField.getDate());
+//            String reason = (String) reasonField.getSelectedItem();
+//            String value = valueField.getText();
+////            String nif = nifField.getText();
+//            String expirationDate = expirationDateField.getText();
+//
+//            TaskManagment taskManagment = new TaskManagment();
+//
+//            if (isPlate(plate) && isDate(date) && isValidExpirationDate(expirationDate) && isDouble(value)
+//                    && !reason.equals(" ")) {
+//                taskManagment.createTask("Ticket Registration", nifNum, String.valueOf(nifNum),
+//                        plate, date, reason, value, expirationDate);
+//                JOptionPane.showMessageDialog(this, "Request has been made.");
+//            } else {
+//                JOptionPane.showMessageDialog(this, "Invalid input.");
+//            }
+//        }
+//    }
 
     private void handleGoBackButton() {
         this.dispose();

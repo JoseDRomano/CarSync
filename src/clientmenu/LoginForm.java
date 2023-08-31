@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import java.util.List;
+import java.util.logging.Logger;
 
 import employeeacess.BackOfficeAdminMenu;
 import employeeacess.DataSource;
@@ -109,6 +110,7 @@ public class LoginForm extends JPanel {
                     for(Employee employee: dataSource.queryEmployees()) {
                         if(employee.getNif() == loggedInNif) {
                             switch (employee.getAccess_level()) {
+//                                Logger logger = Logger.getLogger("Back Office Log");
                                 case 0 -> {
                                     dataSource.close();
                                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
@@ -128,6 +130,7 @@ public class LoginForm extends JPanel {
                                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
                                     frame.setVisible(false);
                                     frame.dispose();
+                                    Logger logger = Logger.getLogger("Back Office Log");
                                     new BackOfficeAdminMenu(employee);
                                 }
                                 default -> {

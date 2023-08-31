@@ -78,7 +78,11 @@ public interface ValidateInput {
     }
 
     default boolean isValidString(String s) {
-        return s.matches("^(?=.*[a-zA-Z0-9].*[a-zA-Z0-9])[\\w\\s]{2,}$|^[a-zA-Z0-9]+\\s[a-zA-Z0-9]+$");
+
+        if(!s.isEmpty() && !s.isBlank()) {
+            return true;
+        }
+       return false;
     }
 
 

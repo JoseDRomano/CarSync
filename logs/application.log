@@ -535,3 +535,15 @@
 2023-08-31 10:17:09 INFO  BackOfficeAdminMenu:4937 - Employee with name: John DoeNIF: 0 failed to register new employee with NIF: 200000005
 2023-08-31 10:18:23 INFO  BackOfficeAdminMenu:4937 - Employee with name: John DoeNIF: 0 failed to register new employee with NIF: 200000011
 2023-08-31 10:20:11 INFO  BackOfficeAdminMenu:4955 - Employee with name: John DoeNIF: 0 logged out
+2023-08-31 10:38:49 INFO  Back Office Logs :52 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-31 10:38:52 INFO  Back Office Logs :147 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-31 10:57:16 INFO  Back Office Logs :53 - Employee with name: John Doe and NIF: 0 initialized the BackOffice Menu
+2023-08-31 10:57:20 INFO  Back Office Logs :148 - Employee with name: John Doe NIF: 0 entered the Registration Menu Page
+2023-08-31 10:57:22 INFO  Back Office Logs :4282 - Employee with name: John DoeNIF: 0 entered the employee registration page
+2023-08-31 11:00:05 INFO  Back Office Logs :4739 - Employee with name: John DoeNIF: 0 registered a new employee with NIF: 200000071
+2023-08-31 11:01:23 INFO  Back Office Logs :4774 - Employee with name: John DoeNIF: 0 returned to registration menu page
+2023-08-31 11:01:37 INFO  Back Office Logs :4286 - Employee with name: John DoeNIF: 0 entered the customer registration page
+2023-08-31 11:04:10 INFO  Back Office Logs :4944 - Employee with name: John DoeNIF: 0 failed to register new employee with NIF: 100000000
+2023-08-31 11:08:44 INFO  Back Office Logs :4968 - Employee with name: John DoeNIF: 0 returned to registration menu page
+2023-08-31 11:08:46 INFO  Back Office Logs :4258 - Employee with name: John DoeNIF: 0 went back to main menu
+2023-08-31 11:08:48 INFO  Back Office Logs :88 - Employee with name: John Doe NIF: 0 logged out

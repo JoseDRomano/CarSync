@@ -26,7 +26,7 @@ public class WelcomeMenuForm {
             e.printStackTrace();
         }
 
-        frame = new JFrame("Welcome to IMT");
+        frame = new JFrame("Welcome to CarSync");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLayout(new BorderLayout());

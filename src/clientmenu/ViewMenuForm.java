@@ -1,5 +1,7 @@
 package clientmenu;
 
+import employeeacess.DataSource;
+import model.Insurance;
 import model.Ticket;
 
 import javax.swing.*;
@@ -106,7 +108,7 @@ public class ViewMenuForm extends JFrame {
     }
 
     private void viewCustomerInsurances() {
-        List<String> insurances = getInsurancesForCustomer(nifNum);
+        List<String> insurances = getInsurancesForCustomer();
         if (insurances.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No insurances found for the customer.");
         } else {
@@ -118,23 +120,37 @@ public class ViewMenuForm extends JFrame {
         }
     }
 
-    private List<String> getInsurancesForCustomer(int nif) {
+//    private List<String> getInsurancesForCustomer(int nif) {
+//        List<String> insurances = new ArrayList<>();
+//        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+//             PreparedStatement statement = connection.prepareStatement("SELECT * FROM insurance WHERE nif = ?")) {
+//            statement.setInt(1, nif);
+//            ResultSet resultSet = statement.executeQuery();
+//            while (resultSet.next()) {
+//                String policy = resultSet.getString("policy");
+//                String expiryDate = resultSet.getString("expiry_date");
+//                String company = resultSet.getString("company");
+//                String startDate = resultSet.getString("start_date");
+//                String extraCategory = resultSet.getString("extra_category");
+//                String insuranceDetails = String.format("Policy: %s, Expiry Date: %s, Company: %s, Start Date: %s, Extra Category: %s", policy, expiryDate, company, startDate, extraCategory);
+//                insurances.add(insuranceDetails);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return insurances;
+//    }
+
+
+    private List<String> getInsurancesForCustomer() {
+        DataSource dataSource = new DataSource();
         List<String> insurances = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM insurance WHERE nif = ?")) {
-            statement.setInt(1, nif);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                String policy = resultSet.getString("policy");
-                String expiryDate = resultSet.getString("expiry_date");
-                String company = resultSet.getString("company");
-                String startDate = resultSet.getString("start_date");
-                String extraCategory = resultSet.getString("extra_category");
-                String insuranceDetails = String.format("Policy: %s, Expiry Date: %s, Company: %s, Start Date: %s, Extra Category: %s", policy, expiryDate, company, startDate, extraCategory);
-                insurances.add(insuranceDetails);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(dataSource.open()) {
+            dataSource.queryInsurances().forEach(i -> {
+                if(dataSource.insuranceExists(i.getPolicy(), nifNum) && !i.isDeactivated()) {
+                    insurances.add(i.toString());
+                }
+            });
         }
         return insurances;
     }
@@ -175,7 +191,7 @@ public class ViewMenuForm extends JFrame {
                 ticket.setDate(resultSet.getDate("date"));
                 ticket.setExpiry_date(resultSet.getDate("expiry_date"));
                 ticket.setValue(resultSet.getDouble("value"));
-                ticket.setReason(resultSet.getInt("reason"));
+                ticket.setReason(resultSet.getString("reason"));
                 ticket.setPaid(resultSet.getInt("paid"));
                 ticket.setTicketID(resultSet.getInt("ticketID"));
                 tickets.add(ticket);
@@ -193,6 +209,7 @@ public class ViewMenuForm extends JFrame {
         }
         int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to pay this ticket?", "Pay Ticket", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
+
 
             payTicketInDatabase(ticket);
             JOptionPane.showMessageDialog(this, "Ticket paid successfully.");
