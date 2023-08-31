@@ -1,6 +1,7 @@
 package model;
 
 import employeeacess.DataSource;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Date;
 import java.util.Objects;
@@ -133,6 +134,7 @@ public class Task implements Comparable<Task> {
             }
 
             case CUSTOMER_UPDATE_PASSWORD -> {
+                allValues[1] = BCrypt.hashpw(allValues[1], BCrypt.gensalt());
                 if(dataSource.updatePersonPassword(nif, allValues[1])) {
                     tk.updateTaskStatus("Closed", taskID);
                     return true;
