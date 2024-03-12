@@ -1,5 +1,7 @@
 ## Car Fleet Management System: Java and JDBC Project Overview
 
+The car fleet management system is a robust Java and JDBC application designed to streamline the management of vehicle fleets. With a focus on backend development and database integration, the system ensures efficient data handling and user authentication while providing essential functionalities such as car attributes management, ticket tracking, and automated notifications. Powered by MariaDB and featuring a simplistic JavaFX frontend, the project emphasizes security, usability, and scalability in managing fleet operations effectively.
+
 ### Backend Development:
 1. **User Authentication and Authorization:**
    - Stored user credentials in the database (MariaDB).
